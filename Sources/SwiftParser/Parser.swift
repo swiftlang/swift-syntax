@@ -91,6 +91,21 @@
 /// tokens as needed to disambiguate a parse. However, because lookahead
 /// operates on a copy of the lexical stream, no input tokens are lost..
 public struct Parser {
+  /// Identifies the mode in which the parser should run
+  public enum Mode: Equatable, Hashable {
+    /// Swift source file
+    case swift
+
+    /// Literate Swift source file in Markdown
+    case markdown
+
+    /// Literate Swift source file in reStructuredText
+    case reStructuredText
+
+    /// Literate Swift source file in LaTeX
+    case laTeX
+  }
+
   var arena: ParsingRawSyntaxArena
 
   /// A view of the sequence of lexemes in the input.
@@ -210,6 +225,9 @@ public struct Parser {
   ///            and can be freed after the initializer returns. When `false` the
   ///            caller must keep `input` valid for the entire parse (see
   ///            `withParser`).
+  ///   - mode: The lexer mode; this can be `.swift` for a Swift file, or
+  ///           `.markdown`, `.reStructuredText` or `.laTeX` for literate
+  ///           Swift code.
   ///   - maximumNestingLevel: To avoid overflowing the stack, the parser will
   ///                          stop if a nesting level greater than this value
   ///                          is reached. The nesting level is increased
@@ -229,6 +247,7 @@ public struct Parser {
   ///  - experimentalFeatures: The experimental features enabled for the parser.
   private init(
     buffer input: UnsafeBufferPointer<UInt8>,
+    mode: Mode = .swift,
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
     arena: ParsingRawSyntaxArena?,
@@ -266,6 +285,7 @@ public struct Parser {
 
     self.lexemes = Lexer.tokenize(
       input,
+      mode: mode,
       lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker,
       experimentalFeatures: experimentalFeatures
     )
@@ -280,6 +300,7 @@ public struct Parser {
   /// Private initializer for creating a ``Parser`` from the given string.
   private init(
     string input: String,
+    mode: Mode = .swift,
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
     swiftVersion: SwiftVersion?,
@@ -290,6 +311,7 @@ public struct Parser {
     self = input.withUTF8 { buffer in
       Parser(
         buffer: buffer,
+        mode: mode,
         maximumNestingLevel: maximumNestingLevel,
         parseTransition: parseTransition,
         arena: nil,
@@ -306,6 +328,7 @@ public struct Parser {
   /// Initializes a ``Parser`` from the given string.
   public init(
     _ input: String,
+    mode: Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil
@@ -313,6 +336,7 @@ public struct Parser {
     // Chain to the private String initializer.
     self.init(
       string: input,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       swiftVersion: swiftVersion,
@@ -326,6 +350,9 @@ public struct Parser {
   ///   - input: An input buffer containing Swift source text. It is copied into
   ///            a parser-owned buffer, so it can be freed after the initializer
   ///            has been called.
+  ///   - mode: The lexer mode; this can be `.swift` for a Swift file, or
+  ///           `.markdown`, `.reStructuredText` or `.laTeX` for literate
+  ///           Swift code.
   ///   - maximumNestingLevel: To avoid overflowing the stack, the parser will
   ///                          stop if a nesting level greater than this value
   ///                          is reached. The nesting level is increased
@@ -336,6 +363,7 @@ public struct Parser {
   ///                      parse, or `nil`.
   public init(
     _ input: UnsafeBufferPointer<UInt8>,
+    mode: Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil
@@ -344,6 +372,7 @@ public struct Parser {
     // free `input` after this initializer returns.
     self.init(
       buffer: input,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: nil,
@@ -358,6 +387,7 @@ public struct Parser {
   @_spi(ExperimentalLanguageFeatures)
   public init(
     _ input: String,
+    mode: Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
@@ -366,6 +396,7 @@ public struct Parser {
     // Chain to the private String initializer.
     self.init(
       string: input,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       swiftVersion: swiftVersion,
@@ -378,6 +409,7 @@ public struct Parser {
   @_spi(ExperimentalLanguageFeatures)
   public init(
     _ input: UnsafeBufferPointer<UInt8>,
+    mode: Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     arena: ParsingRawSyntaxArena? = nil,
@@ -389,6 +421,7 @@ public struct Parser {
     // does not depend on `input` (its tokens are interned into `arena`).
     self.init(
       buffer: input,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: arena,
@@ -414,12 +447,14 @@ public struct Parser {
   @_spi(RawSyntax)
   public static func withParser<T>(
     source input: UnsafeBufferPointer<UInt8>,
+    mode: Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     body: (inout Parser) -> T
   ) -> T {
     return withParser(
       source: input,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       swiftVersion: nil,
@@ -444,6 +479,7 @@ public struct Parser {
   @_spi(ExperimentalLanguageFeatures)
   public static func withParser<T>(
     source input: UnsafeBufferPointer<UInt8>,
+    mode: Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion?,
@@ -452,6 +488,7 @@ public struct Parser {
   ) -> T {
     var parser = Parser(
       buffer: input,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: nil,
@@ -474,6 +511,7 @@ public struct Parser {
   @_spi(ExperimentalLanguageFeatures)
   public static func withParser<T>(
     source input: String,
+    mode: Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion?,
@@ -485,6 +523,7 @@ public struct Parser {
     return input.withUTF8 { buffer in
       withParser(
         source: buffer,
+        mode: mode,
         maximumNestingLevel: maximumNestingLevel,
         parseTransition: parseTransition,
         swiftVersion: swiftVersion,

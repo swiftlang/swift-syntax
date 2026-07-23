@@ -255,6 +255,28 @@ extension Lexer {
     }
     var position: Position
 
+    /// Says which mode we are in (pure Swift versus some literate syntax).
+    var mode: Parser.Mode
+
+    /// `true` if we are inside a code block in a literate Swift file.
+    var inCodeBlock: Bool
+
+    /// `true` if we are scanning indentation.
+    var scanningIndent: Bool
+
+    /// The current indent level, for literate parsing.
+    var indentLevel: Int
+
+    /// The current Markdown fence character (either "`" or " ")
+    var markdownFence: Unicode.Scalar?
+
+    /// The length of the Markdown fence
+    var markdownFenceLength: Int
+
+    /// The current reStructuredText indent level, for literate parsing.
+    var rstIndentLevel: Int
+
+    /// Says which experimental features are enabled.
     var experimentalFeatures: Parser.ExperimentalFeatures
 
     /// If we have already lexed a token, the kind of the previously lexed token
@@ -269,9 +291,21 @@ extension Lexer {
 
     private var stateStack: StateStack = StateStack()
 
-    init(input: UnsafeBufferPointer<UInt8>, previous: UInt8, experimentalFeatures: Parser.ExperimentalFeatures) {
+    init(
+      input: UnsafeBufferPointer<UInt8>,
+      previous: UInt8,
+      mode: Parser.Mode = .swift,
+      experimentalFeatures: Parser.ExperimentalFeatures
+    ) {
       self.position = Position(input: input, previous: previous)
+      self.mode = mode
       self.experimentalFeatures = experimentalFeatures
+      self.inCodeBlock = self.mode == .swift
+      self.indentLevel = 0
+      self.scanningIndent = true
+      self.rstIndentLevel = 0
+      self.markdownFence = nil
+      self.markdownFenceLength = 0
     }
 
     /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has
@@ -304,6 +338,9 @@ extension Lexer {
     }
     func distance(to other: Self) -> Int {
       self.position.distance(to: other.position)
+    }
+    func distance(from other: Self) -> Int {
+      other.distance(to: self)
     }
 
     var isAtEndOfFile: Bool {
@@ -428,18 +465,40 @@ extension Lexer.Cursor.Position {
 
 extension Lexer.Cursor {
   mutating func nextToken(sourceBufferStart: Lexer.Cursor, stateAllocator: BumpPtrAllocator) -> Lexer.Lexeme {
-    let cursor = self
-    // Leading trivia.
+    var cursor = self
     let leadingTriviaStart = self
-    let newlineInLeadingTrivia: NewlinePresence
+    var newlineInLeadingTrivia: NewlinePresence = .absent
     var diagnostic: TokenDiagnostic? = nil
-    if let leadingTriviaMode = self.currentState.leadingTriviaLexingMode(cursor: self) {
-      let triviaResult = self.lexTrivia(mode: leadingTriviaMode)
-      newlineInLeadingTrivia = triviaResult.newlinePresence
-      diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
-    } else {
-      newlineInLeadingTrivia = .absent
-    }
+
+    // Loop until we're in a code block
+    repeat {
+      cursor = self
+
+      // In literate mode, if we aren't in a code block, find one
+      if !inCodeBlock {
+        self.advanceToCodeBlock(sourceBufferStart: sourceBufferStart)
+
+        // We might have read the rest of the file
+        if self.isAtEndOfFile {
+          break
+        }
+      }
+
+      if inCodeBlock {
+        // Leading trivia.
+        if let leadingTriviaMode = self.currentState.leadingTriviaLexingMode(cursor: self) {
+          let triviaResult = self.lexTrivia(mode: leadingTriviaMode)
+          newlineInLeadingTrivia = triviaResult.newlinePresence
+          diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
+        } else {
+          newlineInLeadingTrivia = .absent
+        }
+      }
+
+      if self.atEndOfCodeBlock() {
+        inCodeBlock = false
+      }
+    } while !inCodeBlock && !self.isAtEndOfFile
 
     // Token text.
     let textStart = self
@@ -516,6 +575,568 @@ extension Lexer.Cursor {
     return lexeme
   }
 
+}
+
+// MARK: - Literate Swift Processing
+
+extension Lexer.Cursor {
+  /// Move the cursor back to the start of the current line, if any
+  mutating func rewindToStartOfLine(sourceBufferStart: Lexer.Cursor) {
+    guard let bufferBaseAddress = sourceBufferStart.input.baseAddress,
+      var selfBaseAddress = self.input.baseAddress
+    else {
+      return
+    }
+
+    let original = selfBaseAddress
+    var lastNonEOL = selfBaseAddress
+    while selfBaseAddress > bufferBaseAddress {
+      if selfBaseAddress.pointee == 13 || selfBaseAddress.pointee == 10 {
+        break
+      }
+      lastNonEOL = selfBaseAddress
+      selfBaseAddress -= 1
+    }
+
+    let count = self.input.count + (original - lastNonEOL)
+    self.position.input = UnsafeBufferPointer(start: lastNonEOL, count: count)
+
+    if lastNonEOL > bufferBaseAddress {
+      self.position.previous = (lastNonEOL - 1).pointee
+    } else {
+      self.position.previous = 0
+    }
+  }
+
+  func previousLineWasEmpty(sourceBufferStart: Lexer.Cursor) -> Bool {
+    guard let bufferBaseAddress = sourceBufferStart.input.baseAddress,
+      var selfBaseAddress = self.input.baseAddress
+    else {
+      return true
+    }
+
+    // Skip the preceding line ending
+    if selfBaseAddress > bufferBaseAddress && selfBaseAddress[-1] == "\n" {
+      selfBaseAddress -= 1
+    }
+    if selfBaseAddress > bufferBaseAddress && selfBaseAddress[-1] == "\r" {
+      selfBaseAddress -= 1
+    }
+
+    // If we're at the start of the buffer, it was empty
+    if selfBaseAddress == bufferBaseAddress {
+      return true
+    }
+
+    // If we're at a line ending, it was also empty
+    if selfBaseAddress > bufferBaseAddress
+      && (selfBaseAddress[-1] == "\n" || selfBaseAddress[-1] == "\r")
+    {
+      return true
+    }
+
+    return false
+  }
+
+  /// Move the cursor back to the line ending before the current line, if
+  /// any.
+  mutating func rewindToEndOfLine(sourceBufferStart: Lexer.Cursor) {
+    guard let bufferBaseAddress = sourceBufferStart.input.baseAddress,
+      var selfBaseAddress = self.input.baseAddress
+    else {
+      return
+    }
+
+    let original = selfBaseAddress
+    while selfBaseAddress > bufferBaseAddress {
+      if selfBaseAddress.pointee == 13 || selfBaseAddress.pointee == 10 {
+        break
+      }
+      selfBaseAddress -= 1
+    }
+
+    // Skip backwards to the CR if we're at CR/LF
+    if selfBaseAddress > bufferBaseAddress && selfBaseAddress.pointee == 10 {
+      let prevAddress = selfBaseAddress - 1
+      if prevAddress.pointee == 13 {
+        selfBaseAddress = prevAddress
+      }
+    }
+
+    let count = self.input.count + (original - selfBaseAddress)
+    self.position.input = UnsafeBufferPointer(start: selfBaseAddress, count: count)
+
+    if selfBaseAddress > bufferBaseAddress {
+      self.position.previous = (selfBaseAddress - 1).pointee
+    } else {
+      self.position.previous = 0
+    }
+  }
+
+  /// Skip the code in a reStructuredText code block
+  mutating func skipRSTCodeBlock() {
+    var lineStart = self
+    while true {
+      let pos = self
+      guard let ch = self.advance() else {
+        break
+      }
+      switch ch {
+      case 13:
+        lineStart = pos
+        _ = self.advance(matching: "\n")
+        indentLevel = 0;
+      case 10:
+        lineStart = pos
+        indentLevel = 0
+      case 32:
+        indentLevel += 1
+      case 9:
+        indentLevel += 8
+      default:
+        if indentLevel <= rstIndentLevel {
+          self = lineStart
+          return
+        }
+      }
+    }
+  }
+
+  /// Scan a word, which is a space-separated item in a literate file
+  mutating func scanWord(extraTerminator: CharacterByte? = nil) -> SyntaxText {
+    let start = self
+    let extraByte = extraTerminator?.value ?? 32
+    self.advance(while: {
+      $0 != " " && $0 != "\t"
+        && $0 != "\r" && $0 != "\n"
+        && $0.value != extraByte
+    })
+
+    return start.text(upTo: self)
+  }
+
+  enum IndentState {
+    case waitingForEOL
+    case gotCR
+    case gotEOL
+    case gotBlankLineCR
+    case gotBlankLine
+  }
+
+  /// Find the start of the next Markdown code block
+  mutating func advanceToMarkdownCodeBlock(sourceBufferStart: Lexer.Cursor) {
+    var indentState = IndentState.gotEOL
+    indentLevel = 0
+
+    self.rewindToStartOfLine(sourceBufferStart: sourceBufferStart)
+
+    // Looking for
+    //
+    //     ``` swift nocompile
+    //
+    // or a block with a four plus character indent.
+    //
+    // If we see a non-Swift code block, we will skip it; we wil also skip
+    // any code block marked "nocompile".
+    markdownFence = nil
+    var fenceStart = self
+    while true {
+      let pos = self
+      guard let ch = self.advance() else {
+        break
+      }
+      if ch == "`" || ch == "~" {
+        if let mdf = markdownFence, ch == mdf {
+          let count = self.distance(from: fenceStart)
+          if count == 3 {
+            // Scan any additional fence characters and remember the length
+            self.advance(while: { $0 == mdf })
+
+            markdownFenceLength = self.distance(from: fenceStart)
+
+            // Skip whitespace
+            self.advance(while: { $0 == " " || $0 == "\t" })
+
+            let terminator: CharacterByte = markdownFence == "`" ? "`" : " "
+
+            // Scan a word
+            let language = scanWord(extraTerminator: terminator)
+
+            var skip = language != "swift" && language != ""
+
+            // Continue until end of line
+            while self.is(
+              notAt: "\r",
+              "\n",
+              markdownFence == "`" ? "`" : "\r"
+            ) {
+              // Skip whitespace
+              self.advance(while: { $0 == " " || $0 == "\t" })
+
+              let word = scanWord(extraTerminator: terminator)
+              if word == "nocompile" {
+                skip = true
+              }
+            }
+
+            // If we're using backticks and found a backtick, this is not a
+            // code block; skip the backtick(s) and the rest of the line, and
+            // continue
+            if markdownFence == "`" && self.is(at: "`") {
+              self.advance(while: { $0 == "`" })
+
+              self.advanceToEndOfLine()
+
+              markdownFence = nil
+              continue
+            }
+
+            // If we're at a line end, we're done
+            if self.advanceMatchingEOL() {
+              if skip {
+                // Skip this block
+                var closeStart: Self? = nil
+                while true {
+                  let pos = self
+                  guard let ch = advance() else { break }
+                  if ch == mdf {
+                    if closeStart == nil {
+                      closeStart = pos
+                    }
+                    if self.distance(from: closeStart!) == markdownFenceLength {
+                      break
+                    }
+                  } else {
+                    closeStart = nil
+                  }
+                }
+
+                if self.distance(from: closeStart!) == markdownFenceLength {
+                  self.advance(while: { $0 == mdf })
+                }
+                markdownFence = nil
+                continue
+              } else {
+                inCodeBlock = true
+                return
+              }
+            }
+          }
+        } else {
+          markdownFence = Unicode.Scalar(ch)
+          fenceStart = pos
+        }
+      } else {
+        markdownFence = nil
+      }
+
+      switch indentState {
+      case .waitingForEOL:
+        if ch == "\r" {
+          indentState = .gotCR
+        } else if ch == "\n" {
+          indentState = .gotEOL
+        }
+      case .gotCR:
+        if ch == "\n" {
+          indentState = .gotEOL
+          break
+        }
+        indentState = .gotEOL
+        fallthrough
+      case .gotEOL:
+        if ch == "\r" {
+          indentState = .gotBlankLineCR
+        } else if ch == "\n" {
+          indentState = .gotBlankLine
+          indentLevel = 0
+        } else if ch != " " && ch != "\t" {
+          indentState = .waitingForEOL
+        }
+        break
+      case .gotBlankLineCR:
+        if ch == "\n" {
+          indentState = .gotBlankLine
+          indentLevel = 0
+          break
+        }
+        indentState = .gotBlankLine
+        fallthrough
+      case .gotBlankLine:
+        if ch == " " {
+          indentLevel += 1
+        } else if ch == "\t" {
+          indentLevel += 8
+        } else {
+          indentState = .waitingForEOL
+        }
+      }
+
+      // If we have a four plus space indent, this is a code block
+      if indentLevel >= 4 {
+        scanningIndent = false
+        markdownFence = " "
+        inCodeBlock = true
+        return
+      }
+    }
+  }
+
+  // Scan an EOL
+  mutating func advanceMatchingEOL() -> Bool {
+    if self.is(notAt: "\r", "\n") {
+      return false
+    }
+    _ = self.advance(matching: "\r")
+    _ = self.advance(matching: "\n")
+    return true
+  }
+
+  // Skip over whitespace
+  mutating func advanceOverWhitespace() {
+    self.advance(while: { $0 == " " || $0 == "\t" })
+  }
+
+  // Find the start of the next reStructuredText code block
+  mutating func advanceToRSTCodeBlock(sourceBufferStart: Lexer.Cursor) {
+    var indentState: IndentState = .gotEOL
+    rstIndentLevel = 0
+    indentLevel = 0
+
+    self.rewindToStartOfLine(sourceBufferStart: sourceBufferStart)
+
+    if self.previousLineWasEmpty(sourceBufferStart: sourceBufferStart) {
+      indentState = .gotBlankLine
+    }
+
+    while let ch = self.advance() {
+      // Looking for :: EOL WS* EOL
+      if ch == ":" && self.is(at: ":") {
+        _ = self.advance()
+
+        if !self.advanceMatchingEOL() {
+          continue
+        }
+
+        self.advanceOverWhitespace()
+
+        if !self.advanceMatchingEOL() {
+          continue
+        }
+
+        rstIndentLevel = indentLevel
+        inCodeBlock = true
+        return
+      }
+
+      switch indentState {
+      case .waitingForEOL:
+        if ch == "\r" {
+          indentState = .gotCR
+        } else if ch == "\n" {
+          indentState = .gotEOL
+        }
+      case .gotCR:
+        if ch == "\n" {
+          indentState = .gotEOL
+          break
+        }
+        indentState = .gotEOL
+        fallthrough
+      case .gotEOL:
+        if ch == "\r" {
+          indentState = .gotBlankLineCR
+        } else if ch == "\n" {
+          indentState = .gotBlankLine
+          indentLevel = 0
+        } else if ch != " " || ch != "\t" {
+          indentState = .waitingForEOL
+        }
+      case .gotBlankLineCR:
+        if ch == "\n" {
+          indentState = .gotBlankLine
+          indentLevel = 0
+          break
+        }
+        indentState = .gotBlankLine
+        fallthrough
+      case .gotBlankLine:
+        if ch == " " {
+          indentLevel += 1
+        } else if ch == "\t" {
+          indentLevel += 8
+        } else if ch == "\r" {
+          indentState = .gotBlankLineCR
+          indentLevel = 0
+        } else if ch == "\n" {
+          indentState = .gotBlankLine
+          indentLevel = 0
+        } else if (ch == "-" || ch == "*" || ch == "+")
+          && self.is(at: " ", "\t")
+        {
+          // It's a bullet
+          indentLevel += 1
+          var extraIndent = 0
+          self.advance(while: {
+            if $0 == " " {
+              extraIndent += 1
+              return true
+            }
+            if $0 == "\t" {
+              extraIndent += 8
+              return true
+            }
+            return false
+          })
+          indentLevel += extraIndent
+        } else if (ch >= UInt8(ascii: "0") && ch <= UInt8(ascii: "9")) || ch == "#" {
+          let itemPos = self
+
+          indentLevel += 1
+          if ch != "#" {
+            self.advance(while: { $0.value >= UInt8(ascii: "0") && $0.value <= UInt8(ascii: "9") })
+            indentLevel += self.distance(from: itemPos)
+          }
+
+          if self.is(notAt: ".") {
+            self = itemPos
+            indentState = .waitingForEOL
+            break
+          }
+
+          // This is an enumerated list item
+          var extraIndent = 0
+          self.advance(while: {
+            if $0 == " " {
+              extraIndent += 1
+              return true
+            }
+            if $0 == "\t" {
+              extraIndent += 8
+              return true
+            }
+            return false
+          })
+          indentLevel += extraIndent
+        } else if ch == "." && self.is(at: ". ") {
+          // It's explicit markup
+          _ = self.advance()
+          self.advance(while: { $0 == " " })
+
+          if self.is(at: "code-block::", "sourcecode::") {
+            self.advance(by: 12)
+
+            // We're in a code-block:: directive
+            self.advance(while: { $0 == " " || $0 == "\t" })
+
+            // Scan the language
+            let language = scanWord()
+
+            var skip = language != "swift" && language != ""
+
+            // Scan to the next line
+            self.advanceToStartOfLine()
+
+            // Process options
+            while let ch = self.advance() {
+              if ch == " " || ch == "\t" {
+                continue
+              }
+
+              if ch == ":" {
+                if self.is(at: "nocompile:") {
+                  skip = true
+                }
+
+                self.advanceToStartOfLine()
+              } else if ch == "\r" || ch == "\n" {
+                // We're at a code block
+
+                rstIndentLevel = indentLevel
+
+                if skip {
+                  self.skipRSTCodeBlock()
+                  break
+                } else {
+                  inCodeBlock = true
+                  return
+                }
+              }
+            }
+          } else {
+            self.advanceToEndOfLine()
+          }
+
+          indentState = .waitingForEOL
+        } else {
+          indentState = .waitingForEOL
+        }
+      }
+    }
+  }
+
+  // Find the start of the next LaTeX code block
+  mutating func advanceToLaTeXCodeBlock() {
+    while let ch = advance() {
+      if ch == "\\" {
+        if self.is(at: "begin{swift}") {
+          self.advanceToStartOfLine()
+
+          inCodeBlock = true
+          return
+        }
+      }
+    }
+  }
+
+  mutating func advanceToCodeBlock(sourceBufferStart: Lexer.Cursor) {
+    switch mode {
+    case .markdown:
+      advanceToMarkdownCodeBlock(sourceBufferStart: sourceBufferStart)
+    case .reStructuredText:
+      advanceToRSTCodeBlock(sourceBufferStart: sourceBufferStart)
+    case .laTeX:
+      advanceToLaTeXCodeBlock()
+    default:
+      fatalError("Unknown lexer mode in advanceToCodeBlock()")
+    }
+
+    if inCodeBlock {
+      self.rewindToEndOfLine(sourceBufferStart: sourceBufferStart)
+    }
+  }
+
+  mutating func atEndOfCodeBlock() -> Bool {
+    if !inCodeBlock {
+      return false
+    }
+
+    switch mode {
+    case .markdown:
+      guard let markdownFence else {
+        return true
+      }
+      if markdownFence == " " {
+        return indentLevel < 4
+      }
+      if self.is(notAt: CharacterByte(unicodeScalarLiteral: markdownFence)) {
+        return false
+      }
+      var pos = self
+      pos.advance(while: { $0 == markdownFence })
+      if pos.distance(from: self) >= markdownFenceLength {
+        self = pos
+        return true
+      }
+      return false
+    case .reStructuredText:
+      return indentLevel <= rstIndentLevel
+    case .laTeX:
+      return self.is(at: "\\end{swift}")
+    default:
+      return false
+    }
+  }
 }
 
 // MARK: - Peeking
@@ -631,11 +1252,58 @@ extension Lexer.Cursor {
     return peeked != character1.value && peeked != character2.value && peeked != character3.value
   }
 
+  /// Returns `true` if we are not at the end of the file and the string at
+  /// offset `offset` is `text`.
+  @_disfavoredOverload
+  func `is`(
+    offset: Int = 0,
+    at text: StaticString
+  ) -> Bool {
+    if offset >= self.input.count {
+      return false
+    }
+    let length = text.utf8CodeUnitCount
+    if self.input.count - offset < length {
+      return false
+    }
+
+    return self.text(upTo: self.advanced(by: length)) == SyntaxText(text)
+  }
+
+  /// Returns `true` if we are not at the end of the file and the string at
+  /// offset `offset` is `text`.
+  @_disfavoredOverload
+  func `is`(
+    offset: Int = 0,
+    at text: StaticString,
+    _ text2: StaticString
+  ) -> Bool {
+    if offset >= self.input.count {
+      return false
+    }
+
+    let remaining = self.input.count - offset
+    let textLen = text.utf8CodeUnitCount
+    if remaining >= textLen {
+      if self.text(upTo: self.advanced(by: textLen)) == SyntaxText(text) {
+        return true
+      }
+    }
+    let text2Len = text2.utf8CodeUnitCount
+    if remaining >= text2Len {
+      if self.text(upTo: self.advanced(by: text2Len)) == SyntaxText(text2) {
+        return true
+      }
+    }
+
+    return false
+  }
+
   // MARK: Misc
 
   /// Returns the text from `self` to `other`.
   func text(upTo other: Lexer.Cursor) -> SyntaxText {
-    let count = other.input.baseAddress! - self.input.baseAddress!
+    let count = self.distance(to: other)
     precondition(count >= 0)
     return SyntaxText(baseAddress: self.input.baseAddress, count: count)
   }
@@ -671,6 +1339,18 @@ extension Lexer.Cursor {
   /// If the end of the input is reached, return `nil`.
   mutating func advance() -> UInt8? {
     self.position.advance()
+  }
+
+  /// Advance the cursor position by `n` bytes.
+  mutating func advance(by n: Int) {
+    self.position = self.position.advanced(by: n)
+  }
+
+  /// Return a new cursor `n` bytes ahead of this one.
+  func advanced(by n: Int) -> Self {
+    var result = self
+    result.advance(by: n)
+    return result
   }
 
   /// If the current character is `matching`, advance the cursor and return `true`.
@@ -737,6 +1417,13 @@ extension Lexer.Cursor {
     while self.is(notAt: "\n", "\r") {
       _ = self.advance()
     }
+  }
+
+  /// Advance the cursor to the start of the next line.
+  mutating func advanceToStartOfLine() {
+    self.advanceToEndOfLine()
+    _ = self.advance(matching: "\r")
+    _ = self.advance(matching: "\n")
   }
 
   /// Returns `true` if the comment spanned multiple lines and `false` otherwise.
@@ -1231,23 +1918,36 @@ extension Lexer.Cursor {
           break
         }
         newlinePresence = .present
+        scanningIndent = true
+        indentLevel = 0
         continue
       case "\r":
         if mode == .noNewlines {
           break
         }
         newlinePresence = .present
+        scanningIndent = true
+        indentLevel = 0
         continue
 
       case " ":
+        if scanningIndent {
+          indentLevel += 1
+        }
         continue
       case "\t":
+        if scanningIndent {
+          indentLevel += 8
+        }
         continue
       case "\u{000B}":
+        scanningIndent = false
         continue
       case "\u{000C}":
+        scanningIndent = false
         continue
       case "/":
+        scanningIndent = false
         switch self.peek() {
         case "/":
           self.advanceToEndOfLine()
@@ -1263,6 +1963,7 @@ extension Lexer.Cursor {
           break
         }
       case "<", ">":
+        scanningIndent = false
         if self.tryLexConflictMarker(start: start) {
           error = LexingDiagnostic(.sourceConflictMarker, position: start)
           continue
@@ -1289,6 +1990,7 @@ extension Lexer.Cursor {
 
         // Start of operators.
         "%", "!", "?", "=", "-", "+", "*", "&", "|", "^", "~", ".":
+        scanningIndent = false
         break
       case 0xEF:
         if self.is(at: 0xBB), self.is(offset: 1, at: 0xBF) {
@@ -1300,6 +2002,7 @@ extension Lexer.Cursor {
 
         fallthrough
       default:
+        scanningIndent = false
         if let peekedScalar = start.peekScalar(), peekedScalar.isValidIdentifierStartCodePoint {
           break
         }
@@ -2194,7 +2897,7 @@ extension Lexer.Cursor {
     let rightBound = operEnd.isRightBound(isLeftBound: leftBound)
 
     // Match various reserved words.
-    if operEnd.input.baseAddress! - operStart.input.baseAddress! == 1 {
+    if operEnd.distance(from: operStart) == 1 {
       switch operStart.peek() {
       case "=":
         if leftBound != rightBound {
@@ -2229,7 +2932,7 @@ extension Lexer.Cursor {
       default:
         break
       }
-    } else if operEnd.input.baseAddress! - operStart.input.baseAddress! == 2 {
+    } else if operEnd.distance(from: operStart) == 2 {
       switch (operStart.peek(), operStart.peek(at: 1)) {
       case ("-", ">"):  // ->
         return (.arrow, error: nil)
@@ -2298,7 +3001,7 @@ extension Lexer.Cursor {
       }
     }
 
-    if self.input.baseAddress! - tokStart.input.baseAddress! > 2 {
+    if self.distance(from: tokStart) > 2 {
       // If there is a "//" or "/*" in the middle of an identifier token,
       // it starts a comment.
       var ptr = tokStart

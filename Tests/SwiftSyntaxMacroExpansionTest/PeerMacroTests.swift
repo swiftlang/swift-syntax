@@ -171,10 +171,9 @@ final class PeerMacroTests: XCTestCase {
       """,
       expandedSource: """
         let a = 17, b = 12
+
+        var baz: Int = 0
         """,
-      diagnostics: [
-        DiagnosticSpec(message: "peer macro can only be applied to a single variable", line: 1, column: 1)
-      ],
       macros: ["Test": TestMacro.self]
     )
 
@@ -188,11 +187,37 @@ final class PeerMacroTests: XCTestCase {
       expandedSource: """
         struct Foo {
           let a = 17, b = 12
+
+          var baz: Int = 0
         }
         """,
-      diagnostics: [
-        DiagnosticSpec(message: "peer macro can only be applied to a single variable", line: 2, column: 3)
-      ],
+      macros: ["Test": TestMacro.self]
+    )
+  }
+
+  func testPeerMacroReturningNoPeersOnVariableWithMultipleBindings() {
+    struct TestMacro: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @Test
+        var a: Int, b: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var a: Int, b: Int
+        }
+        """,
       macros: ["Test": TestMacro.self]
     )
   }

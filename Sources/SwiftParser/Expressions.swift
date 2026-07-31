@@ -21,7 +21,7 @@ extension TokenConsumer {
     if self.isAtModuleSelector() {
       var lookahead = self.lookahead()
       _ = lookahead.consumeModuleSelectorTokensIfPresent()
-      return lookahead.atStartOfExpression()
+      return lookahead.atStartOfExpression() || lookahead.currentToken.isLexerClassifiedKeyword
     }
 
     switch self.at(anyIn: ExpressionStart.self) {

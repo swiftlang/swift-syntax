@@ -13,6 +13,7 @@
 import SwiftDiagnostics
 import SwiftOperators
 @_spi(RawSyntax) import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Evaluate the condition of an `#if`.
 /// - Parameters:

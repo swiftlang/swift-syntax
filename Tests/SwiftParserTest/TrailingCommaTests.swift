@@ -12,6 +12,7 @@
 
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class TrailingCommaTests: ParserTestCase {

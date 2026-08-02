@@ -13,6 +13,7 @@
 @_spi(Experimental) @_spi(_QualifiedLookup) import SwiftLexicalLookup
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 /// Visitor class helper used in ``SyntaxProtocol/children``

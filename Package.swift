@@ -319,7 +319,14 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacroExpansion",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxBuilder", "SwiftSyntaxMacros", "SwiftDiagnostics", "SwiftOperators"],
+      dependencies: [
+        "SwiftBasicFormat",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftDiagnostics",
+        "SwiftOperators",
+      ],
       exclude: ["CMakeLists.txt"]
     ),
 

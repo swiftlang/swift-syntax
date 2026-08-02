@@ -65,8 +65,10 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       i = bar(
       """
     let expectedOutput = """
+       1 | var i = 1
        2 | i = 2
        3 | i = foo(
+         |        `- note: to match this opening '('
        4 | i = 4
          |      `- error: expected ')' to end function call
        5 | i = 5
@@ -128,7 +130,8 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
     let expectedOutput = """
       \u{001B}[0;36m1 |\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
-        \u{001B}[0;36m|\u{001B}[0;0m |     `- \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m|\u{001B}[0;0m |   | `- \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m|\u{001B}[0;0m |   `- \u{001B}[1;39mnote: \u{001B}[1;39mto match this opening '('\u{001B}[0;0m
         \u{001B}[0;36m|\u{001B}[0;0m `- \u{001B}[1;31merror: \u{001B}[1;39mC-style for statement has been removed in Swift 3\u{001B}[0;0m
 
       """

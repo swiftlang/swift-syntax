@@ -470,6 +470,12 @@ package.targets.append(
   )
 )
 
+// Require every file to import the modules that define the members it uses, so that missing
+// imports can't creep back in. Toolchains that don't know the upcoming feature ignore the flag.
+for target in package.targets where target.type == .regular || target.type == .test {
+  target.swiftSettings = (target.swiftSettings ?? []) + [.enableUpcomingFeature("MemberImportVisibility")]
+}
+
 // MARK: - Parse build arguments
 
 func hasEnvironmentVariable(_ name: String) -> Bool {

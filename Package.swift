@@ -472,7 +472,8 @@ package.targets.append(
 
 // Require every file to import the modules that define the members it uses, so that missing
 // imports can't creep back in. Toolchains that don't know the upcoming feature ignore the flag.
-for target in package.targets where target.type == .regular || target.type == .test {
+// When updating this, also update CMakeLists.txt accordingly.
+for target in package.targets where target.type != .plugin {
   target.swiftSettings = (target.swiftSettings ?? []) + [.enableUpcomingFeature("MemberImportVisibility")]
 }
 

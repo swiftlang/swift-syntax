@@ -194,7 +194,7 @@ public class RawSyntaxArena {
 
 /// RawSyntaxArena for parsing.
 @_spi(RawSyntax)
-public class ParsingRawSyntaxArena: RawSyntaxArena {
+public final class ParsingRawSyntaxArena: RawSyntaxArena {
   public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
 
   /// Function to parse trivia.

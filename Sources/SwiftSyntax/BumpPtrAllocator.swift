@@ -15,7 +15,7 @@
 /// Once all memory in a slab has been used, it allocates a new slab and no
 /// memory allocations are necessary until that slab is completely filled up.
 @_spi(BumpPtrAllocator) @_spi(Testing)
-public class BumpPtrAllocator {
+public final class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
   static private let GROWTH_DELAY: Int = 128

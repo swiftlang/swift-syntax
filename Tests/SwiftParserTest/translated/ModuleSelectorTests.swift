@@ -2174,6 +2174,38 @@ final class ModuleSelectorTests: ParserTestCase {
     )
   }
 
+  func testModuleSelectorKeywordNameAtStartOfStatement() {
+    // https://github.com/swiftlang/swift-syntax/issues/3387
+    // A module-selected reference to a keyword-named declaration must be
+    // recognized as the start of an expression at statement level, matching
+    // 'parseDeclReferenceBase', which remaps the keyword to an identifier.
+    assertParse(
+      "Module::as(x)",
+      substructure: makeCall(
+        callee: makeDeclRef(moduleSelector: "Module", baseName: "as"),
+        arguments: [nil: ExprSyntax(makeDeclRef(baseName: "x"))]
+      )
+    )
+    assertParse(
+      "Module::is(x)",
+      substructure: makeCall(
+        callee: makeDeclRef(moduleSelector: "Module", baseName: "is"),
+        arguments: [nil: ExprSyntax(makeDeclRef(baseName: "x"))]
+      )
+    )
+    assertParse(
+      """
+      func use(_ x: Int) {
+        Module::as(x)
+      }
+      """,
+      substructure: makeCall(
+        callee: makeDeclRef(moduleSelector: "Module", baseName: "as"),
+        arguments: [nil: ExprSyntax(makeDeclRef(baseName: "x"))]
+      )
+    )
+  }
+
   func testModuleSelectorType() {
     assertParse(
       "func fn(_: Swift::Self) {}",

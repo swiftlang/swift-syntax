@@ -540,7 +540,9 @@ extension Lexer.Cursor {
     if let leadingTriviaMode = self.currentState.leadingTriviaLexingMode() {
       let triviaResult = self.lexTrivia(mode: leadingTriviaMode)
       newlineInLeadingTrivia = triviaResult.newlinePresence
-      diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
+      if let error = triviaResult.error {
+        diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: cursor))
+      }
     } else {
       newlineInLeadingTrivia = .absent
     }
@@ -595,14 +597,18 @@ extension Lexer.Cursor {
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode() {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
       self.previousLexemeTrailingNewlinePresence = triviaResult.newlinePresence
-      diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
+      if let error = triviaResult.error {
+        diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: cursor))
+      }
     }
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
       self.stateStack.perform(stateTransition: .pop, stateAllocator: stateAllocator)
     }
 
-    diagnostic = TokenDiagnostic(combining: diagnostic, result.error?.tokenDiagnostic(tokenStart: cursor))
+    if let error = result.error {
+      diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: cursor))
+    }
 
     let lexeme = Lexer.Lexeme(
       tokenKind: result.tokenKind,

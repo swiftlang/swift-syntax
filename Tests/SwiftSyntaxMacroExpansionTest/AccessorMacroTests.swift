@@ -565,4 +565,38 @@ final class AccessorMacroTests: XCTestCase {
       macros: ["TestWrapper": PropertyWrapperMacro.self]
     )
   }
+
+  func testQualifiedAccessorMacroName() {
+    assertMacroExpansion(
+      """
+      @MyModule.constantOne
+      var x: Int
+      """,
+      expandedSource: """
+        var x: Int {
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @MyModule::constantOne
+      var x: Int
+      """,
+      expandedSource: """
+        var x: Int {
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }

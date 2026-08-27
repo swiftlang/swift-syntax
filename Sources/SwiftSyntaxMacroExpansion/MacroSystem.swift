@@ -1081,7 +1081,8 @@ extension MacroApplication {
 
     return attributedNode.attributes.compactMap {
       guard case let .attribute(attribute) = $0,
-        let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text,
+        let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text
+          ?? attribute.attributeName.as(MemberTypeSyntax.self)?.name.text,
         let macroSpec = macroSystem.lookup(attributeName)
       else {
         return nil

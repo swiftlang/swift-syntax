@@ -138,8 +138,8 @@ final class VariableTests: XCTestCase {
         """
         var bar: [String] {
             bar.map({
-                    $0.description
-                })
+                $0.description
+            })
         }
         """
       ),
@@ -148,8 +148,8 @@ final class VariableTests: XCTestCase {
         """
         inout bar: [String] {
             bar.map({
-                    $0.description
-                })
+                $0.description
+            })
         }
         """
       ),

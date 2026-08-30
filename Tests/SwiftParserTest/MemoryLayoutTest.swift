@@ -32,7 +32,7 @@ final class MemoryLayoutTest: XCTestCase {
     /// so these sizes are multiplied several times over on the hot path.
     let expected: [String: SyntaxMemoryLayout.Value] = [
       "Lexer.Cursor": .init(size: 32, stride: 32, alignment: 8),
-      "Lexer.Cursor.Position": .init(size: 17, stride: 24, alignment: 8),
+      "Lexer.Cursor.Position": .init(size: 16, stride: 16, alignment: 8),
       "Lexer.Cursor.State": .init(size: 10, stride: 16, alignment: 8),
       "Lexer.Cursor.StateStack": .init(size: 8, stride: 8, alignment: 8),
       "Lexer.Lexeme": .init(size: 72, stride: 72, alignment: 8),

@@ -336,8 +336,47 @@ extension Lexer {
   /// bounds-checked.
   struct Cursor {
     struct Position {
-      var input: UnsafeBufferPointer<UInt8>
-      var previous: UInt8
+      /// The next byte to be read, or `nil` if the input is empty.
+      var ptr: UnsafePointer<UInt8>?
+
+      /// How many bytes remain from `ptr`, and whether anything precedes it.
+      ///
+      /// The sign bit says this position is at the start of the input, where
+      /// there is no byte before it; the rest is the count of bytes left. A file
+      /// is nowhere near eight exabytes, so the bit is free. Everywhere but the
+      /// start, the byte of look-behind the lexer needs is `ptr[-1]`.
+      var metadata: Int
+
+      static let startBit = Int.min
+      static let countMask = Int.max
+
+      init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool) {
+        self.ptr = input.baseAddress
+        self.metadata = input.count | (isAtStartOfInput ? Self.startBit : 0)
+      }
+
+      /// How many bytes remain to be read.
+      var count: Int {
+        self.metadata & Self.countMask
+      }
+
+      /// Whether nothing precedes this position, so that there is no byte of
+      /// look-behind to read.
+      var isAtStartOfInput: Bool {
+        self.metadata < 0
+      }
+
+      /// The byte before this position, or nul if it is at the start of the input.
+      var previous: UInt8 {
+        guard !self.isAtStartOfInput, let ptr = self.ptr else {
+          return 0
+        }
+        return (ptr - 1).pointee
+      }
+
+      var input: UnsafeBufferPointer<UInt8> {
+        UnsafeBufferPointer(start: self.ptr, count: self.count)
+      }
     }
     var position: Position
 
@@ -353,8 +392,8 @@ extension Lexer {
 
     private var stateStack: StateStack = StateStack()
 
-    init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
-      self.position = Position(input: input, previous: previous)
+    init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool) {
+      self.position = Position(input: input, isAtStartOfInput: isAtStartOfInput)
     }
 
     /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has
@@ -509,19 +548,19 @@ extension Lexer {
 
 extension Lexer.Cursor.Position {
   var pointer: UnsafePointer<UInt8> {
-    self.input.baseAddress!
+    self.ptr!
   }
 
   func distance(to other: Self) -> Int {
-    self.pointer.distance(to: other.pointer)
+    self.count - other.count
   }
 
   var isAtEndOfFile: Bool {
-    self.input.isEmpty
+    self.count == 0
   }
 
   var isAtStartOfFile: Bool {
-    !self.input.isEmpty && self.previous == "\0"
+    self.count != 0 && self.isAtStartOfInput
   }
 }
 
@@ -740,30 +779,31 @@ extension Lexer.Cursor.Position {
   /// If there is a character in the input, and return it, advancing the cursor.
   /// If the end of the input is reached, return `nil`.
   mutating func advance() -> UInt8? {
-    var input = self.input[...]
-    guard let c = input.popFirst() else {
+    guard let ptr = self.ptr, self.count > 0 else {
       return nil  // end of input
     }
-    self.previous = c
-    self.input = UnsafeBufferPointer(rebasing: input)
-    return c
+    self.ptr = ptr + 1
+    // Assigning the count also clears the start bit, since a byte precedes the
+    // advanced position.
+    self.metadata = self.count - 1
+    return ptr.pointee
   }
 
   /// Returns the text from `self` to `other`.
   func text(upTo other: Self) -> SyntaxText {
-    let count = other.input.baseAddress! - self.input.baseAddress!
+    let count = self.count - other.count
     precondition(count >= 0)
-    return SyntaxText(baseAddress: self.input.baseAddress, count: count)
+    return SyntaxText(baseAddress: self.ptr, count: count)
   }
 
   /// Peek at the byte `offset` bytes ahead without advancing, or `nil` if the
   /// input does not reach that far.
   func peek(at offset: Int = 0) -> UInt8? {
     precondition(offset >= 0)
-    guard offset < self.input.count else {
+    guard offset < self.count, let ptr = self.ptr else {
       return nil
     }
-    return self.input[offset]
+    return ptr[offset]
   }
 
   /// Returns `true` if we are not at the end of the file and the character at
@@ -865,12 +905,12 @@ extension Lexer.Cursor.Position {
   @inline(__always)
   func advanced(by n: Int) -> Self {
     precondition(n > 0)
-    precondition(n <= self.input.count)
-    let base = self.input.baseAddress!
-    return .init(
-      input: UnsafeBufferPointer(start: base + n, count: self.input.count - n),
-      previous: base[n - 1]
-    )
+    precondition(n <= self.count)
+    var advanced = self
+    advanced.ptr = self.ptr! + n
+    // Assigning the count also clears the start bit.
+    advanced.metadata = self.count - n
+    return advanced
   }
 
   /// Advance past every byte that is only part of a string literal's text.
@@ -2868,7 +2908,7 @@ extension Lexer.Cursor {
     let advanced = curPtr.input.baseAddress?.advanced(by: markerKind.introducer.count)
     var restOfBuffer = Lexer.Cursor(
       input: .init(start: advanced, count: curPtr.input.count - markerKind.introducer.count),
-      previous: curPtr.input[markerKind.introducer.count - 1]
+      isAtStartOfInput: false
     )
     let terminator = markerKind.terminator
     let terminatorStart = terminator.first!
@@ -2889,7 +2929,7 @@ extension Lexer.Cursor {
       let advanced = restOfBuffer.input.baseAddress?.advanced(by: terminator.count)
       return Lexer.Cursor(
         input: .init(start: advanced, count: restOfBuffer.input.count - terminator.count),
-        previous: restOfBuffer.input[terminator.count - 1]
+        isAtStartOfInput: false
       )
     }
     return nil

@@ -16,6 +16,19 @@
 @_spi(RawSyntax) @_spi(BumpPtrAllocator) import SwiftSyntax
 #endif
 
+private func getStringLiteralKind(quoteToken: TokenSyntax) -> StringLiteralKind? {
+  switch quoteToken.tokenKind {
+  case .stringQuote:
+    return .singleLine
+  case .multilineStringQuote:
+    return .multiLine
+  case .singleQuote:
+    return .singleQuote
+  default:
+    return nil
+  }
+}
+
 extension StringLiteralExprSyntax {
 
   /// Returns the string value of the literal as the parsed program would see
@@ -55,21 +68,29 @@ extension StringLiteralExprSyntax {
 
   @_spi(Compiler)
   public var stringLiteralKind: StringLiteralKind? {
-    switch openingQuote.tokenKind {
-    case .stringQuote:
-      return .singleLine
-    case .multilineStringQuote:
-      return .multiLine
-    case .singleQuote:
-      return .singleQuote
-    default:
-      return nil
-    }
+    getStringLiteralKind(quoteToken: openingQuote)
   }
 
   @_spi(Compiler)
   public var delimiterLength: Int {
     openingPounds?.text.count ?? 0
+  }
+}
+
+extension SimpleStringLiteralExprSyntax {
+  public var representedLiteralValue: String? {
+    guard let stringLiteralKind else { return nil }
+
+    var results = ""
+    for segment in segments {
+      segment.appendUnescapedLiteralValue(stringLiteralKind: stringLiteralKind, delimiterLength: 0, to: &results)
+    }
+    return results
+  }
+
+  @_spi(Compiler)
+  public var stringLiteralKind: StringLiteralKind? {
+    getStringLiteralKind(quoteToken: openingQuote)
   }
 }
 

@@ -102,15 +102,13 @@ final class PeerMacroTests: XCTestCase {
       let call: ExprSyntax =
         "\(funcDecl.name)(\(raw: callArguments.joined(separator: ", ")))"
 
-      // FIXME: We should make CodeBlockSyntax ExpressibleByStringInterpolation,
-      // so that the full body could go here.
-      let newBody: ExprSyntax =
+      let newBody: CodeBlockSyntax =
         """
-
+        {
           Task {
             completionHandler(await \(call))
           }
-
+        }
         """
 
       // Drop the @addCompletionHandler attribute from the new declaration.
@@ -126,7 +124,7 @@ final class PeerMacroTests: XCTestCase {
       newFunc.signature.returnClause = nil  // drop result type
       newFunc.signature.parameterClause.parameters = newParameterList
       newFunc.signature.parameterClause.trailingTrivia = []
-      newFunc.body = CodeBlockSyntax { newBody }
+      newFunc.body = newBody
       newFunc.attributes = newAttributeList
 
       return [DeclSyntax(newFunc)]

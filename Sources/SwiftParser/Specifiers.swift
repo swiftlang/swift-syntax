@@ -27,10 +27,12 @@ public enum AsyncEffectSpecifier: TokenSpecSet {
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
     // We'll take 'await' too for recovery but they have to be on the same line
     // as the declaration they're modifying.
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.async): self = .async
-    case TokenSpec(.await, allowAtStartOfLine: false): self = .await
-    case TokenSpec(.reasync): self = .reasync
+    let atStartOfLine = lexeme.isAtStartOfLine
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .async: self = .async
+    case .await where !atStartOfLine: self = .await
+    case .reasync: self = .reasync
     default: return nil
     }
   }
@@ -64,11 +66,13 @@ public enum ThrowsEffectSpecifier: TokenSpecSet {
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
     // We'll take 'throw' and 'try' too for recovery but they have to
     // be on the same line as the declaration they're modifying.
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.rethrows): self = .rethrows
-    case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
-    case TokenSpec(.throws): self = .throws
-    case TokenSpec(.try, allowAtStartOfLine: false): self = .try
+    let atStartOfLine = lexeme.isAtStartOfLine
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .rethrows: self = .rethrows
+    case .throw where !atStartOfLine: self = .throw
+    case .throws: self = .throws
+    case .try where !atStartOfLine: self = .try
     default: return nil
     }
   }
@@ -229,8 +233,10 @@ extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case await
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .await where !atStartOfLine: self = .await
       default: return nil
       }
     }
@@ -247,9 +253,10 @@ extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case reasync
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.async): self = .async
-      case TokenSpec(.reasync): self = .reasync
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .async: self = .async
+      case .reasync: self = .reasync
       default: return nil
       }
     }
@@ -267,9 +274,11 @@ extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case `throw`
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
-      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .try where !atStartOfLine: self = .try
+      case .throw where !atStartOfLine: self = .throw
       default: return nil
       }
     }
@@ -287,9 +296,10 @@ extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case `throws`
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.rethrows): self = .rethrows
-      case TokenSpec(.throws): self = .throws
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .rethrows: self = .rethrows
+      case .throws: self = .throws
       default: return nil
       }
     }
@@ -309,9 +319,11 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case reasync
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
-      case TokenSpec(.reasync): self = .reasync
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .await where !atStartOfLine: self = .await
+      case .reasync: self = .reasync
       default: return nil
       }
     }
@@ -328,8 +340,9 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case async
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.async): self = .async
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .async: self = .async
       default: return nil
       }
     }
@@ -347,10 +360,12 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case `throw`
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.rethrows): self = .rethrows
-      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
-      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .rethrows: self = .rethrows
+      case .try where !atStartOfLine: self = .try
+      case .throw where !atStartOfLine: self = .throw
       default: return nil
       }
     }
@@ -368,8 +383,9 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case `throws`
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.throws): self = .throws
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .throws: self = .throws
       default: return nil
       }
     }
@@ -388,9 +404,11 @@ extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case reasync
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
-      case TokenSpec(.reasync): self = .reasync
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .await where !atStartOfLine: self = .await
+      case .reasync: self = .reasync
       default: return nil
       }
     }
@@ -407,8 +425,9 @@ extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case async
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.async): self = .async
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .async: self = .async
       default: return nil
       }
     }
@@ -426,10 +445,12 @@ extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case `throw`
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.rethrows): self = .rethrows
-      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
-      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .rethrows: self = .rethrows
+      case .try where !atStartOfLine: self = .try
+      case .throw where !atStartOfLine: self = .throw
       default: return nil
       }
     }
@@ -447,8 +468,9 @@ extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
     case `throws`
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.throws): self = .throws
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .throws: self = .throws
       default: return nil
       }
     }
@@ -467,9 +489,11 @@ extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTr
     case reasync
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.await, allowAtStartOfLine: false): self = .await
-      case TokenSpec(.reasync): self = .reasync
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .await where !atStartOfLine: self = .await
+      case .reasync: self = .reasync
       default: return nil
       }
     }
@@ -486,8 +510,9 @@ extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTr
     case async
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.async): self = .async
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .async: self = .async
       default: return nil
       }
     }
@@ -506,11 +531,13 @@ extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTr
     case `throws`
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.rethrows): self = .rethrows
-      case TokenSpec(.try, allowAtStartOfLine: false): self = .try
-      case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
-      case TokenSpec(.throws): self = .throws
+      let atStartOfLine = lexeme.isAtStartOfLine
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .rethrows: self = .rethrows
+      case .try where !atStartOfLine: self = .try
+      case .throw where !atStartOfLine: self = .throw
+      case .throws: self = .throws
       default: return nil
       }
     }

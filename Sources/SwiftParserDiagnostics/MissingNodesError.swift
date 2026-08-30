@@ -178,6 +178,28 @@ func nodesDescriptionAndCommonParent(
   return (nil, formatDescriptions(partDescriptions))
 }
 
+/// Like `nodesDescriptionAndCommonParent`, but applies special-case overrides
+/// for missing-node arrangements whose surrounding context would otherwise
+/// produce a misleading description.
+private func missingNodesDescriptionAndCommonParent(
+  _ missingNodes: [Syntax],
+  format: Bool
+) -> (commonAncestor: Syntax?, description: String) {
+  // When producing a description for a single `MissingDeclSyntax` that already
+  // carries attributes or modifiers, the parser has committed to "this should
+  // be a declaration"; describe it that way directly. The general climb logic
+  // in `nodesDescriptionAndCommonParent` would otherwise pick up the surrounding
+  // container's slot name (e.g. "statements" for a code block), which is accurate
+  // to the grammar but misleading as a description of the missing element.
+  if missingNodes.count == 1,
+    let missingDecl = missingNodes.first?.as(MissingDeclSyntax.self),
+    !missingDecl.attributes.isEmpty || !missingDecl.modifiers.isEmpty
+  {
+    return (nil, "declaration")
+  }
+  return nodesDescriptionAndCommonParent(missingNodes, format: format)
+}
+
 /// Formats an array of descriptions into a single string.
 ///
 /// This function takes an array of descriptions and formats them into a single string. Depending on the number
@@ -337,7 +359,7 @@ public struct MissingNodesError: ParserError {
   }
 
   public var message: String {
-    let (anchor, description) = nodesDescriptionAndCommonParent(missingNodes, format: true)
+    let (anchor, description) = missingNodesDescriptionAndCommonParent(missingNodes, format: true)
     var message = "expected \(description)"
     if let afterClause {
       message += " \(afterClause)"
@@ -367,7 +389,9 @@ public struct InsertTokenFixIt: ParserFixIt {
     self.missingNodes = missingNodes
   }
 
-  public var message: String { "insert \(nodesDescription(missingNodes, format: true))" }
+  public var message: String {
+    "insert \(missingNodesDescriptionAndCommonParent(missingNodes, format: true).description)"
+  }
 }
 
 // MARK: - Generate Error

@@ -346,6 +346,31 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
+  /// A sub-group that is reachable from multiple parents (a diamond-shaped
+  /// inheritance graph) must still have the control applied to it. Previously,
+  /// the BFS in `addWarningGroupControls` did not de-duplicate at dequeue, so
+  /// such a sub-group was enqueued (and re-processed) once per incoming path;
+  /// for deeper diamonds this caused the queue to grow exponentially.
+  func testDiamondSubGroupInheritance() throws {
+    try assertWarningGroupControl(
+      """
+      @diagnose(SuperGroup, as: error)
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      groupInheritanceTree: DiagnosticGroupInheritanceTree(subGroups: [
+        "SuperGroup": ["ChildA", "ChildB"],
+        "ChildA": ["SharedGroup"],
+        "ChildB": ["SharedGroup"],
+      ]),
+      diagnosticGroupID: "SharedGroup",
+      states: [
+        "1️⃣": .error
+      ]
+    )
+  }
+
   func testInheritanceTreeCycle() throws {
     XCTAssertThrowsError(
       try DiagnosticGroupInheritanceTree(subGroups: [

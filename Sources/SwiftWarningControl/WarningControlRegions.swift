@@ -130,22 +130,35 @@ public struct WarningControlRegionTree {
     guard !controls.isEmpty else { return }
     let newNode = WarningControlRegionNode(range: range)
     for (diagnosticGroupIdentifier, control) in controls {
-      // Handle the control for the added diagnostic group
-      // and propagate it to all of its subgroups.
+      // Breadth-first walk over the inheritance tree of `diagnosticGroupIdentifier`,
+      // applying `control` to every transitive sub-group.
+      //
+      // We use an index-based queue (rather than `Array.removeFirst()`, which is O(N))
+      // and dedupe at dequeue time. Previously, a sub-group reachable from more than one
+      // already-queued group would be enqueued multiple times and have its control
+      // re-applied each time, which was both redundant and made the loop O(N^2) in the
+      // queue size. For a diamond-shaped inheritance graph this caused the queue to
+      // grow exponentially, so the function would not terminate in any reasonable time.
       var groups: [DiagnosticGroupIdentifier] = [diagnosticGroupIdentifier]
+      var groupIndex = 0
       var processedGroups: Set<DiagnosticGroupIdentifier> = []
-      while !groups.isEmpty {
-        let groupIdentifier = groups.removeFirst()
-        processedGroups.insert(groupIdentifier)
+      while groupIndex < groups.count {
+        let groupIdentifier = groups[groupIndex]
+        groupIndex += 1
+        // Skip groups we already reached via another path through the inheritance tree.
+        guard processedGroups.insert(groupIdentifier).inserted else { continue }
+
         newNode.addWarningGroupControl(for: groupIdentifier, control: control)
         if control != .ignored {
           enabledGroups.insert(diagnosticGroupIdentifier)
         }
 
-        let newSubGroups = groupInheritanceTree.subgroups(of: groupIdentifier).filter { !processedGroups.contains($0) }
-        // Ensure we add a corresponding control to each direct and
-        // transitive sub-group of the one specified on this control.
-        groups.append(contentsOf: newSubGroups)
+        // Enqueue not-yet-processed sub-groups so each direct and transitive sub-group
+        // also receives the control.
+        for subGroup in groupInheritanceTree.subgroups(of: groupIdentifier)
+        where !processedGroups.contains(subGroup) {
+          groups.append(subGroup)
+        }
       }
     }
     insertIntoSubtree(newNode, parent: rootRegionNode)

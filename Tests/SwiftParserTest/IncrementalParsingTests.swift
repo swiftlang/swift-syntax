@@ -16,6 +16,30 @@ import XCTest
 import _SwiftSyntaxTestSupport
 
 class IncrementalParsingTests: ParserTestCase {
+  private func replacing(
+    _ oldText: String,
+    with newText: String,
+    in source: String
+  ) -> (String, SourceEdit) {
+    let range = source.range(of: oldText)!
+    let lowerBound = source.utf8.distance(
+      from: source.utf8.startIndex,
+      to: range.lowerBound.samePosition(in: source.utf8)!
+    )
+    let upperBound = source.utf8.distance(
+      from: source.utf8.startIndex,
+      to: range.upperBound.samePosition(in: source.utf8)!
+    )
+    var editedSource = source
+    editedSource.replaceSubrange(range, with: newText)
+    return (
+      editedSource,
+      SourceEdit(
+        range: AbsolutePosition(utf8Offset: lowerBound)..<AbsolutePosition(utf8Offset: upperBound),
+        replacement: newText
+      )
+    )
+  }
 
   public func testBrokenMemberFunction() {
     assertIncrementalParse(
@@ -38,6 +62,48 @@ class IncrementalParsingTests: ParserTestCase {
         ReusedNodeSpec("struct B {}", kind: .codeBlockItem)
       ]
     )
+  }
+
+  public func testLookaheadRangesForChildrenOfReusedNodeArePreserved() {
+    let originalSource = """
+      struct A {
+        func f() {}
+        func abc() {}
+        let value = 1
+      }
+      struct B {}
+      struct D {}
+      """
+    let originalResult = Parser.parseIncrementally(source: originalSource, parseTransition: nil)
+
+    // Reuse `struct A` while applying an unrelated edit. Because reusing the
+    // struct skips parsing its members, their lookahead ranges must be preserved.
+    let (intermediateSource, unrelatedEdit) = replacing("struct D", with: "struct E", in: originalSource)
+    var initiallyReusedNodes: [Syntax] = []
+    let intermediateResult = Parser.parseIncrementally(
+      source: intermediateSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: originalResult,
+        edits: ConcurrentEdits(unrelatedEdit),
+        reusedNodeCallback: { initiallyReusedNodes.append($0) }
+      )
+    )
+    XCTAssertTrue(initiallyReusedNodes.contains(where: { $0.trimmedDescription.hasPrefix("struct A") }))
+
+    // This invalidates the reused struct item. The unchanged function precedes
+    // the edit, so reusing it requires preserving the skipped child's range.
+    let (finalSource, memberEdit) = replacing("let value = 1", with: "let value = 2", in: intermediateSource)
+    var reusedNodes: [Syntax] = []
+    _ = Parser.parseIncrementally(
+      source: finalSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: intermediateResult,
+        edits: ConcurrentEdits(memberEdit),
+        reusedNodeCallback: { reusedNodes.append($0) }
+      )
+    )
+
+    XCTAssertTrue(reusedNodes.contains(where: { $0.trimmedDescription == "func f() {}" }))
   }
 
   public func testAddElse() {

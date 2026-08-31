@@ -24,6 +24,7 @@ extension Parser {
 
     let currentOffset = self.lexemes.offsetToStart(self.currentToken)
     if let node = parseLookup!.lookUp(AbsolutePosition(utf8Offset: currentOffset), kind: kind) {
+      parseLookup!.preserveLookaheadRanges(in: node, to: &lookaheadRanges)
       self.lexemes.advance(by: node.totalLength.utf8Length, currentToken: &self.currentToken)
       return node
     }
@@ -148,6 +149,16 @@ struct IncrementalParseLookup {
 
   fileprivate var reusedCallback: ReusedNodeCallback? {
     return transition.reusedNodeCallback
+  }
+
+  fileprivate func preserveLookaheadRanges(in node: Syntax, to lookaheadRanges: inout LookaheadRanges) {
+    var nodesToVisit = [node]
+    while let node = nodesToVisit.popLast() {
+      if let lookaheadLength = transition.previousIncrementalParseResult.lookaheadRanges.lookaheadRanges[node.raw.id] {
+        lookaheadRanges.registerNodeForIncrementalParse(node: node.raw, lookaheadLength: lookaheadLength)
+      }
+      nodesToVisit.append(contentsOf: node.children(viewMode: .sourceAccurate))
+    }
   }
 
   /// Does a lookup to see if the current source `offset` should be associated

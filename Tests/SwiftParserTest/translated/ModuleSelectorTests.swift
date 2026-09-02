@@ -1783,6 +1783,9 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorExpr() {
+    assertParse("Module::as(x)")
+    assertParse("Module::is(x)")
+
     assertParse(
       "let x = Swift::1️⃣do { 1 }",
       substructure: FunctionCallExprSyntax(

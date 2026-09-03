@@ -145,7 +145,7 @@ private func assertTokens(
     case (let actualError?, let expectedError?):
       // Create a token from the lexeme so we can pass it to `TokenDiagnostic.diagnosticMessage(in:)`
       let arena = ParsingRawSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
-      let rawToken = RawTokenSyntax(
+      let rawToken = RawSyntax.parsedToken(
         kind: actualLexeme.rawTokenKind,
         wholeText: arena.intern(actualLexeme.wholeText),
         textRange: actualLexeme.textRange,
@@ -153,7 +153,7 @@ private func assertTokens(
         tokenDiagnostic: actualLexeme.diagnostic,
         arena: arena
       )
-      let token = Syntax(raw: RawSyntax(rawToken), rawNodeArena: arena).cast(TokenSyntax.self)
+      let token = Syntax(raw: rawToken, rawNodeArena: arena).cast(TokenSyntax.self)
       assertStringsEqualWithDiff(
         actualError.diagnosticMessage(in: token).message,
         expectedError,

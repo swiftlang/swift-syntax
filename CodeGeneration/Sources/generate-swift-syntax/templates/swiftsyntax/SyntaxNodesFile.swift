@@ -45,8 +45,16 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         DeclSyntax(
           """
+          static func isKindOf(_ kind: SyntaxKind) -> Bool {
+            return kind == .\(node.enumCaseCallName)
+          }
+          """
+        )
+
+        DeclSyntax(
+          """
           public init?(_ node: __shared some SyntaxProtocol) {
-            guard node.raw.kind == .\(node.enumCaseCallName) else { return nil }
+            guard Self.isKindOf(node.raw.kind) else { return nil }
             self._syntaxNode = node._syntaxNode
           }
           """
@@ -226,10 +234,12 @@ extension ChildNodeChoices {
   var enumDecl: EnumDeclSyntax {
     try! EnumDeclSyntax("public enum \(self.name): SyntaxChildChoices, SyntaxHashable") {
       for choice in self.choices {
-        choice.enumCaseDecl
+        choice.enumCaseDecl()
       }
 
       self.syntaxGetter(propertyName: "_syntaxNode", propertyType: "Syntax")
+
+      self.isKindOfFuncDecl(parameterName: "kind", parameterType: "SyntaxKind", accessLevel: nil)
 
       for choice in self.choices {
         choice.baseTypeInitDecl(hasArgumentName: false) ?? choice.concreteTypeInitDecl

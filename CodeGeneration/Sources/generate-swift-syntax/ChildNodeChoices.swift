@@ -48,16 +48,26 @@ struct ChildNodeChoices {
   let name: TypeSyntax
   let choices: [Choice]
 
-  func isKindOfFuncDecl(parameterName: TokenSyntax, parameterType: TypeSyntax) -> FunctionDeclSyntax {
-    try! FunctionDeclSyntax("public static func isKindOf(_ \(parameterName): \(parameterType)) -> Bool") {
+  func isKindOfFuncDecl(
+    parameterName: TokenSyntax,
+    parameterType: TypeSyntax,
+    accessLevel: ImportAccessLevel? = .public
+  ) -> FunctionDeclSyntax {
+    try! FunctionDeclSyntax(
+      "\(accessLevel?.modifier) static func isKindOf(_ \(parameterName): \(parameterType)) -> Bool"
+    ) {
       ExprSyntax(
         "\(raw: self.choices.map { "\($0.syntaxType).isKindOf(\(parameterName))" }.joined(separator: " || "))"
       )
     }
   }
 
-  func syntaxGetter(propertyName: TokenSyntax, propertyType: TypeSyntax) -> VariableDeclSyntax {
-    try! VariableDeclSyntax("public var \(propertyName.declNameOrVarCallName): \(propertyType)") {
+  func syntaxGetter(
+    propertyName: TokenSyntax,
+    propertyType: TypeSyntax,
+    accessLevel: ImportAccessLevel? = .public
+  ) -> VariableDeclSyntax {
+    try! VariableDeclSyntax("\(accessLevel?.modifier) var \(propertyName.declNameOrVarCallName): \(propertyType)") {
       try! SwitchExprSyntax("switch self") {
         for choice in self.choices {
           SwitchCaseSyntax("case .\(choice.enumCaseCallName)(let node):") {
@@ -68,8 +78,8 @@ struct ChildNodeChoices {
     }
   }
 
-  func syntaxInitDecl(inputType: TypeSyntax) -> InitializerDeclSyntax {
-    try! InitializerDeclSyntax("public init?(_ node: \(inputType))") {
+  func syntaxInitDecl(inputType: TypeSyntax, accessLevel: ImportAccessLevel? = .public) -> InitializerDeclSyntax {
+    try! InitializerDeclSyntax("\(accessLevel?.modifier) init?(_ node: \(inputType))") {
       self.choices.ifExpr
     }
   }
@@ -105,18 +115,18 @@ extension Node {
 }
 
 extension ChildNodeChoices.Choice {
-  var enumCaseDecl: EnumCaseDeclSyntax {
+  func enumCaseDecl(internal isIntenral: Bool = false) -> EnumCaseDeclSyntax {
     try! EnumCaseDeclSyntax(
       """
-      \(self.documentation)\
-      \(self.experimentalDocNote)\
-      \(self.apiAttributes)\
+      \(isIntenral ? "" : self.documentation)\
+      \(isIntenral ? "" : self.experimentalDocNote)\
+      \(isIntenral ? "" : self.apiAttributes)\
       case \(self.enumCaseDeclName)(\(self.syntaxType))
       """
     )
   }
 
-  func baseTypeInitDecl(hasArgumentName: Bool) -> InitializerDeclSyntax? {
+  func baseTypeInitDecl(hasArgumentName: Bool, accessLevel: ImportAccessLevel? = .public) -> InitializerDeclSyntax? {
     guard self.isBase else {
       return nil
     }
@@ -133,7 +143,8 @@ extension ChildNodeChoices.Choice {
       """
       \(self.experimentalDocNote)\
       \(self.apiAttributes)\
-      public init(\(firstName)\(secondName): some \(self.protocolType))
+      \(accessLevel?.modifier) \
+      init(\(firstName)\(secondName): some \(self.protocolType))
       """
     ) {
       ExprSyntax(

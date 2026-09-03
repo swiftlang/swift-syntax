@@ -184,6 +184,15 @@ extension Syntax {
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .usingDecl, .variableDecl:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``DeclSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some DeclSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -214,12 +223,10 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .usingDecl, .variableDecl:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `DeclSyntaxProtocol`. This API is just
@@ -512,6 +519,15 @@ extension Syntax {
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr, .unsafeExpr:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``ExprSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some ExprSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -542,12 +558,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr, .unsafeExpr:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `ExprSyntaxProtocol`. This API is just
@@ -824,6 +838,15 @@ extension Syntax {
 public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``PatternSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some PatternSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -854,12 +877,10 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `PatternSyntaxProtocol`. This API is just
@@ -1098,6 +1119,15 @@ extension Syntax {
 public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``StmtSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some StmtSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -1128,12 +1158,10 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `StmtSyntaxProtocol`. This API is just
@@ -1385,6 +1413,15 @@ extension Syntax {
 public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``TypeSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some TypeSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -1415,12 +1452,10 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `TypeSyntaxProtocol`. This API is just

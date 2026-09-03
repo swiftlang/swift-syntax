@@ -25,8 +25,12 @@ public struct AccessorDeclListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .accessorDeclList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .accessorDeclList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -52,8 +56,12 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .arrayElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .arrayElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -128,6 +136,10 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
 
+     static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      AttributeSyntax.isKindOf(kind) || IfConfigDeclSyntax.isKindOf(kind)
+    }
+
     public init(_ node: AttributeSyntax) {
       self = .attribute(node)
     }
@@ -197,8 +209,12 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .attributeList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .attributeList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -226,8 +242,12 @@ public struct AvailabilityArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .availabilityArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .availabilityArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -253,8 +273,12 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .catchClauseList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .catchClauseList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -280,8 +304,12 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .catchItemList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .catchItemList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -307,8 +335,12 @@ public struct ClosureCaptureListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .closureCaptureList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .closureCaptureList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -334,8 +366,12 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .closureParameterList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .closureParameterList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -374,8 +410,12 @@ public struct ClosureShorthandParameterListSyntax: SyntaxCollection, SyntaxHasha
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .closureShorthandParameterList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .closureShorthandParameterList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -406,8 +446,12 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .codeBlockItemList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .codeBlockItemList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -433,8 +477,12 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .compositionTypeElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .compositionTypeElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -462,8 +510,12 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .conditionElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .conditionElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -512,8 +564,12 @@ public struct DeclModifierListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .declModifierList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .declModifierList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -539,8 +595,12 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .declNameArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .declNameArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -566,8 +626,12 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .designatedTypeList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .designatedTypeList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -593,8 +657,12 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .dictionaryElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .dictionaryElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -620,8 +688,12 @@ public struct DifferentiabilityArgumentListSyntax: SyntaxCollection, SyntaxHasha
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .differentiabilityArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .differentiabilityArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -649,8 +721,12 @@ public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, Syntax
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .documentationAttributeArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .documentationAttributeArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -678,8 +754,12 @@ public struct EffectsAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashab
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .effectsAttributeArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .effectsAttributeArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -707,8 +787,12 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -734,8 +818,12 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseParameterList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseParameterList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -763,8 +851,12 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .exprList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .exprList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -801,8 +893,12 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionParameterList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .functionParameterList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -828,8 +924,12 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .genericArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .genericArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -855,8 +955,12 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .genericParameterList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .genericParameterList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -882,8 +986,12 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .genericRequirementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .genericRequirementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -909,8 +1017,12 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .ifConfigClauseList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .ifConfigClauseList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -936,8 +1048,12 @@ public struct ImportPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .importPathComponentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .importPathComponentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -963,8 +1079,12 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .inheritedTypeList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .inheritedTypeList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -992,8 +1112,12 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .keyPathComponentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .keyPathComponentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1026,8 +1150,12 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .labeledExprList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .labeledExprList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1056,8 +1184,12 @@ public struct LifetimeSpecifierArgumentListSyntax: SyntaxCollection, SyntaxHasha
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .lifetimeSpecifierArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .lifetimeSpecifierArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1084,8 +1216,12 @@ public struct MemberBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .memberBlockItemList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .memberBlockItemList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1114,8 +1250,12 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .multipleTrailingClosureElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .multipleTrailingClosureElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1141,8 +1281,12 @@ public struct ObjCSelectorPieceListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .objCSelectorPieceList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .objCSelectorPieceList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1168,8 +1312,12 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .patternBindingList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .patternBindingList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1196,8 +1344,12 @@ public struct PlatformVersionItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .platformVersionItemList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .platformVersionItemList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1236,6 +1388,10 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       case .precedenceGroupAssociativity(let node):
         return node._syntaxNode
       }
+    }
+
+     static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      PrecedenceGroupRelationSyntax.isKindOf(kind) || PrecedenceGroupAssignmentSyntax.isKindOf(kind) || PrecedenceGroupAssociativitySyntax.isKindOf(kind)
     }
 
     public init(_ node: PrecedenceGroupRelationSyntax) {
@@ -1335,8 +1491,12 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .precedenceGroupAttributeList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .precedenceGroupAttributeList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1362,8 +1522,12 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .precedenceGroupNameList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .precedenceGroupNameList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1389,8 +1553,12 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .primaryAssociatedTypeList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .primaryAssociatedTypeList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1418,8 +1586,12 @@ public struct SimpleStringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHash
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .simpleStringLiteralSegmentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .simpleStringLiteralSegmentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1464,6 +1636,10 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
       case .genericWhereClause(let node):
         return node._syntaxNode
       }
+    }
+
+     static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      LabeledSpecializeArgumentSyntax.isKindOf(kind) || SpecializeAvailabilityArgumentSyntax.isKindOf(kind) || SpecializeTargetFunctionArgumentSyntax.isKindOf(kind) || GenericWhereClauseSyntax.isKindOf(kind)
     }
 
     public init(_ node: LabeledSpecializeArgumentSyntax) {
@@ -1596,8 +1772,12 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .specializeAttributeArgumentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .specializeAttributeArgumentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1636,6 +1816,10 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
       case .expressionSegment(let node):
         return node._syntaxNode
       }
+    }
+
+     static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      StringSegmentSyntax.isKindOf(kind) || ExpressionSegmentSyntax.isKindOf(kind)
     }
 
     public init(_ node: StringSegmentSyntax) {
@@ -1707,8 +1891,12 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .stringLiteralSegmentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .stringLiteralSegmentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1734,8 +1922,12 @@ public struct SwitchCaseItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .switchCaseItemList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .switchCaseItemList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1790,6 +1982,10 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       case .macroExpansionDecl(let node):
         return node._syntaxNode
       }
+    }
+
+     static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      SwitchCaseSyntax.isKindOf(kind) || IfConfigDeclSyntax.isKindOf(kind) || MacroExpansionDeclSyntax.isKindOf(kind)
     }
 
     public init(_ node: SwitchCaseSyntax) {
@@ -1889,8 +2085,12 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .switchCaseList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .switchCaseList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1918,8 +2118,12 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .tuplePatternElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .tuplePatternElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1946,8 +2150,12 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .tupleTypeElementList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .tupleTypeElementList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1988,6 +2196,10 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       case .nonisolatedTypeSpecifier(let node):
         return node._syntaxNode
       }
+    }
+
+     static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      SimpleTypeSpecifierSyntax.isKindOf(kind) || LifetimeTypeSpecifierSyntax.isKindOf(kind) || NonisolatedTypeSpecifierSyntax.isKindOf(kind)
     }
 
     public init(_ node: SimpleTypeSpecifierSyntax) {
@@ -2095,8 +2307,12 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .typeSpecifierList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .typeSpecifierList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2120,8 +2336,12 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .unexpectedNodes
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .unexpectedNodes else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2147,8 +2367,12 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .versionComponentList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .versionComponentList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2174,8 +2398,12 @@ public struct YieldedExpressionListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .yieldedExpressionList
+  }
+
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .yieldedExpressionList else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode

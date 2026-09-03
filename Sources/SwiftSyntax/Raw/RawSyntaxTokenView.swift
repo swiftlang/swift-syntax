@@ -15,7 +15,7 @@ extension RawSyntax {
   /// The token's payload must be a token, otherwise this traps.
   @_spi(RawSyntax)
   public var tokenView: RawSyntaxTokenView? {
-    switch raw.payload {
+    switch payload {
     case .parsedToken, .materializedToken:
       return RawSyntaxTokenView(raw: self)
     case .layout(_):
@@ -281,13 +281,13 @@ public struct RawSyntaxTokenView: Sendable {
   }
 
   @_spi(RawSyntax)
-  public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: RawSyntaxArena) -> RawTokenSyntax {
+  public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: RawSyntaxArena) -> RawSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var dat):
       if arena == self.raw.arenaReference {
         dat.tokenDiagnostic = tokenDiagnostic
-        return RawSyntax(arena: arena, payload: .parsedToken(dat)).cast(RawTokenSyntax.self)
+        return RawSyntax(arena: arena, payload: .parsedToken(dat))
       }
       // If the modified token is allocated in a different arena, it might have
       // a different or no `parseTrivia` function. We thus cannot use a
@@ -299,10 +299,10 @@ public struct RawSyntaxTokenView: Sendable {
         presence: presence,
         tokenDiagnostic: tokenDiagnostic,
         arena: arena
-      ).cast(RawTokenSyntax.self)
+      )
     case .materializedToken(var dat):
       dat.tokenDiagnostic = tokenDiagnostic
-      return RawSyntax(arena: arena, payload: .materializedToken(dat)).cast(RawTokenSyntax.self)
+      return RawSyntax(arena: arena, payload: .materializedToken(dat))
     default:
       preconditionFailure("'withTokenDiagnostic' is not available for non-token node")
     }

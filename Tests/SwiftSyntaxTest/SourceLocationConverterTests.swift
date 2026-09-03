@@ -41,17 +41,22 @@ final class SourceLocationConverterTests: XCTestCase {
         arena.intern(SyntaxText(buffer: ArenaAllocatedBufferPointer(buf)))
       }
 
-      let nodeWithInvalidUtf8 = RawTokenSyntax(
+      let leadingTrivia: [RawTriviaPiece] = [.unexpectedText(leadingTriviaText)]
+      let nodeWithInvalidUtf8 = RawSyntax.makeMaterializedToken(
         kind: .endOfFile,
         text: "",
-        leadingTriviaPieces: [
-          .unexpectedText(leadingTriviaText)
-        ],
+        leadingTriviaPieceCount: leadingTrivia.count,
+        trailingTriviaPieceCount: 0,
         presence: .present,
-        arena: arena
+        tokenDiagnostic: nil,
+        arena: arena,
+        initializingLeadingTriviaWith: { buffer in
+          _ = buffer.initialize(from: leadingTrivia)
+        },
+        initializingTrailingTriviaWith: { _ in }
       )
 
-      return Syntax(raw: nodeWithInvalidUtf8.raw, rawNodeArena: arena).cast(TokenSyntax.self)
+      return Syntax(raw: nodeWithInvalidUtf8, rawNodeArena: arena).cast(TokenSyntax.self)
     }
 
     let tree = SourceFileSyntax(statements: [], endOfFileToken: eofToken)

@@ -15,7 +15,7 @@ extension RawSyntax {
   /// The token's payload must be a layout, otherwise this traps.
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView? {
-    switch raw.payload {
+    switch payload {
     case .parsedToken, .materializedToken:
       return nil
     case .layout:

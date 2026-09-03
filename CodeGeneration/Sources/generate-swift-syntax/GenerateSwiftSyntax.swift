@@ -162,7 +162,7 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
           syntaxNode(nodesStartingWith: Array(letters))
         ),
         GeneratedFileSpec(
-          swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes\(letters).swift"],
+          swiftParserGeneratedDir + ["raw", "RawSyntaxNodes\(letters).swift"],
           rawSyntaxNodesFile(nodesStartingWith: Array(letters))
         ),
       ]

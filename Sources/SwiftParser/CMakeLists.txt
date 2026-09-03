@@ -43,11 +43,24 @@ add_swift_syntax_library(SwiftParser
   TriviaParser.swift
   Types.swift
 
+  RawSyntaxNodeProtocol.swift
+  RawMissingNodeInitializers.swift
+
   generated/LanguageFeatures.swift
   generated/IsLexerClassified.swift
   generated/LayoutNodes+Parsable.swift
   generated/Parser+TokenSpecSet.swift
   generated/TokenSpecStaticMembers.swift
+
+  generated/raw/RawSyntaxNodesAB.swift
+  generated/raw/RawSyntaxNodesC.swift
+  generated/raw/RawSyntaxNodesD.swift
+  generated/raw/RawSyntaxNodesEF.swift
+  generated/raw/RawSyntaxNodesGHI.swift
+  generated/raw/RawSyntaxNodesJKLMN.swift
+  generated/raw/RawSyntaxNodesOP.swift
+  generated/raw/RawSyntaxNodesQRS.swift
+  generated/raw/RawSyntaxNodesTUVWXYZ.swift
 
   Lexer/Cursor.swift
   Lexer/Lexeme.swift

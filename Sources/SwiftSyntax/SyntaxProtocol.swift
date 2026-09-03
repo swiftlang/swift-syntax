@@ -353,7 +353,7 @@ extension SyntaxProtocol {
   ///  - unexpected nodes or
   ///  - tokens with a ``TokenDiagnostic`` of severity ``TokenDiagnostic/Severity-swift.enum/error``.
   public var hasError: Bool {
-    return raw.hasError
+    return raw.recursiveFlags.contains(.hasError)
   }
 
   /// Whether the tree contained by this layout has any tokens with a
@@ -592,7 +592,7 @@ extension SyntaxProtocol {
   /// underlying tokens, e.g. an empty CodeBlockItemList.
   @available(*, deprecated, message: "Check children(viewMode: .all).isEmpty instead")
   public var isImplicit: Bool {
-    return raw.isEmpty
+    return raw.byteLength == 0
   }
 
   /// Returns a value representing the unique identity of the node.

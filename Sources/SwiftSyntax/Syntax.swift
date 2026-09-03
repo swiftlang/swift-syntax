@@ -33,6 +33,10 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   let arena: SyntaxDataArena
   let dataRef: SyntaxDataReference
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    true
+  }
+
   /// "designated" memberwise initializer of `Syntax`.
   @_transparent  // Inline early to enable certain optimzation.
   init(arena: __shared SyntaxDataArena, dataRef: SyntaxDataReference) {

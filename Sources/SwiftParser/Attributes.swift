@@ -192,7 +192,9 @@ extension Parser {
         self.swiftVersion < .v6 ? .extraneousTrailingWhitespaceWarning : .extraneousTrailingWhitespaceError,
         byteOffset: atSign.leadingTriviaByteLength + atSign.tokenText.count
       )
-      atSign = atSign.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
+      atSign = atSign.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena).cast(
+        RawTokenSyntax.self
+      )
     }
     let attributeName = self.parseAttributeName()
     let attributeNameHasTrailingSpace = attributeName.raw.trailingTriviaByteLength > 0
@@ -221,7 +223,9 @@ extension Parser {
           self.swiftVersion < .v6 ? .extraneousLeadingWhitespaceWarning : .extraneousLeadingWhitespaceError,
           byteOffset: 0
         )
-        leftParen = leftParen.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
+        leftParen = leftParen.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena).cast(
+          RawTokenSyntax.self
+        )
       }
 
       let unexpectedBeforeArguments: RawUnexpectedNodesSyntax?

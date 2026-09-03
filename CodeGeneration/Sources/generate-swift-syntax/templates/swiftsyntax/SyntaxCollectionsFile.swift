@@ -43,8 +43,16 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
+        static func isKindOf(_ kind: SyntaxKind) -> Bool {
+          return kind == .\(node.enumCaseCallName)
+        }
+        """
+      )
+
+      DeclSyntax(
+        """
         public init?(_ node: some SyntaxProtocol) {
-          guard node.raw.kind == .\(node.memberCallName) else { return nil }
+          guard Self.isKindOf(node.raw.kind) else { return nil }
           self._syntaxNode = node._syntaxNode
         }
         """

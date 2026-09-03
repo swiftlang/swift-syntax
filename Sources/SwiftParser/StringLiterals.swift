@@ -71,7 +71,7 @@ private class StringLiteralExpressionIndentationChecker {
     let tokenWithDiagnostic = token.tokenView.withTokenDiagnostic(
       tokenDiagnostic: TokenDiagnostic(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0),
       arena: arena
-    )
+    ).cast(RawTokenSyntax.self)
     return RawSyntax(tokenWithDiagnostic)
   }
 

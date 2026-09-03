@@ -26,8 +26,10 @@ public struct TokenDiagnostic: Hashable, Sendable {
     case editorPlaceholder
     case equalMustHaveConsistentWhitespaceOnBothSides
     case expectedBinaryExponentInHexFloatLiteral
+    case expectedClosingBraceInRawCodeUnitEscape
     case expectedClosingBraceInUnicodeEscape
     case expectedDigitInFloatLiteral
+    case expectedHexCodeInRawCodeUnitEscape
     case expectedHexCodeInUnicodeEscape
     case expectedHexDigitInHexLiteral
     case extraneousLeadingWhitespaceError
@@ -44,6 +46,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
     case invalidFloatingPointExponentDigit
     case invalidHexDigitInIntegerLiteral
     case invalidIdentifierStartCharacter
+    case invalidNumberOfHexDigitsInRawCodeUnitEscape
     case invalidNumberOfHexDigitsInUnicodeEscape
     case invalidOctalDigitInIntegerLiteral
     case invalidUtf8
@@ -70,8 +73,10 @@ public struct TokenDiagnostic: Hashable, Sendable {
       case .editorPlaceholder: return .error
       case .equalMustHaveConsistentWhitespaceOnBothSides: return .error
       case .expectedBinaryExponentInHexFloatLiteral: return .error
+      case .expectedClosingBraceInRawCodeUnitEscape: return .error
       case .expectedClosingBraceInUnicodeEscape: return .error
       case .expectedDigitInFloatLiteral: return .error
+      case .expectedHexCodeInRawCodeUnitEscape: return .error
       case .expectedHexCodeInUnicodeEscape: return .error
       case .expectedHexDigitInHexLiteral: return .error
       case .extraneousLeadingWhitespaceError: return .error
@@ -88,6 +93,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
       case .invalidFloatingPointExponentDigit: return .error
       case .invalidHexDigitInIntegerLiteral: return .error
       case .invalidIdentifierStartCharacter: return .error
+      case .invalidNumberOfHexDigitsInRawCodeUnitEscape: return .error
       case .invalidNumberOfHexDigitsInUnicodeEscape: return .error
       case .invalidOctalDigitInIntegerLiteral: return .error
       case .invalidUtf8: return .error

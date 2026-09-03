@@ -527,6 +527,16 @@ public class AttributeRemover: SyntaxRewriter {
 
   var triviaToAttachToNextToken: Trivia = Trivia()
 
+  /// When `true`, the next call to `prependAndClearAccumulatedTrivia(to:)`
+  /// should also drop one leading newline (and any spaces/tabs that
+  /// immediately precede it) from the resulting trivia.
+  ///
+  /// This is set when we remove an attribute that occupies its own line but
+  /// whose own leading trivia does not contain the line-terminating newline
+  /// (e.g. the attribute is the first token of the file, so the newline
+  /// terminating its line lives on the following node).
+  var dropLeadingNewlineOnNextNode: Bool = false
+
   /// Initializes an attribute remover with a given predicate to determine which attributes to remove.
   ///
   /// - Parameter predicate: A closure that determines whether a given `AttributeSyntax` should be removed.
@@ -560,6 +570,16 @@ public class AttributeRemover: SyntaxRewriter {
           !nextToken.leadingTrivia.isEmpty
         {
           leadingTrivia = Trivia(pieces: leadingTrivia.pieces[..<lastNewline])
+        } else if leadingTrivia.isEmpty,
+          attribute.trailingTrivia.allSatisfy(\.isSpaceOrTab),
+          attribute.previousToken(viewMode: .sourceAccurate)
+            .map({ $0.trailingTrivia.pieces.last?.isNewline ?? false }) ?? true
+        {
+          // The attribute occupies its own line, but the newline terminating that
+          // line lives on a following node (either the next attribute or the next
+          // token on a following node) rather than on this attribute. Record that
+          // we need to drop that newline when we attach accumulated trivia.
+          dropLeadingNewlineOnNextNode = true
         }
 
         // Drop any spaces or tabs from the trailing trivia because there’s no
@@ -609,12 +629,30 @@ public class AttributeRemover: SyntaxRewriter {
   /// significant trivia accumulated from removed attributes to the provided subsequent node.
   /// Once attached, the accumulated trivia is cleared.
   ///
+  /// If `dropLeadingNewlineOnNextNode` is `true`, this function additionally
+  /// drops one leading newline (and any spaces or tabs that precede it) from
+  /// the combined trivia, removing the line vacated by a removed attribute
+  /// whose own leading trivia did not include that newline.
+  ///
   /// - Parameter node: The syntax node receiving the accumulated trivia.
   /// - Returns: The modified syntax node with the prepended trivia.
   private func prependAndClearAccumulatedTrivia<T: SyntaxProtocol>(to syntaxNode: T) -> T {
-    guard !triviaToAttachToNextToken.isEmpty else { return syntaxNode }
-    defer { triviaToAttachToNextToken = Trivia() }
-    return syntaxNode.with(\.leadingTrivia, triviaToAttachToNextToken + syntaxNode.leadingTrivia)
+    guard !triviaToAttachToNextToken.isEmpty || dropLeadingNewlineOnNextNode else {
+      return syntaxNode
+    }
+    defer {
+      triviaToAttachToNextToken = Trivia()
+      dropLeadingNewlineOnNextNode = false
+    }
+
+    var combined = triviaToAttachToNextToken + syntaxNode.leadingTrivia
+    if dropLeadingNewlineOnNextNode,
+      let firstNewline = combined.pieces.firstIndex(where: \.isNewline),
+      combined.pieces[..<firstNewline].allSatisfy(\.isSpaceOrTab)
+    {
+      combined = Trivia(pieces: combined.pieces[combined.index(after: firstNewline)...])
+    }
+    return syntaxNode.with(\.leadingTrivia, combined)
   }
 }
 

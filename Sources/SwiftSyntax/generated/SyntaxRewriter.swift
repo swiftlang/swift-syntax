@@ -1425,6 +1425,14 @@ open class SyntaxRewriter {
     return TypeSyntax(NamedOpaqueReturnTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a `NamespaceDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: NamespaceDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(NamespaceDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
   /// Visit a ``NilLiteralExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3143,6 +3151,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitNamespaceDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(NamespaceDeclSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitNilLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(NilLiteralExprSyntax(unsafeCasting: node)))
   }
@@ -4071,6 +4084,8 @@ open class SyntaxRewriter {
       return self.visitMultipleTrailingClosureElementSyntaxImpl(_:)
     case .namedOpaqueReturnType:
       return self.visitNamedOpaqueReturnTypeSyntaxImpl(_:)
+    case .namespaceDecl:
+      return self.visitNamespaceDeclSyntaxImpl(_:)
     case .nilLiteralExpr:
       return self.visitNilLiteralExprSyntaxImpl(_:)
     case .nonisolatedSpecifierArgument:
@@ -4667,6 +4682,8 @@ open class SyntaxRewriter {
       return visitMultipleTrailingClosureElementSyntaxImpl(node)
     case .namedOpaqueReturnType:
       return visitNamedOpaqueReturnTypeSyntaxImpl(node)
+    case .namespaceDecl:
+      return visitNamespaceDeclSyntaxImpl(node)
     case .nilLiteralExpr:
       return visitNilLiteralExprSyntaxImpl(node)
     case .nonisolatedSpecifierArgument:

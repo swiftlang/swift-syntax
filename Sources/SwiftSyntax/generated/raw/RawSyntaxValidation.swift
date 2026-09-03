@@ -2167,6 +2167,20 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateNamespaceDeclSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 11)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("namespace")]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawMemberBlockSyntax.self))
+    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateNilLiteralExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -3556,6 +3570,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateMultipleTrailingClosureElementSyntax(kind: kind, layout: layout)
   case .namedOpaqueReturnType:
     validateNamedOpaqueReturnTypeSyntax(kind: kind, layout: layout)
+  case .namespaceDecl:
+    validateNamespaceDeclSyntax(kind: kind, layout: layout)
   case .nilLiteralExpr:
     validateNilLiteralExprSyntax(kind: kind, layout: layout)
   case .nonisolatedSpecifierArgument:

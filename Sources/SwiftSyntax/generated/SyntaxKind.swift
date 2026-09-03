@@ -214,6 +214,8 @@ public enum SyntaxKind: Sendable {
   case multipleTrailingClosureElementList
   case multipleTrailingClosureElement
   case namedOpaqueReturnType
+  @_spi(ExperimentalLanguageFeatures)
+  case namespaceDecl
   case nilLiteralExpr
   case nonisolatedSpecifierArgument
   case nonisolatedTypeSpecifier
@@ -830,6 +832,8 @@ public enum SyntaxKind: Sendable {
       return MultipleTrailingClosureElementSyntax.self
     case .namedOpaqueReturnType:
       return NamedOpaqueReturnTypeSyntax.self
+    case .namespaceDecl:
+      return NamespaceDeclSyntax.self
     case .nilLiteralExpr:
       return NilLiteralExprSyntax.self
     case .nonisolatedSpecifierArgument:

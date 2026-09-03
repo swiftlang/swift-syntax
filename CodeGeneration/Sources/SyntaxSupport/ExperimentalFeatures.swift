@@ -25,6 +25,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case borrowAndMutateAccessors
   case literalExpressions
   case calledAttribute
+  case namespaces
   case _test_EverythingUnexpected
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
@@ -54,6 +55,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "LiteralExpressions"
     case .calledAttribute:
       return "CalledAttribute"
+    case .namespaces:
+      return "Namespaces"
     case ._test_EverythingUnexpected:
       return "_test_EverythingUnexpected"
     }
@@ -86,6 +89,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "constant-foldable literal expressions"
     case .calledAttribute:
       return "`@called(...)` attribute on function types"
+    case .namespaces:
+      return "namespace declarations"
     case ._test_EverythingUnexpected:
       return "a test feature that parses everything as unexpected"
     }

@@ -1663,6 +1663,48 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .namespaceDecl,
+    base: .decl,
+    experimentalFeature: .namespaces,
+    nameForDiagnostics: "namespace",
+    documentation: "A declaration that introduces a namespace.",
+    traits: [
+      "NamedDecl",
+      "WithAttributes",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "attributes",
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes",
+        documentation: "Attributes written before the namespace declaration. These are retained for diagnostics."
+      ),
+      Child(
+        name: "modifiers",
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers written before the namespace declaration. These are retained for diagnostics."
+      ),
+      Child(
+        name: "namespaceKeyword",
+        kind: .token(choices: [.keyword(.namespace)]),
+        documentation: "The `namespace` keyword for this declaration."
+      ),
+      Child(
+        name: "name",
+        kind: .token(choices: [.token(.identifier)]),
+        documentation: "The name of the namespace."
+      ),
+      Child(
+        name: "memberBlock",
+        kind: .node(kind: .memberBlock),
+        documentation: "The declarations contained in the namespace."
+      ),
+    ]
+  ),
+
+  Node(
     kind: .declModifierList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,

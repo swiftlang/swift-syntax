@@ -63,6 +63,20 @@ final class NamespaceDeclarationTests: ParserTestCase {
     XCTAssertEqual(declarations[1].memberBlock.members.count, 1)
   }
 
+  func testConsecutiveTopLevelNamespaces() {
+    let source = """
+      namespace Empty {}
+      namespace `switch` {}
+      @available(*, deprecated)
+      public namespace Network {}
+      """
+
+    assertParse(source)
+
+    let declarations = namespaceDeclarations(in: source, languageFeatures: languageFeatures)
+    XCTAssertEqual(declarations.map(\.name.text), ["Empty", "`switch`", "Network"])
+  }
+
   func testNamespaceRemainsAnIdentifierOutsideDeclarationShape() {
     let source = """
       let namespace = 0

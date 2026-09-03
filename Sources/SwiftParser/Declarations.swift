@@ -159,7 +159,7 @@ extension TokenConsumer {
   /// body opener so ordinary identifier uses continue to parse as expressions.
   /// In declaration-only contexts, or after attributes or modifiers have
   /// established declaration intent, also accept missing syntax for recovery.
-  fileprivate mutating func atStartOfNamespaceDeclaration(allowRecovery: Bool) -> Bool {
+  mutating func atStartOfNamespaceDeclaration(allowRecovery: Bool) -> Bool {
     guard languageFeatures.contains(.namespaces), self.at(.keyword(.namespace)) else {
       return false
     }

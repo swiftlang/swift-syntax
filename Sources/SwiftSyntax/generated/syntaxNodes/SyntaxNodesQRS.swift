@@ -3382,7 +3382,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 ///  - `subscriptKeyword`: `subscript`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
-///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `accessorBlock`: ``AccessorBlockSyntax``?
@@ -3410,7 +3410,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   ///   - genericParameterClause: The parameter clause that defines the generic parameters.
   ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
@@ -3636,6 +3636,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenParameterClauseAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
@@ -3645,6 +3646,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var yieldClause: FunctionYieldClauseSyntax? {
     get {
       return Syntax(self).child(at: 11)?.cast(FunctionYieldClauseSyntax.self)
@@ -3654,6 +3656,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)

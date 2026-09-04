@@ -140,8 +140,11 @@ public enum SyntaxKind: Sendable {
   case functionParameter
   case functionSignature
   case functionType
+  @_spi(ExperimentalLanguageFeatures)
   case functionYieldClause
+  @_spi(ExperimentalLanguageFeatures)
   case functionYieldList
+  @_spi(ExperimentalLanguageFeatures)
   case functionYield
   case genericArgumentClause
   case genericArgumentList

@@ -115,7 +115,7 @@ extension Parser {
       case TokenSpec(.objc): self = .objc
       case TokenSpec(.Sendable): self = .Sendable
       case TokenSpec(.transpose): self = .transpose
-      case TokenSpec(.`yield_once`): self = .yield_once
+      case TokenSpec(.`yield_once`) where languageFeatures.contains(.coroutineFunctions): self = .yield_once
       default:
         return nil
       }
@@ -1167,8 +1167,9 @@ extension Parser.Lookahead {
         TokenSpec(.rightParen),
         TokenSpec(.rightBrace),
         TokenSpec(.rightSquare),
-        TokenSpec(.rightAngle),
-        TokenSpec(.yields):
+        TokenSpec(.rightAngle):
+        return false
+      case TokenSpec(.yields) where languageFeatures.contains(.coroutineFunctions):
         return false
       case _ where lookahead.at(.keyword(.async)):
         return false

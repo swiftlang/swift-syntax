@@ -2210,7 +2210,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
 /// ### Children
 /// 
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
-///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `arrow`: `->`
 public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -2230,7 +2230,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
@@ -2290,6 +2290,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -2299,6 +2300,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var yieldClause: FunctionYieldClauseSyntax? {
     get {
       return Syntax(self).child(at: 3)?.cast(FunctionYieldClauseSyntax.self)
@@ -2308,6 +2310,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenYieldClauseAndArrow: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)

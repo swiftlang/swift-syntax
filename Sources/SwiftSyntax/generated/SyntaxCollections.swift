@@ -826,13 +826,16 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
 /// }
 /// ```
 ///
+/// - Note: Requires experimental feature `coroutineFunctions`.
+///
 /// ### Children
 /// 
-/// ``FunctionYieldSyntax`` `*`
+/// `FunctionYieldSyntax` `*`
 ///
 /// ### Contained in
 /// 
-///  - ``FunctionYieldClauseSyntax``.``FunctionYieldClauseSyntax/yields``
+///  - `FunctionYieldClauseSyntax`.`FunctionYieldClauseSyntax/yields`
+@_spi(ExperimentalLanguageFeatures)
 public struct FunctionYieldListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = FunctionYieldSyntax
 

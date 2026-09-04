@@ -621,9 +621,8 @@ extension Parser {
   }
 
   mutating func parseYields() -> RawFunctionYieldClauseSyntax? {
-    let (unexpectedBeforeYields, yieldsKeyword) = self.expect(.keyword(.yields))
     // If there is no `yields` at all, then let result type parsing handle everything else
-    if yieldsKeyword.isMissing {
+    guard let yieldsKeyword = self.consume(if: .keyword(.yields)) else {
       return nil
     }
 
@@ -649,7 +648,7 @@ extension Parser {
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
     return RawFunctionYieldClauseSyntax(
-      unexpectedBeforeYields,
+      nil,
       yieldsKeyword: yieldsKeyword,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,

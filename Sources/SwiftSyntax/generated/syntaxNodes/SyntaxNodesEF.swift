@@ -4386,7 +4386,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// 
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
 ///  - `effectSpecifiers`: ``FunctionEffectSpecifiersSyntax``?
-///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``?
 ///
 /// ### Contained in
@@ -4415,7 +4415,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   ///   - effectSpecifiers: The effect indicators of the function, like `async` or `throws`
   ///   - returnClause: The return type of the function.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeParameterClause: UnexpectedNodesSyntax? = nil,
     parameterClause: FunctionParameterClauseSyntax,
@@ -4501,6 +4501,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4510,6 +4511,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var yieldClause: FunctionYieldClauseSyntax? {
     get {
       return Syntax(self).child(at: 5)?.cast(FunctionYieldClauseSyntax.self)
@@ -4519,6 +4521,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -4568,7 +4571,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - `parameters`: ``TupleTypeElementListSyntax``
 ///  - `rightParen`: `)`
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
-///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -4588,7 +4591,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax = .leftParenToken(),
@@ -4753,6 +4756,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -4762,6 +4766,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var yieldClause: FunctionYieldClauseSyntax? {
     get {
       return Syntax(self).child(at: 9)?.cast(FunctionYieldClauseSyntax.self)
@@ -4771,6 +4776,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
@@ -4817,11 +4823,13 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
 
 // MARK: - FunctionYieldClauseSyntax
 
+/// - Note: Requires experimental feature `coroutineFunctions`.
+///
 /// ### Children
 /// 
 ///  - `yieldsKeyword`: (`<identifier>` | `yields`)
 ///  - `leftParen`: `(`
-///  - `yields`: ``FunctionYieldListSyntax``
+///  - `yields`: `FunctionYieldListSyntax`
 ///  - `rightParen`: `)`
 ///
 /// ### Contained in
@@ -4831,6 +4839,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
 ///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/yieldClause``
 ///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/yieldClause``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/yieldClause``
+@_spi(ExperimentalLanguageFeatures)
 public struct FunctionYieldClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -5044,6 +5053,8 @@ public struct FunctionYieldClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 
 /// A function yield type
 ///
+/// - Note: Requires experimental feature `coroutineFunctions`.
+///
 /// ### Children
 /// 
 ///  - `type`: ``TypeSyntax``
@@ -5051,7 +5062,8 @@ public struct FunctionYieldClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 ///
 /// ### Contained in
 /// 
-///  - ``FunctionYieldListSyntax``
+///  - `FunctionYieldListSyntax`
+@_spi(ExperimentalLanguageFeatures)
 public struct FunctionYieldSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

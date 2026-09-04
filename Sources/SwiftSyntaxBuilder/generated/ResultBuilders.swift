@@ -328,6 +328,7 @@ extension FunctionParameterListSyntax {
 
 // MARK: - FunctionYieldListBuilder
 
+@_spi(ExperimentalLanguageFeatures)
 @resultBuilder
 public struct FunctionYieldListBuilder: ListBuilder {
   public typealias FinalResult = FunctionYieldListSyntax

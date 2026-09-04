@@ -2628,7 +2628,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
 ///  - `capture`: ``ClosureCaptureClauseSyntax``?
 ///  - `parameterClause`: (``ClosureShorthandParameterListSyntax`` | ``ClosureParameterClauseSyntax``)?
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
-///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``?
 ///  - `inKeyword`: `in`
 ///
@@ -2733,7 +2733,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
@@ -2898,6 +2898,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -2907,6 +2908,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var yieldClause: FunctionYieldClauseSyntax? {
     get {
       return Syntax(self).child(at: 9)?.cast(FunctionYieldClauseSyntax.self)
@@ -2916,6 +2918,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)

@@ -91,6 +91,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "yieldClause",
         kind: .node(kind: .functionYieldClause),
+        experimentalFeature: .coroutineFunctions,
         isOptional: true
       ),
       Child(
@@ -639,6 +640,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "yieldClause",
         kind: .node(kind: .functionYieldClause),
+        experimentalFeature: .coroutineFunctions,
         isOptional: true
       ),
       Child(

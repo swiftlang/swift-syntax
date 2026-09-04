@@ -1473,39 +1473,45 @@ open class SyntaxVisitor {
   open func visitPost(_ node: FunctionTypeSyntax) {
   }
 
-  /// Visiting ``FunctionYieldClauseSyntax`` specifically.
+  /// Visiting `FunctionYieldClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FunctionYieldClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting ``FunctionYieldClauseSyntax`` and its descendants.
+  /// The function called after visiting `FunctionYieldClauseSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: FunctionYieldClauseSyntax) {
   }
 
-  /// Visiting ``FunctionYieldListSyntax`` specifically.
+  /// Visiting `FunctionYieldListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FunctionYieldListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting ``FunctionYieldListSyntax`` and its descendants.
+  /// The function called after visiting `FunctionYieldListSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: FunctionYieldListSyntax) {
   }
 
-  /// Visiting ``FunctionYieldSyntax`` specifically.
+  /// Visiting `FunctionYieldSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FunctionYieldSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting ``FunctionYieldSyntax`` and its descendants.
+  /// The function called after visiting `FunctionYieldSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: FunctionYieldSyntax) {
   }
 

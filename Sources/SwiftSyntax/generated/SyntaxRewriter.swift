@@ -937,23 +937,26 @@ open class SyntaxRewriter {
     return TypeSyntax(FunctionTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
-  /// Visit a ``FunctionYieldClauseSyntax``.
+  /// Visit a `FunctionYieldClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FunctionYieldClauseSyntax) -> FunctionYieldClauseSyntax {
     return FunctionYieldClauseSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
-  /// Visit a ``FunctionYieldListSyntax``.
+  /// Visit a `FunctionYieldListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FunctionYieldListSyntax) -> FunctionYieldListSyntax {
     return FunctionYieldListSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
-  /// Visit a ``FunctionYieldSyntax``.
+  /// Visit a `FunctionYieldSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FunctionYieldSyntax) -> FunctionYieldSyntax {
     return FunctionYieldSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }

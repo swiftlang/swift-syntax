@@ -1145,6 +1145,7 @@ public let DECL_NODES: [Node] = [
   Node(
     kind: .functionYieldList,
     base: .syntaxCollection,
+    experimentalFeature: .coroutineFunctions,
     nameForDiagnostics: "yield list",
     documentation: """
       A list of function yield represented by `FunctionYieldListSyntax`.
@@ -1163,6 +1164,7 @@ public let DECL_NODES: [Node] = [
   Node(
     kind: .functionYield,
     base: .syntax,
+    experimentalFeature: .coroutineFunctions,
     nameForDiagnostics: "yield",
     documentation: "A function yield type",
     parserFunction: "parseFunctionYield",
@@ -1203,6 +1205,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "yieldClause",
         kind: .node(kind: .functionYieldClause),
+        experimentalFeature: .coroutineFunctions,
         isOptional: true
       ),
       Child(
@@ -2216,6 +2219,7 @@ public let DECL_NODES: [Node] = [
   Node(
     kind: .functionYieldClause,
     base: .syntax,
+    experimentalFeature: .coroutineFunctions,
     nameForDiagnostics: "yields clause",
     traits: [
       "Parenthesized"
@@ -2477,6 +2481,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "yieldClause",
         kind: .node(kind: .functionYieldClause),
+        experimentalFeature: .coroutineFunctions,
         isOptional: true
       ),
       Child(

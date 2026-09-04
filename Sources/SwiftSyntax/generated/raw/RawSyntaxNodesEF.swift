@@ -2481,6 +2481,7 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 }
 
+@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawFunctionYieldClauseSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
@@ -2575,6 +2576,7 @@ public struct RawFunctionYieldClauseSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawFunctionYieldListSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
@@ -2625,6 +2627,7 @@ public struct RawFunctionYieldListSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawFunctionYieldSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)

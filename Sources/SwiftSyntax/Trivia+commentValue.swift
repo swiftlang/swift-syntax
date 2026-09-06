@@ -11,6 +11,18 @@
 //===----------------------------------------------------------------------===//
 
 extension Trivia {
+  /// A single output line of a documentation comment's normalized content,
+  /// together with the absolute position of that line's first character in
+  /// the original source.
+  @_spi(SourceKitLSP)
+  public struct DocCommentLine {
+    /// The normalized text of this line — identical to the corresponding
+    /// line `docCommentValue` would produce.
+    public let text: Substring
+    /// The absolute position of `text`'s first character.
+    public let position: AbsolutePosition
+  }
+
   /// The normalized contents of the documentation comment in this trivia.
   ///
   /// Returns the content of the last documentation comment block, which semantically represents
@@ -19,24 +31,63 @@ extension Trivia {
   ///
   /// Returns `nil` if no documentation comment is present.
   public var docCommentValue: String? {
-    var comments: [Substring] = []
-    var currentLineComments: [String] = []  // Reset line comments when encountering a block comment
+    extractDocCommentLines(tokenStart: AbsolutePosition(utf8Offset: 0))?
+      .map { String($0.text) }
+      .joined(separator: "\n")
+  }
+
+  /// Same normalization as `docCommentValue`, but additionally returns the
+  /// absolute source position of each resulting line.
+  ///
+  /// - Parameter tokenStart: The absolute position of the first trivia piece
+  ///   in this `Trivia` (e.g. a token's `position` for leading trivia, or its
+  ///   `endPositionBeforeTrailingTrivia` for trailing trivia).
+  @_spi(SourceKitLSP)
+  public func docCommentLines(startingAt tokenStart: AbsolutePosition) -> [DocCommentLine]? {
+    extractDocCommentLines(tokenStart: tokenStart)
+  }
+
+  /// One doc-comment "entry" as encountered while walking trivia pieces: either a single
+  /// raw `///` line, or an entire (possibly multi-line) `/**...*/` block.
+  /// A block comment is stripped as a single unit, only ever affecting its
+  /// first line, never lines inside it.
+  private struct CommentEntry {
+    /// This entry's full text, exactly as `docCommentValue` would see it before the
+    /// final prefix strip (used only to decide/apply that strip).
+    var wholeText: Substring
+    /// The individual output lines that make up `wholeText`, with their absolute positions.
+    /// For a `///` line this has exactly one element (identical to `wholeText`); for a
+    /// `/**...*/` block this has one element per line inside the block.
+    var lines: [DocCommentLine]
+  }
+
+  /// Shared implementation behind `docCommentValue` and `docCommentLines(startingAt:)`.
+  /// Positions are computed unconditionally
+  private func extractDocCommentLines(tokenStart: AbsolutePosition) -> [DocCommentLine]? {
+    var comments: [CommentEntry] = []
+    var currentLineComments: [CommentEntry] = []
     var isInsideDocLineCommentSection = false
     var consecutiveNewlines = 0
+    var offset = 0  // UTF-8 byte offset from tokenStart, i.e. from the start of `pieces`
 
     for piece in pieces {
+      defer { offset += piece.sourceLength.utf8Length }
+
       switch piece {
       case .docBlockComment(let text):
-        if let processedComment = processBlockComment(text) {
-          comments = [processedComment]
+        let pieceStart = AbsolutePosition(utf8Offset: tokenStart.utf8Offset + offset)
+        if let entry = processBlockComment(text, pieceStart: pieceStart) {
+          comments = [entry]
         }
         currentLineComments = []
         consecutiveNewlines = 0
       case .docLineComment(let text):
+        let position = AbsolutePosition(utf8Offset: tokenStart.utf8Offset + offset)
+        let entry = CommentEntry(wholeText: text[...], lines: [DocCommentLine(text: text[...], position: position)])
         if isInsideDocLineCommentSection {
-          currentLineComments.append(text)
+          currentLineComments.append(entry)
         } else {
-          currentLineComments = [text]
+          currentLineComments = [entry]
           isInsideDocLineCommentSection = true
         }
         consecutiveNewlines = 0
@@ -55,7 +106,7 @@ extension Trivia {
     }
 
     /// Strips /** */ markers and removes any common indentation between the lines in the block comment.
-    func processBlockComment(_ text: String) -> Substring? {
+    func processBlockComment(_ text: String, pieceStart: AbsolutePosition) -> CommentEntry? {
       var lines = text.dropPrefix("/**").dropSuffix("*/")
         .split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)
 
@@ -98,16 +149,24 @@ extension Trivia {
         unindentedLines.removeLast()
       }
 
+      // Each line here is still a Substring sharing storage with the original `text`, so its
+      // `startIndex` is a valid UTF-8 offset into `text` even after dropFirst/split/dedent.
+      let lineInfos = unindentedLines.map { line -> DocCommentLine in
+        let lineOffset = text.utf8.distance(from: text.utf8.startIndex, to: line.startIndex)
+        return DocCommentLine(text: line, position: AbsolutePosition(utf8Offset: pieceStart.utf8Offset + lineOffset))
+      }
+
       // We canonicalize the line endings to `\n` here. This matches how we concatenate the different line comment
       // pieces using \n as well.
-      return Substring(unindentedLines.joined(separator: "\n"))
+      let joined = Substring(unindentedLines.joined(separator: "\n"))
+      return CommentEntry(wholeText: joined, lines: lineInfos)
     }
 
     /// Processes a section break, which is defined as a sequence of newlines or other trivia pieces that are not comments.
     func processSectionBreak() {
       // If we have a section break, we reset the current line comments.
       if !currentLineComments.isEmpty {
-        comments = currentLineComments.map { $0[...] }
+        comments = currentLineComments
         currentLineComments = []
       }
       isInsideDocLineCommentSection = false
@@ -115,13 +174,30 @@ extension Trivia {
 
     // If there are remaining line comments, use them as the last doc comment block.
     if !currentLineComments.isEmpty {
-      comments = currentLineComments.map { $0[...] }
+      comments = currentLineComments
     }
 
     if comments.isEmpty { return nil }
 
-    let prefix = comments.allSatisfy { $0.hasPrefix("/// ") } ? "/// " : "///"
-    return comments.map { $0.dropPrefix(prefix) }.joined(separator: "\n")
+    let prefix = comments.allSatisfy { $0.wholeText.hasPrefix("/// ") } ? "/// " : "///"
+
+    // Apply the prefix strip per entry, then flatten each entry's stored lines into the final output.
+    // For a multi-line block comment entry, the strip can only ever affect line 0, since it only ever touches the
+    // very start of `wholeText` — lines 1..n of a block are always passed through unchanged.
+    return comments.flatMap { entry -> [DocCommentLine] in
+      guard entry.wholeText.hasPrefix(prefix) else {
+        return entry.lines.map { DocCommentLine(text: $0.text, position: $0.position) }
+      }
+      return entry.lines.enumerated().map { index, line in
+        guard index == 0 else {
+          return DocCommentLine(text: line.text, position: line.position)
+        }
+        return DocCommentLine(
+          text: line.text.dropFirst(prefix.count),
+          position: AbsolutePosition(utf8Offset: line.position.utf8Offset + prefix.utf8.count)
+        )
+      }
+    }
   }
 }
 

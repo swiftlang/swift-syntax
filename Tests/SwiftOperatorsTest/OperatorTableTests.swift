@@ -441,4 +441,59 @@ class OperatorPrecedenceTests: XCTestCase {
     let folded = try OperatorTable.standardOperators.foldAll(original)
     XCTAssertEqual(original.description, folded.description)
   }
+
+  func testPrecedenceGroupComparison() throws {
+    let opPrecedence = OperatorTable.standardOperators
+    let syntax = Syntax(ExprSyntax("x"))
+
+    // MultiplicationPrecedence has "higherThan: AdditionPrecedence" in the
+    // standard operators, so comparing the two groups directly should return
+    // the corresponding relationship in both directions.
+    XCTAssertEqual(
+      try opPrecedence.precedence(
+        of: "MultiplicationPrecedence",
+        relativeTo: "AdditionPrecedence",
+        referencedFrom: syntax
+      ),
+      .higherThan
+    )
+    XCTAssertEqual(
+      try opPrecedence.precedence(
+        of: "AdditionPrecedence",
+        relativeTo: "MultiplicationPrecedence",
+        referencedFrom: syntax
+      ),
+      .lowerThan
+    )
+
+    // Comparing a group to itself should always be reported as unrelated.
+    XCTAssertEqual(
+      try opPrecedence.precedence(
+        of: "AdditionPrecedence",
+        relativeTo: "AdditionPrecedence",
+        referencedFrom: syntax
+      ),
+      .unrelated
+    )
+
+    // Two groups that both sit above `TernaryPrecedence` but have no direct
+    // or transitive relationship to each other should be reported as unrelated.
+    // In the standard operator table, `DefaultPrecedence` and
+    // `LogicalDisjunctionPrecedence` are both declared `higherThan:
+    // TernaryPrecedence` with no other links between them.
+    XCTAssertEqual(
+      try opPrecedence.precedence(
+        of: "DefaultPrecedence",
+        relativeTo: "LogicalDisjunctionPrecedence",
+        referencedFrom: syntax
+      ),
+      .unrelated
+    )
+  }
+
+  func testPrecedenceGroupFlipped() {
+    XCTAssertEqual(Precedence.higherThan.flipped, .lowerThan)
+    XCTAssertEqual(Precedence.lowerThan.flipped, .higherThan)
+    XCTAssertEqual(Precedence.unrelated.flipped, .unrelated)
+  }
 }

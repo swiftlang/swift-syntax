@@ -13,6 +13,7 @@
 // This test file has been translated from swift/test/Parse/recovery.swift
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class RecoveryTests: ParserTestCase {

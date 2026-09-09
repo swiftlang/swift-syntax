@@ -13,6 +13,7 @@
 @_spi(Testing) import SwiftOperators
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 

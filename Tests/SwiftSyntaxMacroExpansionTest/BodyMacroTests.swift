@@ -20,8 +20,10 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxBuilder
 @_spi(Testing) import SwiftSyntaxMacroExpansion
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntaxMacros
+import SwiftSyntaxMacrosGenericTestSupport
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 

@@ -12,9 +12,11 @@
 
 #if compiler(>=6)
 public import SwiftSyntax
+internal import SwiftSyntaxBuilder
 public import SwiftSyntaxMacros
 #else
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 #endif
 

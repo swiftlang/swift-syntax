@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-import SwiftBasicFormat
+internal import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftIfConfig
 public import SwiftSyntax

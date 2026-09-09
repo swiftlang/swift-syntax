@@ -24,7 +24,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
 
       let _: \(results: [
         .decls(["struct A {}", "typealias A"], inScope: nil),
-        .lookInModule,
       ])A
 
       func f() \("🟩"){
@@ -34,12 +33,10 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
         // A is still accessible from function scope
         let _: \(results: [
           .decls(["struct A {}", "typealias A"], inScope: nil),
-          .lookInModule,
         ])A
 
         let _: \(results: [
           .decls(["struct B {}", "typealias B"], inScope: "🟩"),
-          .lookInModule,
         ])B
 
         while \("🟪"){
@@ -49,7 +46,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
           let a: \(results: [
             .decls(["struct A {}"], inScope: "🟪"),
             .decls(["struct A {}", "typealias A"], inScope: nil),
-            .lookInModule,
           ])A
         }
       }
@@ -67,14 +63,12 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
       struct A {
         let _: \(results: [
           .lookForMember(declGroupParent: "struct A {}", lookForSelf: false),
-          .lookInModule
         ])B
 
         struct B {
           let _: \(results: [
             .lookForMember(declGroupParent: "struct B {}", lookForSelf: false),
             .lookForMember(declGroupParent: "struct A {}", lookForSelf: false),
-            .lookInModule
           ])B
         }
       }
@@ -85,7 +79,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
           let _: \(results: [
             .lookForMember(declGroupParent: "struct C {}", lookForSelf: false),
             .decls(["struct C {}"], inScope: "🟩"),
-            .lookInModule
           ])C
 
           func g() {
@@ -96,7 +89,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
                   .lookForMember(declGroupParent: "struct D {}", lookForSelf: false),
                   .lookForMember(declGroupParent: "struct C {}", lookForSelf: false),
                   .decls(["struct C {}"], inScope: "🟩"),
-                  .lookInModule
                 ])C
               }
             }
@@ -111,7 +103,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
             .lookForMember(declGroupParent: "struct C {}", lookForSelf: false),
             .lookForGenericParameters(extensionDecl: "extension T {}"),
             .lookForMember(declGroupParent: "extension T {}", lookForSelf: false),
-            .lookInModule
           ])D
 
           struct D {
@@ -120,7 +111,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
               .lookForMember(declGroupParent: "struct C {}", lookForSelf: false),
               .lookForGenericParameters(extensionDecl: "extension T {}"),
               .lookForMember(declGroupParent: "extension T {}", lookForSelf: false),
-              .lookInModule
             ])D
           }
         }
@@ -136,7 +126,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
         let _: \(results: [
           .lookForGenericParameters(extensionDecl: "extension MyType {}"),
           .lookForMember(declGroupParent: "extension MyType {}", lookForSelf: false),
-          .lookInModule,
         ])A
 
         struct Nested<A, Random1> {
@@ -145,7 +134,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
             .lookForMember(declGroupParent: "struct Nested<A, Random1> {}", lookForSelf: false),
             .lookForGenericParameters(extensionDecl: "extension MyType {}"),
             .lookForMember(declGroupParent: "extension MyType {}", lookForSelf: false),
-            .lookInModule,
           ])A
 
           func f<A, B, Random2>() {
@@ -155,7 +143,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
               .lookForMember(declGroupParent: "struct Nested<A, Random1> {}", lookForSelf: false),
               .lookForGenericParameters(extensionDecl: "extension MyType {}"),
               .lookForMember(declGroupParent: "extension MyType {}", lookForSelf: false),
-              .lookInModule,
             ])A
 
             do { // nested sequential scope
@@ -164,7 +151,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
                 .lookForMember(declGroupParent: "struct Nested<A, Random1> {}", lookForSelf: false),
                 .lookForGenericParameters(extensionDecl: "extension MyType {}"),
                 .lookForMember(declGroupParent: "extension MyType {}", lookForSelf: false),
-                .lookInModule,
               ])B
             }
           }
@@ -183,7 +169,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
 
         func f() -> \(results: [
           .lookForMember(declGroupParent: "protocol ProtoA {}", lookForSelf: false),
-          .lookInModule,
         ])A
       }
 
@@ -202,7 +187,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
             .genericParameters(["B"], inClause: "<B>"),
             .lookForMember(declGroupParent: "struct B<B> {}", lookForSelf: false),
             .decls(["struct B<B> {}"], inScope: nil),
-            .lookInModule,
           ])B
 
         }
@@ -246,7 +230,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
           // Implicit `Self`
           .lookForMember(declGroupParent: "protocol P {}", lookForSelf: true),
           .lookForMember(declGroupParent: "protocol P {}", lookForSelf: false),
-          .lookInModule
         ])Self
       }
 
@@ -257,7 +240,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
             .lookForMember(declGroupParent: "extension A {}", lookForSelf: true),
             .lookForGenericParameters(extensionDecl: "extension A {}"),
             .lookForMember(declGroupParent: "extension A {}", lookForSelf: false),
-            .lookInModule
           ])Self
 
           func g() {
@@ -265,7 +247,6 @@ final class UnqualifiedTypeLookupTests: XCTestCase {
               .lookForMember(declGroupParent: "extension A {}", lookForSelf: true),
               .lookForGenericParameters(extensionDecl: "extension A {}"),
               .lookForMember(declGroupParent: "extension A {}", lookForSelf: false),
-              .lookInModule
             ])Self
           }
         }

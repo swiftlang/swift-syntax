@@ -512,9 +512,15 @@ struct MacroSystem {
     macros[name] = macroSpec
   }
 
-  /// Look for a macro specification with the given name.
-  func lookup(_ macroName: String) -> MacroSpec? {
-    return macros[macroName]
+  /// Looks up a macro by name, matching the module when specified.
+  func lookup(_ macroName: String, moduleName: String? = nil) -> MacroSpec? {
+    guard let spec = macros[macroName] else {
+      return nil
+    }
+    if let moduleName, spec.moduleName != moduleName {
+      return nil
+    }
+    return spec
   }
 }
 
@@ -1081,15 +1087,30 @@ extension MacroApplication {
 
     return attributedNode.attributes.compactMap {
       guard case let .attribute(attribute) = $0,
-        let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text
-          ?? attribute.attributeName.as(MemberTypeSyntax.self)?.name.text,
-        let macroSpec = macroSystem.lookup(attributeName)
+        let (attributeName, moduleName) = attachedMacroReference(attribute.attributeName),
+        let macroSpec = macroSystem.lookup(attributeName, moduleName: moduleName)
       else {
         return nil
       }
 
       return (attribute, macroSpec)
     }
+  }
+
+  /// Extracts the macro and module names from `@Name`, `@Module.Name`, or `@Module::Name`.
+  private func attachedMacroReference(_ attributeName: TypeSyntax) -> (name: String, moduleName: String?)? {
+    if let identifierType = attributeName.as(IdentifierTypeSyntax.self) {
+      return (identifierType.name.text, identifierType.moduleSelector?.moduleName.identifier?.name)
+    }
+    if let memberType = attributeName.as(MemberTypeSyntax.self),
+      memberType.moduleSelector == nil,
+      let module = memberType.baseType.as(IdentifierTypeSyntax.self),
+      module.moduleSelector == nil,
+      module.genericArgumentClause == nil
+    {
+      return (memberType.name.text, module.name.identifier?.name)
+    }
+    return nil
   }
 
   /// Get a list of the macro attribute, the macro definition and the conformance
@@ -1375,7 +1396,10 @@ extension MacroApplication {
     expandMacro: (_ macro: any Macro.Type, _ node: any FreestandingMacroExpansionSyntax) throws -> ExpandedMacroType?
   ) -> MacroExpansionResult<ExpandedMacroType> {
     guard let node,
-      let macro = macroSystem.lookup(node.macroName.text)?.type
+      let macro = macroSystem.lookup(
+        node.macroName.text,
+        moduleName: node.moduleSelector?.moduleName.identifier?.name
+      )?.type
     else {
       return .notAMacro
     }

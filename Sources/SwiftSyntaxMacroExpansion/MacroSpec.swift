@@ -20,10 +20,12 @@ import SwiftSyntaxMacros
 
 /// The information of a macro declaration, to be used with `assertMacroExpansion`.
 ///
-/// In addition to specifying the macro’s type, this allows the specification of conformances that will be passed to the macro’s `expansion` function.
+/// Specifies the macro type and module, plus conformances passed to its `expansion` function.
 public struct MacroSpec: Sendable {
   /// The type of macro.
   let type: Macro.Type
+  /// The module that declared the macro, if specified.
+  let moduleName: String?
   /// The list of types for which the macro needs to add conformances.
   let conformances: [TypeSyntax]
 
@@ -36,14 +38,16 @@ public struct MacroSpec: Sendable {
     }
   }
 
-  /// Creates a new specification from provided macro type
-  /// and optional list of generated conformances.
+  /// Creates a macro specification.
   ///
   /// - Parameters:
   ///   - type: The type of macro.
+  ///   - moduleName: The module that declared the macro. Module-qualified uses must match this name.
+  ///     If `nil`, only unqualified uses expand.
   ///   - conformances: The list of types that will be passed to the macro’s `expansion` function.
-  public init(type: Macro.Type, conformances: [TypeSyntax] = []) {
+  public init(type: Macro.Type, moduleName: String? = nil, conformances: [TypeSyntax] = []) {
     self.type = type
+    self.moduleName = moduleName
     self.conformances = conformances
   }
 }

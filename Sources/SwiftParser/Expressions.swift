@@ -21,6 +21,12 @@ extension TokenConsumer {
     if self.isAtModuleSelector() {
       var lookahead = self.lookahead()
       _ = lookahead.consumeModuleSelectorTokensIfPresent()
+      // After a module selector, a lexer-classified keyword is a declaration
+      // reference: 'parseDeclReferenceBase' remaps it to an identifier, so that
+      // e.g. 'Module::as(x)' parses as a function call.
+      if lookahead.currentToken.isLexerClassifiedKeyword {
+        return true
+      }
       return lookahead.atStartOfExpression()
     }
 

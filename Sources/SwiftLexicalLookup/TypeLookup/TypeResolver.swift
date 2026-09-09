@@ -682,9 +682,8 @@ extension TypeResolver {
     //      let b: B // ❌ ambiguous
     //    }
     guard disambiguatedTypeDecls.count == 1 else {
-      // TODO: Find more efficient solution (perhaps force `symbolTable.findMembers` to sort for us).
       return Result.failure(
-        Failure.ambiguousTypeDecl(symbolTable.sortDeclarations(disambiguatedTypeDecls.map(\.typeDecl)).map(\.node))
+        Failure.ambiguousTypeDecl(disambiguatedTypeDecls.map(\.typeDecl).map(\.node))
       )
     }
     // There's just one member; return that
@@ -1234,7 +1233,7 @@ extension TypeResolver {
 
     // After binding all extensions, get the new nominal type
     guard
-      case .success(let finalizedNominalRef) = symbolTable.typeGraph.updateNominalTypeReference(
+      case .success(let finalizedNominalRef) = symbolTable.updateNominalTypeReference(
         oldReference: TypeGraph.TypeRef.global(qualifiedGlobalRef)
       )
     else {

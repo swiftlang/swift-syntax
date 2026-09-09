@@ -30,12 +30,9 @@ public final class SymbolTable {
   private let fileToInfo: [SourceFileSyntax: FileInfo]
 
   /// Tracks requested extensions for extension binding.
-  var requestedExtensions: RequestedExtensions = RequestedExtensions()
+  var requestedExtensions: RequestedExtensions
 
-  // TODO: Setters should be private
-  //
-  /// The extensions that have not yet been admitted to the type graph.
-  public internal(set) lazy var unresolvedExtensions = [Attached<ExtensionDeclSyntax>]()
+  // TODO: Setter should be private
   /// A graph that keeps tracks of types and their extensions.
   public internal(set) var typeGraph = TypeGraph()
 
@@ -54,6 +51,7 @@ public final class SymbolTable {
     self.moduleToSources = moduleToSources
     self.buildConfiguration = buildConfiguration
     self.fileToInfo = fileToInfo
+    self.requestedExtensions = RequestedExtensions(fileToInfo: fileToInfo)
   }
 }
 
@@ -113,7 +111,7 @@ extension SymbolTable {
   public func resolve(
     typeSyntax: Attached<TypeSyntax>
   ) -> TypeResolver.TypeResult {
-    var typeResolver = TypeResolver(symbolTable: self, _verbose: _verbose)
+    var typeResolver = TypeResolver(symbolTable: self)
     return typeResolver.resolve(typeSyntax: typeSyntax)
   }
 }
@@ -122,11 +120,13 @@ extension SymbolTable {
 
 extension SymbolTable {
   func log(_ component: Any, file: StaticString = #file, line: UInt = #line) {
+    #if DEBUG
     guard _verbose else { return }
     // Calculate log text
     let newLine = "\(logPrefix.map({ "[\($0)]" }).joined()) \(component)\n"
     // Print new line
     print(newLine)
+    #endif
   }
 
   func withLogging<T>(

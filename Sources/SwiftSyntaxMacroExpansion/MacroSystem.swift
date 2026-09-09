@@ -905,10 +905,18 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     return CodeBlockItemListSyntax(newItems)
   }
 
-  override func visit(_ node: MemberBlockSyntax) -> MemberBlockSyntax {
-    let parentDeclGroup = node
-      .parent?
-      .as(DeclSyntax.self)
+  /// Expand the macros in `members`, which are the members of `parentDeclGroup`.
+  ///
+  /// This is used both for the members of a member block and for the members
+  /// guarded by an `#if` inside such a block, so that both are treated the same
+  /// way. `isInsideIfConfig` describes which of the two it is, since macros
+  /// whose expansion is not inserted in place of the member cannot be expanded
+  /// inside an `#if`.
+  private func expandMemberBlockItems(
+    _ members: MemberBlockItemListSyntax,
+    parentDeclGroup: DeclSyntax?,
+    isInsideIfConfig: Bool
+  ) -> [MemberBlockItemSyntax] {
     var newItems: [MemberBlockItemSyntax] = []
 
     func addResult(_ node: MemberBlockItemSyntax) {
@@ -932,10 +940,24 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       for peer in expandMemberDeclPeers(of: node.decl) {
         addResult(peer)
       }
-      extensions += expandExtensions(of: node.decl)
+
+      // Extensions are added to the top level, outside of any `#if` that
+      // guards the member they were expanded from. Expanding them here would
+      // thus extend a type that might not be compiled at all.
+      if !isInsideIfConfig {
+        extensions += expandExtensions(of: node.decl)
+      }
     }
 
-    for var item in node.members {
+    for var item in members {
+      // Members guarded by an `#if` are expanded inside the clause that
+      // contains them, so that they are treated like any other member.
+      if let ifConfigDecl = item.decl.as(IfConfigDeclSyntax.self) {
+        item.decl = DeclSyntax(expandIfConfigDeclMembers(ifConfigDecl, parentDeclGroup: parentDeclGroup))
+        newItems.append(item)
+        continue
+      }
+
       // Expand member attribute members attached to the declaration context.
       // Note that MemberAttribute macros are _not_ applied to generated members
       if let parentDeclGroup, let decl = item.decl.asProtocol(WithAttributesSyntax.self) {
@@ -961,12 +983,51 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       addResult(item)
     }
 
-    // Expand any member macros of parent.
-    if let parentDeclGroup {
+    // Expand any member macros of parent. The members they add belong to the
+    // declaration itself, not to any `#if` that happens to be nested in it.
+    if !isInsideIfConfig, let parentDeclGroup {
       for member in expandMembers(of: parentDeclGroup) {
         addResult(member)
       }
     }
+
+    return newItems
+  }
+
+  /// Expand the macros attached to the members of each clause of `node`.
+  ///
+  /// Macros are expanded in every clause, not just the one that is active for
+  /// some particular build configuration: the clause that ends up being
+  /// compiled should have its macros expanded, and which one that is isn't
+  /// known here.
+  private func expandIfConfigDeclMembers(
+    _ node: IfConfigDeclSyntax,
+    parentDeclGroup: DeclSyntax?
+  ) -> IfConfigDeclSyntax {
+    let newClauses = node.clauses.map { clause in
+      guard case .decls(let members) = clause.elements else {
+        return clause
+      }
+      let newMembers = expandMemberBlockItems(
+        members,
+        parentDeclGroup: parentDeclGroup,
+        isInsideIfConfig: true
+      )
+      return clause.with(\.elements, .decls(MemberBlockItemListSyntax(newMembers)))
+    }
+
+    return node.with(\.clauses, IfConfigClauseListSyntax(newClauses))
+  }
+
+  override func visit(_ node: MemberBlockSyntax) -> MemberBlockSyntax {
+    let parentDeclGroup = node
+      .parent?
+      .as(DeclSyntax.self)
+    let newItems = expandMemberBlockItems(
+      node.members,
+      parentDeclGroup: parentDeclGroup,
+      isInsideIfConfig: false
+    )
 
     /// Returns an leading trivia for the member blocks closing brace.
     /// It will add a leading newline, if there is none.

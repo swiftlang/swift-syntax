@@ -816,20 +816,20 @@ fileprivate extension RawSyntax {
     var position = position
     switch self.header {
     case .parsedToken:
-      position = self.asParsedToken.pointee.wholeText.forEachEndOfLine(position: position, body: body)
+      position = self.asParsedToken.wholeText.forEachEndOfLine(position: position, body: body)
     case .materializedToken:
-      position = self.asMaterializedToken.pointee.leadingTrivia.forEachEndOfLine(position: position, body: body)
-      position = self.asMaterializedToken.pointee.tokenText.forEachEndOfLine(position: position, body: body)
-      position = self.asMaterializedToken.pointee.trailingTrivia.forEachEndOfLine(position: position, body: body)
+      position = self.asMaterializedToken.leadingTrivia.forEachEndOfLine(position: position, body: body)
+      position = self.asMaterializedToken.tokenText.forEachEndOfLine(position: position, body: body)
+      position = self.asMaterializedToken.trailingTrivia.forEachEndOfLine(position: position, body: body)
     case .layout:
       // Handle '#sourceLocation' directive.
-      if self.asLayout.pointee.kind == .poundSourceLocation {
+      if self.asLayout.kind == .poundSourceLocation {
         // Do this before `node.forEachEndOfLine` call below so the caller can
         // know the exact position of the directive.
         handleSourceLocationDirective(position, self)
       }
 
-      for case let node? in self.asLayout.pointee.layout
+      for case let node? in self.asLayout.layout
       where SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) {
         position = node.forEachEndOfLine(
           position: position,

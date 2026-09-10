@@ -45,7 +45,7 @@ public struct RawSyntaxLayoutView {
       .materializedToken(_):
       preconditionFailure("RawSyntax must be a layout")
     case .layout:
-      return raw.asLayout.pointee
+      return raw.asLayout.fields
     }
   }
 

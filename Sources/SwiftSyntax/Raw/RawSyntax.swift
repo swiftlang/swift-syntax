@@ -181,23 +181,124 @@ enum RawSyntaxData: Sendable {
 }
 
 extension RawSyntaxData.ParsedToken {
-  var tokenText: SyntaxText {
-    SyntaxText(rebasing: wholeText[textRange])
-  }
-  var leadingTriviaText: SyntaxText {
-    SyntaxText(rebasing: wholeText[..<textRange.lowerBound])
-  }
-  var trailingTriviaText: SyntaxText {
-    SyntaxText(rebasing: wholeText[textRange.upperBound...])
+  /// A parsed token's fields in a node's tail.
+  ///
+  /// - Important: The arena that owns the node must outlive this.
+  struct Ref: Sendable {
+    typealias Fields = RawSyntaxData.ParsedToken
+
+    private let pointer: ArenaAllocatedPointer<Fields>
+
+    @inline(__always)
+    init(_ pointer: UnsafePointer<Fields>) {
+      self.pointer = ArenaAllocatedPointer(pointer)
+    }
+
+    /// The fields themselves, to make a token that differs from this one in a
+    /// field or two.
+    @inline(__always)
+    var fields: Fields { pointer.pointee }
+
+    @inline(__always)
+    var tokenKind: RawTokenKind { pointer.pointee.tokenKind }
+    @inline(__always)
+    var wholeText: SyntaxText { pointer.pointee.wholeText }
+    @inline(__always)
+    var textRange: Range<SyntaxText.Index> { pointer.pointee.textRange }
+    @inline(__always)
+    var presence: SourcePresence { pointer.pointee.presence }
+    @inline(__always)
+    var tokenDiagnostic: TokenDiagnostic? { pointer.pointee.tokenDiagnostic }
+
+    /// The token's own text, without its trivia.
+    @inline(__always)
+    var tokenText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[self.textRange])
+    }
+    @inline(__always)
+    var leadingTriviaText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[..<self.textRange.lowerBound])
+    }
+    @inline(__always)
+    var trailingTriviaText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[self.textRange.upperBound...])
+    }
   }
 }
 
 extension RawSyntaxData.MaterializedToken {
-  var leadingTrivia: RawTriviaPieceBuffer {
-    RawTriviaPieceBuffer(rebasing: triviaPieces[..<Int(numLeadingTrivia)])
+  /// A materialized token's fields in a node's tail.
+  ///
+  /// - Important: The arena that owns the node must outlive this.
+  struct Ref: Sendable {
+    typealias Fields = RawSyntaxData.MaterializedToken
+
+    private let pointer: ArenaAllocatedPointer<Fields>
+
+    @inline(__always)
+    init(_ pointer: UnsafePointer<Fields>) {
+      self.pointer = ArenaAllocatedPointer(pointer)
+    }
+
+    /// The fields themselves, to make a token that differs from this one in a
+    /// field or two.
+    @inline(__always)
+    var fields: Fields { pointer.pointee }
+
+    @inline(__always)
+    var tokenKind: RawTokenKind { pointer.pointee.tokenKind }
+    @inline(__always)
+    var tokenText: SyntaxText { pointer.pointee.tokenText }
+    @inline(__always)
+    var byteLength: UInt32 { pointer.pointee.byteLength }
+    @inline(__always)
+    var numLeadingTrivia: UInt32 { pointer.pointee.numLeadingTrivia }
+    @inline(__always)
+    var triviaPieces: RawTriviaPieceBuffer { pointer.pointee.triviaPieces }
+    @inline(__always)
+    var presence: SourcePresence { pointer.pointee.presence }
+    @inline(__always)
+    var tokenDiagnostic: TokenDiagnostic? { pointer.pointee.tokenDiagnostic }
+
+    @inline(__always)
+    var leadingTrivia: RawTriviaPieceBuffer {
+      RawTriviaPieceBuffer(rebasing: self.triviaPieces[..<Int(self.numLeadingTrivia)])
+    }
+    @inline(__always)
+    var trailingTrivia: RawTriviaPieceBuffer {
+      RawTriviaPieceBuffer(rebasing: self.triviaPieces[Int(self.numLeadingTrivia)...])
+    }
   }
-  var trailingTrivia: RawTriviaPieceBuffer {
-    RawTriviaPieceBuffer(rebasing: triviaPieces[Int(numLeadingTrivia)...])
+}
+
+extension RawSyntaxData.Layout {
+  /// A layout node's fields in a node's tail.
+  ///
+  /// - Important: The arena that owns the node must outlive this.
+  struct Ref: Sendable {
+    typealias Fields = RawSyntaxData.Layout
+
+    private let pointer: ArenaAllocatedPointer<Fields>
+
+    @inline(__always)
+    init(_ pointer: UnsafePointer<Fields>) {
+      self.pointer = ArenaAllocatedPointer(pointer)
+    }
+
+    /// The fields themselves, for a caller that wants them as a value.
+    @inline(__always)
+    var fields: Fields { pointer.pointee }
+
+    @inline(__always)
+    var kind: SyntaxKind { pointer.pointee.kind }
+    @inline(__always)
+    var layout: RawSyntaxBuffer { pointer.pointee.layout }
+    @inline(__always)
+    var byteLength: Int { pointer.pointee.byteLength }
+    @inline(__always)
+    var descendantCount: Int { pointer.pointee.descendantCount }
+    @inline(__always)
+    var recursiveFlags: RecursiveRawSyntaxFlags { pointer.pointee.recursiveFlags }
   }
 }
 
@@ -278,10 +379,10 @@ public struct RawSyntax: Sendable {
 
   /// - Precondition: this is a parsed token.
   @inline(__always)
-  var asParsedToken: UnsafePointer<RawSyntaxData.ParsedToken> {
+  var asParsedToken: RawSyntaxData.ParsedToken.Ref {
     switch self.header {
     case .parsedToken:
-      return tail.assumingMemoryBound(to: RawSyntaxData.ParsedToken.self)
+      return RawSyntaxData.ParsedToken.Ref(tail.assumingMemoryBound(to: RawSyntaxData.ParsedToken.self))
     case .materializedToken, .layout:
       preconditionFailure("not a parsed token")
     }
@@ -289,10 +390,10 @@ public struct RawSyntax: Sendable {
 
   /// - Precondition: this is a materialized token.
   @inline(__always)
-  var asMaterializedToken: UnsafePointer<RawSyntaxData.MaterializedToken> {
+  var asMaterializedToken: RawSyntaxData.MaterializedToken.Ref {
     switch self.header {
     case .materializedToken:
-      return tail.assumingMemoryBound(to: RawSyntaxData.MaterializedToken.self)
+      return RawSyntaxData.MaterializedToken.Ref(tail.assumingMemoryBound(to: RawSyntaxData.MaterializedToken.self))
     case .parsedToken, .layout:
       preconditionFailure("not a materialized token")
     }
@@ -300,10 +401,10 @@ public struct RawSyntax: Sendable {
 
   /// - Precondition: this is a layout node or a collection.
   @inline(__always)
-  var asLayout: UnsafePointer<RawSyntaxData.Layout> {
+  var asLayout: RawSyntaxData.Layout.Ref {
     switch self.header {
     case .layout:
-      return tail.assumingMemoryBound(to: RawSyntaxData.Layout.self)
+      return RawSyntaxData.Layout.Ref(tail.assumingMemoryBound(to: RawSyntaxData.Layout.self))
     case .parsedToken, .materializedToken:
       preconditionFailure("not a layout node")
     }
@@ -327,7 +428,7 @@ extension RawSyntax {
     switch header {
     case .parsedToken: return .token
     case .materializedToken: return .token
-    case .layout: return asLayout.pointee.kind
+    case .layout: return asLayout.kind
     }
   }
 
@@ -365,7 +466,7 @@ extension RawSyntax {
       .materializedToken(_):
       return 1
     case .layout:
-      return asLayout.pointee.descendantCount + 1
+      return asLayout.descendantCount + 1
     }
   }
 
@@ -376,19 +477,19 @@ extension RawSyntax {
   public var byteLength: Int {
     switch header {
     case .parsedToken:
-      if asParsedToken.pointee.presence == .present {
-        return asParsedToken.pointee.wholeText.count
+      if asParsedToken.presence == .present {
+        return asParsedToken.wholeText.count
       } else {
         return 0
       }
     case .materializedToken:
-      if asMaterializedToken.pointee.presence == .present {
-        return Int(asMaterializedToken.pointee.byteLength)
+      if asMaterializedToken.presence == .present {
+        return Int(asMaterializedToken.byteLength)
       } else {
         return 0
       }
     case .layout:
-      return asLayout.pointee.byteLength
+      return asLayout.byteLength
     }
   }
 
@@ -486,21 +587,21 @@ extension RawSyntax {
   public func withEachSyntaxText(body: (SyntaxText, _ isEphemeral: Bool) throws -> Void) rethrows {
     switch header {
     case .parsedToken:
-      if asParsedToken.pointee.presence == .present {
-        try body(asParsedToken.pointee.wholeText, /*isEphemeral*/ false)
+      if asParsedToken.presence == .present {
+        try body(asParsedToken.wholeText, /*isEphemeral*/ false)
       }
     case .materializedToken:
-      if asMaterializedToken.pointee.presence == .present {
-        for p in asMaterializedToken.pointee.leadingTrivia {
+      if asMaterializedToken.presence == .present {
+        for p in asMaterializedToken.leadingTrivia {
           try p.withSyntaxText(body: body)
         }
-        try body(asMaterializedToken.pointee.tokenText, /*isEphemeral*/ false)
-        for p in asMaterializedToken.pointee.trailingTrivia {
+        try body(asMaterializedToken.tokenText, /*isEphemeral*/ false)
+        for p in asMaterializedToken.trailingTrivia {
           try p.withSyntaxText(body: body)
         }
       }
     case .layout:
-      for case let child? in asLayout.pointee.layout {
+      for case let child? in asLayout.layout {
         try child.withEachSyntaxText(body: body)
       }
     }
@@ -535,17 +636,17 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   public func write<Target: TextOutputStream>(to target: inout Target) {
     switch header {
     case .parsedToken:
-      if asParsedToken.pointee.presence == .present {
-        String(syntaxText: asParsedToken.pointee.wholeText).write(to: &target)
+      if asParsedToken.presence == .present {
+        String(syntaxText: asParsedToken.wholeText).write(to: &target)
       }
     case .materializedToken:
-      if asMaterializedToken.pointee.presence == .present {
-        for p in asMaterializedToken.pointee.leadingTrivia { p.write(to: &target) }
-        String(syntaxText: asMaterializedToken.pointee.tokenText).write(to: &target)
-        for p in asMaterializedToken.pointee.trailingTrivia { p.write(to: &target) }
+      if asMaterializedToken.presence == .present {
+        for p in asMaterializedToken.leadingTrivia { p.write(to: &target) }
+        String(syntaxText: asMaterializedToken.tokenText).write(to: &target)
+        for p in asMaterializedToken.trailingTrivia { p.write(to: &target) }
       }
     case .layout:
-      for case let child? in asLayout.pointee.layout {
+      for case let child? in asLayout.layout {
         child.write(to: &target)
       }
     }
@@ -676,7 +777,7 @@ extension RawSyntax {
       tokenDiagnostic: tokenDiagnostic
     )
     precondition(
-      kind != .keyword || Keyword(payload.tokenText) != nil,
+      kind != .keyword || Keyword(SyntaxText(rebasing: wholeText[textRange])) != nil,
       "If kind is keyword, the text must be a known token kind"
     )
     return RawSyntax(arena: arena, parsedToken: payload)
@@ -977,23 +1078,23 @@ extension RawSyntax: CustomDebugStringConvertible {
     switch header {
     case .parsedToken:
       target.write(".parsedToken(")
-      target.write(String(describing: asParsedToken.pointee.tokenKind))
-      target.write(" wholeText=\(asParsedToken.pointee.wholeText.debugDescription)")
-      target.write(" textRange=\(asParsedToken.pointee.textRange.description)")
+      target.write(String(describing: asParsedToken.tokenKind))
+      target.write(" wholeText=\(asParsedToken.wholeText.debugDescription)")
+      target.write(" textRange=\(asParsedToken.textRange.description)")
     case .materializedToken:
       target.write(".materializedToken(")
-      target.write(String(describing: asMaterializedToken.pointee.tokenKind))
-      target.write(" text=\(asMaterializedToken.pointee.tokenText.debugDescription)")
-      target.write(" numLeadingTrivia=\(asMaterializedToken.pointee.numLeadingTrivia)")
-      target.write(" byteLength=\(asMaterializedToken.pointee.byteLength)")
+      target.write(String(describing: asMaterializedToken.tokenKind))
+      target.write(" text=\(asMaterializedToken.tokenText.debugDescription)")
+      target.write(" numLeadingTrivia=\(asMaterializedToken.numLeadingTrivia)")
+      target.write(" byteLength=\(asMaterializedToken.byteLength)")
       break
     case .layout:
       target.write(".layout(")
       target.write(String(describing: kind))
-      target.write(" byteLength=\(asLayout.pointee.byteLength)")
-      target.write(" descendantCount=\(asLayout.pointee.descendantCount)")
+      target.write(" byteLength=\(asLayout.byteLength)")
+      target.write(" descendantCount=\(asLayout.descendantCount)")
       if withChildren {
-        for (num, child) in asLayout.pointee.layout.enumerated() {
+        for (num, child) in asLayout.layout.enumerated() {
           target.write("\n")
           target.write(String(repeating: " ", count: childIndent))
           target.write("\(num): ")

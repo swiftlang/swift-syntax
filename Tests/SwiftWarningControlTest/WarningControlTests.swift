@@ -450,6 +450,129 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
+  /// A file-scoped `using @diagnose` nested in an active `#if` clause still
+  /// applies to the whole file.
+  func testFileScopeUsingInsideActiveIfConfig() throws {
+    try assertWarningGroupControl(
+      """
+      0️⃣let x = 1
+      #if STRICT
+      using @diagnose(GroupID, as: error)
+      #endif
+      1️⃣let k = 1
+      """,
+      customConditions: ["STRICT"],
+      languageFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "0️⃣": .error,
+        "1️⃣": .error,
+      ]
+    )
+  }
+
+  /// A file-scoped `using @diagnose` in an inactive `#if` clause contributes nothing.
+  func testFileScopeUsingInsideInactiveIfConfig() throws {
+    try assertWarningGroupControl(
+      """
+      0️⃣let x = 1
+      #if STRICT
+      using @diagnose(GroupID, as: error)
+      #endif
+      1️⃣let k = 1
+      """,
+      languageFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "0️⃣": .none,
+        "1️⃣": .none,
+      ]
+    )
+  }
+
+  /// Each `#if` clause may specify its own file-scoped `using @diagnose`.
+  func testFileScopeUsingIfConfigElseClause() throws {
+    let source =
+      """
+      #if STRICT
+      using @diagnose(GroupID, as: error)
+      #else
+      using @diagnose(GroupID, as: ignored)
+      #endif
+      0️⃣let x = 1
+      """
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      languageFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: ["0️⃣": .error]
+    )
+
+    try assertWarningGroupControl(
+      source,
+      languageFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: ["0️⃣": .ignored]
+    )
+  }
+
+  /// Nested `#if` directives around a file-scoped `using @diagnose`: the whole
+  /// chain must be active.
+  func testFileScopeUsingInsideNestedIfConfig() throws {
+    let source =
+      """
+      #if OUTER
+      #if INNER
+      using @diagnose(GroupID, as: error)
+      #endif
+      #endif
+      0️⃣let x = 1
+      """
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["OUTER", "INNER"],
+      languageFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: ["0️⃣": .error]
+    )
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["INNER"],
+      languageFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: ["0️⃣": .none]
+    )
+  }
+
+  /// A `using @diagnose` inside an `#if` nested in a type body stays decl-scoped,
+  /// and so contributes no file-level default.
+  func testDeclScopeUsingInsideIfConfigIgnored() throws {
+    try assertWarningGroupControl(
+      """
+      0️⃣let x = 1
+      struct Foo {
+        #if STRICT
+        using @diagnose(GroupID, as: error)
+        #endif
+        var property: Int {
+          1️⃣return 11
+        }
+      }
+      """,
+      customConditions: ["STRICT"],
+      languageFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "0️⃣": .none,
+        "1️⃣": .none,
+      ]
+    )
+  }
+
   func testWarnSpellingBackwardCompat() throws {
     // The old @warn spelling should continue to work as an alias
     try assertWarningGroupControl(

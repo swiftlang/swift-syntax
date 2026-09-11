@@ -309,12 +309,42 @@ func evaluateIfConfig(
       }
     }
 
+    /// Perform a check for an operation that takes a single non-empty
+    /// string-literal argument.
+    func doSingleStringLiteralArgumentCheck(
+      _ body: (String) throws -> Bool,
+      role: String
+    ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
+      guard let argExpr = call.arguments.singleUnlabeledExpression,
+        let stringLiteral = argExpr.as(StringLiteralExprSyntax.self),
+        stringLiteral.segments.count == 1,
+        let segment = stringLiteral.segments.first,
+        case .stringSegment(let stringSegment) = segment,
+        !stringSegment.content.text.isEmpty
+      else {
+        return recordError(
+          .requiresUnlabeledArgument(name: fnName, role: role, syntax: ExprSyntax(call))
+        )
+      }
+      return checkConfiguration(at: argExpr) {
+        (active: try body(stringSegment.content.text), syntaxErrorsAllowed: fn.syntaxErrorsAllowed)
+      }
+    }
+
     switch fn {
     case .hasAttribute:
       return doSingleIdentifierArgumentCheck(configuration.hasAttribute, role: "attribute")
 
     case .hasFeature:
       return doSingleIdentifierArgumentCheck(configuration.hasFeature, role: "feature")
+
+    case ._hasTargetFeature:
+      // Gated behind an experimental feature flag; if it isn't enabled,
+      // treat the name as unrecognized.
+      guard (try? configuration.hasFeature(name: "TargetFeaturePredicate")) ?? false else {
+        return recordError(.unknownExpression(condition))
+      }
+      return doSingleStringLiteralArgumentCheck(configuration.hasTargetFeature, role: "target feature name")
 
     case .os:
       return doSingleIdentifierArgumentCheck(configuration.isActiveTargetOS, role: "operating system")
@@ -882,6 +912,10 @@ private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>
 
   func isActiveTargetObjectFormat(name: String) throws -> Bool {
     return try other.isActiveTargetObjectFormat(name: name)
+  }
+
+  func hasTargetFeature(name: String) throws -> Bool {
+    return try other.hasTargetFeature(name: name)
   }
 
   var targetPointerBitWidth: Int { return other.targetPointerBitWidth }

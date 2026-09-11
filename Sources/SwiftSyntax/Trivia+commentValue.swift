@@ -32,7 +32,7 @@ extension Trivia {
   /// Returns `nil` if no documentation comment is present.
   public var docCommentValue: String? {
     extractDocCommentLines(tokenStart: AbsolutePosition(utf8Offset: 0))?
-      .map { String($0.text) }
+      .map(\.text)
       .joined(separator: "\n")
   }
 

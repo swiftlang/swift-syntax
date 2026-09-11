@@ -1581,6 +1581,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: NamespaceDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: NamespaceDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

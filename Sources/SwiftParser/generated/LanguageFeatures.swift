@@ -76,9 +76,13 @@ extension Parser.LanguageFeatures {
   @_spi(ExperimentalLanguageFeatures)
   public static let calledAttribute = Self (rawValue: 1 << 11)
 
+  /// Whether to enable the parsing of namespace declarations.
+  @_spi(ExperimentalLanguageFeatures)
+  public static let namespaces = Self (rawValue: 1 << 12)
+
   /// Whether to enable the parsing of a test feature that parses everything as unexpected.
   @_spi(ExperimentalLanguageFeatures)
-  public static let _test_EverythingUnexpected = Self (rawValue: 1 << 12)
+  public static let _test_EverythingUnexpected = Self (rawValue: 1 << 13)
 
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
@@ -109,6 +113,8 @@ extension Parser.LanguageFeatures {
       self = .literalExpressions
     case "CalledAttribute":
       self = .calledAttribute
+    case "Namespaces":
+      self = .namespaces
     case "_test_EverythingUnexpected":
       self = ._test_EverythingUnexpected
     default:

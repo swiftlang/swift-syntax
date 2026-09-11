@@ -215,7 +215,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .usingDecl, .variableDecl:
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .namespaceDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .usingDecl, .variableDecl:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -256,6 +256,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(MacroDeclSyntax.self),
       .node(MacroExpansionDeclSyntax.self),
       .node(MissingDeclSyntax.self),
+      .node(NamespaceDeclSyntax.self),
       .node(OperatorDeclSyntax.self),
       .node(PoundSourceLocationSyntax.self),
       .node(PrecedenceGroupDeclSyntax.self),
@@ -1703,6 +1704,7 @@ extension Syntax {
       .node(MultipleTrailingClosureElementListSyntax.self),
       .node(MultipleTrailingClosureElementSyntax.self),
       .node(NamedOpaqueReturnTypeSyntax.self),
+      .node(NamespaceDeclSyntax.self),
       .node(NilLiteralExprSyntax.self),
       .node(NonisolatedSpecifierArgumentSyntax.self),
       .node(NonisolatedTypeSpecifierSyntax.self),

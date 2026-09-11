@@ -2398,6 +2398,28 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "type"
   case \NamedOpaqueReturnTypeSyntax.unexpectedAfterType:
     return "unexpectedAfterType"
+  case \NamespaceDeclSyntax.unexpectedBeforeAttributes:
+    return "unexpectedBeforeAttributes"
+  case \NamespaceDeclSyntax.attributes:
+    return "attributes"
+  case \NamespaceDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+    return "unexpectedBetweenAttributesAndModifiers"
+  case \NamespaceDeclSyntax.modifiers:
+    return "modifiers"
+  case \NamespaceDeclSyntax.unexpectedBetweenModifiersAndNamespaceKeyword:
+    return "unexpectedBetweenModifiersAndNamespaceKeyword"
+  case \NamespaceDeclSyntax.namespaceKeyword:
+    return "namespaceKeyword"
+  case \NamespaceDeclSyntax.unexpectedBetweenNamespaceKeywordAndName:
+    return "unexpectedBetweenNamespaceKeywordAndName"
+  case \NamespaceDeclSyntax.name:
+    return "name"
+  case \NamespaceDeclSyntax.unexpectedBetweenNameAndMemberBlock:
+    return "unexpectedBetweenNameAndMemberBlock"
+  case \NamespaceDeclSyntax.memberBlock:
+    return "memberBlock"
+  case \NamespaceDeclSyntax.unexpectedAfterMemberBlock:
+    return "unexpectedAfterMemberBlock"
   case \NilLiteralExprSyntax.unexpectedBeforeNilKeyword:
     return "unexpectedBeforeNilKeyword"
   case \NilLiteralExprSyntax.nilKeyword:

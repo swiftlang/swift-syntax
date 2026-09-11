@@ -2311,6 +2311,20 @@ open class SyntaxVisitor {
   open func visitPost(_ node: NamedOpaqueReturnTypeSyntax) {
   }
 
+  /// Visiting `NamespaceDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: NamespaceDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `NamespaceDeclSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: NamespaceDeclSyntax) {
+  }
+
   /// Visiting ``NilLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5099,6 +5113,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitNamespaceDeclSyntaxImpl(_ node: Syntax) {
+    if visit(NamespaceDeclSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(NamespaceDeclSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitNilLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(NilLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6342,6 +6364,8 @@ open class SyntaxVisitor {
       return self.visitMultipleTrailingClosureElementSyntaxImpl(_:)
     case .namedOpaqueReturnType:
       return self.visitNamedOpaqueReturnTypeSyntaxImpl(_:)
+    case .namespaceDecl:
+      return self.visitNamespaceDeclSyntaxImpl(_:)
     case .nilLiteralExpr:
       return self.visitNilLiteralExprSyntaxImpl(_:)
     case .nonisolatedSpecifierArgument:
@@ -6938,6 +6962,8 @@ open class SyntaxVisitor {
       self.visitMultipleTrailingClosureElementSyntaxImpl(node)
     case .namedOpaqueReturnType:
       self.visitNamedOpaqueReturnTypeSyntaxImpl(node)
+    case .namespaceDecl:
+      self.visitNamespaceDeclSyntaxImpl(node)
     case .nilLiteralExpr:
       self.visitNilLiteralExprSyntaxImpl(node)
     case .nonisolatedSpecifierArgument:

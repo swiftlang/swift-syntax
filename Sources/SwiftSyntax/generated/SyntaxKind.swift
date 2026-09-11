@@ -140,6 +140,12 @@ public enum SyntaxKind: Sendable {
   case functionParameter
   case functionSignature
   case functionType
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYieldClause
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYieldList
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYield
   case genericArgumentClause
   case genericArgumentList
   case genericArgument
@@ -369,6 +375,8 @@ public enum SyntaxKind: Sendable {
     case .exprList:
       return true
     case .functionParameterList:
+      return true
+    case .functionYieldList:
       return true
     case .genericArgumentList:
       return true
@@ -692,6 +700,12 @@ public enum SyntaxKind: Sendable {
       return FunctionSignatureSyntax.self
     case .functionType:
       return FunctionTypeSyntax.self
+    case .functionYieldClause:
+      return FunctionYieldClauseSyntax.self
+    case .functionYieldList:
+      return FunctionYieldListSyntax.self
+    case .functionYield:
+      return FunctionYieldSyntax.self
     case .genericArgumentClause:
       return GenericArgumentClauseSyntax.self
     case .genericArgumentList:

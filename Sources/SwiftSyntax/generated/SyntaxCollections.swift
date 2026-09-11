@@ -816,6 +816,46 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.functionParameterList
 }
 
+/// A list of function yield represented by `FunctionYieldListSyntax`.
+/// 
+/// ### Example
+/// 
+/// ```swift
+/// func foo() yields (Int, inout Float) {
+/// 
+/// }
+/// ```
+///
+/// - Note: Requires experimental feature `coroutineFunctions`.
+///
+/// ### Children
+/// 
+/// `FunctionYieldSyntax` `*`
+///
+/// ### Contained in
+/// 
+///  - `FunctionYieldClauseSyntax`.`FunctionYieldClauseSyntax/yields`
+@_spi(ExperimentalLanguageFeatures)
+public struct FunctionYieldListSyntax: SyntaxCollection, SyntaxHashable {
+  public typealias Element = FunctionYieldSyntax
+
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .functionYieldList else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  public static let syntaxKind = SyntaxKind.functionYieldList
+}
+
 /// ### Children
 /// 
 /// ``GenericArgumentSyntax`` `*`

@@ -326,6 +326,20 @@ extension FunctionParameterListSyntax {
   }
 }
 
+// MARK: - FunctionYieldListBuilder
+
+@_spi(ExperimentalLanguageFeatures)
+@resultBuilder
+public struct FunctionYieldListBuilder: ListBuilder {
+  public typealias FinalResult = FunctionYieldListSyntax
+}
+
+extension FunctionYieldListSyntax {
+  public init(@FunctionYieldListBuilder itemsBuilder: () throws -> FunctionYieldListSyntax) rethrows {
+    self = try itemsBuilder()
+  }
+}
+
 // MARK: - GenericArgumentListBuilder
 
 @resultBuilder

@@ -140,6 +140,12 @@ public enum SyntaxEnum: Sendable {
   case functionParameter(FunctionParameterSyntax)
   case functionSignature(FunctionSignatureSyntax)
   case functionType(FunctionTypeSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYieldClause(FunctionYieldClauseSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYieldList(FunctionYieldListSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYield(FunctionYieldSyntax)
   case genericArgumentClause(GenericArgumentClauseSyntax)
   case genericArgumentList(GenericArgumentListSyntax)
   case genericArgument(GenericArgumentSyntax)
@@ -567,6 +573,12 @@ extension Syntax {
       return .functionSignature(FunctionSignatureSyntax(self)!)
     case .functionType:
       return .functionType(FunctionTypeSyntax(self)!)
+    case .functionYieldClause:
+      return .functionYieldClause(FunctionYieldClauseSyntax(self)!)
+    case .functionYieldList:
+      return .functionYieldList(FunctionYieldListSyntax(self)!)
+    case .functionYield:
+      return .functionYield(FunctionYieldSyntax(self)!)
     case .genericArgumentClause:
       return .genericArgumentClause(GenericArgumentClauseSyntax(self)!)
     case .genericArgumentList:

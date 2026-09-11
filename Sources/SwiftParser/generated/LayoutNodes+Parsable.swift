@@ -164,6 +164,14 @@ extension FunctionParameterSyntax: SyntaxParseable {
   }
 }
 
+extension FunctionYieldSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    parse(from: &parser) {
+      $0.parseFunctionYield()
+    }
+  }
+}
+
 extension GenericParameterClauseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     parse(from: &parser) {

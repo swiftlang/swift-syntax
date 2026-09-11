@@ -3382,6 +3382,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 ///  - `subscriptKeyword`: `subscript`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `accessorBlock`: ``AccessorBlockSyntax``?
@@ -3409,7 +3410,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   ///   - genericParameterClause: The parameter clause that defines the generic parameters.
   ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
@@ -3421,7 +3422,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndParameterClause: UnexpectedNodesSyntax? = nil,
     parameterClause: FunctionParameterClauseSyntax,
-    _ unexpectedBetweenParameterClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenParameterClauseAndYieldClause: UnexpectedNodesSyntax? = nil,
+    yieldClause: FunctionYieldClauseSyntax? = nil,
+    _ unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax,
     _ unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
@@ -3443,7 +3446,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       genericParameterClause,
       unexpectedBetweenGenericParameterClauseAndParameterClause,
       parameterClause,
-      unexpectedBetweenParameterClauseAndReturnClause,
+      unexpectedBetweenParameterClauseAndYieldClause,
+      yieldClause,
+      unexpectedBetweenYieldClauseAndReturnClause,
       returnClause,
       unexpectedBetweenReturnClauseAndGenericWhereClause,
       genericWhereClause,
@@ -3462,7 +3467,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         genericParameterClause?.raw,
         unexpectedBetweenGenericParameterClauseAndParameterClause?.raw,
         parameterClause.raw,
-        unexpectedBetweenParameterClauseAndReturnClause?.raw,
+        unexpectedBetweenParameterClauseAndYieldClause?.raw,
+        yieldClause?.raw,
+        unexpectedBetweenYieldClauseAndReturnClause?.raw,
         returnClause.raw,
         unexpectedBetweenReturnClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
@@ -3629,7 +3636,8 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var unexpectedBetweenParameterClauseAndReturnClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenParameterClauseAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3638,16 +3646,18 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var returnClause: ReturnClauseSyntax {
+  @_spi(ExperimentalLanguageFeatures)
+  public var yieldClause: FunctionYieldClauseSyntax? {
     get {
-      return Syntax(self).child(at: 11)!.cast(ReturnClauseSyntax.self)
+      return Syntax(self).child(at: 11)?.cast(FunctionYieldClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
-  public var unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3656,17 +3666,16 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
-  public var genericWhereClause: GenericWhereClauseSyntax? {
+  public var returnClause: ReturnClauseSyntax {
     get {
-      return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
+      return Syntax(self).child(at: 13)!.cast(ReturnClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3675,21 +3684,40 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var accessorBlock: AccessorBlockSyntax? {
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
+  public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      return Syntax(self).child(at: 15)?.cast(AccessorBlockSyntax.self)
+      return Syntax(self).child(at: 15)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
-  public var unexpectedAfterAccessorBlock: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 16, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
+    }
+  }
+
+  public var accessorBlock: AccessorBlockSyntax? {
+    get {
+      return Syntax(self).child(at: 17)?.cast(AccessorBlockSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 17, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterAccessorBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 18)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 18, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
@@ -3704,7 +3732,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     \Self.genericParameterClause,
     \Self.unexpectedBetweenGenericParameterClauseAndParameterClause,
     \Self.parameterClause,
-    \Self.unexpectedBetweenParameterClauseAndReturnClause,
+    \Self.unexpectedBetweenParameterClauseAndYieldClause,
+    \Self.yieldClause,
+    \Self.unexpectedBetweenYieldClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedBetweenReturnClauseAndGenericWhereClause,
     \Self.genericWhereClause,

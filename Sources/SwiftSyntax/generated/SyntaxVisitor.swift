@@ -1473,6 +1473,48 @@ open class SyntaxVisitor {
   open func visitPost(_ node: FunctionTypeSyntax) {
   }
 
+  /// Visiting `FunctionYieldClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `FunctionYieldClauseSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: FunctionYieldClauseSyntax) {
+  }
+
+  /// Visiting `FunctionYieldListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `FunctionYieldListSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: FunctionYieldListSyntax) {
+  }
+
+  /// Visiting `FunctionYieldSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `FunctionYieldSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: FunctionYieldSyntax) {
+  }
+
   /// Visiting ``GenericArgumentClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4547,6 +4589,30 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) {
+    if visit(FunctionYieldClauseSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(FunctionYieldClauseSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldListSyntaxImpl(_ node: Syntax) {
+    if visit(FunctionYieldListSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(FunctionYieldListSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldSyntaxImpl(_ node: Syntax) {
+    if visit(FunctionYieldSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(FunctionYieldSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitGenericArgumentClauseSyntaxImpl(_ node: Syntax) {
     if visit(GenericArgumentClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6204,6 +6270,12 @@ open class SyntaxVisitor {
       return self.visitFunctionSignatureSyntaxImpl(_:)
     case .functionType:
       return self.visitFunctionTypeSyntaxImpl(_:)
+    case .functionYieldClause:
+      return self.visitFunctionYieldClauseSyntaxImpl(_:)
+    case .functionYieldList:
+      return self.visitFunctionYieldListSyntaxImpl(_:)
+    case .functionYield:
+      return self.visitFunctionYieldSyntaxImpl(_:)
     case .genericArgumentClause:
       return self.visitGenericArgumentClauseSyntaxImpl(_:)
     case .genericArgumentList:
@@ -6800,6 +6872,12 @@ open class SyntaxVisitor {
       self.visitFunctionSignatureSyntaxImpl(node)
     case .functionType:
       self.visitFunctionTypeSyntaxImpl(node)
+    case .functionYieldClause:
+      self.visitFunctionYieldClauseSyntaxImpl(node)
+    case .functionYieldList:
+      self.visitFunctionYieldListSyntaxImpl(node)
+    case .functionYield:
+      self.visitFunctionYieldSyntaxImpl(node)
     case .genericArgumentClause:
       self.visitGenericArgumentClauseSyntaxImpl(node)
     case .genericArgumentList:

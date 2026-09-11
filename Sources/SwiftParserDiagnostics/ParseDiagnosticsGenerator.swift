@@ -1045,6 +1045,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  public override func visit(_ node: FunctionYieldClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // TODO: What do we want to check here?
+    return .visitChildren
+  }
+
   public override func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -15,7 +15,7 @@ extension RawSyntax {
   /// The token's payload must be a layout, otherwise this traps.
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView? {
-    switch raw.payload {
+    switch header {
     case .parsedToken, .materializedToken:
       return nil
     case .layout:
@@ -31,21 +31,21 @@ public struct RawSyntaxLayoutView {
 
   fileprivate init(raw: RawSyntax) {
     self.raw = raw
-    switch raw.payload {
+    switch raw.header {
     case .parsedToken, .materializedToken:
       preconditionFailure("RawSyntax must be a layout")
-    case .layout(_):
+    case .layout:
       break
     }
   }
 
   private var layoutData: RawSyntaxData.Layout {
-    switch raw.rawData.payload {
-    case .parsedToken(_),
+    switch raw.header {
+    case .parsedToken,
       .materializedToken(_):
       preconditionFailure("RawSyntax must be a layout")
-    case .layout(let dat):
-      return dat
+    case .layout:
+      return raw.asLayout.fields
     }
   }
 

@@ -92,28 +92,29 @@ extension Parser {
     case transpose
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._backDeploy): self = ._backDeploy
-      case TokenSpec(._documentation): self = ._documentation
-      case TokenSpec(._dynamicReplacement): self = ._dynamicReplacement
-      case TokenSpec(._effects): self = ._effects
-      case TokenSpec(._implements): self = ._implements
-      case TokenSpec(._originallyDefinedIn): self = ._originallyDefinedIn
-      case TokenSpec(.section): self = .section
-      case TokenSpec(.specialized): self = .specialized
-      case TokenSpec(._specialize): self = ._specialize
-      case TokenSpec(._spi_available): self = ._spi_available
-      case TokenSpec(.`rethrows`): self = .rethrows
-      case TokenSpec(.abi): self = .abi
-      case TokenSpec(.attached): self = .attached
-      case TokenSpec(.available): self = .available
-      case TokenSpec(.backDeployed): self = .backDeployed
-      case TokenSpec(.derivative): self = .derivative
-      case TokenSpec(.differentiable): self = .differentiable
-      case TokenSpec(.freestanding): self = .freestanding
-      case TokenSpec(.objc): self = .objc
-      case TokenSpec(.Sendable): self = .Sendable
-      case TokenSpec(.transpose): self = .transpose
+      let keyword = lexeme.keyword
+      switch keyword {
+      case ._backDeploy: self = ._backDeploy
+      case ._documentation: self = ._documentation
+      case ._dynamicReplacement: self = ._dynamicReplacement
+      case ._effects: self = ._effects
+      case ._implements: self = ._implements
+      case ._originallyDefinedIn: self = ._originallyDefinedIn
+      case .section: self = .section
+      case .specialized: self = .specialized
+      case ._specialize: self = ._specialize
+      case ._spi_available: self = ._spi_available
+      case .`rethrows`: self = .rethrows
+      case .abi: self = .abi
+      case .attached: self = .attached
+      case .available: self = .available
+      case .backDeployed: self = .backDeployed
+      case .derivative: self = .derivative
+      case .differentiable: self = .differentiable
+      case .freestanding: self = .freestanding
+      case .objc: self = .objc
+      case .Sendable: self = .Sendable
+      case .transpose: self = .transpose
       default:
         return nil
       }
@@ -1075,13 +1076,14 @@ extension Parser {
           }
 
           init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-            switch PrepareForKeywordMatch(lexeme) {
-            case TokenSpec(.private): self = .private
-            case TokenSpec(.fileprivate): self = .fileprivate
-            case TokenSpec(.internal): self = .internal
-            case TokenSpec(.package): self = .package
-            case TokenSpec(.public): self = .public
-            case TokenSpec(.open): self = .open
+            let keyword = lexeme.keyword
+            switch keyword {
+            case .private: self = .private
+            case .fileprivate: self = .fileprivate
+            case .internal: self = .internal
+            case .package: self = .package
+            case .public: self = .public
+            case .open: self = .open
             default: return nil
             }
           }

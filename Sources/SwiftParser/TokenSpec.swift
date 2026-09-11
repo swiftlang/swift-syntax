@@ -16,27 +16,6 @@
 @_spi(RawSyntax) import SwiftSyntax
 #endif
 
-/// Pre-computes the keyword a lexeme might represent. This makes matching
-/// a lexeme that has been converted into `PrepareForKeyword` match cheaper to
-/// match against multiple ``TokenSpec`` that assume a keyword.
-struct PrepareForKeywordMatch {
-  /// The kind of the lexeme.
-  fileprivate let rawTokenKind: RawTokenKind
-
-  /// If the lexeme has the same text as a keyword, that keyword, otherwise `nil`.
-  fileprivate let keyword: Keyword?
-
-  /// Whether to lexeme occurred at the start of a line.
-  fileprivate let isAtStartOfLine: Bool
-
-  @inline(__always)
-  init(_ lexeme: Lexer.Lexeme) {
-    self.rawTokenKind = lexeme.rawTokenKind
-    self.keyword = lexeme.keyword
-    self.isAtStartOfLine = lexeme.isAtStartOfLine
-  }
-}
-
 /// Describes a token that should be consumed by the parser.
 ///
 /// All the methods in here and all functions that take a ``TokenSpec`` need to be
@@ -152,15 +131,6 @@ public struct TokenSpec: Sendable {
       rawTokenKind: token.tokenKind,
       keyword: Keyword(token.tokenView.rawText),
       atStartOfLine: token.leadingTriviaPieces.contains(where: \.isNewline)
-    )
-  }
-
-  @inline(__always)
-  static func ~= (kind: TokenSpec, lexeme: PrepareForKeywordMatch) -> Bool {
-    return kind.matches(
-      rawTokenKind: lexeme.rawTokenKind,
-      keyword: lexeme.keyword,
-      atStartOfLine: lexeme.isAtStartOfLine
     )
   }
 

@@ -26,11 +26,11 @@ extension Parser {
       case dollarIdentifier  // For recovery
 
       init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.leftParen): self = .leftParen
-        case TokenSpec(.wildcard): self = .wildcard
-        case TokenSpec(.identifier): self = .identifier
-        case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
+        switch lexeme.rawTokenKind {
+        case .leftParen: self = .leftParen
+        case .wildcard: self = .wildcard
+        case .identifier: self = .identifier
+        case .dollarIdentifier: self = .dollarIdentifier
         default: return nil
         }
       }
@@ -299,10 +299,10 @@ extension Parser.Lookahead {
       case leftParen
 
       init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.identifier): self = .identifier
-        case TokenSpec(.wildcard): self = .wildcard
-        case TokenSpec(.leftParen): self = .leftParen
+        switch lexeme.rawTokenKind {
+        case .identifier: self = .identifier
+        case .wildcard: self = .wildcard
+        case .leftParen: self = .leftParen
         default: return nil
         }
       }

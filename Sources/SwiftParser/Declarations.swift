@@ -2084,11 +2084,12 @@ extension Parser {
       case lowerThan
 
       init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.associativity): self = .associativity
-        case TokenSpec(.assignment): self = .assignment
-        case TokenSpec(.higherThan): self = .higherThan
-        case TokenSpec(.lowerThan): self = .lowerThan
+        let keyword = lexeme.keyword
+        switch keyword {
+        case .associativity: self = .associativity
+        case .assignment: self = .assignment
+        case .higherThan: self = .higherThan
+        case .lowerThan: self = .lowerThan
         default: return nil
         }
       }

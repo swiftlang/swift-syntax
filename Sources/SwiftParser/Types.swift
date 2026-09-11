@@ -325,15 +325,31 @@ extension Parser {
       case wildcard
 
       init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case .keyword(.Self): self = .Self
-        case .keyword(.Any): self = .Any
-        case .identifier: self = .identifier
-        case .leftParen: self = .leftParen
-        case .leftSquare: self = .leftSquare
-        case .wildcard: self = .wildcard
-        default: return nil
+        func token() -> Self? {
+          return switch lexeme.rawTokenKind {
+          case .identifier: .identifier
+          case .leftParen: .leftParen
+          case .leftSquare: .leftSquare
+          case .wildcard: .wildcard
+          default: nil
+          }
         }
+
+        func keyword() -> Self? {
+          guard let keyword = lexeme.keyword else {
+            return nil
+          }
+          return switch keyword {
+          case .Self: .Self
+          case .Any: .Any
+          default: nil
+          }
+        }
+
+        guard let match = keyword() ?? token() else {
+          return nil
+        }
+        self = match
       }
 
       var spec: TokenSpec {

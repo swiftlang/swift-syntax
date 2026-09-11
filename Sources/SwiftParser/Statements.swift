@@ -650,18 +650,34 @@ extension Parser {
       case endOfFile
 
       init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.rightBrace): self = .rightBrace
-        case TokenSpec(.case): self = .case
-        case TokenSpec(.default): self = .default
-        case TokenSpec(.semicolon): self = .semicolon
-        case TokenSpec(.poundIf): self = .poundIf
-        case TokenSpec(.poundEndif): self = .poundEndif
-        case TokenSpec(.poundElse): self = .poundElse
-        case TokenSpec(.poundElseif): self = .poundElseif
-        case TokenSpec(.endOfFile): self = .endOfFile
-        default: return nil
+        func token() -> Self? {
+          return switch lexeme.rawTokenKind {
+          case .rightBrace: .rightBrace
+          case .semicolon: .semicolon
+          case .poundIf: .poundIf
+          case .poundEndif: .poundEndif
+          case .poundElse: .poundElse
+          case .poundElseif: .poundElseif
+          case .endOfFile: .endOfFile
+          default: nil
+          }
         }
+
+        func keyword() -> Self? {
+          guard let keyword = lexeme.keyword else {
+            return nil
+          }
+          return switch keyword {
+          case .case: .case
+          case .default: .default
+          default: nil
+          }
+        }
+
+        guard let match = token() ?? keyword() else {
+          return nil
+        }
+        self = match
       }
 
       var spec: TokenSpec {

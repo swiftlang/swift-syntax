@@ -69,13 +69,14 @@ enum AccessorModifier: TokenSpecSet {
   case yielding
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.__consuming): self = .__consuming
-    case TokenSpec(.consuming): self = .consuming
-    case TokenSpec(.borrowing): self = .borrowing
-    case TokenSpec(.mutating): self = .mutating
-    case TokenSpec(.nonmutating): self = .nonmutating
-    case TokenSpec(.yielding): self = .yielding
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .__consuming: self = .__consuming
+    case .consuming: self = .consuming
+    case .borrowing: self = .borrowing
+    case .mutating: self = .mutating
+    case .nonmutating: self = .nonmutating
+    case .yielding: self = .yielding
     default: return nil
     }
   }
@@ -111,23 +112,24 @@ enum CanBeStatementStart: TokenSpecSet {
   case yield
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.break): self = .break
-    case TokenSpec(.continue): self = .continue
-    case TokenSpec(.defer): self = .defer
-    case TokenSpec(.do): self = .do
-    case TokenSpec(.fallthrough): self = .fallthrough
-    case TokenSpec(.for): self = .for
-    case TokenSpec(.discard): self = .discard
-    case TokenSpec(.guard): self = .guard
-    case TokenSpec(.if): self = .if
-    case TokenSpec(.repeat): self = .repeat
-    case TokenSpec(.return): self = .return
-    case TokenSpec(.switch): self = .switch
-    case TokenSpec(.then) where languageFeatures.contains(.thenStatements): self = .then
-    case TokenSpec(.throw): self = .throw
-    case TokenSpec(.while): self = .while
-    case TokenSpec(.yield): self = .yield
+    guard let keyword = lexeme.keyword else { return nil }
+    switch keyword {
+    case .break: self = .break
+    case .continue: self = .continue
+    case .defer: self = .defer
+    case .do: self = .do
+    case .fallthrough: self = .fallthrough
+    case .for: self = .for
+    case .discard: self = .discard
+    case .guard: self = .guard
+    case .if: self = .if
+    case .repeat: self = .repeat
+    case .return: self = .return
+    case .switch: self = .switch
+    case .then where languageFeatures.contains(.thenStatements): self = .then
+    case .throw: self = .throw
+    case .while: self = .while
+    case .yield: self = .yield
     default: return nil
     }
   }
@@ -160,10 +162,11 @@ enum CompilationCondition: TokenSpecSet {
   case canImport
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.swift): self = .swift
-    case TokenSpec(.compiler): self = .compiler
-    case TokenSpec(.canImport): self = .canImport
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .swift: self = .swift
+    case .compiler: self = .compiler
+    case .canImport: self = .canImport
     default: return nil
     }
   }
@@ -207,33 +210,33 @@ enum ContextualDeclKeyword: TokenSpecSet {
   case weak
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.__consuming): self = .__consuming
-    case TokenSpec(._compilerInitialized): self = ._compilerInitialized
-    case TokenSpec(._const): self = ._const
-    case TokenSpec(._local): self = ._local
-    case TokenSpec(.actor): self = .actor
-    case TokenSpec(.async): self = .async
-    case TokenSpec(.convenience): self = .convenience
-    case TokenSpec(.distributed): self = .distributed
-    case TokenSpec(.dynamic): self = .dynamic
-    case TokenSpec(.final): self = .final
-    case TokenSpec(.indirect): self = .indirect
-    case TokenSpec(.infix): self = .infix
-    case TokenSpec(.isolated): self = .isolated
-    case TokenSpec(.lazy): self = .lazy
-    case TokenSpec(.mutating): self = .mutating
-    case TokenSpec(.nonisolated): self = .nonisolated
-    case TokenSpec(.nonmutating): self = .nonmutating
-    case TokenSpec(.package): self = .package
-    case TokenSpec(.open): self = .open
-    case TokenSpec(.optional): self = .optional
-    case TokenSpec(.override): self = .override
-    case TokenSpec(.postfix): self = .postfix
-    case TokenSpec(.prefix): self = .prefix
-    case TokenSpec(.required): self = .required
-    case TokenSpec(.unowned): self = .unowned
-    case TokenSpec(.weak): self = .weak
+    switch lexeme.keyword {
+    case .__consuming: self = .__consuming
+    case ._compilerInitialized: self = ._compilerInitialized
+    case ._const: self = ._const
+    case ._local: self = ._local
+    case .actor: self = .actor
+    case .async: self = .async
+    case .convenience: self = .convenience
+    case .distributed: self = .distributed
+    case .dynamic: self = .dynamic
+    case .final: self = .final
+    case .indirect: self = .indirect
+    case .infix: self = .infix
+    case .isolated: self = .isolated
+    case .lazy: self = .lazy
+    case .mutating: self = .mutating
+    case .nonisolated: self = .nonisolated
+    case .nonmutating: self = .nonmutating
+    case .package: self = .package
+    case .open: self = .open
+    case .optional: self = .optional
+    case .override: self = .override
+    case .postfix: self = .postfix
+    case .prefix: self = .prefix
+    case .required: self = .required
+    case .unowned: self = .unowned
+    case .weak: self = .weak
     default: return nil
     }
   }
@@ -296,28 +299,45 @@ enum PureDeclarationKeyword: TokenSpecSet {
   case using
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.actor): self = .actor
-    case TokenSpec(.macro): self = .macro
-    case TokenSpec(.associatedtype): self = .associatedtype
-    case TokenSpec(.case): self = .case
-    case TokenSpec(.class): self = .class
-    case TokenSpec(.deinit): self = .deinit
-    case TokenSpec(.enum): self = .enum
-    case TokenSpec(.extension): self = .extension
-    case TokenSpec(.func): self = .func
-    case TokenSpec(.import): self = .import
-    case TokenSpec(.`init`): self = .`init`
-    case TokenSpec(.operator): self = .operator
-    case TokenSpec(.precedencegroup): self = .precedencegroup
-    case TokenSpec(.protocol): self = .protocol
-    case TokenSpec(.struct): self = .struct
-    case TokenSpec(.subscript): self = .subscript
-    case TokenSpec(.typealias): self = .typealias
-    case TokenSpec(.pound): self = .pound
-    case TokenSpec(.using) where languageFeatures.contains(.defaultIsolationPerFile): self = .using
-    default: return nil
+    func token() -> Self? {
+      // `pound` is a token kind rather than a keyword.
+      return switch lexeme.rawTokenKind {
+      case .pound: .pound
+      default: nil
+      }
     }
+
+    func keyword() -> Self? {
+      guard let keyword = lexeme.keyword else {
+        return nil
+      }
+      return switch keyword {
+      case .actor: .actor
+      case .macro: .macro
+      case .associatedtype: .associatedtype
+      case .case: .case
+      case .class: .class
+      case .deinit: .deinit
+      case .enum: .enum
+      case .extension: .extension
+      case .func: .func
+      case .import: .import
+      case .`init`: .`init`
+      case .operator: .operator
+      case .precedencegroup: .precedencegroup
+      case .protocol: .protocol
+      case .struct: .struct
+      case .subscript: .subscript
+      case .typealias: .typealias
+      case .using where languageFeatures.contains(.defaultIsolationPerFile): .using
+      default: nil
+      }
+    }
+
+    guard let match = token() ?? keyword() else {
+      return nil
+    }
+    self = match
   }
 
   var spec: TokenSpec {
@@ -389,43 +409,43 @@ enum DeclarationModifier: TokenSpecSet {
   case weak
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.__consuming): self = .__consuming
-    case TokenSpec(.__setter_access): self = .__setter_access
-    case TokenSpec(._const): self = ._const
-    case TokenSpec(._local): self = ._local
-    case TokenSpec(.async): self = .async
-    case TokenSpec(.borrowing): self = .borrowing
-    case TokenSpec(.class): self = .class
-    case TokenSpec(.consuming): self = .consuming
-    case TokenSpec(.convenience): self = .convenience
-    case TokenSpec(.distributed): self = .distributed
-    case TokenSpec(.dynamic): self = .dynamic
-    case TokenSpec(.fileprivate): self = .fileprivate
-    case TokenSpec(.final): self = .final
-    case TokenSpec(.indirect): self = .indirect
-    case TokenSpec(.infix): self = .infix
-    case TokenSpec(.internal): self = .internal
-    case TokenSpec(.isolated): self = .isolated
-    case TokenSpec(.lazy): self = .lazy
-    case TokenSpec(.mutating): self = .mutating
-    case TokenSpec(.nonisolated): self = .nonisolated
-    case TokenSpec(.nonmutating): self = .nonmutating
-    case TokenSpec(.open): self = .open
-    case TokenSpec(.optional): self = .optional
-    case TokenSpec(.override): self = .override
-    case TokenSpec(.package): self = .package
-    case TokenSpec(.postfix): self = .postfix
-    case TokenSpec(.prefix): self = .prefix
-    case TokenSpec(.private): self = .private
-    case TokenSpec(.public): self = .public
-    case TokenSpec(.reasync): self = .reasync
-    case TokenSpec(.required): self = .required
-    case TokenSpec(.rethrows): self = .rethrows
-    case TokenSpec(.static): self = .static
-    case TokenSpec(.sending): self = .sending
-    case TokenSpec(.unowned): self = .unowned
-    case TokenSpec(.weak): self = .weak
+    switch lexeme.keyword {
+    case .__consuming: self = .__consuming
+    case .__setter_access: self = .__setter_access
+    case ._const: self = ._const
+    case ._local: self = ._local
+    case .async: self = .async
+    case .borrowing: self = .borrowing
+    case .class: self = .class
+    case .consuming: self = .consuming
+    case .convenience: self = .convenience
+    case .distributed: self = .distributed
+    case .dynamic: self = .dynamic
+    case .fileprivate: self = .fileprivate
+    case .final: self = .final
+    case .indirect: self = .indirect
+    case .infix: self = .infix
+    case .internal: self = .internal
+    case .isolated: self = .isolated
+    case .lazy: self = .lazy
+    case .mutating: self = .mutating
+    case .nonisolated: self = .nonisolated
+    case .nonmutating: self = .nonmutating
+    case .open: self = .open
+    case .optional: self = .optional
+    case .override: self = .override
+    case .package: self = .package
+    case .postfix: self = .postfix
+    case .prefix: self = .prefix
+    case .private: self = .private
+    case .public: self = .public
+    case .reasync: self = .reasync
+    case .required: self = .required
+    case .rethrows: self = .rethrows
+    case .static: self = .static
+    case .sending: self = .sending
+    case .unowned: self = .unowned
+    case .weak: self = .weak
     default: return nil
     }
   }
@@ -587,17 +607,13 @@ enum OperatorLike: TokenSpecSet {
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
     if case .prefixOperator = lexeme.rawTokenKind {
       self = .prefixOperator
-      return
-    }
-    if let binOp = BinaryOperatorLike(lexeme: lexeme, languageFeatures: languageFeatures) {
+    } else if let binOp = BinaryOperatorLike(lexeme: lexeme, languageFeatures: languageFeatures) {
       self = .binaryOperatorLike(binOp)
-      return
-    }
-    if let postfixOp = PostfixOperatorLike(lexeme: lexeme, languageFeatures: languageFeatures) {
+    } else if let postfixOp = PostfixOperatorLike(lexeme: lexeme, languageFeatures: languageFeatures) {
       self = .postfixOperatorLike(postfixOp)
-      return
+    } else {
+      return nil
     }
-    return nil
   }
 
   static var allCases: [OperatorLike] {
@@ -619,9 +635,10 @@ enum SwitchCaseStart: TokenSpecSet {
   case `default`
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.case): self = .case
-    case TokenSpec(.default): self = .default
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .case: self = .case
+    case .default: self = .default
     default: return nil
     }
   }
@@ -652,22 +669,23 @@ enum TypeAttribute: TokenSpecSet {
   case isolated
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(._local): self = ._local
-    case TokenSpec(._noMetadata): self = ._noMetadata
-    case TokenSpec(._opaqueReturnTypeOf): self = ._opaqueReturnTypeOf
-    case TokenSpec(.async): self = .async
-    case TokenSpec(.autoclosure): self = .autoclosure
-    case TokenSpec(.convention): self = .convention
-    case TokenSpec(.differentiable): self = .differentiable
-    case TokenSpec(.escaping): self = .escaping
-    case TokenSpec(.noDerivative): self = .noDerivative
-    case TokenSpec(.noescape): self = .noescape
-    case TokenSpec(.preconcurrency): self = .preconcurrency
-    case TokenSpec(.Sendable): self = .Sendable
-    case TokenSpec(.retroactive): self = .retroactive
-    case TokenSpec(.unchecked): self = .unchecked
-    case TokenSpec(.isolated): self = .isolated
+    let keyword = lexeme.keyword
+    switch keyword {
+    case ._local: self = ._local
+    case ._noMetadata: self = ._noMetadata
+    case ._opaqueReturnTypeOf: self = ._opaqueReturnTypeOf
+    case .async: self = .async
+    case .autoclosure: self = .autoclosure
+    case .convention: self = .convention
+    case .differentiable: self = .differentiable
+    case .escaping: self = .escaping
+    case .noDerivative: self = .noDerivative
+    case .noescape: self = .noescape
+    case .preconcurrency: self = .preconcurrency
+    case .Sendable: self = .Sendable
+    case .retroactive: self = .retroactive
+    case .unchecked: self = .unchecked
+    case .isolated: self = .isolated
     default: return nil
     }
   }
@@ -709,18 +727,19 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case unsafe
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.await): self = .await
-    case TokenSpec(._move) where languageFeatures.contains(.oldOwnershipOperatorSpellings): self = ._move
-    case TokenSpec(._borrow) where languageFeatures.contains(.oldOwnershipOperatorSpellings): self = ._borrow
-    case TokenSpec(.try): self = .try
-    case TokenSpec(.borrow): self = .borrow
-    case TokenSpec(.consume): self = .consume
-    case TokenSpec(.copy): self = .copy
-    case TokenSpec(.repeat): self = .repeat
-    case TokenSpec(.each): self = .each
-    case TokenSpec(.any): self = .any
-    case TokenSpec(.unsafe): self = .unsafe
+    guard let keyword = lexeme.keyword else { return nil }
+    switch keyword {
+    case .await: self = .await
+    case ._move where languageFeatures.contains(.oldOwnershipOperatorSpellings): self = ._move
+    case ._borrow where languageFeatures.contains(.oldOwnershipOperatorSpellings): self = ._borrow
+    case .try: self = .try
+    case .borrow: self = .borrow
+    case .consume: self = .consume
+    case .copy: self = .copy
+    case .repeat: self = .repeat
+    case .each: self = .each
+    case .any: self = .any
+    case .unsafe: self = .unsafe
     default: return nil
     }
   }
@@ -748,10 +767,11 @@ enum SingleValueStatementExpression: TokenSpecSet {
   case `switch`
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.do) where languageFeatures.contains(.doExpressions): self = .do
-    case TokenSpec(.if): self = .if
-    case TokenSpec(.switch): self = .switch
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .do where languageFeatures.contains(.doExpressions): self = .do
+    case .if: self = .if
+    case .switch: self = .switch
     default: return nil
     }
   }
@@ -796,8 +816,9 @@ enum PureMatchingPatternStart: TokenSpecSet {
   case `is`
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.is): self = .is
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .is: self = .is
     default: return nil
     }
   }
@@ -819,9 +840,10 @@ enum ParameterModifier: TokenSpecSet {
   case isolated
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(._const): self = ._const
-    case TokenSpec(.isolated): self = .isolated
+    let keyword = lexeme.keyword
+    switch keyword {
+    case ._const: self = ._const
+    case .isolated: self = .isolated
     default: return nil
     }
   }
@@ -867,39 +889,55 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case singleQuote
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.Any): self = .Any
-    case TokenSpec(.atSign): self = .atSign
-    case TokenSpec(.Self): self = .Self
-    case TokenSpec(.colonColon): self = .colonColon
-    case TokenSpec(.deinit): self = .`deinit`
-    case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
-    case TokenSpec(.false): self = .false
-    case TokenSpec(.floatLiteral): self = .floatLiteral
-    case TokenSpec(.identifier): self = .identifier
-    case TokenSpec(.`init`): self = .`init`
-    case TokenSpec(.integerLiteral): self = .integerLiteral
-    case TokenSpec(.leftBrace): self = .leftBrace
-    case TokenSpec(.leftParen): self = .leftParen
-    case TokenSpec(.leftSquare): self = .leftSquare
-    case TokenSpec(.nil): self = .nil
-    case TokenSpec(.period): self = .period
-    case TokenSpec(.pound): self = .pound
-    case TokenSpec(.poundAvailable): self = .poundAvailable
-    case TokenSpec(.poundUnavailable): self = .poundUnavailable
-    case TokenSpec(.regexSlash): self = .regexSlash
-    case TokenSpec(.regexPoundDelimiter): self = .extendedRegexDelimiter
-    case TokenSpec(.self): self = .self
-    case TokenSpec(.subscript): self = .`subscript`
-    case TokenSpec(.super): self = .super
-    case TokenSpec(.true): self = .true
-    case TokenSpec(.wildcard): self = .wildcard
-    case TokenSpec(.rawStringPoundDelimiter): self = .rawStringDelimiter
-    case TokenSpec(.stringQuote): self = .stringQuote
-    case TokenSpec(.multilineStringQuote): self = .multilineStringQuote
-    case TokenSpec(.singleQuote): self = .singleQuote
-    default: return nil
+    func token() -> Self? {
+      return switch lexeme.rawTokenKind {
+      case .atSign: .atSign
+      case .colonColon: .colonColon
+      case .dollarIdentifier: .dollarIdentifier
+      case .floatLiteral: .floatLiteral
+      case .identifier: .identifier
+      case .integerLiteral: .integerLiteral
+      case .leftBrace: .leftBrace
+      case .leftParen: .leftParen
+      case .leftSquare: .leftSquare
+      case .period: .period
+      case .pound: .pound
+      case .poundAvailable: .poundAvailable
+      case .poundUnavailable: .poundUnavailable
+      case .regexSlash: .regexSlash
+      case .regexPoundDelimiter: .extendedRegexDelimiter
+      case .wildcard: .wildcard
+      case .rawStringPoundDelimiter: .rawStringDelimiter
+      case .stringQuote: .stringQuote
+      case .multilineStringQuote: .multilineStringQuote
+      case .singleQuote: .singleQuote
+      default: nil
+      }
     }
+
+    func keyword() -> Self? {
+      guard let keyword = lexeme.keyword else {
+        return nil
+      }
+      return switch keyword {
+      case .Any: .Any
+      case .Self: .Self
+      case .deinit: .`deinit`
+      case .false: .false
+      case .`init`: .`init`
+      case .nil: .nil
+      case .self: .self
+      case .subscript: .`subscript`
+      case .super: .super
+      case .true: .true
+      default: nil
+      }
+    }
+
+    guard let match = token() ?? keyword() else {
+      return nil
+    }
+    self = match
   }
 
   var spec: TokenSpec {
@@ -990,14 +1028,16 @@ enum EffectSpecifiers: TokenSpecSet {
   case `try`
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.async): self = .async
-    case TokenSpec(.await, allowAtStartOfLine: false): self = .await
-    case TokenSpec(.reasync): self = .reasync
-    case TokenSpec(.rethrows): self = .rethrows
-    case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
-    case TokenSpec(.throws): self = .throws
-    case TokenSpec(.try, allowAtStartOfLine: false): self = .try
+    let atStartOfLine = lexeme.isAtStartOfLine
+    let keyword = lexeme.keyword
+    switch keyword {
+    case .async: self = .async
+    case .await where !atStartOfLine: self = .await
+    case .reasync: self = .reasync
+    case .rethrows: self = .rethrows
+    case .throw where !atStartOfLine: self = .throw
+    case .throws: self = .throws
+    case .try where !atStartOfLine: self = .try
     default: return nil
     }
   }

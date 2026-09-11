@@ -91,7 +91,7 @@ extension StringSegmentSyntax {
 
     // The lexer's state stack spills into this allocator, so it has to outlive
     // `cursor` below rather than be a temporary of the `perform` call.
-    let stateAllocator = BumpPtrAllocator(initialSlabSize: 256)
+    let stateAllocator = Lexer.StateAllocator()
     withExtendedLifetime(stateAllocator) {
       rawText.withBuffer { buffer in
         var cursor = Lexer.Cursor(input: buffer, previous: 0)
@@ -100,7 +100,7 @@ extension StringSegmentSyntax {
         // defensive as it's currently not used by `lexCharacterInStringLiteral`.
         let state = Lexer.Cursor.State.inStringLiteral(delimiterLength: delimiterLength, kind: stringLiteralKind)
         let transition = Lexer.StateTransition.push(newState: state)
-        cursor.perform(stateTransition: transition, stateAllocator: stateAllocator)
+        cursor.perform(stateTransition: transition, stateAllocator: .passUnretained(stateAllocator))
 
         while true {
           let lex = cursor.lexCharacterInStringLiteral(

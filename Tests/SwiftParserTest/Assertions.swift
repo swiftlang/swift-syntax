@@ -204,12 +204,15 @@ func assertLexemes(
     lookaheadTracker.deallocate()
   }
   lookaheadTracker.initialize(to: LookaheadTracker())
+  // Outlives the lexeme sequence, which refers to it without owning it.
+  let stateAllocator = Lexer.StateAllocator()
   source.withUTF8 { buf in
     var lexemes = [Lexer.Lexeme]()
     for token in Lexer.tokenize(
       buf,
       from: 0,
-      lookaheadTracker: lookaheadTracker
+      lookaheadTracker: lookaheadTracker,
+      stateAllocator: stateAllocator
     ) {
       lexemes.append(token)
 

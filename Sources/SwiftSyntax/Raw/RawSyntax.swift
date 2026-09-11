@@ -341,36 +341,6 @@ public struct RawSyntax: Sendable {
     )
   }
 
-  init(arena: __shared RawSyntaxArena, parsedToken fields: RawSyntaxData.ParsedToken) {
-    let (node, tail) = Self.allocate(
-      .parsedToken(RawSyntaxArenaRef(arena)),
-      tailByteCount: MemoryLayout<RawSyntaxData.ParsedToken>.stride,
-      arena: arena
-    )
-    tail.bindMemory(to: RawSyntaxData.ParsedToken.self, capacity: 1).initialize(to: fields)
-    self = node
-  }
-
-  init(arena: __shared RawSyntaxArena, materializedToken fields: RawSyntaxData.MaterializedToken) {
-    let (node, tail) = Self.allocate(
-      .materializedToken(RawSyntaxArenaRef(arena)),
-      tailByteCount: MemoryLayout<RawSyntaxData.MaterializedToken>.stride,
-      arena: arena
-    )
-    tail.bindMemory(to: RawSyntaxData.MaterializedToken.self, capacity: 1).initialize(to: fields)
-    self = node
-  }
-
-  init(arena: __shared RawSyntaxArena, layout fields: RawSyntaxData.Layout) {
-    let (node, tail) = Self.allocate(
-      .layout(RawSyntaxArenaRef(arena)),
-      tailByteCount: MemoryLayout<RawSyntaxData.Layout>.stride,
-      arena: arena
-    )
-    tail.bindMemory(to: RawSyntaxData.Layout.self, capacity: 1).initialize(to: fields)
-    self = node
-  }
-
   /// Which of the three shapes this node has, and the arena that owns it.
   @inline(__always)
   var header: RawSyntaxData {
@@ -780,7 +750,20 @@ extension RawSyntax {
       kind != .keyword || Keyword(SyntaxText(rebasing: wholeText[textRange])) != nil,
       "If kind is keyword, the text must be a known token kind"
     )
-    return RawSyntax(arena: arena, parsedToken: payload)
+    return RawSyntax.allocateParsedToken(payload, arena: arena)
+  }
+
+  static func allocateParsedToken(
+    _ fields: RawSyntaxData.ParsedToken,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let (node, tail) = Self.allocate(
+      .parsedToken(RawSyntaxArenaRef(arena)),
+      tailByteCount: MemoryLayout<RawSyntaxData.ParsedToken>.stride,
+      arena: arena
+    )
+    tail.bindMemory(to: RawSyntaxData.ParsedToken.self, capacity: 1).initialize(to: fields)
+    return node
   }
 
   /// "Designated" factory method to create a materialized token node.
@@ -825,7 +808,20 @@ extension RawSyntax {
       tokenDiagnostic: tokenDiagnostic
     )
     precondition(kind != .keyword || Keyword(text) != nil, "If kind is keyword, the text must be a known token kind")
-    return RawSyntax(arena: arena, materializedToken: payload)
+    return RawSyntax.allocateMaterializedToken(payload, arena: arena)
+  }
+
+  static func allocateMaterializedToken(
+    _ fields: RawSyntaxData.MaterializedToken,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let (node, tail) = Self.allocate(
+      .materializedToken(RawSyntaxArenaRef(arena)),
+      tailByteCount: MemoryLayout<RawSyntaxData.MaterializedToken>.stride,
+      arena: arena
+    )
+    tail.bindMemory(to: RawSyntaxData.MaterializedToken.self, capacity: 1).initialize(to: fields)
+    return node
   }
 
   /// Factory method to create a materialized token node.
@@ -965,7 +961,20 @@ extension RawSyntax {
       descendantCount: descendantCount,
       recursiveFlags: recursiveFlags
     )
-    return RawSyntax(arena: arena, layout: payload)
+    return RawSyntax.allocateLayout(payload, arena: arena)
+  }
+
+  private static func allocateLayout(
+    _ fields: RawSyntaxData.Layout,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let (node, tail) = Self.allocate(
+      .layout(RawSyntaxArenaRef(arena)),
+      tailByteCount: MemoryLayout<RawSyntaxData.Layout>.stride,
+      arena: arena
+    )
+    tail.bindMemory(to: RawSyntaxData.Layout.self, capacity: 1).initialize(to: fields)
+    return node
   }
 
   /// Factory method to create a layout node.

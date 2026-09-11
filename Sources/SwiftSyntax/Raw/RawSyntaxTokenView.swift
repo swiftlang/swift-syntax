@@ -193,7 +193,7 @@ public struct RawSyntaxTokenView: Sendable {
       let text: SyntaxText = (decomposed.string.map({ arena.intern($0) }) ?? decomposed.rawKind.defaultText ?? "")
       payload.tokenKind = rawKind
       payload.tokenText = text
-      return RawSyntax(arena: arena, materializedToken: payload)
+      return RawSyntax.allocateMaterializedToken(payload, arena: arena)
     default:
       preconditionFailure("'withKind()' is called on non-token raw syntax")
     }
@@ -208,7 +208,7 @@ public struct RawSyntaxTokenView: Sendable {
       var payload = raw.asParsedToken.fields
       if arena == self.raw.arenaReference {
         payload.presence = newValue
-        return RawSyntax(arena: arena, parsedToken: payload)
+        return RawSyntax.allocateParsedToken(payload, arena: arena)
       }
       // If the modified token is allocated in a different arena, it might have
       // a different or no `parseTrivia` function. We thus cannot use a
@@ -224,7 +224,7 @@ public struct RawSyntaxTokenView: Sendable {
     case .materializedToken:
       var payload = raw.asMaterializedToken.fields
       payload.presence = newValue
-      return RawSyntax(arena: arena, materializedToken: payload)
+      return RawSyntax.allocateMaterializedToken(payload, arena: arena)
     default:
       preconditionFailure("'withKind()' is called on non-token raw syntax")
     }
@@ -299,7 +299,7 @@ public struct RawSyntaxTokenView: Sendable {
       var dat = raw.asParsedToken.fields
       if arena == self.raw.arenaReference {
         dat.tokenDiagnostic = tokenDiagnostic
-        return RawSyntax(arena: arena, parsedToken: dat).cast(RawTokenSyntax.self)
+        return RawSyntax.allocateParsedToken(dat, arena: arena).cast(RawTokenSyntax.self)
       }
       // If the modified token is allocated in a different arena, it might have
       // a different or no `parseTrivia` function. We thus cannot use a
@@ -315,7 +315,7 @@ public struct RawSyntaxTokenView: Sendable {
     case .materializedToken:
       var dat = raw.asMaterializedToken.fields
       dat.tokenDiagnostic = tokenDiagnostic
-      return RawSyntax(arena: arena, materializedToken: dat).cast(RawTokenSyntax.self)
+      return RawSyntax.allocateMaterializedToken(dat, arena: arena).cast(RawTokenSyntax.self)
     default:
       preconditionFailure("'withTokenDiagnostic' is not available for non-token node")
     }

@@ -18,18 +18,31 @@ import SwiftSyntax
 extension SymbolTable {
   struct RequestedExtensions {
     fileprivate private(set) var current: Attached<ExtensionDeclSyntax>?
+    /// The extensions that have not yet been admitted to the type graph.
+    fileprivate private(set) var unresolvedExtensions: [SourceFileSyntax: [Attached<ExtensionDeclSyntax>]]
     private var requestedArray: [Attached<ExtensionDeclSyntax>]
     private var requestedSet: Set<Attached<ExtensionDeclSyntax>>
 
-    init() {
+    /// Initialize `RequestedExtensions`, keeping track of unresolved extensions.
+    ///
+    /// Complexity: O(n) where `n` is the number of extensions across all files.
+    init(fileToInfo: [SourceFileSyntax: FileInfo]) {
+      // Find all the unresolved extensions
+      var unresolvedExtensions = [SourceFileSyntax: [Attached<ExtensionDeclSyntax>]]()
+      for (file, fileInfo) in fileToInfo {
+        // Note: findExtensions gurantees in-order and no duplicates
+        unresolvedExtensions[file] = file.findExtensions(configuredRegions: fileInfo.configuredRegions)
+      }
+
       self.current = nil
       (self.requestedArray, self.requestedSet) = ([], [])
+      self.unresolvedExtensions = unresolvedExtensions
     }
 
     /// Appends the requested extensions
     ///
     /// Complexity: O(n) where `n` is the number of `elements`.
-    mutating func append(contentsOf elements: [Attached<ExtensionDeclSyntax>]) {
+    private mutating func append(contentsOf elements: [Attached<ExtensionDeclSyntax>]) {
       for element in elements {
         // Don't add the currently processing array
         guard current != element else { continue }
@@ -46,7 +59,7 @@ extension SymbolTable {
     /// `current == nil`.
     ///
     /// Complexity: O(1) with respect to the number of requested extensions.
-    mutating func beginPop() -> Attached<ExtensionDeclSyntax>? {
+    fileprivate mutating func beginPop() -> Attached<ExtensionDeclSyntax>? {
       // Both of the following calls are O(1)
       guard let extensionDecl = requestedArray.popLast() else { return nil }
       requestedSet.remove(extensionDecl)
@@ -65,7 +78,7 @@ extension SymbolTable {
     /// Precondition: The given extension is `current`.
     ///
     /// Complexity: O(1) with respect to the number of requested extensions.
-    mutating func finalizePop(_ extensionDecl: Attached<ExtensionDeclSyntax>) {
+    fileprivate mutating func finalizePop(_ extensionDecl: Attached<ExtensionDeclSyntax>) {
       // Ensure we're finalizing the right extension
       precondition(
         extensionDecl == current,
@@ -77,7 +90,65 @@ extension SymbolTable {
   }
 }
 
-// MARK: Registering Nominal
+// MARK: Extension Requests
+
+extension SymbolTable {
+  @_spi(_QualifiedLookupTests)
+  public func admitExtensions(accessibleFrom sourceFile: SourceFileSyntax) {
+    // TODO: Implement
+  }
+
+  /// Returns the nominal-type reference with the extension's extended-type
+  /// syntax as the originating syntax.
+  @_spi(_QualifiedLookupTests)
+  public func bindExtension(
+    _ extensionDecl: Attached<ExtensionDeclSyntax>
+  ) -> Result<TypeResolver.GloballyResolvedTypeSyntax, TypeResolver.Failure> {
+    fatalError("TODO")
+  }
+
+  func getExtensionResolvedType(
+    _ extensionDecl: Attached<ExtensionDeclSyntax>
+  ) -> Result<TypeResolver.GloballyResolvedTypeSyntax, TypeResolver.Failure>? {
+    fatalError("TODO")
+  }
+}
+
+// MARK: Qualified-Lookup Requests
+
+extension SymbolTable {
+  func findMemberType(
+    baseType: TypeGraph.TypeRef,
+    memberTypeName: Identifier,
+    introducingTypeSyntax: Attached<TypeLikeSyntax>,
+    introducingModule: ModuleName,
+    dependencyTracker: inout DependencyTracker
+  ) -> Result<
+    [(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)],
+    TypeGraph.QualifiedTypeLookupFailure
+  > {
+    // TODO: Implement `TypeGraph`-based lookup
+    let fileInfo = getFileInfo(introducingTypeSyntax.fileRoot)!
+    var typeDecls = [Attached<TypeDeclSyntax>]()
+    // Look just in the nominal-type decl
+    baseType.mainDecl.node.visitDirectMembers(
+      configuredRegions: fileInfo.configuredRegions,
+      visit: {
+        guard let typeDecl = $0.as(TypeDeclSyntax.self),
+          let attachedTypeDecl = Attached(typeDecl)
+        else {
+          return
+        }
+        typeDecls.append(attachedTypeDecl)
+      }
+    )
+    return Result.success(
+      typeDecls.map({ (declGroupParent: Attached<DeclGroupSyntaxType>(baseType.mainDecl), typeDecl: $0) })
+    )
+  }
+}
+
+// MARK: Registration Requests
 
 extension SymbolTable {
   /// Registers nominal type by forwarding to `TypeGraph/registerNominalType`
@@ -101,21 +172,10 @@ extension SymbolTable {
   ) -> Result<TypeResolver.ResolvedTypeSyntax, TypeGraph.NestedNominalRegistrationFailure> {
     fatalError("TODO")
   }
-}
-
-// MARK: Qualified Type Lookup
-
-extension SymbolTable {
-  func findMemberType(
-    baseType: TypeGraph.TypeRef,
-    memberTypeName: Identifier,
-    introducingTypeSyntax: Attached<TypeLikeSyntax>,
-    introducingModule: ModuleName,
-    dependencyTracker: inout DependencyTracker
-  ) -> Result<
-    [(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)],
-    TypeGraph.QualifiedTypeLookupFailure
-  > {
+  /// Updates a registered nominal type by forwarding to `TypeGraph/updateNominalTypeReference`.
+  func updateNominalTypeReference(
+    oldReference: TypeGraph.TypeRef
+  ) -> Result<TypeGraph.TypeRef, TypeGraph.NominalTypeRefUpdateFailure> {
     fatalError("TODO")
   }
 }

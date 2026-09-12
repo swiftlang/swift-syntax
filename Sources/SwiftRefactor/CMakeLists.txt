@@ -10,6 +10,7 @@ add_swift_syntax_library(SwiftRefactor
   CallLikeSyntax.swift
   CallToTrailingClosures.swift
   ExpandEditorPlaceholder.swift
+  InvertIfCondition.swift
   RefactoringProvider.swift
   SyntaxUtils.swift
 

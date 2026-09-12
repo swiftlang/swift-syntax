@@ -63,6 +63,10 @@ public final class IncrementalParseTransition {
   fileprivate let edits: ConcurrentEdits
   fileprivate let reusedNodeCallback: ReusedNodeCallback?
 
+  var previousLookaheadRanges: LookaheadRanges {
+    return previousIncrementalParseResult.lookaheadRanges
+  }
+
   /// When the previous tree retains at least this many arenas, the next
   /// incremental parse is replaced by a full reparse that collapses the result
   /// back into a single arena.

@@ -64,6 +64,54 @@ class IncrementalParsingTests: ParserTestCase {
     )
   }
 
+  public func testLookaheadRangeDoesNotShrinkWhenNodeIsReused() {
+    let originalSource = """
+      foo() {}
+      label: switch x {
+        default: break
+      }
+      bar() {}
+      """
+    let originalResult = Parser.parseIncrementally(source: originalSource, parseTransition: nil)
+
+    // Reuse `foo() {}` while applying an unrelated edit. Its original parse
+    // looked through `label: switch` to rule out a labeled trailing closure.
+    let (intermediateSource, unrelatedEdit) = replacing("bar", with: "baz", in: originalSource)
+    var initiallyReusedNodes: [Syntax] = []
+    let intermediateResult = Parser.parseIncrementally(
+      source: intermediateSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: originalResult,
+        edits: ConcurrentEdits(unrelatedEdit),
+        reusedNodeCallback: { initiallyReusedNodes.append($0) }
+      )
+    )
+    XCTAssertTrue(initiallyReusedNodes.contains(where: { $0.trimmedDescription == "foo() {}" }))
+
+    // Changing `switch ...` to a closure makes `label: {}` a labeled trailing
+    // closure of `foo()`. The reused node must therefore be invalidated.
+    let (finalSource, lookaheadEdit) = replacing(
+      "switch x {\n  default: break\n}",
+      with: "{}",
+      in: intermediateSource
+    )
+    let incrementalTree = Parser.parseIncrementally(
+      source: finalSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: intermediateResult,
+        edits: ConcurrentEdits(lookaheadEdit)
+      )
+    ).tree
+    let fullyParsedTree = Parser.parse(source: finalSource)
+
+    let subtreeMatcher = SubtreeMatcher(incrementalTree, markers: [:])
+    do {
+      try subtreeMatcher.assertSameStructure(fullyParsedTree, includeTrivia: true)
+    } catch {
+      XCTFail("Matching for a subtree failed with error: \(error)")
+    }
+  }
+
   public func testLookaheadRangesForChildrenOfReusedNodeArePreserved() {
     let originalSource = """
       struct A {

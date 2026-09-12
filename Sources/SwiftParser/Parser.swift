@@ -280,6 +280,7 @@ public struct Parser {
     self.currentToken = self.lexemes.advance()
     if let parseTransition {
       self.parseLookup = IncrementalParseLookup(transition: parseTransition)
+      self.lookaheadRanges = parseTransition.previousLookaheadRanges
     } else {
       self.parseLookup = nil
     }

@@ -43,29 +43,46 @@ function(add_swift_syntax_library name)
     # Determine where Swift modules will be built and installed.
     set(module_dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(module_base "${module_dir}/${name}.swiftmodule")
-    set(module_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.swiftmodule")
-    set(module_interface_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.swiftinterface")
-    set(module_private_interface_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.private.swiftinterface")
 
-    # Configure the emission of the Swift module files.
-    target_compile_options("${target}" PRIVATE
-      $<$<COMPILE_LANGUAGE:Swift>:
-        -DRESILIENT_LIBRARIES;
-        -enable-library-evolution;
-        -emit-module-path;${module_file};
-        -emit-module-interface-path;${module_interface_file};
-        -emit-private-module-interface-path;${module_private_interface_file}
-    >)
+    set_target_properties(${target} PROPERTIES
+      Swift_MODULE_DIRECTORY ${module_dir}
+      Swift_MODULE_NAME ${name}
+    )
+
+    if(POLICY CMP0195)
+      # CMake 4.1 and later (CMP0195) generates the nested
+      # `<name>.swiftmodule/<triple>.swiftmodule` directory layout
+      # automatically. Emit the swift interfaces into that directory.
+      target_compile_options(${target} PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:
+          "SHELL:-emit-module-interface-path ${module_base}/${CMAKE_Swift_MODULE_TRIPLE}.swiftinterface"
+          "SHELL:-emit-private-module-interface-path ${module_base}/${CMAKE_Swift_MODULE_TRIPLE}.private.swiftinterface">)
+    else()
+      # Older CMake versions emit the flat `<name>.swiftmodule` layout.
+      # Explicitly override the output to form the nested directory structure.
+      target_compile_options(${target} PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:
+          "SHELL:-emit-module-path  ${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.swiftmodule"
+          "SHELL:-emit-module-interface-path  ${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.swiftinterface"
+          "SHELL:-emit-private-module-interface-path ${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.private.swiftinterface">)
+    endif()
+
+    # Build a resilient library with a stable textual module interface.
+    target_compile_definitions(${target} PRIVATE
+      $<$<COMPILE_LANGUAGE:Swift>:RESILIENT_LIBRARIES>
+    )
 
     # Enable package CMO if possible.
     if(Swift_COMPILER_PACKAGE_CMO_SUPPORT STREQUAL "IMPLEMENTED")
       target_compile_options("${target}" PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:-enable-library-evolution>
         $<$<COMPILE_LANGUAGE:Swift>:
           "SHELL:-Xfrontend -package-cmo"
           "SHELL:-Xfrontend -allow-non-resilient-access"
       >)
     elseif(Swift_COMPILER_PACKAGE_CMO_SUPPORT STREQUAL "EXPERIMENTAL")
       target_compile_options("${target}" PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:-enable-library-evolution>
         $<$<COMPILE_LANGUAGE:Swift>:
           "SHELL:-Xfrontend -experimental-package-cmo"
           "SHELL:-Xfrontend -experimental-allow-non-resilient-access"
@@ -77,12 +94,6 @@ function(add_swift_syntax_library name)
     set(module_dir ${CMAKE_CURRENT_BINARY_DIR})
     set(module_base "${module_dir}/${name}.swiftmodule")
   endif()
-
-  set_target_properties(${target} PROPERTIES
-    Swift_MODULE_NAME ${name}
-    Swift_MODULE_DIRECTORY ${module_dir}
-    INTERFACE_INCLUDE_DIRECTORIES ${module_dir}
-  )
 
   target_compile_options("${target}" PRIVATE
     $<$<COMPILE_LANGUAGE:Swift>:

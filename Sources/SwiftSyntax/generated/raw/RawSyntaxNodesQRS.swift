@@ -85,47 +85,47 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeOpeningPounds: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var openingPounds: RawTokenSyntax? {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedBetweenOpeningPoundsAndOpeningSlash: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var openingSlash: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenOpeningSlashAndRegex: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var regex: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenRegexAndClosingSlash: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var closingSlash: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 3).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenClosingSlashAndClosingPounds: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var closingPounds: RawTokenSyntax? {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+    layoutView.realChild(at: 4).map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedAfterClosingPounds: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 5).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -194,39 +194,39 @@ public struct RawRepeatStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeRepeatKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var repeatKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenRepeatKeywordAndBody: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var body: RawCodeBlockSyntax {
-    layoutView.children[3].map(RawCodeBlockSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawCodeBlockSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenBodyAndWhileKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var whileKeyword: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenWhileKeywordAndCondition: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var condition: RawExprSyntax {
-    layoutView.children[7].map(RawExprSyntax.init(raw:))!
+    layoutView.realChild(at: 3).map(RawExprSyntax.init(raw:))!
   }
 
   public var unexpectedAfterCondition: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -287,23 +287,23 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeArrow: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var arrow: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenArrowAndType: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var type: RawTypeSyntax {
-    layoutView.children[3].map(RawTypeSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTypeSyntax.init(raw:))!
   }
 
   public var unexpectedAfterType: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -364,23 +364,23 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeReturnKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var returnKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenReturnKeywordAndExpression: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var expression: RawExprSyntax? {
-    layoutView.children[3].map(RawExprSyntax.init(raw:))
+    layoutView.realChild(at: 1).map(RawExprSyntax.init(raw:))
   }
 
   public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -517,31 +517,31 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeLeftType: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var leftType: RawSyntax {
-    layoutView.children[1]!
+    layoutView.realChild(at: 0)!
   }
 
   public var unexpectedBetweenLeftTypeAndEqual: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var equal: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenEqualAndRightType: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var rightType: RawSyntax {
-    layoutView.children[5]!
+    layoutView.realChild(at: 2)!
   }
 
   public var unexpectedAfterRightType: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -636,15 +636,15 @@ public struct RawSectionAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeSection: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var section: RawSyntax {
-    layoutView.children[1]!
+    layoutView.realChild(at: 0)!
   }
 
   public var unexpectedAfterSection: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -701,15 +701,15 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeElements: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var elements: RawExprListSyntax {
-    layoutView.children[1].map(RawExprListSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawExprListSyntax.init(raw:))!
   }
 
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -774,31 +774,31 @@ public struct RawSimpleStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeOpeningQuote: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var openingQuote: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenOpeningQuoteAndSegments: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var segments: RawSimpleStringLiteralSegmentListSyntax {
-    layoutView.children[3].map(RawSimpleStringLiteralSegmentListSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawSimpleStringLiteralSegmentListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenSegmentsAndClosingQuote: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var closingQuote: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterClosingQuote: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -909,15 +909,15 @@ public struct RawSimpleTypeSpecifierSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var specifier: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterSpecifier: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -978,23 +978,23 @@ public struct RawSomeOrAnyTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeSomeOrAnySpecifier: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var someOrAnySpecifier: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenSomeOrAnySpecifierAndConstraint: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var constraint: RawTypeSyntax {
-    layoutView.children[3].map(RawTypeSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTypeSyntax.init(raw:))!
   }
 
   public var unexpectedAfterConstraint: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1059,31 +1059,31 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeShebang: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var shebang: RawTokenSyntax? {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedBetweenShebangAndStatements: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var statements: RawCodeBlockItemListSyntax {
-    layoutView.children[3].map(RawCodeBlockItemListSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawCodeBlockItemListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenStatementsAndEndOfFileToken: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var endOfFileToken: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1248,39 +1248,39 @@ public struct RawSpecializeAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeAvailabilityLabel: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var availabilityLabel: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenAvailabilityLabelAndColon: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var colon: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenColonAndAvailabilityArguments: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var availabilityArguments: RawAvailabilityArgumentListSyntax {
-    layoutView.children[5].map(RawAvailabilityArgumentListSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawAvailabilityArgumentListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenAvailabilityArgumentsAndSemicolon: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var semicolon: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 3).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1349,39 +1349,39 @@ public struct RawSpecializeTargetFunctionArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeTargetLabel: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var targetLabel: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenTargetLabelAndColon: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var colon: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenColonAndDeclName: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var declName: RawDeclReferenceExprSyntax {
-    layoutView.children[5].map(RawDeclReferenceExprSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawDeclReferenceExprSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenDeclNameAndTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var trailingComma: RawTokenSyntax? {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))
+    layoutView.realChild(at: 3).map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1438,15 +1438,15 @@ public struct RawSpecializedAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeGenericWhereClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var genericWhereClause: RawGenericWhereClauseSyntax {
-    layoutView.children[1].map(RawGenericWhereClauseSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawGenericWhereClauseSyntax.init(raw:))!
   }
 
   public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1558,47 +1558,47 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeOpeningPounds: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var openingPounds: RawTokenSyntax? {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedBetweenOpeningPoundsAndOpeningQuote: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var openingQuote: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenOpeningQuoteAndSegments: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var segments: RawStringLiteralSegmentListSyntax {
-    layoutView.children[5].map(RawStringLiteralSegmentListSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawStringLiteralSegmentListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenSegmentsAndClosingQuote: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var closingQuote: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 3).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenClosingQuoteAndClosingPounds: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var closingPounds: RawTokenSyntax? {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+    layoutView.realChild(at: 4).map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedAfterClosingPounds: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 5).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1743,15 +1743,15 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeContent: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var content: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterContent: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1836,71 +1836,71 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var attributes: RawAttributeListSyntax {
-    layoutView.children[1].map(RawAttributeListSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawAttributeListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var modifiers: RawDeclModifierListSyntax {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawDeclModifierListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenModifiersAndStructKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var structKeyword: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenStructKeywordAndName: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var name: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 3).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenNameAndGenericParameterClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
-    layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
+    layoutView.realChild(at: 4).map(RawGenericParameterClauseSyntax.init(raw:))
   }
 
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 5).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var inheritanceClause: RawInheritanceClauseSyntax? {
-    layoutView.children[11].map(RawInheritanceClauseSyntax.init(raw:))
+    layoutView.realChild(at: 5).map(RawInheritanceClauseSyntax.init(raw:))
   }
 
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 6).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
-    layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
+    layoutView.realChild(at: 6).map(RawGenericWhereClauseSyntax.init(raw:))
   }
 
   public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 7).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var memberBlock: RawMemberBlockSyntax {
-    layoutView.children[15].map(RawMemberBlockSyntax.init(raw:))!
+    layoutView.realChild(at: 7).map(RawMemberBlockSyntax.init(raw:))!
   }
 
   public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 8).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1977,55 +1977,55 @@ public struct RawSubscriptCallExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var calledExpression: RawExprSyntax {
-    layoutView.children[1].map(RawExprSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawExprSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenCalledExpressionAndLeftSquare: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var leftSquare: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenLeftSquareAndArguments: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var arguments: RawLabeledExprListSyntax {
-    layoutView.children[5].map(RawLabeledExprListSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawLabeledExprListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenArgumentsAndRightSquare: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var rightSquare: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 3).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenRightSquareAndTrailingClosure: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var trailingClosure: RawClosureExprSyntax? {
-    layoutView.children[9].map(RawClosureExprSyntax.init(raw:))
+    layoutView.realChild(at: 4).map(RawClosureExprSyntax.init(raw:))
   }
 
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 5).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax {
-    layoutView.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))!
+    layoutView.realChild(at: 5).map(RawMultipleTrailingClosureElementListSyntax.init(raw:))!
   }
 
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
-    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 6).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2114,79 +2114,79 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var attributes: RawAttributeListSyntax {
-    layoutView.children[1].map(RawAttributeListSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawAttributeListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var modifiers: RawDeclModifierListSyntax {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawDeclModifierListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenModifiersAndSubscriptKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var subscriptKeyword: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenSubscriptKeywordAndGenericParameterClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
-    layoutView.children[7].map(RawGenericParameterClauseSyntax.init(raw:))
+    layoutView.realChild(at: 3).map(RawGenericParameterClauseSyntax.init(raw:))
   }
 
   public var unexpectedBetweenGenericParameterClauseAndParameterClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var parameterClause: RawFunctionParameterClauseSyntax {
-    layoutView.children[9].map(RawFunctionParameterClauseSyntax.init(raw:))!
+    layoutView.realChild(at: 4).map(RawFunctionParameterClauseSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenParameterClauseAndYieldClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 5).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var yieldClause: RawFunctionYieldClauseSyntax? {
-    layoutView.children[11].map(RawFunctionYieldClauseSyntax.init(raw:))
+    layoutView.realChild(at: 5).map(RawFunctionYieldClauseSyntax.init(raw:))
   }
 
   public var unexpectedBetweenYieldClauseAndReturnClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 6).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var returnClause: RawReturnClauseSyntax {
-    layoutView.children[13].map(RawReturnClauseSyntax.init(raw:))!
+    layoutView.realChild(at: 6).map(RawReturnClauseSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenReturnClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 7).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
-    layoutView.children[15].map(RawGenericWhereClauseSyntax.init(raw:))
+    layoutView.realChild(at: 7).map(RawGenericWhereClauseSyntax.init(raw:))
   }
 
   public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 8).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var accessorBlock: RawAccessorBlockSyntax? {
-    layoutView.children[17].map(RawAccessorBlockSyntax.init(raw:))
+    layoutView.realChild(at: 8).map(RawAccessorBlockSyntax.init(raw:))
   }
 
   public var unexpectedAfterAccessorBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 9).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2243,15 +2243,15 @@ public struct RawSuperExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeSuperKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var superKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterSuperKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2312,23 +2312,23 @@ public struct RawSuppressedTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeWithoutTilde: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var withoutTilde: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenWithoutTildeAndType: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var type: RawTypeSyntax {
-    layoutView.children[3].map(RawTypeSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTypeSyntax.init(raw:))!
   }
 
   public var unexpectedAfterType: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2447,31 +2447,31 @@ public struct RawSwitchCaseItemSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var pattern: RawPatternSyntax {
-    layoutView.children[1].map(RawPatternSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawPatternSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var whereClause: RawWhereClauseSyntax? {
-    layoutView.children[3].map(RawWhereClauseSyntax.init(raw:))
+    layoutView.realChild(at: 1).map(RawWhereClauseSyntax.init(raw:))
   }
 
   public var unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var trailingComma: RawTokenSyntax? {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2536,31 +2536,31 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var caseKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenCaseKeywordAndCaseItems: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var caseItems: RawSwitchCaseItemListSyntax {
-    layoutView.children[3].map(RawSwitchCaseItemListSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawSwitchCaseItemListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenCaseItemsAndColon: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var colon: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterColon: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2758,31 +2758,31 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeAttribute: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var attribute: RawAttributeSyntax? {
-    layoutView.children[1].map(RawAttributeSyntax.init(raw:))
+    layoutView.realChild(at: 0).map(RawAttributeSyntax.init(raw:))
   }
 
   public var unexpectedBetweenAttributeAndLabel: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var label: RawSyntax {
-    layoutView.children[3]!
+    layoutView.realChild(at: 1)!
   }
 
   public var unexpectedBetweenLabelAndStatements: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var statements: RawCodeBlockItemListSyntax {
-    layoutView.children[5].map(RawCodeBlockItemListSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawCodeBlockItemListSyntax.init(raw:))!
   }
 
   public var unexpectedAfterStatements: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2843,23 +2843,23 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeDefaultKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var defaultKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenDefaultKeywordAndColon: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var colon: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterColon: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -2932,46 +2932,46 @@ public struct RawSwitchExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeSwitchKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var switchKeyword: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenSwitchKeywordAndSubject: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var subject: RawExprSyntax {
-    layoutView.children[3].map(RawExprSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawExprSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenSubjectAndLeftBrace: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var leftBrace: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 2).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenLeftBraceAndCases: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var cases: RawSwitchCaseListSyntax {
-    layoutView.children[7].map(RawSwitchCaseListSyntax.init(raw:))!
+    layoutView.realChild(at: 3).map(RawSwitchCaseListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenCasesAndRightBrace: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 4).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var rightBrace: RawTokenSyntax {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))!
+    layoutView.realChild(at: 4).map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterRightBrace: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 5).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }

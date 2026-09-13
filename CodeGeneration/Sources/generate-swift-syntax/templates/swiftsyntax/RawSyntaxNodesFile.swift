@@ -216,17 +216,37 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             ExprSyntax("self.init(unchecked: raw)")
           }
 
-          for (index, child) in node.children.enumerated() {
+          // Reach a child by where it sits rather than by its index in the
+          // layout as the tree describes it: a real child is at the same slot
+          // whichever shape the node has, and an `unexpected` slot is absent from
+          // a node that has nothing to put in it.
+          let childAccessors: [String] = {
+            var result: [String] = []
+            var realIndex = 0
+            var unexpectedIndex = 0
+            for child in node.children {
+              if node.interleavesUnexpectedChildren && child.isUnexpectedNodes {
+                result.append("layoutView.unexpectedSlot(at: \(unexpectedIndex))")
+                unexpectedIndex += 1
+              } else {
+                result.append("layoutView.realChild(at: \(realIndex))")
+                realIndex += 1
+              }
+            }
+            return result
+          }()
+
+          for (child, accessor) in zip(node.children, childAccessors) {
             try VariableDeclSyntax(
               "public var \(child.varDeclName): Raw\(child.buildableType.buildable)"
             ) {
               let exclamationMark = child.isOptional ? "" : "!"
 
               if child.syntaxNodeKind == .syntax {
-                ExprSyntax("layoutView.children[\(raw: index)]\(raw: exclamationMark)")
+                ExprSyntax("\(raw: accessor)\(raw: exclamationMark)")
               } else {
                 ExprSyntax(
-                  "layoutView.children[\(raw: index)].map(\(child.syntaxNodeKind.raw.syntaxType).init(raw:))\(raw: exclamationMark)"
+                  "\(raw: accessor).map(\(child.syntaxNodeKind.raw.syntaxType).init(raw:))\(raw: exclamationMark)"
                 )
               }
             }

@@ -223,3 +223,36 @@ public struct RawLayoutChildren: RandomAccessCollection {
     return slot < self.unexpected.count ? self.unexpected[slot] : nil
   }
 }
+
+extension RawSyntaxLayoutView {
+  /// The `index`th real child, counting only the node's own children and not the
+  /// `unexpected` slots between them.
+  ///
+  /// Real children come first in a node's slots whichever shape it has, so this
+  /// is the same load either way — which is why the generated accessors use it
+  /// rather than an index into the layout as the tree describes it.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public func realChild(at index: Int) -> RawSyntax? {
+    let (base, childCount) = raw.slotBase
+    precondition(index >= 0 && index < childCount)
+    return base[index]
+  }
+
+  /// The `index`th `unexpected` slot, or `nil` for a node that kept no room for
+  /// them, which is almost every node.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public func unexpectedSlot(at index: Int) -> RawSyntax? {
+    switch raw.header {
+    case .layoutWithUnexpected:
+      let (base, childCount) = raw.slotBase
+      precondition(index >= 0 && index <= childCount)
+      return base[childCount + index]
+    case .flat, .layout:
+      return nil
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
+  }
+}

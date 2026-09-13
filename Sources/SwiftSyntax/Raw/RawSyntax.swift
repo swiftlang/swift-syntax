@@ -494,6 +494,15 @@ public struct RawSyntax: Sendable {
     RawSyntaxData.Layout.Ref(fields(as: RawSyntaxData.Layout.self))
   }
 
+  /// Where this node's slots begin, and how many real children it has.
+  ///
+  /// - Precondition: this is a layout node or a collection.
+  @inline(__always)
+  var slotBase: (base: UnsafePointer<RawSyntax?>, childCount: Int) {
+    let layout = self.asLayout
+    return (layout.slotBase, Int(layout.childCount))
+  }
+
   /// Calls `body` with each child this node holds, in source order.
   ///
   /// The same order as ``logicalChildren``, without the positions a node kept no

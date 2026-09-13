@@ -825,7 +825,7 @@ fileprivate extension RawSyntax {
       position = self.asMaterializedToken.leadingTrivia.forEachEndOfLine(position: position, body: body)
       position = self.asMaterializedToken.tokenText.forEachEndOfLine(position: position, body: body)
       position = self.asMaterializedToken.trailingTrivia.forEachEndOfLine(position: position, body: body)
-    case .layout:
+    case .flat, .layout, .layoutWithUnexpected:
       // Handle '#sourceLocation' directive.
       if self.asLayout.kind == .poundSourceLocation {
         // Do this before `node.forEachEndOfLine` call below so the caller can
@@ -833,7 +833,7 @@ fileprivate extension RawSyntax {
         handleSourceLocationDirective(position, self)
       }
 
-      for case let node? in self.asLayout.layout
+      for case let node? in self.logicalChildren
       where SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) {
         position = node.forEachEndOfLine(
           position: position,

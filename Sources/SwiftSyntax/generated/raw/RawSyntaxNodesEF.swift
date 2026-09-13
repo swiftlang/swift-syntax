@@ -55,16 +55,23 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeAttributes != nil || unexpectedBetweenAttributesAndModifiers != nil || unexpectedBetweenModifiersAndPlaceholder != nil || unexpectedAfterPlaceholder != nil
     let raw = RawSyntax.makeLayout(
-      kind: .editorPlaceholderDecl, uninitializedCount: 7, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAttributes?.raw
-      layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers.raw
-      layout[4] = unexpectedBetweenModifiersAndPlaceholder?.raw
-      layout[5] = placeholder.raw
-      layout[6] = unexpectedAfterPlaceholder?.raw
+      kind: .editorPlaceholderDecl,
+      childCount: 3,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: attributes.raw)
+      layout.initializeElement(at: 1, to: modifiers.raw)
+      layout.initializeElement(at: 2, to: placeholder.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 3, to: unexpectedBeforeAttributes?.raw)
+      layout.initializeElement(at: 4, to: unexpectedBetweenAttributesAndModifiers?.raw)
+      layout.initializeElement(at: 5, to: unexpectedBetweenModifiersAndPlaceholder?.raw)
+      layout.initializeElement(at: 6, to: unexpectedAfterPlaceholder?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -133,12 +140,19 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforePlaceholder != nil || unexpectedAfterPlaceholder != nil
     let raw = RawSyntax.makeLayout(
-      kind: .editorPlaceholderExpr, uninitializedCount: 3, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforePlaceholder?.raw
-      layout[1] = placeholder.raw
-      layout[2] = unexpectedAfterPlaceholder?.raw
+      kind: .editorPlaceholderExpr,
+      childCount: 1,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: placeholder.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 1, to: unexpectedBeforePlaceholder?.raw)
+      layout.initializeElement(at: 2, to: unexpectedAfterPlaceholder?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -187,7 +201,11 @@ public struct RawEffectsAttributeArgumentListSyntax: RawSyntaxNodeProtocol {
 
   public init(elements: RawSyntaxNodeList<RawTokenSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .effectsAttributeArgumentList, uninitializedCount: elements.count, arena: arena) { layout in
+      kind: .effectsAttributeArgumentList,
+      childCount: elements.count,
+      storage: .flat,
+      arena: arena
+    ) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
@@ -247,18 +265,25 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterElements: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeAttributes != nil || unexpectedBetweenAttributesAndModifiers != nil || unexpectedBetweenModifiersAndCaseKeyword != nil || unexpectedBetweenCaseKeywordAndElements != nil || unexpectedAfterElements != nil
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseDecl, uninitializedCount: 9, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAttributes?.raw
-      layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers.raw
-      layout[4] = unexpectedBetweenModifiersAndCaseKeyword?.raw
-      layout[5] = caseKeyword.raw
-      layout[6] = unexpectedBetweenCaseKeywordAndElements?.raw
-      layout[7] = elements.raw
-      layout[8] = unexpectedAfterElements?.raw
+      kind: .enumCaseDecl,
+      childCount: 4,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: attributes.raw)
+      layout.initializeElement(at: 1, to: modifiers.raw)
+      layout.initializeElement(at: 2, to: caseKeyword.raw)
+      layout.initializeElement(at: 3, to: elements.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 4, to: unexpectedBeforeAttributes?.raw)
+      layout.initializeElement(at: 5, to: unexpectedBetweenAttributesAndModifiers?.raw)
+      layout.initializeElement(at: 6, to: unexpectedBetweenModifiersAndCaseKeyword?.raw)
+      layout.initializeElement(at: 7, to: unexpectedBetweenCaseKeywordAndElements?.raw)
+      layout.initializeElement(at: 8, to: unexpectedAfterElements?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -331,7 +356,11 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol {
 
   public init(elements: RawSyntaxNodeList<RawEnumCaseElementSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      kind: .enumCaseElementList,
+      childCount: elements.count,
+      storage: .flat,
+      arena: arena
+    ) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
@@ -391,18 +420,25 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeName != nil || unexpectedBetweenNameAndParameterClause != nil || unexpectedBetweenParameterClauseAndRawValue != nil || unexpectedBetweenRawValueAndTrailingComma != nil || unexpectedAfterTrailingComma != nil
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseElement, uninitializedCount: 9, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeName?.raw
-      layout[1] = name.raw
-      layout[2] = unexpectedBetweenNameAndParameterClause?.raw
-      layout[3] = parameterClause?.raw
-      layout[4] = unexpectedBetweenParameterClauseAndRawValue?.raw
-      layout[5] = rawValue?.raw
-      layout[6] = unexpectedBetweenRawValueAndTrailingComma?.raw
-      layout[7] = trailingComma?.raw
-      layout[8] = unexpectedAfterTrailingComma?.raw
+      kind: .enumCaseElement,
+      childCount: 4,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: name.raw)
+      layout.initializeElement(at: 1, to: parameterClause?.raw)
+      layout.initializeElement(at: 2, to: rawValue?.raw)
+      layout.initializeElement(at: 3, to: trailingComma?.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 4, to: unexpectedBeforeName?.raw)
+      layout.initializeElement(at: 5, to: unexpectedBetweenNameAndParameterClause?.raw)
+      layout.initializeElement(at: 6, to: unexpectedBetweenParameterClauseAndRawValue?.raw)
+      layout.initializeElement(at: 7, to: unexpectedBetweenRawValueAndTrailingComma?.raw)
+      layout.initializeElement(at: 8, to: unexpectedAfterTrailingComma?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -483,16 +519,23 @@ public struct RawEnumCaseParameterClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeLeftParen != nil || unexpectedBetweenLeftParenAndParameters != nil || unexpectedBetweenParametersAndRightParen != nil || unexpectedAfterRightParen != nil
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseParameterClause, uninitializedCount: 7, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeLeftParen?.raw
-      layout[1] = leftParen.raw
-      layout[2] = unexpectedBetweenLeftParenAndParameters?.raw
-      layout[3] = parameters.raw
-      layout[4] = unexpectedBetweenParametersAndRightParen?.raw
-      layout[5] = rightParen.raw
-      layout[6] = unexpectedAfterRightParen?.raw
+      kind: .enumCaseParameterClause,
+      childCount: 3,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: leftParen.raw)
+      layout.initializeElement(at: 1, to: parameters.raw)
+      layout.initializeElement(at: 2, to: rightParen.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 3, to: unexpectedBeforeLeftParen?.raw)
+      layout.initializeElement(at: 4, to: unexpectedBetweenLeftParenAndParameters?.raw)
+      layout.initializeElement(at: 5, to: unexpectedBetweenParametersAndRightParen?.raw)
+      layout.initializeElement(at: 6, to: unexpectedAfterRightParen?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -557,7 +600,11 @@ public struct RawEnumCaseParameterListSyntax: RawSyntaxNodeProtocol {
 
   public init(elements: RawSyntaxNodeList<RawEnumCaseParameterSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+      kind: .enumCaseParameterList,
+      childCount: elements.count,
+      storage: .flat,
+      arena: arena
+    ) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
@@ -623,24 +670,31 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeModifiers != nil || unexpectedBetweenModifiersAndFirstName != nil || unexpectedBetweenFirstNameAndSecondName != nil || unexpectedBetweenSecondNameAndColon != nil || unexpectedBetweenColonAndType != nil || unexpectedBetweenTypeAndDefaultValue != nil || unexpectedBetweenDefaultValueAndTrailingComma != nil || unexpectedAfterTrailingComma != nil
     let raw = RawSyntax.makeLayout(
-      kind: .enumCaseParameter, uninitializedCount: 15, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeModifiers?.raw
-      layout[1] = modifiers.raw
-      layout[2] = unexpectedBetweenModifiersAndFirstName?.raw
-      layout[3] = firstName?.raw
-      layout[4] = unexpectedBetweenFirstNameAndSecondName?.raw
-      layout[5] = secondName?.raw
-      layout[6] = unexpectedBetweenSecondNameAndColon?.raw
-      layout[7] = colon?.raw
-      layout[8] = unexpectedBetweenColonAndType?.raw
-      layout[9] = type.raw
-      layout[10] = unexpectedBetweenTypeAndDefaultValue?.raw
-      layout[11] = defaultValue?.raw
-      layout[12] = unexpectedBetweenDefaultValueAndTrailingComma?.raw
-      layout[13] = trailingComma?.raw
-      layout[14] = unexpectedAfterTrailingComma?.raw
+      kind: .enumCaseParameter,
+      childCount: 7,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: modifiers.raw)
+      layout.initializeElement(at: 1, to: firstName?.raw)
+      layout.initializeElement(at: 2, to: secondName?.raw)
+      layout.initializeElement(at: 3, to: colon?.raw)
+      layout.initializeElement(at: 4, to: type.raw)
+      layout.initializeElement(at: 5, to: defaultValue?.raw)
+      layout.initializeElement(at: 6, to: trailingComma?.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 7, to: unexpectedBeforeModifiers?.raw)
+      layout.initializeElement(at: 8, to: unexpectedBetweenModifiersAndFirstName?.raw)
+      layout.initializeElement(at: 9, to: unexpectedBetweenFirstNameAndSecondName?.raw)
+      layout.initializeElement(at: 10, to: unexpectedBetweenSecondNameAndColon?.raw)
+      layout.initializeElement(at: 11, to: unexpectedBetweenColonAndType?.raw)
+      layout.initializeElement(at: 12, to: unexpectedBetweenTypeAndDefaultValue?.raw)
+      layout.initializeElement(at: 13, to: unexpectedBetweenDefaultValueAndTrailingComma?.raw)
+      layout.initializeElement(at: 14, to: unexpectedAfterTrailingComma?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -755,26 +809,33 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeAttributes != nil || unexpectedBetweenAttributesAndModifiers != nil || unexpectedBetweenModifiersAndEnumKeyword != nil || unexpectedBetweenEnumKeywordAndName != nil || unexpectedBetweenNameAndGenericParameterClause != nil || unexpectedBetweenGenericParameterClauseAndInheritanceClause != nil || unexpectedBetweenInheritanceClauseAndGenericWhereClause != nil || unexpectedBetweenGenericWhereClauseAndMemberBlock != nil || unexpectedAfterMemberBlock != nil
     let raw = RawSyntax.makeLayout(
-      kind: .enumDecl, uninitializedCount: 17, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAttributes?.raw
-      layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers.raw
-      layout[4] = unexpectedBetweenModifiersAndEnumKeyword?.raw
-      layout[5] = enumKeyword.raw
-      layout[6] = unexpectedBetweenEnumKeywordAndName?.raw
-      layout[7] = name.raw
-      layout[8] = unexpectedBetweenNameAndGenericParameterClause?.raw
-      layout[9] = genericParameterClause?.raw
-      layout[10] = unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw
-      layout[11] = inheritanceClause?.raw
-      layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
-      layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
-      layout[15] = memberBlock.raw
-      layout[16] = unexpectedAfterMemberBlock?.raw
+      kind: .enumDecl,
+      childCount: 8,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: attributes.raw)
+      layout.initializeElement(at: 1, to: modifiers.raw)
+      layout.initializeElement(at: 2, to: enumKeyword.raw)
+      layout.initializeElement(at: 3, to: name.raw)
+      layout.initializeElement(at: 4, to: genericParameterClause?.raw)
+      layout.initializeElement(at: 5, to: inheritanceClause?.raw)
+      layout.initializeElement(at: 6, to: genericWhereClause?.raw)
+      layout.initializeElement(at: 7, to: memberBlock.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 8, to: unexpectedBeforeAttributes?.raw)
+      layout.initializeElement(at: 9, to: unexpectedBetweenAttributesAndModifiers?.raw)
+      layout.initializeElement(at: 10, to: unexpectedBetweenModifiersAndEnumKeyword?.raw)
+      layout.initializeElement(at: 11, to: unexpectedBetweenEnumKeywordAndName?.raw)
+      layout.initializeElement(at: 12, to: unexpectedBetweenNameAndGenericParameterClause?.raw)
+      layout.initializeElement(at: 13, to: unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw)
+      layout.initializeElement(at: 14, to: unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw)
+      layout.initializeElement(at: 15, to: unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw)
+      layout.initializeElement(at: 16, to: unexpectedAfterMemberBlock?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -879,7 +940,11 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol {
 
   public init(elements: RawSyntaxNodeList<RawExprSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .exprList, uninitializedCount: elements.count, arena: arena) { layout in
+      kind: .exprList,
+      childCount: elements.count,
+      storage: .flat,
+      arena: arena
+    ) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
@@ -972,12 +1037,19 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeExpression != nil || unexpectedAfterExpression != nil
     let raw = RawSyntax.makeLayout(
-      kind: .expressionPattern, uninitializedCount: 3, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeExpression?.raw
-      layout[1] = expression.raw
-      layout[2] = unexpectedAfterExpression?.raw
+      kind: .expressionPattern,
+      childCount: 1,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: expression.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 1, to: unexpectedBeforeExpression?.raw)
+      layout.initializeElement(at: 2, to: unexpectedAfterExpression?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1038,20 +1110,27 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeBackslash != nil || unexpectedBetweenBackslashAndPounds != nil || unexpectedBetweenPoundsAndLeftParen != nil || unexpectedBetweenLeftParenAndExpressions != nil || unexpectedBetweenExpressionsAndRightParen != nil || unexpectedAfterRightParen != nil
     let raw = RawSyntax.makeLayout(
-      kind: .expressionSegment, uninitializedCount: 11, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeBackslash?.raw
-      layout[1] = backslash.raw
-      layout[2] = unexpectedBetweenBackslashAndPounds?.raw
-      layout[3] = pounds?.raw
-      layout[4] = unexpectedBetweenPoundsAndLeftParen?.raw
-      layout[5] = leftParen.raw
-      layout[6] = unexpectedBetweenLeftParenAndExpressions?.raw
-      layout[7] = expressions.raw
-      layout[8] = unexpectedBetweenExpressionsAndRightParen?.raw
-      layout[9] = rightParen.raw
-      layout[10] = unexpectedAfterRightParen?.raw
+      kind: .expressionSegment,
+      childCount: 5,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: backslash.raw)
+      layout.initializeElement(at: 1, to: pounds?.raw)
+      layout.initializeElement(at: 2, to: leftParen.raw)
+      layout.initializeElement(at: 3, to: expressions.raw)
+      layout.initializeElement(at: 4, to: rightParen.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 5, to: unexpectedBeforeBackslash?.raw)
+      layout.initializeElement(at: 6, to: unexpectedBetweenBackslashAndPounds?.raw)
+      layout.initializeElement(at: 7, to: unexpectedBetweenPoundsAndLeftParen?.raw)
+      layout.initializeElement(at: 8, to: unexpectedBetweenLeftParenAndExpressions?.raw)
+      layout.initializeElement(at: 9, to: unexpectedBetweenExpressionsAndRightParen?.raw)
+      layout.initializeElement(at: 10, to: unexpectedAfterRightParen?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1136,12 +1215,19 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeExpression != nil || unexpectedAfterExpression != nil
     let raw = RawSyntax.makeLayout(
-      kind: .expressionStmt, uninitializedCount: 3, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeExpression?.raw
-      layout[1] = expression.raw
-      layout[2] = unexpectedAfterExpression?.raw
+      kind: .expressionStmt,
+      childCount: 1,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: expression.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 1, to: unexpectedBeforeExpression?.raw)
+      layout.initializeElement(at: 2, to: unexpectedAfterExpression?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1206,24 +1292,31 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeAttributes != nil || unexpectedBetweenAttributesAndModifiers != nil || unexpectedBetweenModifiersAndExtensionKeyword != nil || unexpectedBetweenExtensionKeywordAndExtendedType != nil || unexpectedBetweenExtendedTypeAndInheritanceClause != nil || unexpectedBetweenInheritanceClauseAndGenericWhereClause != nil || unexpectedBetweenGenericWhereClauseAndMemberBlock != nil || unexpectedAfterMemberBlock != nil
     let raw = RawSyntax.makeLayout(
-      kind: .extensionDecl, uninitializedCount: 15, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAttributes?.raw
-      layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers.raw
-      layout[4] = unexpectedBetweenModifiersAndExtensionKeyword?.raw
-      layout[5] = extensionKeyword.raw
-      layout[6] = unexpectedBetweenExtensionKeywordAndExtendedType?.raw
-      layout[7] = extendedType.raw
-      layout[8] = unexpectedBetweenExtendedTypeAndInheritanceClause?.raw
-      layout[9] = inheritanceClause?.raw
-      layout[10] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
-      layout[11] = genericWhereClause?.raw
-      layout[12] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
-      layout[13] = memberBlock.raw
-      layout[14] = unexpectedAfterMemberBlock?.raw
+      kind: .extensionDecl,
+      childCount: 7,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: attributes.raw)
+      layout.initializeElement(at: 1, to: modifiers.raw)
+      layout.initializeElement(at: 2, to: extensionKeyword.raw)
+      layout.initializeElement(at: 3, to: extendedType.raw)
+      layout.initializeElement(at: 4, to: inheritanceClause?.raw)
+      layout.initializeElement(at: 5, to: genericWhereClause?.raw)
+      layout.initializeElement(at: 6, to: memberBlock.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 7, to: unexpectedBeforeAttributes?.raw)
+      layout.initializeElement(at: 8, to: unexpectedBetweenAttributesAndModifiers?.raw)
+      layout.initializeElement(at: 9, to: unexpectedBetweenModifiersAndExtensionKeyword?.raw)
+      layout.initializeElement(at: 10, to: unexpectedBetweenExtensionKeywordAndExtendedType?.raw)
+      layout.initializeElement(at: 11, to: unexpectedBetweenExtendedTypeAndInheritanceClause?.raw)
+      layout.initializeElement(at: 12, to: unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw)
+      layout.initializeElement(at: 13, to: unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw)
+      layout.initializeElement(at: 14, to: unexpectedAfterMemberBlock?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1324,12 +1417,19 @@ public struct RawFallThroughStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterFallthroughKeyword: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeFallthroughKeyword != nil || unexpectedAfterFallthroughKeyword != nil
     let raw = RawSyntax.makeLayout(
-      kind: .fallThroughStmt, uninitializedCount: 3, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeFallthroughKeyword?.raw
-      layout[1] = fallthroughKeyword.raw
-      layout[2] = unexpectedAfterFallthroughKeyword?.raw
+      kind: .fallThroughStmt,
+      childCount: 1,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: fallthroughKeyword.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 1, to: unexpectedBeforeFallthroughKeyword?.raw)
+      layout.initializeElement(at: 2, to: unexpectedAfterFallthroughKeyword?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1416,14 +1516,21 @@ public struct RawFileDefaultDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterSpecifier: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeDefaultKeyword != nil || unexpectedBetweenDefaultKeywordAndSpecifier != nil || unexpectedAfterSpecifier != nil
     let raw = RawSyntax.makeLayout(
-      kind: .fileDefaultDecl, uninitializedCount: 5, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeDefaultKeyword?.raw
-      layout[1] = defaultKeyword.raw
-      layout[2] = unexpectedBetweenDefaultKeywordAndSpecifier?.raw
-      layout[3] = specifier.raw
-      layout[4] = unexpectedAfterSpecifier?.raw
+      kind: .fileDefaultDecl,
+      childCount: 2,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: defaultKeyword.raw)
+      layout.initializeElement(at: 1, to: specifier.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 2, to: unexpectedBeforeDefaultKeyword?.raw)
+      layout.initializeElement(at: 3, to: unexpectedBetweenDefaultKeywordAndSpecifier?.raw)
+      layout.initializeElement(at: 4, to: unexpectedAfterSpecifier?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1484,12 +1591,19 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterLiteral: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeLiteral != nil || unexpectedAfterLiteral != nil
     let raw = RawSyntax.makeLayout(
-      kind: .floatLiteralExpr, uninitializedCount: 3, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeLiteral?.raw
-      layout[1] = literal.raw
-      layout[2] = unexpectedAfterLiteral?.raw
+      kind: .floatLiteralExpr,
+      childCount: 1,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: literal.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 1, to: unexpectedBeforeLiteral?.raw)
+      layout.initializeElement(at: 2, to: unexpectedAfterLiteral?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1562,32 +1676,39 @@ public struct RawForStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeForKeyword != nil || unexpectedBetweenForKeywordAndTryKeyword != nil || unexpectedBetweenTryKeywordAndAwaitKeyword != nil || unexpectedBetweenAwaitKeywordAndUnsafeKeyword != nil || unexpectedBetweenUnsafeKeywordAndCaseKeyword != nil || unexpectedBetweenCaseKeywordAndPattern != nil || unexpectedBetweenPatternAndTypeAnnotation != nil || unexpectedBetweenTypeAnnotationAndInKeyword != nil || unexpectedBetweenInKeywordAndSequence != nil || unexpectedBetweenSequenceAndWhereClause != nil || unexpectedBetweenWhereClauseAndBody != nil || unexpectedAfterBody != nil
     let raw = RawSyntax.makeLayout(
-      kind: .forStmt, uninitializedCount: 23, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeForKeyword?.raw
-      layout[1] = forKeyword.raw
-      layout[2] = unexpectedBetweenForKeywordAndTryKeyword?.raw
-      layout[3] = tryKeyword?.raw
-      layout[4] = unexpectedBetweenTryKeywordAndAwaitKeyword?.raw
-      layout[5] = awaitKeyword?.raw
-      layout[6] = unexpectedBetweenAwaitKeywordAndUnsafeKeyword?.raw
-      layout[7] = unsafeKeyword?.raw
-      layout[8] = unexpectedBetweenUnsafeKeywordAndCaseKeyword?.raw
-      layout[9] = caseKeyword?.raw
-      layout[10] = unexpectedBetweenCaseKeywordAndPattern?.raw
-      layout[11] = pattern.raw
-      layout[12] = unexpectedBetweenPatternAndTypeAnnotation?.raw
-      layout[13] = typeAnnotation?.raw
-      layout[14] = unexpectedBetweenTypeAnnotationAndInKeyword?.raw
-      layout[15] = inKeyword.raw
-      layout[16] = unexpectedBetweenInKeywordAndSequence?.raw
-      layout[17] = sequence.raw
-      layout[18] = unexpectedBetweenSequenceAndWhereClause?.raw
-      layout[19] = whereClause?.raw
-      layout[20] = unexpectedBetweenWhereClauseAndBody?.raw
-      layout[21] = body.raw
-      layout[22] = unexpectedAfterBody?.raw
+      kind: .forStmt,
+      childCount: 11,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: forKeyword.raw)
+      layout.initializeElement(at: 1, to: tryKeyword?.raw)
+      layout.initializeElement(at: 2, to: awaitKeyword?.raw)
+      layout.initializeElement(at: 3, to: unsafeKeyword?.raw)
+      layout.initializeElement(at: 4, to: caseKeyword?.raw)
+      layout.initializeElement(at: 5, to: pattern.raw)
+      layout.initializeElement(at: 6, to: typeAnnotation?.raw)
+      layout.initializeElement(at: 7, to: inKeyword.raw)
+      layout.initializeElement(at: 8, to: sequence.raw)
+      layout.initializeElement(at: 9, to: whereClause?.raw)
+      layout.initializeElement(at: 10, to: body.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 11, to: unexpectedBeforeForKeyword?.raw)
+      layout.initializeElement(at: 12, to: unexpectedBetweenForKeywordAndTryKeyword?.raw)
+      layout.initializeElement(at: 13, to: unexpectedBetweenTryKeywordAndAwaitKeyword?.raw)
+      layout.initializeElement(at: 14, to: unexpectedBetweenAwaitKeywordAndUnsafeKeyword?.raw)
+      layout.initializeElement(at: 15, to: unexpectedBetweenUnsafeKeywordAndCaseKeyword?.raw)
+      layout.initializeElement(at: 16, to: unexpectedBetweenCaseKeywordAndPattern?.raw)
+      layout.initializeElement(at: 17, to: unexpectedBetweenPatternAndTypeAnnotation?.raw)
+      layout.initializeElement(at: 18, to: unexpectedBetweenTypeAnnotationAndInKeyword?.raw)
+      layout.initializeElement(at: 19, to: unexpectedBetweenInKeywordAndSequence?.raw)
+      layout.initializeElement(at: 20, to: unexpectedBetweenSequenceAndWhereClause?.raw)
+      layout.initializeElement(at: 21, to: unexpectedBetweenWhereClauseAndBody?.raw)
+      layout.initializeElement(at: 22, to: unexpectedAfterBody?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1722,14 +1843,21 @@ public struct RawForceUnwrapExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeExpression != nil || unexpectedBetweenExpressionAndExclamationMark != nil || unexpectedAfterExclamationMark != nil
     let raw = RawSyntax.makeLayout(
-      kind: .forceUnwrapExpr, uninitializedCount: 5, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeExpression?.raw
-      layout[1] = expression.raw
-      layout[2] = unexpectedBetweenExpressionAndExclamationMark?.raw
-      layout[3] = exclamationMark.raw
-      layout[4] = unexpectedAfterExclamationMark?.raw
+      kind: .forceUnwrapExpr,
+      childCount: 2,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: expression.raw)
+      layout.initializeElement(at: 1, to: exclamationMark.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 2, to: unexpectedBeforeExpression?.raw)
+      layout.initializeElement(at: 3, to: unexpectedBetweenExpressionAndExclamationMark?.raw)
+      layout.initializeElement(at: 4, to: unexpectedAfterExclamationMark?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1800,22 +1928,29 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeCalledExpression != nil || unexpectedBetweenCalledExpressionAndLeftParen != nil || unexpectedBetweenLeftParenAndArguments != nil || unexpectedBetweenArgumentsAndRightParen != nil || unexpectedBetweenRightParenAndTrailingClosure != nil || unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures != nil || unexpectedAfterAdditionalTrailingClosures != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionCallExpr, uninitializedCount: 13, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeCalledExpression?.raw
-      layout[1] = calledExpression.raw
-      layout[2] = unexpectedBetweenCalledExpressionAndLeftParen?.raw
-      layout[3] = leftParen?.raw
-      layout[4] = unexpectedBetweenLeftParenAndArguments?.raw
-      layout[5] = arguments.raw
-      layout[6] = unexpectedBetweenArgumentsAndRightParen?.raw
-      layout[7] = rightParen?.raw
-      layout[8] = unexpectedBetweenRightParenAndTrailingClosure?.raw
-      layout[9] = trailingClosure?.raw
-      layout[10] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
-      layout[11] = additionalTrailingClosures.raw
-      layout[12] = unexpectedAfterAdditionalTrailingClosures?.raw
+      kind: .functionCallExpr,
+      childCount: 6,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: calledExpression.raw)
+      layout.initializeElement(at: 1, to: leftParen?.raw)
+      layout.initializeElement(at: 2, to: arguments.raw)
+      layout.initializeElement(at: 3, to: rightParen?.raw)
+      layout.initializeElement(at: 4, to: trailingClosure?.raw)
+      layout.initializeElement(at: 5, to: additionalTrailingClosures.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 6, to: unexpectedBeforeCalledExpression?.raw)
+      layout.initializeElement(at: 7, to: unexpectedBetweenCalledExpressionAndLeftParen?.raw)
+      layout.initializeElement(at: 8, to: unexpectedBetweenLeftParenAndArguments?.raw)
+      layout.initializeElement(at: 9, to: unexpectedBetweenArgumentsAndRightParen?.raw)
+      layout.initializeElement(at: 10, to: unexpectedBetweenRightParenAndTrailingClosure?.raw)
+      layout.initializeElement(at: 11, to: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw)
+      layout.initializeElement(at: 12, to: unexpectedAfterAdditionalTrailingClosures?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -1922,26 +2057,33 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeAttributes != nil || unexpectedBetweenAttributesAndModifiers != nil || unexpectedBetweenModifiersAndFuncKeyword != nil || unexpectedBetweenFuncKeywordAndName != nil || unexpectedBetweenNameAndGenericParameterClause != nil || unexpectedBetweenGenericParameterClauseAndSignature != nil || unexpectedBetweenSignatureAndGenericWhereClause != nil || unexpectedBetweenGenericWhereClauseAndBody != nil || unexpectedAfterBody != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionDecl, uninitializedCount: 17, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAttributes?.raw
-      layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers.raw
-      layout[4] = unexpectedBetweenModifiersAndFuncKeyword?.raw
-      layout[5] = funcKeyword.raw
-      layout[6] = unexpectedBetweenFuncKeywordAndName?.raw
-      layout[7] = name.raw
-      layout[8] = unexpectedBetweenNameAndGenericParameterClause?.raw
-      layout[9] = genericParameterClause?.raw
-      layout[10] = unexpectedBetweenGenericParameterClauseAndSignature?.raw
-      layout[11] = signature.raw
-      layout[12] = unexpectedBetweenSignatureAndGenericWhereClause?.raw
-      layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndBody?.raw
-      layout[15] = body?.raw
-      layout[16] = unexpectedAfterBody?.raw
+      kind: .functionDecl,
+      childCount: 8,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: attributes.raw)
+      layout.initializeElement(at: 1, to: modifiers.raw)
+      layout.initializeElement(at: 2, to: funcKeyword.raw)
+      layout.initializeElement(at: 3, to: name.raw)
+      layout.initializeElement(at: 4, to: genericParameterClause?.raw)
+      layout.initializeElement(at: 5, to: signature.raw)
+      layout.initializeElement(at: 6, to: genericWhereClause?.raw)
+      layout.initializeElement(at: 7, to: body?.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 8, to: unexpectedBeforeAttributes?.raw)
+      layout.initializeElement(at: 9, to: unexpectedBetweenAttributesAndModifiers?.raw)
+      layout.initializeElement(at: 10, to: unexpectedBetweenModifiersAndFuncKeyword?.raw)
+      layout.initializeElement(at: 11, to: unexpectedBetweenFuncKeywordAndName?.raw)
+      layout.initializeElement(at: 12, to: unexpectedBetweenNameAndGenericParameterClause?.raw)
+      layout.initializeElement(at: 13, to: unexpectedBetweenGenericParameterClauseAndSignature?.raw)
+      layout.initializeElement(at: 14, to: unexpectedBetweenSignatureAndGenericWhereClause?.raw)
+      layout.initializeElement(at: 15, to: unexpectedBetweenGenericWhereClauseAndBody?.raw)
+      layout.initializeElement(at: 16, to: unexpectedAfterBody?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -2052,14 +2194,21 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterThrowsClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeAsyncSpecifier != nil || unexpectedBetweenAsyncSpecifierAndThrowsClause != nil || unexpectedAfterThrowsClause != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAsyncSpecifier?.raw
-      layout[1] = asyncSpecifier?.raw
-      layout[2] = unexpectedBetweenAsyncSpecifierAndThrowsClause?.raw
-      layout[3] = throwsClause?.raw
-      layout[4] = unexpectedAfterThrowsClause?.raw
+      kind: .functionEffectSpecifiers,
+      childCount: 2,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: asyncSpecifier?.raw)
+      layout.initializeElement(at: 1, to: throwsClause?.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 2, to: unexpectedBeforeAsyncSpecifier?.raw)
+      layout.initializeElement(at: 3, to: unexpectedBetweenAsyncSpecifierAndThrowsClause?.raw)
+      layout.initializeElement(at: 4, to: unexpectedAfterThrowsClause?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -2124,16 +2273,23 @@ public struct RawFunctionParameterClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeLeftParen != nil || unexpectedBetweenLeftParenAndParameters != nil || unexpectedBetweenParametersAndRightParen != nil || unexpectedAfterRightParen != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionParameterClause, uninitializedCount: 7, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeLeftParen?.raw
-      layout[1] = leftParen.raw
-      layout[2] = unexpectedBetweenLeftParenAndParameters?.raw
-      layout[3] = parameters.raw
-      layout[4] = unexpectedBetweenParametersAndRightParen?.raw
-      layout[5] = rightParen.raw
-      layout[6] = unexpectedAfterRightParen?.raw
+      kind: .functionParameterClause,
+      childCount: 3,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: leftParen.raw)
+      layout.initializeElement(at: 1, to: parameters.raw)
+      layout.initializeElement(at: 2, to: rightParen.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 3, to: unexpectedBeforeLeftParen?.raw)
+      layout.initializeElement(at: 4, to: unexpectedBetweenLeftParenAndParameters?.raw)
+      layout.initializeElement(at: 5, to: unexpectedBetweenParametersAndRightParen?.raw)
+      layout.initializeElement(at: 6, to: unexpectedAfterRightParen?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -2198,7 +2354,11 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol {
 
   public init(elements: RawSyntaxNodeList<RawFunctionParameterSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+      kind: .functionParameterList,
+      childCount: elements.count,
+      storage: .flat,
+      arena: arena
+    ) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
@@ -2268,28 +2428,35 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeAttributes != nil || unexpectedBetweenAttributesAndModifiers != nil || unexpectedBetweenModifiersAndFirstName != nil || unexpectedBetweenFirstNameAndSecondName != nil || unexpectedBetweenSecondNameAndColon != nil || unexpectedBetweenColonAndType != nil || unexpectedBetweenTypeAndEllipsis != nil || unexpectedBetweenEllipsisAndDefaultValue != nil || unexpectedBetweenDefaultValueAndTrailingComma != nil || unexpectedAfterTrailingComma != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionParameter, uninitializedCount: 19, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAttributes?.raw
-      layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers.raw
-      layout[4] = unexpectedBetweenModifiersAndFirstName?.raw
-      layout[5] = firstName.raw
-      layout[6] = unexpectedBetweenFirstNameAndSecondName?.raw
-      layout[7] = secondName?.raw
-      layout[8] = unexpectedBetweenSecondNameAndColon?.raw
-      layout[9] = colon.raw
-      layout[10] = unexpectedBetweenColonAndType?.raw
-      layout[11] = type.raw
-      layout[12] = unexpectedBetweenTypeAndEllipsis?.raw
-      layout[13] = ellipsis?.raw
-      layout[14] = unexpectedBetweenEllipsisAndDefaultValue?.raw
-      layout[15] = defaultValue?.raw
-      layout[16] = unexpectedBetweenDefaultValueAndTrailingComma?.raw
-      layout[17] = trailingComma?.raw
-      layout[18] = unexpectedAfterTrailingComma?.raw
+      kind: .functionParameter,
+      childCount: 9,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: attributes.raw)
+      layout.initializeElement(at: 1, to: modifiers.raw)
+      layout.initializeElement(at: 2, to: firstName.raw)
+      layout.initializeElement(at: 3, to: secondName?.raw)
+      layout.initializeElement(at: 4, to: colon.raw)
+      layout.initializeElement(at: 5, to: type.raw)
+      layout.initializeElement(at: 6, to: ellipsis?.raw)
+      layout.initializeElement(at: 7, to: defaultValue?.raw)
+      layout.initializeElement(at: 8, to: trailingComma?.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 9, to: unexpectedBeforeAttributes?.raw)
+      layout.initializeElement(at: 10, to: unexpectedBetweenAttributesAndModifiers?.raw)
+      layout.initializeElement(at: 11, to: unexpectedBetweenModifiersAndFirstName?.raw)
+      layout.initializeElement(at: 12, to: unexpectedBetweenFirstNameAndSecondName?.raw)
+      layout.initializeElement(at: 13, to: unexpectedBetweenSecondNameAndColon?.raw)
+      layout.initializeElement(at: 14, to: unexpectedBetweenColonAndType?.raw)
+      layout.initializeElement(at: 15, to: unexpectedBetweenTypeAndEllipsis?.raw)
+      layout.initializeElement(at: 16, to: unexpectedBetweenEllipsisAndDefaultValue?.raw)
+      layout.initializeElement(at: 17, to: unexpectedBetweenDefaultValueAndTrailingComma?.raw)
+      layout.initializeElement(at: 18, to: unexpectedAfterTrailingComma?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -2412,18 +2579,25 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterReturnClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeParameterClause != nil || unexpectedBetweenParameterClauseAndEffectSpecifiers != nil || unexpectedBetweenEffectSpecifiersAndYieldClause != nil || unexpectedBetweenYieldClauseAndReturnClause != nil || unexpectedAfterReturnClause != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionSignature, uninitializedCount: 9, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeParameterClause?.raw
-      layout[1] = parameterClause.raw
-      layout[2] = unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw
-      layout[3] = effectSpecifiers?.raw
-      layout[4] = unexpectedBetweenEffectSpecifiersAndYieldClause?.raw
-      layout[5] = yieldClause?.raw
-      layout[6] = unexpectedBetweenYieldClauseAndReturnClause?.raw
-      layout[7] = returnClause?.raw
-      layout[8] = unexpectedAfterReturnClause?.raw
+      kind: .functionSignature,
+      childCount: 4,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: parameterClause.raw)
+      layout.initializeElement(at: 1, to: effectSpecifiers?.raw)
+      layout.initializeElement(at: 2, to: yieldClause?.raw)
+      layout.initializeElement(at: 3, to: returnClause?.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 4, to: unexpectedBeforeParameterClause?.raw)
+      layout.initializeElement(at: 5, to: unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw)
+      layout.initializeElement(at: 6, to: unexpectedBetweenEffectSpecifiersAndYieldClause?.raw)
+      layout.initializeElement(at: 7, to: unexpectedBetweenYieldClauseAndReturnClause?.raw)
+      layout.initializeElement(at: 8, to: unexpectedAfterReturnClause?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -2510,22 +2684,29 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedAfterReturnClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeLeftParen != nil || unexpectedBetweenLeftParenAndParameters != nil || unexpectedBetweenParametersAndRightParen != nil || unexpectedBetweenRightParenAndEffectSpecifiers != nil || unexpectedBetweenEffectSpecifiersAndYieldClause != nil || unexpectedBetweenYieldClauseAndReturnClause != nil || unexpectedAfterReturnClause != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionType, uninitializedCount: 13, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeLeftParen?.raw
-      layout[1] = leftParen.raw
-      layout[2] = unexpectedBetweenLeftParenAndParameters?.raw
-      layout[3] = parameters.raw
-      layout[4] = unexpectedBetweenParametersAndRightParen?.raw
-      layout[5] = rightParen.raw
-      layout[6] = unexpectedBetweenRightParenAndEffectSpecifiers?.raw
-      layout[7] = effectSpecifiers?.raw
-      layout[8] = unexpectedBetweenEffectSpecifiersAndYieldClause?.raw
-      layout[9] = yieldClause?.raw
-      layout[10] = unexpectedBetweenYieldClauseAndReturnClause?.raw
-      layout[11] = returnClause.raw
-      layout[12] = unexpectedAfterReturnClause?.raw
+      kind: .functionType,
+      childCount: 6,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: leftParen.raw)
+      layout.initializeElement(at: 1, to: parameters.raw)
+      layout.initializeElement(at: 2, to: rightParen.raw)
+      layout.initializeElement(at: 3, to: effectSpecifiers?.raw)
+      layout.initializeElement(at: 4, to: yieldClause?.raw)
+      layout.initializeElement(at: 5, to: returnClause.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 6, to: unexpectedBeforeLeftParen?.raw)
+      layout.initializeElement(at: 7, to: unexpectedBetweenLeftParenAndParameters?.raw)
+      layout.initializeElement(at: 8, to: unexpectedBetweenParametersAndRightParen?.raw)
+      layout.initializeElement(at: 9, to: unexpectedBetweenRightParenAndEffectSpecifiers?.raw)
+      layout.initializeElement(at: 10, to: unexpectedBetweenEffectSpecifiersAndYieldClause?.raw)
+      layout.initializeElement(at: 11, to: unexpectedBetweenYieldClauseAndReturnClause?.raw)
+      layout.initializeElement(at: 12, to: unexpectedAfterReturnClause?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -2625,18 +2806,25 @@ public struct RawFunctionYieldClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeYieldsKeyword != nil || unexpectedBetweenYieldsKeywordAndLeftParen != nil || unexpectedBetweenLeftParenAndYields != nil || unexpectedBetweenYieldsAndRightParen != nil || unexpectedAfterRightParen != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionYieldClause, uninitializedCount: 9, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeYieldsKeyword?.raw
-      layout[1] = yieldsKeyword.raw
-      layout[2] = unexpectedBetweenYieldsKeywordAndLeftParen?.raw
-      layout[3] = leftParen.raw
-      layout[4] = unexpectedBetweenLeftParenAndYields?.raw
-      layout[5] = yields.raw
-      layout[6] = unexpectedBetweenYieldsAndRightParen?.raw
-      layout[7] = rightParen.raw
-      layout[8] = unexpectedAfterRightParen?.raw
+      kind: .functionYieldClause,
+      childCount: 4,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: yieldsKeyword.raw)
+      layout.initializeElement(at: 1, to: leftParen.raw)
+      layout.initializeElement(at: 2, to: yields.raw)
+      layout.initializeElement(at: 3, to: rightParen.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 4, to: unexpectedBeforeYieldsKeyword?.raw)
+      layout.initializeElement(at: 5, to: unexpectedBetweenYieldsKeywordAndLeftParen?.raw)
+      layout.initializeElement(at: 6, to: unexpectedBetweenLeftParenAndYields?.raw)
+      layout.initializeElement(at: 7, to: unexpectedBetweenYieldsAndRightParen?.raw)
+      layout.initializeElement(at: 8, to: unexpectedAfterRightParen?.raw)
+      }
     }
     self.init(unchecked: raw)
   }
@@ -2710,7 +2898,11 @@ public struct RawFunctionYieldListSyntax: RawSyntaxNodeProtocol {
 
   public init(elements: RawSyntaxNodeList<RawFunctionYieldSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionYieldList, uninitializedCount: elements.count, arena: arena) { layout in
+      kind: .functionYieldList,
+      childCount: elements.count,
+      storage: .flat,
+      arena: arena
+    ) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
@@ -2767,14 +2959,21 @@ public struct RawFunctionYieldSyntax: RawSyntaxNodeProtocol {
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
+    let hasUnexpected = unexpectedBeforeType != nil || unexpectedBetweenTypeAndTrailingComma != nil || unexpectedAfterTrailingComma != nil
     let raw = RawSyntax.makeLayout(
-      kind: .functionYield, uninitializedCount: 5, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeType?.raw
-      layout[1] = type.raw
-      layout[2] = unexpectedBetweenTypeAndTrailingComma?.raw
-      layout[3] = trailingComma?.raw
-      layout[4] = unexpectedAfterTrailingComma?.raw
+      kind: .functionYield,
+      childCount: 2,
+      storage: hasUnexpected ? .interleavedWithUnexpected : .interleaved,
+      arena: arena
+    ) { layout in
+
+      layout.initializeElement(at: 0, to: type.raw)
+      layout.initializeElement(at: 1, to: trailingComma?.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 2, to: unexpectedBeforeType?.raw)
+      layout.initializeElement(at: 3, to: unexpectedBetweenTypeAndTrailingComma?.raw)
+      layout.initializeElement(at: 4, to: unexpectedAfterTrailingComma?.raw)
+      }
     }
     self.init(unchecked: raw)
   }

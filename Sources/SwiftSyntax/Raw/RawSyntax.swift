@@ -494,6 +494,40 @@ public struct RawSyntax: Sendable {
     RawSyntaxData.Layout.Ref(fields(as: RawSyntaxData.Layout.self))
   }
 
+  /// Calls `body` with each child this node holds, in source order.
+  ///
+  /// The same order as ``logicalChildren``, without the positions a node kept no
+  /// room for: that collection reports two per child for a kind that interleaves,
+  /// and answering each costs a bounds check, a branch and a division, where almost
+  /// every node has nothing in its `unexpected` slots at all.
+  ///
+  /// - Precondition: this is a layout node or a collection.
+  @inline(__always)
+  func forEachChildInSourceOrder(_ body: (RawSyntax) throws -> Void) rethrows {
+    let layout = self.asLayout
+    let childCount = Int(layout.childCount)
+    switch self.header {
+    case .flat, .layout:
+      // Every slot is a real child; a kind that interleaves keeps room for its
+      // `unexpected` slots only when one of them is occupied.
+      for case let child? in UnsafeBufferPointer(start: layout.slotBase, count: childCount) {
+        try body(child)
+      }
+    case .layoutWithUnexpected:
+      // Real children first, then the `unexpected` slots. Source order interleaves
+      // them: a slot before each child, and one after the last.
+      let real = layout.slotBase
+      let unexpected = real + childCount
+      for index in 0..<childCount {
+        if let node = unexpected[index] { try body(node) }
+        if let node = real[index] { try body(node) }
+      }
+      if let node = unexpected[childCount] { try body(node) }
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
+  }
+
   /// This node's children as the tree describes them, which for a node that kept no
   /// room for its `unexpected` slots means reading those as nil.
   ///
@@ -776,9 +810,11 @@ extension RawSyntax {
         }
       }
     case .flat, .layout, .layoutWithUnexpected:
-      for case let child? in logicalChildren {
-        child.writeSyntaxTextBytes(to: destination, at: &written)
+      var offset = written
+      self.forEachChildInSourceOrder { child in
+        child.writeSyntaxTextBytes(to: destination, at: &offset)
       }
+      written = offset
     }
   }
 }
@@ -803,9 +839,7 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
         for p in asMaterializedToken.trailingTrivia { p.write(to: &target) }
       }
     case .flat, .layout, .layoutWithUnexpected:
-      for case let child? in logicalChildren {
-        child.write(to: &target)
-      }
+      self.forEachChildInSourceOrder { $0.write(to: &target) }
     }
   }
 

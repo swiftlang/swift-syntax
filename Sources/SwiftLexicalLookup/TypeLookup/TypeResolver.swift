@@ -17,28 +17,6 @@ import SwiftSyntax
 /// to which the the given type syntax refers.
 @_spi(_QualifiedLookupTests)
 public struct TypeResolver {
-  var logPrefix = [String]()
-
-  fileprivate mutating func withLogging<T>(
-    request: String,
-    describe: (T) -> String,
-    perform action: (_ mutableSelf: inout TypeResolver) -> T,
-    file: StaticString = #file,
-    line: UInt = #line
-  ) -> T {
-    if let nestingLimit = self._logNestingLimit, logPrefix.count >= nestingLimit {
-      fatalError(
-        "Exceeded log nesting limit of \(nestingLimit), suggesting there's an infinite loop. If you think this is a mistake, you may change the limit in `TypeQualifier`."
-      )
-    }
-    logPrefix.append(request)
-    symbolTable.log("Resolving...", file: file, line: line)
-    let result = action(&self)
-    symbolTable.log("Resolved \(describe(result))", file: file, line: line)
-    logPrefix.removeLast()
-    return result
-  }
-
   let symbolTable: SymbolTable
 
   /// The ordered type syntax we visited; only access through
@@ -49,14 +27,10 @@ public struct TypeResolver {
   private var _visitedTypeSyntaxToIndex: [Attached<TypeSyntax>: Int] = [:]
   private(set) var dependencyTracker: DependencyTracker = DependencyTracker()
 
-  /// The number of `withLogging` calls we can nest. Useful for debugging infinite loops
-  /// that otherwise fill up standard output and become illegible.
-  let _logNestingLimit: Int?
   let _checkNominalInCompositionIsClassOrProtocol = true
 
-  public init(symbolTable: SymbolTable, _logNestingLimit: Int? = nil) {
+  public init(symbolTable: SymbolTable) {
     self.symbolTable = symbolTable
-    self._logNestingLimit = _logNestingLimit
   }
 
   /// Gets the module of an an attached node. Assumes the file is registered;
@@ -132,18 +106,8 @@ extension TypeResolver {
 // MARK: Type Syntax
 
 extension TypeResolver {
+  /// Resolves the given type syntax, tracking cycles along the way.
   public mutating func resolve(
-    typeSyntax: Attached<TypeSyntax>
-  ) -> TypeResult {
-    withLogging(
-      request: "Resolve syntax `\(typeSyntax.trimmedDescription)`",
-      describe: \.debugDescription,
-      perform: { $0._resolve(typeSyntax: typeSyntax) }
-    )
-  }
-
-  /// Implements `resolve`
-  fileprivate mutating func _resolve(
     typeSyntax: Attached<TypeSyntax>
   ) -> TypeResult {
     // Ensure we're not forming a cycle
@@ -295,6 +259,33 @@ extension TypeResolver {
 // MARK: Unqualified References
 
 extension TypeResolver {
+  enum DeclContext {
+    case declGroup(Attached<DeclGroupSyntaxType>)
+    case codeBlock(Attached<CodeBlockItemListSyntax>)
+
+    fileprivate var syntax: Syntax {
+      switch self {
+      case .declGroup(let syntax):
+        return Syntax(syntax.node)
+      case .codeBlock(let syntax):
+        return Syntax(syntax.node)
+      }
+    }
+  }
+
+  /// Performs top-level unqualified lookup for types, optionally
+  /// just in an external module.
+  ///
+  /// Note: `moduleSelector` can be set to the internal module.
+  func findTopLevelTypes(
+    originatingFile: SourceFileSyntax,
+    moduleSelector: Identifier?,
+    name: Identifier
+  ) -> [Attached<TypeDeclSyntax>] {
+    // TODO: Implement
+    []
+  }
+
   /// Resolves the given type reference (an optional module selector +
   /// the type-name identifier) by performing unqualified lookup.
   ///
@@ -313,57 +304,6 @@ extension TypeResolver {
   ///   }
   ///   ```
   fileprivate mutating func resolveUnqualifiedReference(
-    typeComponent: TypeReference
-  ) -> TypeResult {
-    return withLogging(
-      request: "Type reference `\(typeComponent.debugDescription)`",
-      describe: \.debugDescription,
-      perform: { $0._resolveUnqualifiedReference(typeComponent: typeComponent) }
-    )
-  }
-
-  enum DeclContext {
-    case declGroup(Attached<DeclGroupSyntaxType>)
-    case codeBlock(Attached<CodeBlockItemListSyntax>)
-
-    fileprivate var syntax: Syntax {
-      switch self {
-      case .declGroup(let syntax):
-        return Syntax(syntax.node)
-      case .codeBlock(let syntax):
-        return Syntax(syntax.node)
-      }
-    }
-  }
-  func _describeDeclContext(_ declContext: DeclContext) -> String {
-    switch declContext {
-    case .declGroup(let declGroup):
-      return declGroup._memberlessDescription
-    case .codeBlock(let codeBlock):
-      // Get the file scope (global)
-      guard let sourceFileScope = codeBlock.parent?.as(SourceFileSyntax.self) else {
-        // Get the scope description (local)
-        return codeBlock.node._prettyScope.prettyDescription
-      }
-      return extractFileInfo(syntax: sourceFileScope).name
-    }
-  }
-
-  /// Performs top-level unqualified lookup for types, optionally
-  /// just in an external module.
-  ///
-  /// Note: `moduleSelector` can be set to the internal module.
-  func findTopLevelTypes(
-    originatingFile: SourceFileSyntax,
-    moduleSelector: Identifier?,
-    name: Identifier
-  ) -> [Attached<TypeDeclSyntax>] {
-    // TODO: Implement
-    []
-  }
-
-  /// Implements `resolveUnqualifiedReference`
-  fileprivate mutating func _resolveUnqualifiedReference(
     typeComponent: TypeReference
   ) -> TypeResult {
     /// Get the results for this file
@@ -392,8 +332,6 @@ extension TypeResolver {
       topLevelModuleLookup = nil
     }
 
-    symbolTable.log("Lookup results: \(fileResults.map(\.debugDescription))")
-
     // === File Lookup ===
     //
     // Find first matching type declaration in file
@@ -405,9 +343,6 @@ extension TypeResolver {
       // member.
       let enclosingType: TypeResult
       let lookForSelectedMember: Bool
-
-      logPrefix.append("Trying \(lookupResult._describeSuccinctly(lookedUpName: typeComponent.name))")
-      defer { logPrefix.removeLast() }
 
       switch lookupResult {
       case .nonNestedTypeDecl(let typeDecl, redeclarations: _, let parentCodeBlock):
@@ -470,15 +405,13 @@ extension TypeResolver {
           withName: typeComponent.name
         )
         // If the result is empty, continue
-        guard let matchingGenericParameter = matchingGenericParameters.first else { continue }
+        guard !matchingGenericParameters.isEmpty else { continue }
         // Diagnose ambiguities
         guard matchingGenericParameters.count <= 1 else {
           return .failure(
             .ambiguousTypeDecl(matchingGenericParameters.map(TypeDeclSyntax.init(_:)))
           )
         }
-
-        symbolTable.log("Found generic parameter `\(matchingGenericParameter.trimmedDescription)`")
 
         // We don't resolve generic parameters (same as ``resolveTypeDecl``).
         enclosingType = .failure(.genericParameterOrAssociatedType)
@@ -527,22 +460,10 @@ extension TypeResolver {
     guard diambiguatedTopLevelTypes.count == 1 else {
       return .failure(Failure.ambiguousTypeDecl(diambiguatedTopLevelTypes.map(\.node)))
     }
-    symbolTable.log("Found top-level type `\(topLevelType._memberlessDescription)`")
     return resolveTypeDecl(
       typeDecl: topLevelType,
       declContext: DeclContext.codeBlock(topLevelType.fileRootStatements),
       originatingSyntax: Attached<TypeLikeSyntax>(typeComponent.introducingSyntax)
-    )
-  }
-
-  fileprivate mutating func resolveDeclGroup(
-    declGroup: Attached<DeclGroupSyntaxType>,
-    originatingSyntax: Attached<TypeLikeSyntax>
-  ) -> Result<ResolvedTypeSyntax, Failure> {
-    withLogging(
-      request: "Decl group `\(declGroup._memberlessDescription)`",
-      describe: \._debugDescription,
-      perform: { $0._resolveDeclGroup(declGroup: declGroup, originatingSyntax: originatingSyntax) }
     )
   }
 
@@ -568,15 +489,13 @@ extension TypeResolver {
     )
   }
 
-  fileprivate mutating func _resolveDeclGroup(
+  /// Resolves the given declaration group (a nominal type or extension) to
+  /// a nominal type reference.
+  fileprivate mutating func resolveDeclGroup(
     declGroup: Attached<DeclGroupSyntaxType>,
     originatingSyntax: Attached<TypeLikeSyntax>
   ) -> Result<ResolvedTypeSyntax, Failure> {
     let declContext: DeclContext = _findDeclContext(ofDeclGroup: declGroup)
-
-    symbolTable.log(
-      "Found decl context `\(_describeDeclContext(declContext))` containing `\(declGroup._memberlessDescription)`"
-    )
 
     if let nominalTypeDecl = declGroup.as(NominalTypeDeclSyntax.self) {
       return resolveNominalTypeDecl(
@@ -599,25 +518,6 @@ extension TypeResolver {
         "[SwiftLexicalLookup] Internal error: Expected decl group to be either a nominal type or extension decl; instead found \(declGroup.kind)."
       )
     }
-  }
-
-  /// Resolves the nominal-type declaration in the given declaration context.
-  fileprivate mutating func resolveNominalTypeDecl(
-    nominalDecl: Attached<NominalTypeDeclSyntax>,
-    declContext: DeclContext,
-    originatingSyntax: Attached<TypeLikeSyntax>
-  ) -> Result<ResolvedTypeSyntax, Failure> {
-    withLogging(
-      request: "Nominal `\(nominalDecl._memberlessDescription)`",
-      describe: \._debugDescription,
-      perform: {
-        $0._resolveNominalTypeDecl(
-          nominalDecl: nominalDecl,
-          declContext: declContext,
-          originatingSyntax: originatingSyntax
-        )
-      }
-    )
   }
 
   /// Finds the member type-decl of a nominal base type.
@@ -690,8 +590,8 @@ extension TypeResolver {
     return Result.success(firstTypeDecl)
   }
 
-  /// Implements `resolveNominalTypeDecl`
-  fileprivate mutating func _resolveNominalTypeDecl(
+  /// Resolves the nominal-type declaration in the given declaration context.
+  fileprivate mutating func resolveNominalTypeDecl(
     nominalDecl: Attached<NominalTypeDeclSyntax>,
     declContext: DeclContext,
     originatingSyntax: Attached<TypeLikeSyntax>
@@ -745,7 +645,7 @@ extension TypeResolver {
       let disambiguatedTypeDecls = disambiguateResults(
 
         results: scopeTypeDecls,
-        declOfResult: \.self,
+        declOfResult: { $0 },
         callsite: Syntax(nominalDecl.node)
       )
 
@@ -814,7 +714,7 @@ extension TypeResolver {
         memberResult = findNominalTypeMemberDecl(
           resolvedNominalBaseType: resolvedBase.type,
           memberName: declName,
-          memberIntroducingSyntax: Attached<TypeLikeSyntax>(nominalDecl),
+          memberIntroducingSyntax: Attached<TypeLikeSyntax>(nominalDecl)
         )
       }
 
@@ -874,21 +774,6 @@ extension TypeResolver {
     declContext: DeclContext,
     originatingSyntax: Attached<TypeLikeSyntax>
   ) -> TypeResult {
-    withLogging(
-      request: "Decl \(typeDecl.kind) `\(typeDecl.node.name.trimmedDescription)`",
-      describe: \.debugDescription,
-      perform: {
-        $0._resolveTypeDecl(typeDecl: typeDecl, declContext: declContext, originatingSyntax: originatingSyntax)
-      }
-    )
-  }
-
-  /// Implements `resolveTypeDecl`
-  fileprivate mutating func _resolveTypeDecl(
-    typeDecl: Attached<TypeDeclSyntax>,
-    declContext: DeclContext,
-    originatingSyntax: Attached<TypeLikeSyntax>
-  ) -> TypeResult {
     assert(
       declContext.syntax.range.contains(typeDecl.node.range),
       "[SwiftLexicalLookup] Internal error: Decl context doesn't contain declaration."
@@ -911,9 +796,6 @@ extension TypeResolver {
       }
     } else if let typeAlias = typeDecl.as(TypeAliasDeclSyntax.self) {
       let aliasedTypeSyntax = typeAlias.node.initializer.value
-      symbolTable.log(
-        "Found aliased type `\(aliasedTypeSyntax)`"
-      )
 
       let aliasedResult: TypeResult = resolve(
         typeSyntax: typeAlias.initializerValue
@@ -947,19 +829,6 @@ extension TypeResolver {
   /// Note: The base type might have redeclarations, in which case we return
   /// the appropriate error.
   fileprivate mutating func resolveMember(
-    baseType: TypeResult,
-    typeMember: TypeReference
-  ) -> TypeResult {
-    withLogging(
-      request:
-        "Member `\(baseType._succinctDescription)` > `\(typeMember.debugDescription)`",
-      describe: \.debugDescription,
-      perform: { $0._resolveMember(baseType: baseType, typeMember: typeMember) }
-    )
-  }
-
-  /// Implements `resolveMember`
-  fileprivate mutating func _resolveMember(
     baseType: TypeResult,
     typeMember: TypeReference
   ) -> TypeResult {
@@ -1018,9 +887,7 @@ extension TypeResolver {
           (typeDecl: Attached<TypeDeclSyntax>, result: TypeResult)?,
           Failure
         >
-      logPrefix.append("Base `\(baseType.debugDescription)`")
       defer {
-        logPrefix.removeLast()
         switch memberResult {
         case Result.success(nil):
           // No results; continue in case next one has a result.
@@ -1052,7 +919,6 @@ extension TypeResolver {
         memberName: typeMember.name,
         memberIntroducingSyntax: Attached<TypeLikeSyntax>(typeMember.introducingSyntax)
       )
-      symbolTable.log("Type members matching '\(typeMember.name.name)': \(memberTypeDeclResult._debugDescription)")
       // Collect; skip if it doesn't exist; throw on failure
       let (memberDeclGroupParent, memberTypeDecl): (Attached<DeclGroupSyntaxType>, Attached<TypeDeclSyntax>)
       switch memberTypeDeclResult {
@@ -1138,17 +1004,6 @@ extension TypeResolver {
   mutating func resolveExtendedTypeSyntax(
     extensionDecl: Attached<ExtensionDeclSyntax>
   ) -> Result<GloballyResolvedTypeSyntax, Failure> {
-    withLogging(
-      request: "Extended type syntax `\(extensionDecl.extendedType.trimmedDescription)`",
-      describe: \._debugDescription,
-      perform: { $0._resolveExtendedTypeSyntax(extensionDecl: extensionDecl) }
-    )
-  }
-
-  /// Implements `resolveExtendedTypeSyntax`
-  mutating func _resolveExtendedTypeSyntax(
-    extensionDecl: Attached<ExtensionDeclSyntax>
-  ) -> Result<GloballyResolvedTypeSyntax, Failure> {
     guard _visitedTypeSyntax.isEmpty else {
       fatalError(
         "[SwiftLexicalLookup] Internal error: Resolve extended type syntax should only be called on a fresh `TypeResolver` instance."
@@ -1206,19 +1061,7 @@ extension TypeResolver {
 extension TypeResolver {
   /// Resolve a qualified-type name to a nominal type with all accessible
   /// extensions bound.
-  @_spi(_QualifiedLookupTests)
-  mutating func resolveType(
-    typeReference: ResolvedTypeSyntax
-  ) -> Result<ResolvedTypeSyntax, Failure> {
-    withLogging(
-      request: "Extended nominal`\(typeReference.debugDescription)`",
-      describe: \._debugDescription,
-      perform: { $0._resolveType(typeReference: typeReference) }
-    )
-  }
-
-  /// Implements `resolveNominalType`
-  fileprivate mutating func _resolveType(
+  fileprivate mutating func resolveType(
     typeReference: ResolvedTypeSyntax
   ) -> Result<ResolvedTypeSyntax, Failure> {
     // Skip extension binding for local declarations.

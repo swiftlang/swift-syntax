@@ -382,3 +382,17 @@ extension Parser {
     )
   }
 }
+
+// MARK: Parsing yield type
+extension Parser {
+  mutating func parseFunctionYield() -> RawFunctionYieldSyntax {
+    let type = self.parseType()
+    let trailingComma = self.consume(if: .comma)
+
+    return RawFunctionYieldSyntax(
+      type: type,
+      trailingComma: trailingComma,
+      arena: self.arena
+    )
+  }
+}

@@ -1143,6 +1143,49 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .functionYieldList,
+    base: .syntaxCollection,
+    experimentalFeature: .coroutineFunctions,
+    nameForDiagnostics: "yield list",
+    documentation: """
+      A list of function yield represented by `FunctionYieldListSyntax`.
+
+      ### Example
+
+      ```swift
+      func foo() yields (Int, inout Float) {
+
+      }
+      ```
+      """,
+    elementChoices: [.functionYield]
+  ),
+
+  Node(
+    kind: .functionYield,
+    base: .syntax,
+    experimentalFeature: .coroutineFunctions,
+    nameForDiagnostics: "yield",
+    documentation: "A function yield type",
+    parserFunction: "parseFunctionYield",
+    traits: ["WithTrailingComma"],
+    children: [
+      Child(
+        name: "type",
+        kind: .node(kind: .type),
+        nameForDiagnostics: "type",
+        documentation: "The yield's type."
+      ),
+      Child(
+        name: "trailingComma",
+        kind: .token(choices: [.token(.comma)]),
+        documentation: "If the yield is followed by another yield, the comma separating them.",
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     kind: .functionSignature,
     base: .syntax,
     nameForDiagnostics: "function signature",
@@ -1157,6 +1200,12 @@ public let DECL_NODES: [Node] = [
         name: "effectSpecifiers",
         kind: .node(kind: .functionEffectSpecifiers),
         documentation: "The effect indicators of the function, like `async` or `throws`",
+        isOptional: true
+      ),
+      Child(
+        name: "yieldClause",
+        kind: .node(kind: .functionYieldClause),
+        experimentalFeature: .coroutineFunctions,
         isOptional: true
       ),
       Child(
@@ -2168,6 +2217,42 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .functionYieldClause,
+    base: .syntax,
+    experimentalFeature: .coroutineFunctions,
+    nameForDiagnostics: "yields clause",
+    traits: [
+      "Parenthesized"
+    ],
+    children: [
+      Child(
+        name: "yieldsKeyword",
+        // .token(.identifier) here is a hack to not require SPI while compiling the generated syntax files
+        // as otherwise we're ending with `yieldsKeyword: TokenSyntax = .keyword(.yields)` with default argument
+        // being an SPI
+        kind: .token(choices: [.token(.identifier), .keyword(.yields)]),
+        documentation: "The `yields` keyword."
+      ),
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)]),
+        documentation: "The '(' to open the yielded type list specification.",
+      ),
+      Child(
+        name: "yields",
+        kind: .collection(kind: .functionYieldList, collectionElementName: "Yield"),
+        nameForDiagnostics: "yielded types",
+        documentation: "The yielded types.",
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)]),
+        documentation: "The ')' to close the yielded type list specification.",
+      ),
+    ],
+  ),
+
+  Node(
     kind: .returnClause,
     base: .syntax,
     nameForDiagnostics: nil,
@@ -2392,6 +2477,12 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "parameterClause",
         kind: .node(kind: .functionParameterClause)
+      ),
+      Child(
+        name: "yieldClause",
+        kind: .node(kind: .functionYieldClause),
+        experimentalFeature: .coroutineFunctions,
+        isOptional: true
       ),
       Child(
         name: "returnClause",

@@ -1253,6 +1253,29 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testYields() {
+    assertParse(
+      "func test() yields(Int) -> Int { }"
+    )
+
+    assertParse(
+      "func test() yields(inout Int) -> Int { }"
+    )
+
+    assertParse(
+      "func test() throws(MyError) yields(inout Int) -> Int { }"
+    )
+
+    assertParse(
+      "func test() yields(inout Int) 1️⃣throws(MyError) -> Int { }",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'throws(MyError) -> Int' in function")
+      ]
+      // TODO: Enable after fixits would be added
+      // fixedSource: "func test() throws(MyError) yields(inout Int) -> Int { }"
+    )
+  }
+
   func testExtraneousRightBraceRecovery() {
     assertParse(
       """

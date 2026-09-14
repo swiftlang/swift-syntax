@@ -154,6 +154,15 @@ extension FunctionParameterSyntax: Swift.ExpressibleByStringInterpolation {}
 extension FunctionParameterSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
+extension FunctionYieldSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension FunctionYieldSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension FunctionYieldSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
+#endif
+
 extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)

@@ -147,12 +147,17 @@ extension SyntaxProtocol {
   /// Determines if this syntax node is top-level code (not contained in any declaration
   /// or other scoped source in top-level script code).
   func isTopLevelCode() -> Bool {
-    let current = Syntax(self)
-    if current.parent?.is(CodeBlockItemSyntax.self) ?? false,
-      current.parent?.parent?.is(CodeBlockItemListSyntax.self) ?? false,
-      current.parent?.parent?.parent?.is(SourceFileSyntax.self) ?? false
-    {
-      return true
+    var current = Syntax(self)
+    while let parent = current.parent {
+      switch parent.kind {
+      case .sourceFile:
+        return true
+      // Statement lists and active `#if` directives introduce no scope of their own.
+      case .codeBlockItem, .codeBlockItemList, .ifConfigDecl, .ifConfigClauseList, .ifConfigClause:
+        current = parent
+      default:
+        return false
+      }
     }
     return false
   }

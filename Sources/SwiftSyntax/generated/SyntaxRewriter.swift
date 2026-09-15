@@ -860,6 +860,14 @@ open class SyntaxRewriter {
     return StmtSyntax(FallThroughStmtSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a `FileDefaultDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FileDefaultDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(FileDefaultDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
   /// Visit a ``FloatLiteralExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2094,14 +2102,6 @@ open class SyntaxRewriter {
     return ExprSyntax(UnsafeExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
-  /// Visit a `UsingDeclSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
-  open func visit(_ node: UsingDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(UsingDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
-  }
-
   /// Visit a ``ValueBindingPatternSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2764,6 +2764,11 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitFallThroughStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FallThroughStmtSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitFileDefaultDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FileDefaultDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -3642,11 +3647,6 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
-  private func visitUsingDeclSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(UsingDeclSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
   private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ValueBindingPatternSyntax(unsafeCasting: node)))
   }
@@ -3950,6 +3950,8 @@ open class SyntaxRewriter {
       return self.visitExtensionDeclSyntaxImpl(_:)
     case .fallThroughStmt:
       return self.visitFallThroughStmtSyntaxImpl(_:)
+    case .fileDefaultDecl:
+      return self.visitFileDefaultDeclSyntaxImpl(_:)
     case .floatLiteralExpr:
       return self.visitFloatLiteralExprSyntaxImpl(_:)
     case .forStmt:
@@ -4300,8 +4302,6 @@ open class SyntaxRewriter {
       return self.visitUnresolvedTernaryExprSyntaxImpl(_:)
     case .unsafeExpr:
       return self.visitUnsafeExprSyntaxImpl(_:)
-    case .usingDecl:
-      return self.visitUsingDeclSyntaxImpl(_:)
     case .valueBindingPattern:
       return self.visitValueBindingPatternSyntaxImpl(_:)
     case .variableDecl:
@@ -4552,6 +4552,8 @@ open class SyntaxRewriter {
       return visitExtensionDeclSyntaxImpl(node)
     case .fallThroughStmt:
       return visitFallThroughStmtSyntaxImpl(node)
+    case .fileDefaultDecl:
+      return visitFileDefaultDeclSyntaxImpl(node)
     case .floatLiteralExpr:
       return visitFloatLiteralExprSyntaxImpl(node)
     case .forStmt:
@@ -4902,8 +4904,6 @@ open class SyntaxRewriter {
       return visitUnresolvedTernaryExprSyntaxImpl(node)
     case .unsafeExpr:
       return visitUnsafeExprSyntaxImpl(node)
-    case .usingDecl:
-      return visitUsingDeclSyntaxImpl(node)
     case .valueBindingPattern:
       return visitValueBindingPatternSyntaxImpl(node)
     case .variableDecl:

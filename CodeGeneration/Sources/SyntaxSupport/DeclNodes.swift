@@ -956,6 +956,38 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .fileDefaultDecl,
+    base: .decl,
+    experimentalFeature: .defaultIsolationPerFile,
+    nameForDiagnostics: "file-level default",
+    documentation: """
+      A file-level default isolation (`@MainActor`, `nonisolated`) or attribute (`@available`, `@diagnose`).
+
+      An example of a file-level default is
+
+      ```swift
+      default @MainActor
+      ```
+      """,
+    children: [
+      Child(
+        name: "defaultKeyword",
+        kind: .token(choices: [.keyword(.default)]),
+        documentation: "The `default` keyword for this declaration."
+      ),
+      Child(
+        name: "specifier",
+        kind: .nodeChoices(choices: [
+          Child(name: "attribute", kind: .node(kind: .attribute)),
+          Child(name: "modifier", kind: .token(choices: [.token(.identifier)])),
+        ]),
+        documentation:
+          "The file-default specifier that could either be an attribute like `@available` or a modifier like `nonisolated`"
+      ),
+    ]
+  ),
+
+  Node(
     kind: .functionDecl,
     base: .decl,
     nameForDiagnostics: "function",
@@ -1357,37 +1389,6 @@ public let DECL_NODES: [Node] = [
         "importKeyword": .renamed(from: "importTok"),
         "importKindSpecifier": .renamed(from: "importKind"),
       ]
-    ]
-  ),
-
-  Node(
-    kind: .usingDecl,
-    base: .decl,
-    experimentalFeature: .defaultIsolationPerFile,
-    nameForDiagnostics: "using",
-    documentation: """
-      A `using` declaration, currently used to control actor isolation within the current file.
-
-      An example of a `using` declaration is
-
-      ```swift
-      using @MainActor
-      ```
-      """,
-    children: [
-      Child(
-        name: "usingKeyword",
-        kind: .token(choices: [.keyword(.using)]),
-        documentation: "The `using` keyword for this declaration."
-      ),
-      Child(
-        name: "specifier",
-        kind: .nodeChoices(choices: [
-          Child(name: "attribute", kind: .node(kind: .attribute)),
-          Child(name: "modifier", kind: .token(choices: [.token(.identifier)])),
-        ]),
-        documentation: "The specifier that could be either an attribute or a modifier."
-      ),
     ]
   ),
 

@@ -122,14 +122,14 @@ private class WarningControlRegionVisitor: ActiveSyntaxAnyVisitor {
     if let withAttributesSyntax = node.asProtocol(WithAttributesSyntax.self) {
       tree.addWarningControlRegions(for: withAttributesSyntax)
     }
-    // Handle file-scoped `using` declarations before the `containingPosition`
+    // Handle file-scoped `default` declarations before the `containingPosition`
     // check since they may only appear in top-level code and may affect
     // warning group control of all positions in this source file.
-    if let usingAttributedSyntax = node.as(UsingDeclSyntax.self),
+    if let fileDefault = node.as(FileDefaultDeclSyntax.self),
       node.isTopLevelCode(),
-      let usingWarningControl = usingAttributedSyntax.warningControl
+      let fileDefaultWarningControl = fileDefault.warningControl
     {
-      tree.addRootWarningGroupControls(controls: [usingWarningControl])
+      tree.addRootWarningGroupControls(controls: [fileDefaultWarningControl])
     }
     // Skip all declarations which do not contain the specified
     // `containingPosition`.

@@ -271,7 +271,6 @@ public enum Keyword: CaseIterable {
   case unsafe
   case unsafeAddress
   case unsafeMutableAddress
-  case using
   case `var`
   case visibility
   case weak
@@ -686,8 +685,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("unsafeAddress")
     case .unsafeMutableAddress:
       return KeywordSpec("unsafeMutableAddress")
-    case .using:
-      return KeywordSpec("using")
     case .var:
       return KeywordSpec("var", isLexerClassified: true)
     case .visibility:

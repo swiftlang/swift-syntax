@@ -396,7 +396,7 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
-  func testFileScopeUsingWarningGroupControl() throws {
+  func testFileScopedDefaultWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
@@ -410,7 +410,7 @@ public class WarningGroupControlTests: XCTestCase {
           2️⃣return 11
         }
       }
-      using @diagnose(GroupID, as: error)
+      default @diagnose(GroupID, as: error)
       3️⃣let k = 1
       """,
       languageFeatures: [.defaultIsolationPerFile],
@@ -424,7 +424,7 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
-  func testDeclScopeUsingIgnored() throws {
+  func testDeclScopedDefaultIgnored() throws {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
@@ -433,7 +433,7 @@ public class WarningGroupControlTests: XCTestCase {
         1️⃣let y = 1
       }
       struct Foo {
-        using @diagnose(GroupID, as: error)
+        default @diagnose(GroupID, as: error)
         var property: Int {
           2️⃣return 11
         }
@@ -450,14 +450,14 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
-  /// A file-scoped `using @diagnose` nested in an active `#if` clause still
+  /// A file-scoped `default @diagnose` nested in an active `#if` clause still
   /// applies to the whole file.
-  func testFileScopeUsingInsideActiveIfConfig() throws {
+  func testFileScopedDefaultInsideActiveIfConfig() throws {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
       #if STRICT
-      using @diagnose(GroupID, as: error)
+      default @diagnose(GroupID, as: error)
       #endif
       1️⃣let k = 1
       """,
@@ -471,13 +471,13 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
-  /// A file-scoped `using @diagnose` in an inactive `#if` clause contributes nothing.
-  func testFileScopeUsingInsideInactiveIfConfig() throws {
+  /// A file-scoped `default @diagnose` in an inactive `#if` clause contributes nothing.
+  func testFileScopedDefaultInsideInactiveIfConfig() throws {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
       #if STRICT
-      using @diagnose(GroupID, as: error)
+      default @diagnose(GroupID, as: error)
       #endif
       1️⃣let k = 1
       """,
@@ -490,14 +490,14 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
-  /// Each `#if` clause may specify its own file-scoped `using @diagnose`.
-  func testFileScopeUsingIfConfigElseClause() throws {
+  /// Each `#if` clause may specify its own file-scoped `default @diagnose`.
+  func testFileScopedDefaultIfConfigElseClause() throws {
     let source =
       """
       #if STRICT
-      using @diagnose(GroupID, as: error)
+      default @diagnose(GroupID, as: error)
       #else
-      using @diagnose(GroupID, as: ignored)
+      default @diagnose(GroupID, as: ignored)
       #endif
       0️⃣let x = 1
       """
@@ -518,14 +518,14 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
-  /// Nested `#if` directives around a file-scoped `using @diagnose`: the whole
+  /// Nested `#if` directives around a file-scoped `default @diagnose`: the whole
   /// chain must be active.
-  func testFileScopeUsingInsideNestedIfConfig() throws {
+  func testFileScopedDefaultInsideNestedIfConfig() throws {
     let source =
       """
       #if OUTER
       #if INNER
-      using @diagnose(GroupID, as: error)
+      default @diagnose(GroupID, as: error)
       #endif
       #endif
       0️⃣let x = 1
@@ -548,15 +548,15 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
-  /// A `using @diagnose` inside an `#if` nested in a type body stays decl-scoped,
+  /// A `default @diagnose` inside an `#if` nested in a type body stays decl-scoped,
   /// and so contributes no file-level default.
-  func testDeclScopeUsingInsideIfConfigIgnored() throws {
+  func testDeclScopedDefaultInsideIfConfigIgnored() throws {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
       struct Foo {
         #if STRICT
-        using @diagnose(GroupID, as: error)
+        default @diagnose(GroupID, as: error)
         #endif
         var property: Int {
           1️⃣return 11

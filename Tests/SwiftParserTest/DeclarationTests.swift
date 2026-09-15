@@ -3698,16 +3698,16 @@ final class DeclarationTests: ParserTestCase {
   }
 }
 
-final class UsingDeclarationTests: ParserTestCase {
+final class FileDefaultDeclarationTests: ParserTestCase {
   override var languageFeatures: Parser.LanguageFeatures {
     [.defaultIsolationPerFile]
   }
 
-  func testUsing() {
+  func testSpecifiers() {
     assertParse(
-      "using @MainActor",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
+      "default @MainActor",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
         specifier: .attribute(
           AttributeSyntax(
             attributeName: IdentifierTypeSyntax(
@@ -3717,18 +3717,20 @@ final class UsingDeclarationTests: ParserTestCase {
         )
       )
     )
+
     assertParse(
-      "using nonisolated",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
+      "default nonisolated",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
         specifier: .modifier(.identifier("nonisolated"))
       )
     )
 
+    // Which specifiers are valid is only known to ASTGen.
     assertParse(
-      "using @Test",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
+      "default @Test",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
         specifier: .attribute(
           AttributeSyntax(
             attributeName: IdentifierTypeSyntax(
@@ -3740,50 +3742,17 @@ final class UsingDeclarationTests: ParserTestCase {
     )
 
     assertParse(
-      "using test",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
+      "default test",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
         specifier: .modifier(.identifier("test"))
       )
     )
 
     assertParse(
-      "using @warn(DiagGroupID, as: warning)",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
-        specifier: .attribute(
-          AttributeSyntax(
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("warn")
-            ),
-            leftParen: .leftParenToken(),
-            arguments: .argumentList(
-              LabeledExprListSyntax([
-                LabeledExprSyntax(
-                  expression: DeclReferenceExprSyntax(
-                    baseName: .identifier("DiagGroupID")
-                  ),
-                  trailingComma: .commaToken()
-                ),
-                LabeledExprSyntax(
-                  label: .identifier("as"),
-                  colon: .colonToken(),
-                  expression: DeclReferenceExprSyntax(
-                    baseName: .identifier("warning")
-                  )
-                ),
-              ])
-            ),
-            rightParen: .rightParenToken()
-          )
-        )
-      )
-    )
-
-    assertParse(
-      "using @diagnose(DiagGroupID, as: error)",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
+      "default @diagnose(DiagGroupID, as: error)",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
         specifier: .attribute(
           AttributeSyntax(
             attributeName: IdentifierTypeSyntax(
@@ -3813,108 +3782,501 @@ final class UsingDeclarationTests: ParserTestCase {
       )
     )
 
+    assertParse("default @available(*, deprecated, message: \"deprecation message\")")
+  }
+
+  func testBacktickedSpecifier() {
+    assertParse(
+      "default `nonisolated`",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("`nonisolated`"))
+      )
+    )
+  }
+
+  func testTerminatesAfterSpecifier() {
+    assertParse("foo(); default nonisolated; foo()")
+
+    assertParse(
+      "default @diagnose(StrictMemorySafety, as: error)1️⃣ func frog() {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      fixedSource: """
+        default @diagnose(StrictMemorySafety, as: error)
+        func frog() {}
+        """
+    )
+  }
+
+  func testSpecifierMustBeOnSameLine() {
     assertParse(
       """
-      nonisolated
-      using
+      default1️⃣
+      @MainActor func foo() {}
       """,
-      substructure: CodeBlockSyntax(
-        DeclReferenceExprSyntax(baseName: .identifier("using"))
-      )
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("", presence: .missing))
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in file-level default",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: """
+        default <#identifier#>
+        @MainActor func foo() {}
+        """
+    )
+
+    assertParse(
+      """
+      default1️⃣
+      nonisolated func bar() {}
+      """,
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("", presence: .missing))
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in file-level default",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: """
+        default <#identifier#>
+        nonisolated func bar() {}
+        """
+    )
+
+    assertParse(
+      "default1️⃣",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("", presence: .missing))
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in file-level default",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: "default <#identifier#>"
+    )
+  }
+
+  func testInvalidSpecifier() {
+    assertParse(
+      "default 1️⃣func bizarre() {}",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("", presence: .missing))
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in file-level default",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: "default <#identifier#>func bizarre() {}"
+    )
+
+    assertParse(
+      "default 1️⃣break",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("", presence: .missing))
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in file-level default",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: "default <#identifier#>break"
+    )
+
+    assertParse(
+      "default 1️⃣= @MainActor2️⃣",
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("", presence: .missing))
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected identifier in file-level default",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '=' in source file"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected declaration after attribute",
+          fixIts: ["insert declaration"]
+        ),
+      ],
+      fixedSource: "default <#identifier#>= @MainActor <#declaration#>"
+    )
+  }
+
+  func testColonMeansSwitchLabel() {
+    assertParse(
+      "1️⃣default: foo",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      "1️⃣default: break",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      "1️⃣default: @MainActor",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      "1️⃣default: nonisolated",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      1️⃣default:
+        foo()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      "1️⃣@unknown default: foo",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      1️⃣default
+      : nonisolated
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+  }
+
+  func testRejectedAttributesAndModifiers() {
+    assertParse(
+      "1️⃣private default @MainActor",
+      substructure: FileDefaultDeclSyntax(
+        UnexpectedNodesSyntax([
+          Syntax(DeclModifierSyntax(name: .keyword(.private)))
+        ]),
+        defaultKeyword: .keyword(.default),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("MainActor")
+            )
+          )
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'private' before file-level default")
+      ]
     )
 
     assertParse(
       """
       1️⃣@MainActor
-      using2️⃣
+      default nonisolated
       """,
-      substructure: CodeBlockItemSyntax(
-        item: CodeBlockItemSyntax.Item(
-          UsingDeclSyntax(
-            UnexpectedNodesSyntax([
-              Syntax(
-                AttributeSyntax(
-                  atSign: .atSignToken(),
-                  attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("MainActor")))
-                )
-              )
-            ]),
-            usingKeyword: .keyword(.using),
-            specifier: UsingDeclSyntax.Specifier(.identifier("", presence: .missing))
+      substructure: FileDefaultDeclSyntax(
+        UnexpectedNodesSyntax([
+          Syntax(
+            AttributeSyntax(
+              atSign: .atSignToken(),
+              attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("MainActor")))
+            )
           )
-        )
+        ]),
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("nonisolated"))
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@MainActor' before using"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in using", fixIts: ["insert identifier"]),
+        DiagnosticSpec(message: "unexpected code '@MainActor' before file-level default")
+      ]
+    )
+  }
+
+  func testInsideSwitch() {
+    assertParse(
+      """
+      switch x {
+      case 1: break
+      @unknown default: break
+      }
+      """
+    )
+
+    assertParse(
+      """
+      switch x {
+      case 1: break
+      default: nonisolated
+      }
+      """
+    )
+
+    assertParse(
+      """
+      switch x {
+      case 1: break
+      default1️⃣ nonisolated
+      }
+      """,
+      substructure: SwitchDefaultLabelSyntax(
+        defaultKeyword: .keyword(.default),
+        colon: .colonToken(presence: .missing)
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in switch case", fixIts: ["insert ':'"])
       ],
       fixedSource: """
-        @MainActor
-        using <#identifier#>
+        switch x {
+        case 1: break
+        default: nonisolated
+        }
         """
     )
 
     assertParse(
       """
-      using
-      @MainActor 1️⃣
+      switch x {
+      case 1: break
+      default1️⃣ @MainActor2️⃣
+      }
       """,
+      substructure: SwitchDefaultLabelSyntax(
+        defaultKeyword: .keyword(.default),
+        colon: .colonToken(presence: .missing)
+      ),
       diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in switch case", fixIts: ["insert ':'"]),
         DiagnosticSpec(
-          message: "expected declaration after attribute",
-          fixIts: ["insert declaration"]
-        )
+          locationMarker: "2️⃣",
+          message: "expected label in switch case",
+          fixIts: ["insert label"]
+        ),
       ],
-      fixedSource:
-        """
-        using
-        @MainActor <#declaration#>
+      fixedSource: """
+        switch x {
+        case 1: break
+        default: @MainActor case <#identifier#>:
+        }
         """
     )
+  }
 
+  func testMemberBlock() {
     assertParse(
       """
-      using
-      nonisolated
+      struct S {
+        default @MainActor
+      }
       """,
-      substructure: CodeBlockSyntax(
-        DeclReferenceExprSyntax(baseName: .identifier("using"))
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("MainActor")
+            )
+          )
+        )
       )
     )
 
     assertParse(
       """
-      func
-      using (x: Int) {}
-      """
+      struct S {
+        1️⃣default: func lamb() {}
+      }
+      """,
+      substructure: UnexpectedCodeDeclSyntax(
+        unexpectedCode: UnexpectedNodesSyntax([TokenSyntax.keyword(.default), TokenSyntax.colonToken()])
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'default:' in struct")
+      ]
     )
+  }
 
-    assertParse(
-      """
-      func
-      using
-      (x: Int) {}
-      """
+  func testNestedContexts() {
+    let mainActorDefault = FileDefaultDeclSyntax(
+      defaultKeyword: .keyword(.default),
+      specifier: .attribute(
+        AttributeSyntax(
+          attributeName: IdentifierTypeSyntax(
+            name: .identifier("MainActor")
+          )
+        )
+      )
     )
-
-    assertParse(
-      """
-      let
-        using = 42
-      """
-    )
-
-    assertParse("let (x: Int, using: String) = (x: 42, using: \"\")")
 
     assertParse(
       """
       do {
-        using @MainActor
+        default @MainActor
       }
+      """,
+      substructure: mainActorDefault
+    )
+
+    assertParse(
       """
+      func test() {
+        default @MainActor
+      }
+      """,
+      substructure: mainActorDefault
+    )
+
+    assertParse(
+      """
+      struct S {
+        var x: Int {
+          default @MainActor
+        }
+      }
+      """,
+      substructure: mainActorDefault
+    )
+
+    assertParse(
+      """
+      let c = {
+        default @MainActor
+      }
+      """,
+      substructure: mainActorDefault
+    )
+
+    assertParse(
+      """
+      func test() {
+        default1️⃣
+      }
+      """,
+      substructure: FileDefaultDeclSyntax(
+        defaultKeyword: .keyword(.default),
+        specifier: .modifier(.identifier("", presence: .missing))
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in file-level default",
+          fixIts: ["insert identifier"]
+        )
+      ],
+      fixedSource: """
+        func test() {
+          default <#identifier#>
+        }
+        """
+    )
+
+    assertParse(
+      """
+      do {
+        1️⃣default: nonisolated
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      func test() {
+        1️⃣default: nonisolated
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      struct S {
+        var x: Int {
+          1️⃣default: nonisolated
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      let c = {
+        1️⃣default: nonisolated
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
     )
   }
+}
 
+final class FileDefaultDeclarationWithoutFeatureTests: ParserTestCase {
+  func testDefaultIsOnlyASwitchLabel() {
+    assertParse(
+      "1️⃣default @MainActor",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      "1️⃣default nonisolated",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+
+    assertParse(
+      "1️⃣default: nonisolated",
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+  }
+}
+
+final class AccessorBlockTests: ParserTestCase {
   func testAccessorBlockDisambiguationMarker() {
     assertParse(
       """

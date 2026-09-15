@@ -129,6 +129,8 @@ public enum SyntaxKind: Sendable {
   case expressionStmt
   case extensionDecl
   case fallThroughStmt
+  @_spi(ExperimentalLanguageFeatures)
+  case fileDefaultDecl
   case floatLiteralExpr
   case forStmt
   case forceUnwrapExpr
@@ -313,8 +315,6 @@ public enum SyntaxKind: Sendable {
   case unresolvedIsExpr
   case unresolvedTernaryExpr
   case unsafeExpr
-  @_spi(ExperimentalLanguageFeatures)
-  case usingDecl
   case valueBindingPattern
   case variableDecl
   case versionComponentList
@@ -678,6 +678,8 @@ public enum SyntaxKind: Sendable {
       return ExtensionDeclSyntax.self
     case .fallThroughStmt:
       return FallThroughStmtSyntax.self
+    case .fileDefaultDecl:
+      return FileDefaultDeclSyntax.self
     case .floatLiteralExpr:
       return FloatLiteralExprSyntax.self
     case .forStmt:
@@ -1028,8 +1030,6 @@ public enum SyntaxKind: Sendable {
       return UnresolvedTernaryExprSyntax.self
     case .unsafeExpr:
       return UnsafeExprSyntax.self
-    case .usingDecl:
-      return UsingDeclSyntax.self
     case .valueBindingPattern:
       return ValueBindingPatternSyntax.self
     case .variableDecl:

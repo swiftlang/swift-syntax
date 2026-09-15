@@ -176,6 +176,8 @@ extension SyntaxKind {
       return "extension"
     case .fallThroughStmt:
       return "'fallthrough' statement"
+    case .fileDefaultDecl:
+      return "file-level default"
     case .floatLiteralExpr:
       return "floating literal"
     case .forStmt:
@@ -418,8 +420,6 @@ extension SyntaxKind {
       return "ternary operator"
     case .unsafeExpr:
       return "'unsafe' expression"
-    case .usingDecl:
-      return "using"
     case .valueBindingPattern:
       return "value binding pattern"
     case .variableDecl:

@@ -1322,6 +1322,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "fallthroughKeyword"
   case \FallThroughStmtSyntax.unexpectedAfterFallthroughKeyword:
     return "unexpectedAfterFallthroughKeyword"
+  case \FileDefaultDeclSyntax.unexpectedBeforeDefaultKeyword:
+    return "unexpectedBeforeDefaultKeyword"
+  case \FileDefaultDeclSyntax.defaultKeyword:
+    return "defaultKeyword"
+  case \FileDefaultDeclSyntax.unexpectedBetweenDefaultKeywordAndSpecifier:
+    return "unexpectedBetweenDefaultKeywordAndSpecifier"
+  case \FileDefaultDeclSyntax.specifier:
+    return "specifier"
+  case \FileDefaultDeclSyntax.unexpectedAfterSpecifier:
+    return "unexpectedAfterSpecifier"
   case \FloatLiteralExprSyntax.unexpectedBeforeLiteral:
     return "unexpectedBeforeLiteral"
   case \FloatLiteralExprSyntax.literal:
@@ -3540,16 +3550,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \UnsafeExprSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \UsingDeclSyntax.unexpectedBeforeUsingKeyword:
-    return "unexpectedBeforeUsingKeyword"
-  case \UsingDeclSyntax.usingKeyword:
-    return "usingKeyword"
-  case \UsingDeclSyntax.unexpectedBetweenUsingKeywordAndSpecifier:
-    return "unexpectedBetweenUsingKeywordAndSpecifier"
-  case \UsingDeclSyntax.specifier:
-    return "specifier"
-  case \UsingDeclSyntax.unexpectedAfterSpecifier:
-    return "unexpectedAfterSpecifier"
   case \ValueBindingPatternSyntax.unexpectedBeforeBindingSpecifier:
     return "unexpectedBeforeBindingSpecifier"
   case \ValueBindingPatternSyntax.bindingSpecifier:

@@ -88,6 +88,9 @@ extension TokenConsumer {
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return requiresDecl
+    case .lhs(.default):
+      // file-level default unless we see 'default:' which is a switch label.
+      return !subparser.peek(isAt: .colon)
     case .lhs(.`init`):
       return allowInitDecl
     case .lhs(.macro):
@@ -101,13 +104,6 @@ extension TokenConsumer {
 
       // Otherwise, parse it as an expression.
       return false
-    case .lhs(.using):
-      // This declaration doesn't support attributes or modifiers
-      if hasAttribute || hasModifier {
-        return false
-      }
-
-      return subparser.atStartOfUsing()
     case .some(_):
       // All other decl start keywords unconditionally start a decl.
       return true
@@ -196,26 +192,6 @@ extension Parser.Lookahead {
       lookahead.consumeAnyToken()
     } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl, requiresDecl: requiresDecl)
     return lookahead.at(.identifier)
-  }
-
-  fileprivate mutating func atStartOfUsing() -> Bool {
-    var lookahead = self.lookahead()
-
-    // Consume 'using'
-    lookahead.consumeAnyToken()
-
-    // Allow parsing 'using' as declaration only if
-    // it's immediately followed by either `@` or
-    // an identifier.
-    if lookahead.atStartOfLine {
-      return false
-    }
-
-    guard lookahead.at(.atSign) || lookahead.at(.identifier) else {
-      return false
-    }
-
-    return true
   }
 }
 
@@ -356,8 +332,8 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case (.lhs(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
-    case (.lhs(.using), let handle)?:
-      return RawDeclSyntax(self.parseUsingDeclaration(attrs: attrs, introducerHandle: handle))
+    case (.lhs(.default), let handle)?:
+      return RawDeclSyntax(self.parseFileDefaultDeclaration(attrs: attrs, introducerHandle: handle))
     case (.rhs, let handle)?:
       return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, in: context))
     case nil:
@@ -517,10 +493,13 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseUsingDeclaration(
+  /// Parse a file-level default declaration.
+  ///
+  ///     file-default-declaration → 'default' ('@' attribute | 'nonisolated')
+  mutating func parseFileDefaultDeclaration(
     attrs: DeclAttributes,
     introducerHandle handle: RecoveryConsumptionHandle
-  ) -> RawUsingDeclSyntax {
+  ) -> RawFileDefaultDeclSyntax {
     let unexpectedAttributes: RawUnexpectedNodesSyntax? =
       if !attrs.attributes.isEmpty {
         RawUnexpectedNodesSyntax(attrs.attributes.elements, arena: self.arena)
@@ -535,30 +514,28 @@ extension Parser {
         nil
       }
 
-    let (unexpectedBeforeKeyword, usingKeyword) = self.eat(handle)
+    let (unexpectedBeforeKeyword, defaultKeyword) = self.eat(handle)
 
-    let unexpectedBeforeUsingKeyword = RawUnexpectedNodesSyntax(
+    let unexpectedBeforeDefaultKeyword = RawUnexpectedNodesSyntax(
       combining: unexpectedAttributes,
       unexpectedModifiers,
       unexpectedBeforeKeyword,
       arena: self.arena
     )
 
-    if self.at(.atSign) {
-      return RawUsingDeclSyntax(
-        unexpectedBeforeUsingKeyword,
-        usingKeyword: usingKeyword,
-        specifier: .attribute(self.parseAttribute()),
-        arena: self.arena
-      )
-    }
+    // Don't go to the next line! Grabbing the specifier from a following decl could
+    // lead to cascading unrelated errors.
+    let specifier: RawFileDefaultDeclSyntax.Specifier =
+      if self.at(TokenSpec(.atSign, allowAtStartOfLine: false)) {
+        .attribute(self.parseAttribute())
+      } else {
+        .modifier(self.expectWithoutRecovery(TokenSpec(.identifier, allowAtStartOfLine: false)))
+      }
 
-    let modifier = self.expectWithoutRecovery(.identifier)
-
-    return RawUsingDeclSyntax(
-      unexpectedBeforeUsingKeyword,
-      usingKeyword: usingKeyword,
-      specifier: .modifier(modifier),
+    return RawFileDefaultDeclSyntax(
+      unexpectedBeforeDefaultKeyword,
+      defaultKeyword: defaultKeyword,
+      specifier: specifier,
       arena: self.arena
     )
   }

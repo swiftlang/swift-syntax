@@ -1767,6 +1767,12 @@ extension Lexer.Cursor {
     /// this is a valid unicode scalar.
     case validatedEscapeSequence(Unicode.Scalar)
 
+    /// A `\x{hh}` escape sequence. Unlike `validatedEscapeSequence`, this is
+    /// a raw code unit value, not a Unicode scalar -- its legal range
+    /// depends on the not-yet-known Element width of the eventual
+    /// UncheckedString<Element>, so no scalar-validity check applies.
+    case validatedRawEscapeSequence(UInt32)
+
     /// The end of a string literal has been reached.
     case endOfString
 
@@ -1832,6 +1838,8 @@ extension Lexer.Cursor {
       switch self.lexEscapedCharacter(isMultilineString: stringLiteralKind == .multiLine) {
       case .success(let codePoint):
         return .validatedEscapeSequence(codePoint)
+      case .rawSuccess(let rawValue):
+        return .validatedRawEscapeSequence(rawValue)
       case .error(let kind):
         return .error(kind)
       }
@@ -1853,6 +1861,11 @@ extension Lexer.Cursor {
     // Successfully lexed an escape sequence that represents the Unicode character
     // at the given codepoint
     case success(Unicode.Scalar)
+
+    // Successfully lexed a `\x{hh}` escape sequence that represents a raw
+    // code unit value, not a Unicode scalar.
+    case rawSuccess(UInt32)
+
     case error(TokenDiagnostic.Kind)
   }
 
@@ -1881,7 +1894,34 @@ extension Lexer.Cursor {
         return .error(.expectedHexCodeInUnicodeEscape)
       }
 
-      return self.lexUnicodeEscape()
+      switch self.lexHexEscape(kind: .unicode) {
+      case .success(let codePoint):
+        guard let scalar = Unicode.Scalar(codePoint) else {
+          return .error(.invalidEscapeSequenceInStringLiteral)
+        }
+        return .success(scalar)
+      case .error(let kind):
+        return .error(kind)
+      }
+
+    case "x":  // e.g. \x{12} -- a raw code unit, not a Unicode scalar.
+      _ = self.advance()
+
+      guard self.is(at: "{") else {
+        return .error(.expectedHexCodeInRawCodeUnitEscape)
+      }
+
+      switch self.lexHexEscape(kind: .rawCodeUnit) {
+      case .success(let codePoint):
+        // Unlike \u{hh}, \x{hh} denotes a raw code unit, not a Unicode
+        // scalar, so it bypasses Unicode.Scalar validation entirely -- its
+        // legal range depends on the not-yet-known Element width of the
+        // eventual UncheckedString<Element>.
+        return .rawSuccess(codePoint)
+      case .error(let kind):
+        return .error(kind)
+      }
+
     case "\n", "\r":
       if isMultilineString && self.maybeConsumeNewlineEscape() {
         return .success("\n")
@@ -1900,11 +1940,42 @@ extension Lexer.Cursor {
     }
   }
 
-  /// Lex the contents of a `\u{1234}` escape sequence, assuming that we are
-  /// placed at the opening `{`.
+  /// The result of scanning a hex digit escape, e.g. the `{hex+}` part of
+  /// `\u{...}` or `\x{...}`.
+  enum HexEscapeLex {
+    case success(UInt32)
+    case error(TokenDiagnostic.Kind)
+  }
+
+  /// Which kind of hex escape is being scanned, i.e. whether the braces
+  /// were introduced by `\u` or `\x`. This determines which
+  /// ``TokenDiagnostic/Kind`` to report on failure.
+  enum HexEscapeKind {
+    case unicode
+    case rawCodeUnit
+
+    var unterminatedDiagnosticKind: TokenDiagnostic.Kind {
+      switch self {
+      case .unicode: return .expectedClosingBraceInUnicodeEscape
+      case .rawCodeUnit: return .expectedClosingBraceInRawCodeUnitEscape
+      }
+    }
+
+    var invalidDigitCountDiagnosticKind: TokenDiagnostic.Kind {
+      switch self {
+      case .unicode: return .invalidNumberOfHexDigitsInUnicodeEscape
+      case .rawCodeUnit: return .invalidNumberOfHexDigitsInRawCodeUnitEscape
+      }
+    }
+  }
+
+  /// Lex the contents of a `{1234}`-shaped hex escape sequence, assuming
+  /// that we are placed at the opening `{`. This performs no interpretation
+  /// of the parsed value -- it's the caller's job to decide whether it's a
+  /// Unicode scalar (`\u{...}`) or a raw code unit (`\x{...}`).
   ///
-  /// If this is not a valid unicode escape, return `nil`.
-  private mutating func lexUnicodeEscape() -> EscapedCharacterLex {
+  /// If this is not a valid hex escape, return an error.
+  private mutating func lexHexEscape(kind: HexEscapeKind) -> HexEscapeLex {
     let quoteConsumed = self.advance(matching: "{")
     precondition(quoteConsumed)
 
@@ -1917,22 +1988,21 @@ extension Lexer.Cursor {
     )
 
     guard self.advance(matching: "}") else {
-      return .error(.expectedClosingBraceInUnicodeEscape)
+      return .error(kind.unterminatedDiagnosticKind)
     }
 
     guard 1 <= digitText.count && digitText.count <= 8 else {
-      return .error(.invalidNumberOfHexDigitsInUnicodeEscape)
+      return .error(kind.invalidDigitCountDiagnosticKind)
     }
 
     guard
       // FIXME: Implement 'UInt32(_: SyntaxText, radix:)'.
-      let codePoint = UInt32(String(syntaxText: digitText), radix: 16),
-      let scalar = Unicode.Scalar.init(codePoint)
+      let codePoint = UInt32(String(syntaxText: digitText), radix: 16)
     else {
       return .error(.invalidEscapeSequenceInStringLiteral)
     }
 
-    return .success(scalar)
+    return .success(codePoint)
   }
 
   private mutating func maybeConsumeNewlineEscape() -> Bool {
@@ -2132,6 +2202,11 @@ extension Lexer.Cursor {
           // validate the multi-line string literal's indentation.
           return Lexer.Result(.stringSegment, error: error)
         }
+      case .validatedRawEscapeSequence:
+        // \x{hh} is a raw code unit value, not text -- it has no bearing on
+        // the *source* structure that indentation-stripping cares about, so
+        // (unlike \n/\r above) it never starts a new segment on its own.
+        self = clone
       case .error(let errorKind):
         // Only overwrite error if we had not found an earlier error yet
         if error == nil {

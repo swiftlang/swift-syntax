@@ -112,6 +112,18 @@ public struct GroupedDiagnostics {
     return rootIndexes[node.root]
   }
 
+  /// The IDs of the source files that have been added, in the order they were
+  /// added.
+  public var sourceFileIDs: [SourceFileID] {
+    sourceFiles.map { $0.id }
+  }
+
+  /// The diagnostics that have been added for the given source file, in the
+  /// order they were added.
+  public func diagnostics(in sourceFileID: SourceFileID) -> [Diagnostic] {
+    sourceFiles[sourceFileID.id].diagnostics
+  }
+
   /// Add a diagnostic to the set of grouped diagnostics.
   ///
   /// - Parameters:

@@ -257,6 +257,72 @@ extension RawSyntaxLayoutView {
   }
 }
 
+/// A collection's elements, none of which is ever absent.
+///
+/// A layout node's children include the `unexpected` slots and the optional
+/// children it does not have, so they are read as `RawSyntax?`. A collection's
+/// are neither: every slot holds an element, which `makeLayout` asserts when it
+/// builds one. Iterating them therefore needs no test per element.
+@_spi(RawSyntax)
+public struct RawSyntaxElements: RandomAccessCollection {
+  public typealias Element = RawSyntax
+  public typealias Index = Int
+
+  private let slots: UnsafeBufferPointer<RawSyntax?>
+
+  init(slots: UnsafeBufferPointer<RawSyntax?>) {
+    self.slots = slots
+  }
+
+  public var startIndex: Int { 0 }
+
+  public var endIndex: Int { self.slots.count }
+
+  public subscript(position: Int) -> RawSyntax {
+    // Guaranteed by construction: see `RawSyntax.makeLayout`.
+    self.slots[position].unsafelyUnwrapped
+  }
+}
+
+extension RawSyntaxLayoutView {
+  /// This node's slots if they are laid out one after another, and `nil` if they
+  /// are interleaved with `unexpected` slots and so have to be read as the tree
+  /// describes them.
+  ///
+  /// Asking this way costs a test of the word a reader has already loaded, where
+  /// asking the kind costs a switch over every kind there is.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public var flatSlots: RawSyntaxElements? {
+    switch raw.header {
+    case .flat:
+      let (base, childCount) = raw.slotBase
+      return RawSyntaxElements(slots: UnsafeBufferPointer(start: base, count: childCount))
+    case .layout, .layoutWithUnexpected:
+      return nil
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
+  }
+
+  /// The elements of this collection.
+  ///
+  /// - Precondition: this is a collection.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public var elements: RawSyntaxElements {
+    switch raw.header {
+    case .flat:
+      let (base, childCount) = raw.slotBase
+      return RawSyntaxElements(slots: UnsafeBufferPointer(start: base, count: childCount))
+    case .layout, .layoutWithUnexpected:
+      preconditionFailure("this node's children are interleaved with unexpected slots")
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
+  }
+}
+
 extension RawSyntaxLayoutView {
   /// This node's slots as two regions, for a reader that places them where the tree
   /// describes them without asking which position each one is: the real children,

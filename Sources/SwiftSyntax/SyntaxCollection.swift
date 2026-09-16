@@ -58,7 +58,10 @@ extension SyntaxCollection {
 
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int {
-    return layoutView.children.count
+    // A collection's elements are its slots, so this needs neither the mapping a
+    // layout node's children need nor the question of whether its kind
+    // interleaves `unexpected` slots.
+    return layoutView.elements.count
   }
 
   /// Creates a new collection by replacing the underlying layout with a

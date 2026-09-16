@@ -456,31 +456,53 @@ final class SyntaxDataArena: @unchecked Sendable {
   }
 
   /// Create the layout buffer of the node.
+  ///
+  /// One shape per function: a reader of this inlines whichever of the two it needs,
+  /// and neither is large enough to cost the inlining of what it calls. Both in one
+  /// function is 766 instructions where the two are 271 and 300, and at that size the
+  /// compiler stops inlining `advancedBySibling` — which then runs once per slot of
+  /// every node.
   private func createLayoutDataImpl(_ parent: SyntaxDataReference) -> UnsafeBufferPointer<SyntaxDataReference?> {
     let layoutView = parent.pointee.raw.layoutView!
-    // A flat node has a child in every slot, so its children need neither the test
-    // for an absent one nor the mapping interleaved children need.
+    // A flat node has a child in every slot, so its children need neither the test for
+    // an absent one nor the mapping interleaved children need.
     if let elements = layoutView.flatSlots {
-      let allocated = self.allocator.allocate(SyntaxDataReference?.self, count: elements.count)
-      var ptr = allocated.baseAddress!
-      var absoluteInfo = parent.pointee.absoluteInfo.advancedToFirstChild()
-      for raw in elements {
-        ptr.initialize(
-          to: Self.createDataImpl(allocator: self.allocator, raw: raw, parent: parent, absoluteInfo: absoluteInfo)
-        )
-        absoluteInfo = absoluteInfo.advancedBySibling(raw)
-        ptr += 1
-      }
-      return UnsafeBufferPointer(allocated)
+      return createFlatLayoutData(parent, elements)
     }
+    return createInterleavedLayoutData(parent, layoutView.interleavedRegions!)
+  }
 
-    // An interleaving node's buffer has a slot per position its kind names, so it is
-    // written from the two regions the node keeps: a slot before each child, the
-    // child, and a slot after the last. Asking `children` for each position instead
-    // would work out where that position sits, per position, per node.
-    let (real, unexpected) = layoutView.interleavedRegions!
+  /// The buffer of a node whose every slot holds a child.
+  private func createFlatLayoutData(
+    _ parent: SyntaxDataReference,
+    _ elements: RawSyntaxElements
+  ) -> UnsafeBufferPointer<SyntaxDataReference?> {
+    let allocated = self.allocator.allocate(SyntaxDataReference?.self, count: elements.count)
+    var ptr = allocated.baseAddress!
+    var absoluteInfo = parent.pointee.absoluteInfo.advancedToFirstChild()
+    for raw in elements {
+      ptr.initialize(
+        to: Self.createDataImpl(allocator: self.allocator, raw: raw, parent: parent, absoluteInfo: absoluteInfo)
+      )
+      absoluteInfo = absoluteInfo.advancedBySibling(raw)
+      ptr += 1
+    }
+    return UnsafeBufferPointer(allocated)
+  }
+
+  /// The buffer of a node whose kind interleaves `unexpected` slots with its children,
+  /// which has an entry per position that kind names: a slot before each child, the
+  /// child, and a slot after the last.
+  ///
+  /// Written from the two regions the node keeps rather than by asking `children` for
+  /// each position, which would work out where that position sits, per position, per
+  /// node.
+  private func createInterleavedLayoutData(
+    _ parent: SyntaxDataReference,
+    _ regions: (real: UnsafeBufferPointer<RawSyntax?>, unexpected: UnsafeBufferPointer<RawSyntax?>)
+  ) -> UnsafeBufferPointer<SyntaxDataReference?> {
+    let (real, unexpected) = regions
     let allocated = self.allocator.allocate(SyntaxDataReference?.self, count: 2 * real.count + 1)
-
     var ptr = allocated.baseAddress!
     var absoluteInfo = parent.pointee.absoluteInfo.advancedToFirstChild()
 
@@ -493,18 +515,25 @@ final class SyntaxDataArena: @unchecked Sendable {
       } else {
         ptr.initialize(to: nil)
       }
-      // Every position advances the layout index, occupied or not: it is the index
-      // of the slot, not of the child.
+      // Every position advances the layout index, occupied or not: it is the index of
+      // the slot rather than of the child.
       absoluteInfo = absoluteInfo.advancedBySibling(raw)
       ptr += 1
     }
 
-    let hasUnexpected = !unexpected.isEmpty
-    for index in 0..<real.count {
-      place(hasUnexpected ? unexpected[index] : nil)
-      place(real[index])
+    if unexpected.isEmpty {
+      for index in 0..<real.count {
+        place(nil)
+        place(real[index])
+      }
+      place(nil)
+    } else {
+      for index in 0..<real.count {
+        place(unexpected[index])
+        place(real[index])
+      }
+      place(unexpected[real.count])
     }
-    place(hasUnexpected ? unexpected[real.count] : nil)
     return UnsafeBufferPointer(allocated)
   }
 

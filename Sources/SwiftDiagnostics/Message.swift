@@ -17,8 +17,8 @@
 /// same wording. Eg. it’s possible that the message contains more context when
 /// available.
 public struct MessageID: Hashable, Sendable {
-  private let domain: String
-  private let id: String
+  public let domain: String
+  public let id: String
 
   public init(domain: String, id: String) {
     self.domain = domain

@@ -457,7 +457,44 @@ final class SyntaxDataArena: @unchecked Sendable {
 
   /// Create the layout buffer of the node.
   private func createLayoutDataImpl(_ parent: SyntaxDataReference) -> UnsafeBufferPointer<SyntaxDataReference?> {
-    let rawChildren = parent.pointee.raw.layoutView!.children
+    let layoutView = parent.pointee.raw.layoutView!
+
+    // An interleaving node's buffer has a slot per position its kind names, so it is
+    // written from the two regions the node keeps: a slot before each child, the
+    // child, and a slot after the last. Asking `children` for each position instead
+    // would work out where that position sits, per position, per node.
+    if let (real, unexpected) = layoutView.interleavedRegions {
+      let allocated = self.allocator.allocate(SyntaxDataReference?.self, count: 2 * real.count + 1)
+      var ptr = allocated.baseAddress!
+      var absoluteInfo = parent.pointee.absoluteInfo.advancedToFirstChild()
+
+      @inline(__always)
+      func place(_ raw: RawSyntax?) {
+        if let raw {
+          ptr.initialize(
+            to: Self.createDataImpl(allocator: self.allocator, raw: raw, parent: parent, absoluteInfo: absoluteInfo)
+          )
+        } else {
+          ptr.initialize(to: nil)
+        }
+        // Every position advances the layout index, occupied or not: it is the index
+        // of the slot rather than of the child.
+        absoluteInfo = absoluteInfo.advancedBySibling(raw)
+        ptr += 1
+      }
+
+      let hasUnexpected = !unexpected.isEmpty
+      for index in 0..<real.count {
+        place(hasUnexpected ? unexpected[index] : nil)
+        place(real[index])
+      }
+      place(hasUnexpected ? unexpected[real.count] : nil)
+      return UnsafeBufferPointer(allocated)
+    }
+
+    // A node whose slots are all children, which is every collection: the buffer is
+    // those slots.
+    let rawChildren = layoutView.children
     let allocated = self.allocator.allocate(SyntaxDataReference?.self, count: rawChildren.count)
 
     var ptr = allocated.baseAddress!

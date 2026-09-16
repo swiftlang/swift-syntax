@@ -3006,6 +3006,113 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 }
 
+@_spi(ExperimentalLanguageFeatures)
+@_spi(RawSyntax)
+public struct RawNamespaceDeclSyntax: RawDeclSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .namespaceDecl
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
+    attributes: RawAttributeListSyntax,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
+    modifiers: RawDeclModifierListSyntax,
+    _ unexpectedBetweenModifiersAndNamespaceKeyword: RawUnexpectedNodesSyntax? = nil,
+    namespaceKeyword: RawTokenSyntax,
+    _ unexpectedBetweenNamespaceKeywordAndName: RawUnexpectedNodesSyntax? = nil,
+    name: RawTokenSyntax,
+    _ unexpectedBetweenNameAndMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    memberBlock: RawMemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .namespaceDecl, uninitializedCount: 11, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeAttributes?.raw
+      layout[1] = attributes.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
+      layout[3] = modifiers.raw
+      layout[4] = unexpectedBetweenModifiersAndNamespaceKeyword?.raw
+      layout[5] = namespaceKeyword.raw
+      layout[6] = unexpectedBetweenNamespaceKeywordAndName?.raw
+      layout[7] = name.raw
+      layout[8] = unexpectedBetweenNameAndMemberBlock?.raw
+      layout[9] = memberBlock.raw
+      layout[10] = unexpectedAfterMemberBlock?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var attributes: RawAttributeListSyntax {
+    layoutView.children[1].map(RawAttributeListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenModifiersAndNamespaceKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var namespaceKeyword: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenNamespaceKeywordAndName: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var name: RawTokenSyntax {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenNameAndMemberBlock: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var memberBlock: RawMemberBlockSyntax {
+    layoutView.children[9].map(RawMemberBlockSyntax.init(raw:))!
+  }
+
+  public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
 @_spi(RawSyntax)
 public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)

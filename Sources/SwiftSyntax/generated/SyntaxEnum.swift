@@ -220,6 +220,8 @@ public enum SyntaxEnum: Sendable {
   case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case namespaceDecl(NamespaceDeclSyntax)
   case nilLiteralExpr(NilLiteralExprSyntax)
   case nonisolatedSpecifierArgument(NonisolatedSpecifierArgumentSyntax)
   case nonisolatedTypeSpecifier(NonisolatedTypeSpecifierSyntax)
@@ -717,6 +719,8 @@ extension Syntax {
       return .multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax(self)!)
     case .namedOpaqueReturnType:
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
+    case .namespaceDecl:
+      return .namespaceDecl(NamespaceDeclSyntax(self)!)
     case .nilLiteralExpr:
       return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
     case .nonisolatedSpecifierArgument:
@@ -949,6 +953,8 @@ public enum DeclSyntaxEnum {
   case macroDecl(MacroDeclSyntax)
   case macroExpansionDecl(MacroExpansionDeclSyntax)
   case missingDecl(MissingDeclSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case namespaceDecl(NamespaceDeclSyntax)
   case operatorDecl(OperatorDeclSyntax)
   case poundSourceLocation(PoundSourceLocationSyntax)
   case precedenceGroupDecl(PrecedenceGroupDeclSyntax)
@@ -998,6 +1004,8 @@ extension DeclSyntax {
       return .macroExpansionDecl(MacroExpansionDeclSyntax(self)!)
     case .missingDecl:
       return .missingDecl(MissingDeclSyntax(self)!)
+    case .namespaceDecl:
+      return .namespaceDecl(NamespaceDeclSyntax(self)!)
     case .operatorDecl:
       return .operatorDecl(OperatorDeclSyntax(self)!)
     case .poundSourceLocation:

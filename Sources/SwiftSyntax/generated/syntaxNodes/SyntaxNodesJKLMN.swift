@@ -5647,6 +5647,278 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _
   ])
 }
 
+// MARK: - NamespaceDeclSyntax
+
+/// A declaration that introduces a namespace.
+///
+/// - Note: Requires experimental feature `namespaces`.
+///
+/// ### Children
+///
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``DeclModifierListSyntax``
+///  - `namespaceKeyword`: `namespace`
+///  - `name`: `<identifier>`
+///  - `memberBlock`: ``MemberBlockSyntax``
+@_spi(ExperimentalLanguageFeatures)
+public struct NamespaceDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .namespaceDecl else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - attributes: Attributes written before the namespace declaration. These are retained for diagnostics.
+  ///   - modifiers: Modifiers written before the namespace declaration. These are retained for diagnostics.
+  ///   - namespaceKeyword: The `namespace` keyword for this declaration.
+  ///   - name: The name of the namespace.
+  ///   - memberBlock: The declarations contained in the namespace.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndNamespaceKeyword: UnexpectedNodesSyntax? = nil,
+    namespaceKeyword: TokenSyntax = .keyword(.namespace),
+    _ unexpectedBetweenNamespaceKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (
+      unexpectedBeforeAttributes,
+      attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers,
+      unexpectedBetweenModifiersAndNamespaceKeyword,
+      namespaceKeyword,
+      unexpectedBetweenNamespaceKeywordAndName,
+      name,
+      unexpectedBetweenNameAndMemberBlock,
+      memberBlock,
+      unexpectedAfterMemberBlock
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeAttributes?.raw,
+        attributes.raw,
+        unexpectedBetweenAttributesAndModifiers?.raw,
+        modifiers.raw,
+        unexpectedBetweenModifiersAndNamespaceKeyword?.raw,
+        namespaceKeyword.raw,
+        unexpectedBetweenNamespaceKeywordAndName?.raw,
+        name.raw,
+        unexpectedBetweenNameAndMemberBlock?.raw,
+        memberBlock.raw,
+        unexpectedAfterMemberBlock?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.namespaceDecl,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  /// Attributes written before the namespace declaration. These are retained for diagnostics.
+  public var attributes: AttributeListSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `attributes`
+  /// collection.
+  ///
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
+  public func addAttribute(_ element: Syntax) -> NamespaceDeclSyntax {
+    var collection: RawSyntax
+    let arena = RawSyntaxArena()
+    if let col = raw.layoutView!.children[1] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        rawAllocationArena: arena
+      )
+      .cast(NamespaceDeclSyntax.self)
+  }
+
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  /// Modifiers written before the namespace declaration. These are retained for diagnostics.
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `modifiers`
+  /// collection.
+  ///
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
+  public func addModifier(_ element: DeclModifierSyntax) -> NamespaceDeclSyntax {
+    var collection: RawSyntax
+    let arena = RawSyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        rawAllocationArena: arena
+      )
+      .cast(NamespaceDeclSyntax.self)
+  }
+
+  public var unexpectedBetweenModifiersAndNamespaceKeyword: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  /// The `namespace` keyword for this declaration.
+  ///
+  /// ### Tokens
+  ///
+  /// For syntax trees generated by the parser, this is guaranteed to be `namespace`.
+  public var namespaceKeyword: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenNamespaceKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  /// The name of the namespace.
+  ///
+  /// ### Tokens
+  ///
+  /// For syntax trees generated by the parser, this is guaranteed to be `<identifier>`.
+  public var name: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenNameAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  /// The declarations contained in the namespace.
+  public var memberBlock: MemberBlockSyntax {
+    get {
+      return Syntax(self).child(at: 9)!.cast(MemberBlockSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(NamespaceDeclSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeAttributes,
+    \Self.attributes,
+    \Self.unexpectedBetweenAttributesAndModifiers,
+    \Self.modifiers,
+    \Self.unexpectedBetweenModifiersAndNamespaceKeyword,
+    \Self.namespaceKeyword,
+    \Self.unexpectedBetweenNamespaceKeywordAndName,
+    \Self.name,
+    \Self.unexpectedBetweenNameAndMemberBlock,
+    \Self.memberBlock,
+    \Self.unexpectedAfterMemberBlock
+  ])
+}
+
 // MARK: - NilLiteralExprSyntax
 
 /// ### Children

@@ -213,6 +213,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case multipleTrailingClosureElement
   case multipleTrailingClosureElementList
   case namedOpaqueReturnType
+  case namespaceDecl
   case nilLiteralExpr
   case nonisolatedSpecifierArgument
   case nonisolatedSpecifierArgumentList

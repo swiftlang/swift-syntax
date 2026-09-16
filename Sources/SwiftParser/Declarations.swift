@@ -80,6 +80,12 @@ extension TokenConsumer {
       }
     }
 
+    if subparser.atStartOfNamespaceDeclaration(
+      allowRecovery: hasAttribute || hasModifier || requiresDecl
+    ) {
+      return true
+    }
+
     switch subparser.at(anyIn: DeclarationKeyword.self)?.0 {
     case .lhs(.actor):
       // actor Foo {}
@@ -145,7 +151,129 @@ extension TokenConsumer {
   }
 }
 
+extension TokenConsumer {
+  /// Returns whether the current token begins a namespace declaration.
+  ///
+  /// `namespace` is intentionally contextual. In mixed declaration and
+  /// expression contexts, require a complete declaration-shaped header and
+  /// body opener so ordinary identifier uses continue to parse as expressions.
+  /// In declaration-only contexts, or after attributes or modifiers have
+  /// established declaration intent, also accept missing syntax for recovery.
+  mutating func atStartOfNamespaceDeclaration(allowRecovery: Bool) -> Bool {
+    guard languageFeatures.contains(.namespaces), self.at(.keyword(.namespace)) else {
+      return false
+    }
+
+    var lookahead = self.lookahead()
+    lookahead.consumeAnyToken()
+    if lookahead.at(.identifier) {
+      lookahead.consumeAnyToken()
+      if lookahead.at(.leftBrace) {
+        return true
+      }
+      if lookahead.atStartOfMalformedNamespaceHeaderEndingInMemberBlock() {
+        return true
+      }
+      return allowRecovery
+    }
+
+    if allowRecovery && lookahead.at(.leftBrace, .rightBrace, .endOfFile) {
+      return true
+    }
+
+    // A malformed name immediately followed by a body is unambiguous enough
+    // to recover as a namespace declaration even in a mixed declaration and
+    // expression context.
+    if lookahead.currentToken.isLexerClassifiedKeyword
+      || lookahead.at(.integerLiteral, .floatLiteral, .dollarIdentifier)
+      || lookahead.at(.wildcard, .unknown)
+    {
+      lookahead.consumeAnyToken()
+      return lookahead.at(.leftBrace)
+    }
+
+    return false
+  }
+}
+
 extension Parser.Lookahead {
+  /// Recognizes the unsupported namespace-head forms that the parser retains
+  /// as structured unexpected syntax. Requiring the eventual left brace keeps
+  /// this recovery from claiming ordinary identifier-shaped expressions.
+  fileprivate mutating func atStartOfMalformedNamespaceHeaderEndingInMemberBlock() -> Bool {
+    var consumedMalformedSyntax = false
+
+    while self.consume(if: .period) != nil {
+      guard self.consume(if: .identifier) != nil else {
+        return false
+      }
+      consumedMalformedSyntax = true
+    }
+
+    if self.at(prefix: "<") {
+      guard self.consumeNamespaceGenericParameterClause() else {
+        return false
+      }
+      consumedMalformedSyntax = true
+    }
+
+    if self.consume(if: .colon) != nil {
+      guard self.canParseType() else {
+        return false
+      }
+      while self.consume(if: .comma) != nil {
+        guard self.canParseType() else {
+          return false
+        }
+      }
+      consumedMalformedSyntax = true
+    }
+
+    if self.consume(if: .keyword(.where)) != nil {
+      repeat {
+        guard self.canParseType() || self.canParseIntegerLiteral() else {
+          return false
+        }
+        if self.consume(if: .colon) == nil {
+          guard self.currentToken.tokenText == "==" else {
+            return false
+          }
+          self.consumeAnyToken()
+        }
+        guard self.canParseType() || self.canParseIntegerLiteral() else {
+          return false
+        }
+      } while self.consume(if: .comma) != nil
+      consumedMalformedSyntax = true
+    }
+
+    return consumedMalformedSyntax && self.at(.leftBrace)
+  }
+
+  /// Consumes a balanced angle-bracket clause without assigning it semantic
+  /// meaning. The real parser subsequently builds a generic-parameter node and
+  /// retains it as unexpected syntax on the namespace declaration.
+  private mutating func consumeNamespaceGenericParameterClause() -> Bool {
+    guard self.consume(ifPrefix: "<", as: .leftAngle) != nil else {
+      return false
+    }
+
+    var depth = 1
+    while !self.at(.endOfFile, .leftBrace, .rightBrace) {
+      if self.consume(ifPrefix: "<", as: .leftAngle) != nil {
+        depth += 1
+      } else if self.consume(ifPrefix: ">", as: .rightAngle) != nil {
+        depth -= 1
+        if depth == 0 {
+          return true
+        }
+      } else {
+        self.consumeAnyToken()
+      }
+    }
+    return false
+  }
+
   fileprivate mutating func skipAttributesAndModifiers() -> (hasAttribute: Bool, hasModifier: Bool) {
     var hasAttribute = false
     var attributeProgress = LoopProgressCondition()
@@ -290,6 +418,14 @@ extension Parser {
       modifiers: self.parseDeclModifierList()
     )
 
+    if self.atStartOfNamespaceDeclaration(
+      allowRecovery: context.requiresDecl || !attrs.attributes.isEmpty || !attrs.modifiers.isEmpty
+    ) {
+      return RawDeclSyntax(
+        self.parseNamespaceDeclaration(attrs, .constant(.keyword(.namespace)))
+      )
+    }
+
     let recoveryResult: (match: DeclarationKeyword, handle: RecoveryConsumptionHandle)?
     if let atResult = self.at(anyIn: DeclarationKeyword.self) {
       // We are at a keyword that starts a declaration. Parse that declaration.
@@ -383,6 +519,55 @@ extension Parser {
         modifiers: attrs.modifiers,
         arena: self.arena
       )
+    )
+  }
+}
+
+extension Parser {
+  mutating func parseNamespaceDeclaration(
+    _ attrs: DeclAttributes,
+    _ namespaceHandle: RecoveryConsumptionHandle
+  ) -> RawNamespaceDeclSyntax {
+    let (unexpectedBeforeNamespaceKeyword, namespaceKeyword) = self.eat(namespaceHandle)
+    let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
+
+    var unexpectedAfterName: [RawSyntax] = []
+
+    // Namespace names are a single identifier. Preserve dotted components as
+    // structured unexpected syntax for targeted diagnostics downstream.
+    while let period = self.consume(if: .period) {
+      unexpectedAfterName.append(period.raw)
+      let (unexpectedBeforeComponent, component) = self.expectIdentifier(keywordRecovery: true)
+      if let unexpectedBeforeComponent {
+        unexpectedAfterName.append(contentsOf: unexpectedBeforeComponent.elements)
+      }
+      unexpectedAfterName.append(component.raw)
+    }
+
+    // These clauses aren't part of a namespace head, but parsing them into
+    // their normal syntax nodes retains enough structure for precise parser or
+    // compiler diagnostics instead of flattening them into skipped tokens.
+    if self.at(prefix: "<") {
+      unexpectedAfterName.append(self.parseGenericParameters().raw)
+    }
+    if self.at(.colon) {
+      unexpectedAfterName.append(self.parseInheritance().raw)
+    }
+    if self.at(.keyword(.where)) {
+      unexpectedAfterName.append(self.parseGenericWhereClause().raw)
+    }
+
+    let memberBlock = self.parseMemberBlock(introducer: namespaceKeyword)
+    return RawNamespaceDeclSyntax(
+      attributes: attrs.attributes,
+      modifiers: attrs.modifiers,
+      unexpectedBeforeNamespaceKeyword,
+      namespaceKeyword: namespaceKeyword,
+      unexpectedBeforeName,
+      name: name,
+      RawUnexpectedNodesSyntax(unexpectedAfterName, arena: self.arena),
+      memberBlock: memberBlock,
+      arena: self.arena
     )
   }
 }

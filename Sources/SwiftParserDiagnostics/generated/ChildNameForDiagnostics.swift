@@ -273,6 +273,10 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "'::' operator"
   case \MultipleTrailingClosureElementSyntax.label:
     return "label"
+  case \NamespaceDeclSyntax.attributes:
+    return "attributes"
+  case \NamespaceDeclSyntax.modifiers:
+    return "modifiers"
   case \ObjCSelectorPieceSyntax.name:
     return "name"
   case \OperatorDeclSyntax.fixitySpecifier:

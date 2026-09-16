@@ -220,7 +220,7 @@ enum TokenPrecedence: Comparable {
 
     // MARK: Decl keywords
     case  // Types
-    .associatedtype, .class, .enum, .extension, .protocol, .struct, .typealias, .actor, .macro,
+    .associatedtype, .class, .enum, .extension, .protocol, .struct, .typealias, .actor, .macro, .namespace,
       // Access modifiers
       .fileprivate, .internal, .private, .public, .static,
       // Functions

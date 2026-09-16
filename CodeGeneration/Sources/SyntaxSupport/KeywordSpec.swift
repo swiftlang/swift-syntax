@@ -205,6 +205,7 @@ public enum Keyword: CaseIterable {
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
   case mutating
+  case namespace
   case `nil`
   case noasync
   case noDerivative
@@ -551,6 +552,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("mutableAddressWithOwner")
     case .mutating:
       return KeywordSpec("mutating")
+    case .namespace:
+      return KeywordSpec("namespace", experimentalFeature: .namespaces)
     case .nil:
       return KeywordSpec("nil", isLexerClassified: true)
     case .noasync:

@@ -1201,6 +1201,41 @@ extension MemberBlockSyntax {
   }
 }
 
+extension NamespaceDeclSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndNamespaceKeyword: UnexpectedNodesSyntax? = nil,
+    namespaceKeyword: TokenSyntax = .keyword(.namespace),
+    unexpectedBetweenNamespaceKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    unexpectedBetweenNameAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndNamespaceKeyword,
+      namespaceKeyword: namespaceKeyword,
+      unexpectedBetweenNamespaceKeywordAndName,
+      name: name,
+      unexpectedBetweenNameAndMemberBlock,
+      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension ProtocolDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(

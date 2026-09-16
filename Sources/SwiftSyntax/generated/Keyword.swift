@@ -149,6 +149,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
   case mutating
+  @_spi(ExperimentalLanguageFeatures)
+  case namespace
   case `nil`
   case noasync
   case noDerivative
@@ -624,6 +626,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       self = .extension
     case "lowerThan":
       self = .lowerThan
+    case "namespace":
+      self = .namespace
     case "obsoleted":
       self = .obsoleted
     case "spiModule":
@@ -992,6 +996,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "mutableAddressWithNativeOwner",
     "mutableAddressWithOwner",
     "mutating",
+    "namespace",
     "nil",
     "noasync",
     "noDerivative",

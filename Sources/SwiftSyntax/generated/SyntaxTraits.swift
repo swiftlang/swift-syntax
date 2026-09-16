@@ -811,6 +811,8 @@ extension MissingSyntax: MissingNodeSyntax {}
 
 extension MissingTypeSyntax: MissingNodeSyntax {}
 
+extension NamespaceDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+
 extension NonisolatedSpecifierArgumentSyntax: ParenthesizedSyntax {}
 
 extension OperatorDeclSyntax: NamedDeclSyntax {}

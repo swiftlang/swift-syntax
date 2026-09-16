@@ -21,6 +21,14 @@ extension Parser {
     var elements = [RawDeclModifierSyntax]()
     var modifierLoopProgress = LoopProgressCondition()
     MODIFIER_LOOP: while self.hasProgressed(&modifierLoopProgress) {
+      // `namespace` is contextual and intentionally absent from
+      // `DeclarationStart`. Once a declaration-shaped spelling is at the
+      // current token, do not let modifier recovery skip across it to a
+      // modifier on a later declaration.
+      if self.atStartOfNamespaceDeclaration(allowRecovery: false) {
+        break
+      }
+
       switch self.canRecoverTo(anyIn: DeclarationStart.self) {
       case (.declarationModifier(.private), _)?,
         (.declarationModifier(.fileprivate), _)?,

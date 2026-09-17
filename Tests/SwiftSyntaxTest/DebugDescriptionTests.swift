@@ -183,14 +183,14 @@ class DebugDescriptionTests: XCTestCase {
       SourceFileSyntax(
           statements: CodeBlockItemListSyntax([
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
-                        calledExpression: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("test"))),
+                        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("test")),
                         leftParen: .leftParenToken(),
                         arguments: LabeledExprListSyntax([
                               LabeledExprSyntax(
-                                  expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
+                                  expression: IntegerLiteralExprSyntax(literal: .integerLiteral("1")),
                                   trailingComma: .commaToken(trailingTrivia: .space)
                                 ),
-                              LabeledExprSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
+                              LabeledExprSyntax(expression: IntegerLiteralExprSyntax(literal: .integerLiteral("2")))
                             ]),
                         rightParen: .rightParenToken(),
                         additionalTrailingClosures: MultipleTrailingClosureElementListSyntax([])
@@ -207,14 +207,14 @@ class DebugDescriptionTests: XCTestCase {
       SourceFileSyntax(
           statements: CodeBlockItemListSyntax([
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
-                        calledExpression: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("test"))),
+                        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("test")),
                         leftParen: .leftParenToken(),
                         arguments: LabeledExprListSyntax([
                               LabeledExprSyntax(
-                                  expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
+                                  expression: IntegerLiteralExprSyntax(literal: .integerLiteral("1")),
                                   trailingComma: .commaToken()
                                 ),
-                              LabeledExprSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
+                              LabeledExprSyntax(expression: IntegerLiteralExprSyntax(literal: .integerLiteral("2")))
                             ]),
                         rightParen: .rightParenToken(),
                         additionalTrailingClosures: MultipleTrailingClosureElementListSyntax([])

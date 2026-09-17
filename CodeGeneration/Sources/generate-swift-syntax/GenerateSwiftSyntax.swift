@@ -26,6 +26,7 @@ private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
 private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
 private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
+private let swiftSyntaxTestSupportGeneratedDir = ["_SwiftSyntaxTestSupport", generatedDirName]
 private let BASE_KIND_FILES: [SyntaxNodeKind: String] = [
   .decl: "SyntaxDeclNodes.swift",
   .expr: "SyntaxExprNodes.swift",
@@ -152,6 +153,9 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
         swiftSyntaxBuilderGeneratedDir + ["RenamedChildrenBuilderCompatibility.swift"],
         renamedChildrenBuilderCompatibilityFile
       ),
+
+      // _SwiftSyntaxTestSupport
+      GeneratedFileSpec(swiftSyntaxTestSupportGeneratedDir + ["ChildChoicesTypeName.swift"], childChoicesTypeNameFile),
     ]
     // This split of letters produces files for the syntax nodes that have about equal size, which improves compile time
 

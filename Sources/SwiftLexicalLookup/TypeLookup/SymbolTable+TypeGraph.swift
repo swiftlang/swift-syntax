@@ -127,24 +127,7 @@ extension SymbolTable {
     [(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)],
     TypeGraph.QualifiedTypeLookupFailure
   > {
-    // TODO: Implement `TypeGraph`-based lookup
-    let fileInfo = getFileInfo(introducingTypeSyntax.fileRoot)!
-    var typeDecls = [Attached<TypeDeclSyntax>]()
-    // Look just in the nominal-type decl
-    baseType.mainDecl.node.visitDirectMembers(
-      configuredRegions: fileInfo.configuredRegions,
-      visit: {
-        guard let typeDecl = $0.as(TypeDeclSyntax.self),
-          let attachedTypeDecl = Attached(typeDecl)
-        else {
-          return
-        }
-        typeDecls.append(attachedTypeDecl)
-      }
-    )
-    return Result.success(
-      typeDecls.map({ (declGroupParent: Attached<DeclGroupSyntaxType>(baseType.mainDecl), typeDecl: $0) })
-    )
+    fatalError("TODO")
   }
 }
 

@@ -121,6 +121,13 @@ public struct Parser {
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
   private let lookaheadTrackerOwner: LookaheadTrackerOwner
 
+  /// Owns the memory that the lexer's state stack spills into.
+  ///
+  /// ``Lexer/LexemeSequence`` refers to this without owning it, so this parser,
+  /// which outlives its own ``lexemes`` and every ``Lookahead`` copied from them,
+  /// is the one to keep it alive.
+  private let lexerStateAllocator: Lexer.StateAllocator
+
   /// Owns the source buffer for the lifetime of this parser when the parser
   /// created its own arena. The source is not copied into the arena, so it is
   /// freed when this `Parser` is destroyed. `nil` when the source lives
@@ -271,10 +278,12 @@ public struct Parser {
     self.swiftVersion = swiftVersion ?? Self.defaultSwiftVersion
     self.languageFeatures = languageFeatures
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
+    self.lexerStateAllocator = Lexer.StateAllocator()
 
     self.lexemes = Lexer.tokenize(
       input,
-      lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker
+      lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker,
+      stateAllocator: lexerStateAllocator
     )
     self.currentToken = self.lexemes.advance()
     if let parseTransition {

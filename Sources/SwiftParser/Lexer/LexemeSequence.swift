@@ -17,6 +17,32 @@
 #endif
 
 extension Lexer {
+  /// Owns the memory that the lexer's state stack spills into.
+  ///
+  /// Whoever creates this keeps it alive for as long as the lexeme sequence made
+  /// from it, and anything copied from that sequence.
+  @_spi(Testing)
+  public final class StateAllocator {
+    let allocator: BumpPtrAllocator
+
+    /// Nodes already built for a state pushed onto the empty stack, so that a
+    /// file entering the same state repeatedly builds one node rather than one
+    /// per occurrence. Only these are shared, being the ones that recur.
+    ///
+    /// Bounded, so that a file entering many distinct states allocates rather
+    /// than turning every transition into a long scan. Six entries suffice for
+    /// the parser's own sources.
+    var nodesOnEmptyStack: [UnsafePointer<Lexer.Cursor.StateStack.Node>] = []
+
+    static let nodesOnEmptyStackLimit = 16
+
+    @_spi(Testing)
+    public init() {
+      self.allocator = BumpPtrAllocator(initialSlabSize: 256)
+      self.nodesOnEmptyStack.reserveCapacity(Self.nodesOnEmptyStackLimit)
+    }
+  }
+
   /// A sequence of ``Lexer/Lexeme`` tokens starting from a ``Lexer/Cursor``
   /// that points into an input buffer.
   @_spi(Testing)
@@ -24,17 +50,14 @@ extension Lexer {
     fileprivate let sourceBufferStart: UnsafePointer<UInt8>?
     fileprivate var cursor: Lexer.Cursor
     fileprivate var nextToken: Lexer.Lexeme
-    /// If the lexer has more than one state on its state stack, it will
-    /// allocate a new memory region in this allocator to represent the
-    /// additional states on its stack. This is more efficient than paying the
-    /// retain/release cost of an array.
+    /// Where the lexer allocates the states above the first one on its stack,
+    /// which costs less than the retain and release an array would.
     ///
-    /// The states will be freed when the lexer is finished, i.e. when this
-    /// ``LexemeSequence`` is deallocated.
-    ///
-    /// The memory footprint of not freeing past lexer states is negligible. It's
-    /// usually less than 0.1% of the memory allocated by the syntax arena.
-    var lexerStateAllocator = BumpPtrAllocator(initialSlabSize: 256)
+    /// Unmanaged so that copying a sequence to start a ``Lookahead`` stays a
+    /// move; `unowned(unsafe)` costs a retain and release for every token, since
+    /// the allocator is passed as a parameter. Whoever creates the sequence keeps
+    /// the allocator alive for at least as long as anything copied from it.
+    let lexerStateAllocator: Unmanaged<Lexer.StateAllocator>
 
     /// The offset of the trailing trivia end of `nextToken` relative to the source buffer’s start.
     var offsetToNextTokenEnd: Int {
@@ -51,13 +74,15 @@ extension Lexer {
     fileprivate init(
       sourceBufferStart: UnsafePointer<UInt8>?,
       cursor: Lexer.Cursor,
-      lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>
+      lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>,
+      stateAllocator: Unmanaged<Lexer.StateAllocator>
     ) {
       self.sourceBufferStart = sourceBufferStart
       self.cursor = cursor
+      self.lexerStateAllocator = stateAllocator
       self.nextToken = self.cursor.nextToken(
         sourceBufferStart: self.sourceBufferStart,
-        stateAllocator: lexerStateAllocator
+        stateAllocator: stateAllocator
       )
       self.lookaheadTracker = lookaheadTracker
     }
@@ -152,7 +177,8 @@ extension Lexer {
   public static func tokenize(
     _ input: UnsafeBufferPointer<UInt8>,
     from startIndex: Int = 0,
-    lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>
+    lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>,
+    stateAllocator: StateAllocator
   ) -> LexemeSequence {
     precondition(input.isEmpty || startIndex < input.endIndex)
     let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
@@ -163,7 +189,8 @@ extension Lexer {
     return LexemeSequence(
       sourceBufferStart: input.baseAddress,
       cursor: cursor,
-      lookaheadTracker: lookaheadTracker
+      lookaheadTracker: lookaheadTracker,
+      stateAllocator: .passUnretained(stateAllocator)
     )
   }
 }

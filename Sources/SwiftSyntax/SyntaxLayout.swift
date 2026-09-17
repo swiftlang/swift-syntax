@@ -110,16 +110,18 @@ extension SyntaxProtocol {
   /// of a layout node. 'nil' otherwise.
   public var propertyInParent: SyntaxLayoutProperty? {
     let syntax = Syntax(self)
-    guard let parent = syntax.parent else {
+    // Reach the parent through the data pointers instead of 'Syntax.parent' so that
+    // identifying the property doesn't retain and release the arena.
+    guard let parentDataRef = syntax.dataRef.pointee.parent else {
       return nil
     }
-    let parentKind = parent.kind
+    let parentKind = parentDataRef.pointee.raw.kind
     guard parentKind != .token, !parentKind.isSyntaxCollection else {
       return nil
     }
     return SyntaxLayoutProperty(
       syntaxKind: parentKind,
-      index: SyntaxLayoutIndex(UInt32(syntax.layoutIndexInParent))
+      index: SyntaxLayoutIndex(syntax.dataRef.pointee.absoluteInfo.layoutIndexInParent)
     )
   }
 }

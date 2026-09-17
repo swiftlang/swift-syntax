@@ -27,8 +27,6 @@ public struct TypeResolver {
   private var _visitedTypeSyntaxToIndex: [Attached<TypeSyntax>: Int] = [:]
   private(set) var dependencyTracker: DependencyTracker = DependencyTracker()
 
-  let _checkNominalInCompositionIsClassOrProtocol = true
-
   public init(symbolTable: SymbolTable) {
     self.symbolTable = symbolTable
   }
@@ -179,22 +177,20 @@ extension TypeResolver {
       switch childTypeResult {
       // Only nominals are valid in compositions
       case .nominalTypes(let nominals):
-        if _checkNominalInCompositionIsClassOrProtocol {
-          switch (nominals.count, nominals.first?.type.mainDecl.kind) {
-          // If we have one nominal, check it's a protocol or class.
-          // If we have multiple, i.e., a composition, we've already  checked it recursively.
-          case (1, .protocolDecl), (1, .classDecl), (2..., _):
-            break
-          // If we have no nominals, e.g., `Int.Type`, or a single nominal that's not
-          // a struct/enum/actor, we throw an error
-          default:
-            failures.append(
-              (
-                childSyntax: childTypeSyntax.node,
-                childFailure: Failure.cannotComposeNonClassOrProtocol(resolved: childTypeResult)
-              )
+        switch (nominals.count, nominals.first?.type.mainDecl.kind) {
+        // If we have one nominal, check it's a protocol or class.
+        // If we have multiple, i.e., a composition, we've already  checked it recursively.
+        case (1, .protocolDecl), (1, .classDecl), (2..., _):
+          break
+        // If we have no nominals, e.g., `Int.Type`, or a single nominal that's not
+        // a struct/enum/actor, we throw an error
+        default:
+          failures.append(
+            (
+              childSyntax: childTypeSyntax.node,
+              childFailure: Failure.cannotComposeNonClassOrProtocol(resolved: childTypeResult)
             )
-          }
+          )
         }
         // Append types we don't already have
         for nominal in nominals {
@@ -220,13 +216,6 @@ extension TypeResolver {
       // But: `Codable & Int.Type` ❌
       case .anyType:
         anyTypeCounter += 1
-      // Ignore if this particular type didn't contain the type member.
-      // E.g.
-      //   protocol A { typealias T = Int }
-      //   protocol B {}
-      //   let ab: (A & B).T // ✅
-      case .failure(Failure.noTypeMember):
-        continue
       case .failure(let resolutionFailure):
         failures.append(
           (
@@ -533,18 +522,18 @@ extension TypeResolver {
     // First, get the module
     let introducingModule = extractFileInfo(syntax: memberIntroducingSyntax).module
     // Look up
-    let memberTypeDeclsResult:
-      Result<
+    let memberTypeDeclsResult =
+      symbolTable.findMemberType(
+        baseType: resolvedNominalBaseType,
+        memberTypeName: memberName,
+        introducingTypeSyntax: memberIntroducingSyntax,
+        introducingModule: introducingModule,
+        dependencyTracker: &self.dependencyTracker
+      )
+      as Result<
         [(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)],
         TypeGraph.QualifiedTypeLookupFailure
-      > =
-        symbolTable.findMemberType(
-          baseType: resolvedNominalBaseType,
-          memberTypeName: memberName,
-          introducingTypeSyntax: memberIntroducingSyntax,
-          introducingModule: introducingModule,
-          dependencyTracker: &dependencyTracker
-        )
+      >
 
     // Handle failures
     let memberTypeDecls: [(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)]
@@ -703,20 +692,14 @@ extension TypeResolver {
       case .failure(let failure):
         return .failure(Failure.nested(.invalidBaseType(failure)))
       }
-      let memberResult:
-        Result<(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)?, Failure>
-      do {
-        // Don't track dependencies (only extensions track dependencies)
-        let dependencyTracker = self.dependencyTracker
-        self.dependencyTracker = DependencyTracker()
-        defer { self.dependencyTracker = dependencyTracker }
-
-        memberResult = findNominalTypeMemberDecl(
+      // This lookup generates a dependency, but it's not a problem because
+      // `DependencyTracker` de-duplicates dependencies.
+      let memberResult =
+        findNominalTypeMemberDecl(
           resolvedNominalBaseType: resolvedBase.type,
           memberName: declName,
           memberIntroducingSyntax: Attached<TypeLikeSyntax>(nominalDecl)
-        )
-      }
+        ) as Result<(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)?, Failure>
 
       // Ensure we exist under the right decl group and there are no duplicates
       switch memberResult {
@@ -755,7 +738,7 @@ extension TypeResolver {
         // .baseNotRegistered, .baseDeclGroupUnbound -> We should have a valid base from the recursive step
         case .other(.cannotRegisterRedeclaration), .baseNotRegistered, .baseDeclGroupUnbound:
           fatalError(
-            "[ewiftLexicalLookup] Internal error: While registering '\(baseType.debugDescription)' > '\(nominalDecl._memberlessDescription)': \(registrationFailure)"
+            "[SwiftLexicalLookup] Internal error: While registering '\(baseType.debugDescription)' > '\(nominalDecl._memberlessDescription)': \(registrationFailure)"
           )
         }
       }
@@ -884,20 +867,20 @@ extension TypeResolver {
       // result.
       let memberResult:
         Result<
-          (typeDecl: Attached<TypeDeclSyntax>, result: TypeResult)?,
+          (typeDecl: Attached<TypeDeclSyntax>, result: TypeResult),
           Failure
-        >
+        >?
       defer {
         switch memberResult {
-        case Result.success(nil):
-          // No results; continue in case next one has a result.
-          break
-        case Result.success((let memberTypeDecl, let memberResult)?):
+        case Result.success((let memberTypeDecl, let memberResult))?:
           // Add if not already added
           guard visitedDecls.insert(memberTypeDecl).inserted else { break }
           declsAndResults.append((memberTypeDecl, memberResult))
-        case Result.failure(let failure):
+        case Result.failure(let failure)?:
           failures.append((Attached<TypeLikeSyntax>(typeMember.introducingSyntax), failure))
+        case nil:
+          // No results; continue in case the next one has a result.
+          break
         }
       }
 
@@ -927,7 +910,7 @@ extension TypeResolver {
       case .success(nil):
         // Skip if no such member exists, e.g.: in `(Encodable & Collection<Int>).Element`,
         // `Encodable` may not have an `Element` type member.
-        memberResult = Result.success(nil)
+        memberResult = nil
         continue
       case .failure(let failure):
         memberResult = Result.failure(failure)

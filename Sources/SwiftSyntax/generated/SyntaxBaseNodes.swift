@@ -185,6 +185,11 @@ extension Syntax {
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``DeclSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some DeclSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -515,6 +520,11 @@ extension Syntax {
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``ExprSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some ExprSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -829,6 +839,11 @@ extension Syntax {
 public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``PatternSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some PatternSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -1104,6 +1119,11 @@ extension Syntax {
 /// - ``YieldStmtSyntax``
 public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   /// Create a ``StmtSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some StmtSyntaxProtocol) {
@@ -1393,6 +1413,11 @@ extension Syntax {
 /// - ``TupleTypeSyntax``
 public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   /// Create a ``TypeSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some TypeSyntaxProtocol) {

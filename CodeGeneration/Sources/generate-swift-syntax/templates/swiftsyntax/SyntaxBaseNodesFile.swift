@@ -180,6 +180,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     ) {
       DeclSyntax("public let _syntaxNode: Syntax")
 
+      syntaxDataRefDecl
+
       DeclSyntax(
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized syntax node.

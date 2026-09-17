@@ -25,6 +25,11 @@ public struct AccessorDeclListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .accessorDeclList else {
       return nil
@@ -51,6 +56,11 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ArrayElementSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .arrayElementList else {
@@ -128,6 +138,16 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
 
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .attribute(let node):
+        return node._syntaxDataRef
+      case .ifConfigDecl(let node):
+        return node._syntaxDataRef
+      }
+    }
+
     public init(_ node: AttributeSyntax) {
       self = .attribute(node)
     }
@@ -199,6 +219,11 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .attributeList else {
       return nil
@@ -228,6 +253,11 @@ public struct AvailabilityArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .availabilityArgumentList else {
       return nil
@@ -254,6 +284,11 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CatchClauseSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .catchClauseList else {
@@ -282,6 +317,11 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .catchItemList else {
       return nil
@@ -309,6 +349,11 @@ public struct ClosureCaptureListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .closureCaptureList else {
       return nil
@@ -335,6 +380,11 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ClosureParameterSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .closureParameterList else {
@@ -376,6 +426,11 @@ public struct ClosureShorthandParameterListSyntax: SyntaxCollection, SyntaxHasha
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .closureShorthandParameterList else {
       return nil
@@ -408,6 +463,11 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .codeBlockItemList else {
       return nil
@@ -434,6 +494,11 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   public typealias Element = CompositionTypeElementSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .compositionTypeElementList else {
@@ -463,6 +528,11 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ConditionElementSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .conditionElementList else {
@@ -514,6 +584,11 @@ public struct DeclModifierListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .declModifierList else {
       return nil
@@ -540,6 +615,11 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DeclNameArgumentSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .declNameArgumentList else {
@@ -568,6 +648,11 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .designatedTypeList else {
       return nil
@@ -595,6 +680,11 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .dictionaryElementList else {
       return nil
@@ -621,6 +711,11 @@ public struct DifferentiabilityArgumentListSyntax: SyntaxCollection, SyntaxHasha
   public typealias Element = DifferentiabilityArgumentSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .differentiabilityArgumentList else {
@@ -651,6 +746,11 @@ public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, Syntax
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .documentationAttributeArgumentList else {
       return nil
@@ -679,6 +779,11 @@ public struct EffectsAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashab
   public typealias Element = TokenSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .effectsAttributeArgumentList else {
@@ -709,6 +814,11 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .enumCaseElementList else {
       return nil
@@ -735,6 +845,11 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = EnumCaseParameterSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .enumCaseParameterList else {
@@ -764,6 +879,11 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ExprSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .exprList else {
@@ -802,6 +922,11 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = FunctionParameterSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .functionParameterList else {
@@ -843,6 +968,11 @@ public struct FunctionYieldListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .functionYieldList else {
       return nil
@@ -869,6 +999,11 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericArgumentSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .genericArgumentList else {
@@ -897,6 +1032,11 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .genericParameterList else {
       return nil
@@ -923,6 +1063,11 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericRequirementSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .genericRequirementList else {
@@ -951,6 +1096,11 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .ifConfigClauseList else {
       return nil
@@ -978,6 +1128,11 @@ public struct ImportPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .importPathComponentList else {
       return nil
@@ -1004,6 +1159,11 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = InheritedTypeSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .inheritedTypeList else {
@@ -1033,6 +1193,11 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = KeyPathComponentSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .keyPathComponentList else {
@@ -1068,6 +1233,11 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .labeledExprList else {
       return nil
@@ -1098,6 +1268,11 @@ public struct LifetimeSpecifierArgumentListSyntax: SyntaxCollection, SyntaxHasha
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .lifetimeSpecifierArgumentList else {
       return nil
@@ -1125,6 +1300,11 @@ public struct MemberBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = MemberBlockItemSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .memberBlockItemList else {
@@ -1156,6 +1336,11 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .multipleTrailingClosureElementList else {
       return nil
@@ -1182,6 +1367,11 @@ public struct ObjCSelectorPieceListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ObjCSelectorPieceSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .objCSelectorPieceList else {
@@ -1210,6 +1400,11 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .patternBindingList else {
       return nil
@@ -1237,6 +1432,11 @@ public struct PlatformVersionItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PlatformVersionItemSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .platformVersionItemList else {
@@ -1277,6 +1477,18 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
         return node._syntaxNode
       case .precedenceGroupAssociativity(let node):
         return node._syntaxNode
+      }
+    }
+
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .precedenceGroupRelation(let node):
+        return node._syntaxDataRef
+      case .precedenceGroupAssignment(let node):
+        return node._syntaxDataRef
+      case .precedenceGroupAssociativity(let node):
+        return node._syntaxDataRef
       }
     }
 
@@ -1379,6 +1591,11 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .precedenceGroupAttributeList else {
       return nil
@@ -1406,6 +1623,11 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .precedenceGroupNameList else {
       return nil
@@ -1432,6 +1654,11 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   public typealias Element = PrimaryAssociatedTypeSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .primaryAssociatedTypeList else {
@@ -1461,6 +1688,11 @@ public struct SimpleStringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHash
   public typealias Element = StringSegmentSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .simpleStringLiteralSegmentList else {
@@ -1507,6 +1739,20 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
         return node._syntaxNode
       case .genericWhereClause(let node):
         return node._syntaxNode
+      }
+    }
+
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .labeledSpecializeArgument(let node):
+        return node._syntaxDataRef
+      case .specializeAvailabilityArgument(let node):
+        return node._syntaxDataRef
+      case .specializeTargetFunctionArgument(let node):
+        return node._syntaxDataRef
+      case .genericWhereClause(let node):
+        return node._syntaxDataRef
       }
     }
 
@@ -1642,6 +1888,11 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .specializeAttributeArgumentList else {
       return nil
@@ -1681,6 +1932,16 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
         return node._syntaxNode
       case .expressionSegment(let node):
         return node._syntaxNode
+      }
+    }
+
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .stringSegment(let node):
+        return node._syntaxDataRef
+      case .expressionSegment(let node):
+        return node._syntaxDataRef
       }
     }
 
@@ -1755,6 +2016,11 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .stringLiteralSegmentList else {
       return nil
@@ -1781,6 +2047,11 @@ public struct SwitchCaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = SwitchCaseItemSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .switchCaseItemList else {
@@ -1837,6 +2108,18 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
         return node._syntaxNode
       case .macroExpansionDecl(let node):
         return node._syntaxNode
+      }
+    }
+
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .switchCase(let node):
+        return node._syntaxDataRef
+      case .ifConfigDecl(let node):
+        return node._syntaxDataRef
+      case .macroExpansionDecl(let node):
+        return node._syntaxDataRef
       }
     }
 
@@ -1939,6 +2222,11 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .switchCaseList else {
       return nil
@@ -1968,6 +2256,11 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tuplePatternElementList else {
       return nil
@@ -1995,6 +2288,11 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TupleTypeElementSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .tupleTypeElementList else {
@@ -2037,6 +2335,18 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
         return node._syntaxNode
       case .nonisolatedTypeSpecifier(let node):
         return node._syntaxNode
+      }
+    }
+
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .simpleTypeSpecifier(let node):
+        return node._syntaxDataRef
+      case .lifetimeTypeSpecifier(let node):
+        return node._syntaxDataRef
+      case .nonisolatedTypeSpecifier(let node):
+        return node._syntaxDataRef
       }
     }
 
@@ -2147,6 +2457,11 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .typeSpecifierList else {
       return nil
@@ -2171,6 +2486,11 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = Syntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .unexpectedNodes else {
@@ -2199,6 +2519,11 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .versionComponentList else {
       return nil
@@ -2225,6 +2550,11 @@ public struct YieldedExpressionListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = YieldedExpressionSyntax
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .yieldedExpressionList else {

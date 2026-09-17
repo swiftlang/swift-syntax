@@ -43,6 +43,8 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         DeclSyntax("public let _syntaxNode: Syntax")
 
+      syntaxDataRefDecl
+
         DeclSyntax(
           """
           public init?(_ node: __shared some SyntaxProtocol) {
@@ -231,6 +233,12 @@ extension ChildNodeChoices {
       }
 
       self.syntaxGetter(propertyName: "_syntaxNode", propertyType: "Syntax")
+
+      self.syntaxGetter(
+        propertyName: "_syntaxDataRef",
+        propertyType: "SyntaxDataRef",
+        attributes: "@_spi(RawSyntax)\n"
+      )
 
       for choice in self.choices {
         choice.baseTypeInitDecl(hasArgumentName: false) ?? choice.concreteTypeInitDecl

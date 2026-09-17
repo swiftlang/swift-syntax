@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftIfConfig
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 @_spi(_QualifiedLookup) public struct DeclGroupSyntaxType: SyntaxProtocol, SyntaxHashable {
   public internal(set) var _syntaxNode: Syntax

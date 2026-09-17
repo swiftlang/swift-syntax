@@ -22,6 +22,14 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Do not retrieve this property directly. Use `Syntax(self)` instead.
   var _syntaxNode: Syntax { get }
 
+  /// Retrieve a reference to the storage of this node.
+  ///
+  /// Reading this instead of ``_syntaxNode`` avoids retaining and releasing the arena,
+  /// because ``SyntaxDataRef`` is trivial while ``Syntax`` is not. Do not retrieve this
+  /// property directly.
+  @_spi(RawSyntax)
+  var _syntaxDataRef: SyntaxDataRef { get }
+
   /// Converts the given specialized node to this type. Returns `nil` if the
   /// conversion is not possible.
   init?(_ node: __shared some SyntaxProtocol)
@@ -35,6 +43,13 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 // MARK: Access underlying data
 
 extension SyntaxProtocol {
+  /// A conformance that doesn't provide ``_syntaxDataRef`` itself falls back to going
+  /// through ``_syntaxNode``, which costs a retain and a release of the arena.
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(Syntax(self).dataRef)
+  }
+
   @_spi(RawSyntax)
   public var raw: RawSyntax {
     return _syntaxNode.raw

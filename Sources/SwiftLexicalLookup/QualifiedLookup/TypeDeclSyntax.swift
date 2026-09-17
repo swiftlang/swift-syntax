@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// A nominal type declaration (struct, enum, class, actor, protocol), type
 /// alias, associated type or generic parameter.

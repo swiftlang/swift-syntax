@@ -26,6 +26,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// Don’t access this. Use `Syntax(token)` instead.
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// The ``RawSyntaxTokenView`` of this token that allows accessing raw
   /// properties of the token.
   @_spi(RawSyntax)

@@ -109,10 +109,11 @@ extension SyntaxProtocol {
   /// Return 'SyntaxLayoutProperty' in the parent node, if this node is a child
   /// of a layout node. 'nil' otherwise.
   public var propertyInParent: SyntaxLayoutProperty? {
-    let syntax = Syntax(self)
-    // Reach the parent through the data pointers instead of 'Syntax.parent' so that
-    // identifying the property doesn't retain and release the arena.
-    guard let parentDataRef = syntax.dataRef.pointee.parent else {
+    // Read the storage through '_syntaxDataRef' rather than building a 'Syntax', so that
+    // identifying the property neither retains nor releases the arena. 'self' keeps the
+    // arena alive for the duration of the call, and only trivial values leave it.
+    let dataRef = self._syntaxDataRef.dataRef
+    guard let parentDataRef = dataRef.pointee.parent else {
       return nil
     }
     let parentKind = parentDataRef.pointee.raw.kind
@@ -121,7 +122,7 @@ extension SyntaxProtocol {
     }
     return SyntaxLayoutProperty(
       syntaxKind: parentKind,
-      index: SyntaxLayoutIndex(syntax.dataRef.pointee.absoluteInfo.layoutIndexInParent)
+      index: SyntaxLayoutIndex(dataRef.pointee.absoluteInfo.layoutIndexInParent)
     )
   }
 }

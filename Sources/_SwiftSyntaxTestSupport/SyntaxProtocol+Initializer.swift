@@ -208,8 +208,9 @@ extension SyntaxProtocol {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
         FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(typeName))) {
-          for keyPath in layout {
-            let label = childName(keyPath) ?? ""
+          for (index, keyPath) in layout.enumerated() {
+            let property = SyntaxLayoutProperty(syntaxKind: self.kind, index: SyntaxLayoutIndex(UInt32(index)))
+            let label = property.name ?? ""
             let value = self[keyPath: keyPath as! PartialKeyPath<Self>] as! SyntaxProtocol?
             let isUnexpected = label.hasPrefix("unexpected")
             if value != nil {

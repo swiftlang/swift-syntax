@@ -115,7 +115,7 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       ),
 
       // SwiftSyntax
-      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["ChildNameForKeyPath.swift"], childNameForKeyPathFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["ConcreteSyntaxProperty.swift"], concreteSyntaxPropertyFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Keyword.swift"], keywordFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxValidation.swift"], rawSyntaxValidationFile),
       GeneratedFileSpec(
@@ -128,6 +128,7 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxCollections.swift"], syntaxCollectionsFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxEnum.swift"], syntaxEnumFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxKind.swift"], syntaxKindFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxLayoutNodes.swift"], syntaxLayoutNodesFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxRewriter.swift"], syntaxRewriterFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTraits.swift"], syntaxTraitsFile),
       GeneratedFileSpec(

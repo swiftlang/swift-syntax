@@ -18,4 +18,7 @@ add_swift_syntax_library(SwiftWarningControl
 target_link_swift_syntax_libraries(SwiftWarningControl PUBLIC
   SwiftSyntax
   SwiftParser
-  SwiftIfConfig)
+  SwiftIfConfig
+  SwiftBasicFormat
+  SwiftParserDiagnostics
+)

@@ -10,9 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftBasicFormat
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
+import _SwiftSyntaxGenericTestSupport
 import _SwiftSyntaxTestSupport
 
 func assertBuildResult<T: SyntaxProtocol>(

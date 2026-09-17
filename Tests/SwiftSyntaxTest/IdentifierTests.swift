@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 class IdentifierTests: XCTestCase {

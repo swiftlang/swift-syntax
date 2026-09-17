@@ -215,7 +215,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .usingDecl, .variableDecl:
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .fileDefaultDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .variableDecl:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -249,6 +249,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(EnumCaseDeclSyntax.self),
       .node(EnumDeclSyntax.self),
       .node(ExtensionDeclSyntax.self),
+      .node(FileDefaultDeclSyntax.self),
       .node(FunctionDeclSyntax.self),
       .node(IfConfigDeclSyntax.self),
       .node(ImportDeclSyntax.self),
@@ -264,7 +265,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(SubscriptDeclSyntax.self),
       .node(TypeAliasDeclSyntax.self),
       .node(UnexpectedCodeDeclSyntax.self),
-      .node(UsingDeclSyntax.self),
       .node(VariableDeclSyntax.self)
     ])
   }
@@ -1623,6 +1623,7 @@ extension Syntax {
       .node(ExpressionStmtSyntax.self),
       .node(ExtensionDeclSyntax.self),
       .node(FallThroughStmtSyntax.self),
+      .node(FileDefaultDeclSyntax.self),
       .node(FloatLiteralExprSyntax.self),
       .node(ForStmtSyntax.self),
       .node(ForceUnwrapExprSyntax.self),
@@ -1798,7 +1799,6 @@ extension Syntax {
       .node(UnresolvedIsExprSyntax.self),
       .node(UnresolvedTernaryExprSyntax.self),
       .node(UnsafeExprSyntax.self),
-      .node(UsingDeclSyntax.self),
       .node(ValueBindingPatternSyntax.self),
       .node(VariableDeclSyntax.self),
       .node(VersionComponentListSyntax.self),

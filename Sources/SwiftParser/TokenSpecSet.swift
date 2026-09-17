@@ -279,6 +279,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
   case `associatedtype`
   case `case`
   case `class`
+  case `default`
   case `deinit`
   case `enum`
   case `extension`
@@ -293,7 +294,6 @@ enum PureDeclarationKeyword: TokenSpecSet {
   case `subscript`
   case `typealias`
   case pound
-  case using
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -302,6 +302,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
     case TokenSpec(.associatedtype): self = .associatedtype
     case TokenSpec(.case): self = .case
     case TokenSpec(.class): self = .class
+    case TokenSpec(.default) where languageFeatures.contains(.defaultIsolationPerFile): self = .default
     case TokenSpec(.deinit): self = .deinit
     case TokenSpec(.enum): self = .enum
     case TokenSpec(.extension): self = .extension
@@ -315,7 +316,6 @@ enum PureDeclarationKeyword: TokenSpecSet {
     case TokenSpec(.subscript): self = .subscript
     case TokenSpec(.typealias): self = .typealias
     case TokenSpec(.pound): self = .pound
-    case TokenSpec(.using) where languageFeatures.contains(.defaultIsolationPerFile): self = .using
     default: return nil
     }
   }
@@ -326,6 +326,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
     case .associatedtype: return .keyword(.associatedtype)
     case .case: return TokenSpec(.case, recoveryPrecedence: .declKeyword)
     case .class: return .keyword(.class)
+    case .default: return TokenSpec(.default, recoveryPrecedence: .declKeyword)
     case .deinit: return .keyword(.deinit)
     case .enum: return .keyword(.enum)
     case .extension: return .keyword(.extension)
@@ -340,7 +341,6 @@ enum PureDeclarationKeyword: TokenSpecSet {
     case .subscript: return .keyword(.subscript)
     case .typealias: return .keyword(.typealias)
     case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
-    case .using: return TokenSpec(.using)
     }
   }
 }

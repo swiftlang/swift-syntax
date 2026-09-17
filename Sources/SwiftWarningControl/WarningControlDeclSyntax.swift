@@ -84,7 +84,7 @@ extension AttributeListSyntax {
   }
 }
 
-extension UsingDeclSyntax {
+extension FileDefaultDeclSyntax {
   var warningControl: (DiagnosticGroupIdentifier, WarningGroupControl)? {
     guard case .attribute(let attributeSyntax) = self.specifier,
       let warningGroupControl = attributeSyntax.warningGroupControl

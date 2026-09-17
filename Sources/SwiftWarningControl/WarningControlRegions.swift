@@ -152,7 +152,7 @@ public struct WarningControlRegionTree {
   }
 
   /// Add warning control regions to the tree root node.
-  /// For example, controls corresponding to a top-level `using @diagnose()` statement.
+  /// For example, controls corresponding to a top-level `default @diagnose()` declaration.
   mutating func addRootWarningGroupControls(controls: [(DiagnosticGroupIdentifier, WarningGroupControl)]) {
     addWarningGroupControls(range: rootRegionNode.range, controls: controls)
   }

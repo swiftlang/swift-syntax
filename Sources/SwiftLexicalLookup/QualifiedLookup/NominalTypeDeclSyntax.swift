@@ -29,6 +29,7 @@ import SwiftSyntax
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     SyntaxNodeStructure.choices([
       .node(StructDeclSyntax.self),
@@ -38,6 +39,7 @@ import SwiftSyntax
       .node(ProtocolDeclSyntax.self),
     ])
   }
+  #endif
 }
 
 // MARK: Properties

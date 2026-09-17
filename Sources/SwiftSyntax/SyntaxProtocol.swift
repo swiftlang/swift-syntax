@@ -26,8 +26,10 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// conversion is not possible.
   init?(_ node: __shared some SyntaxProtocol)
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }
+  #endif
 }
 
 // MARK: Access underlying data
@@ -223,6 +225,7 @@ extension SyntaxProtocol {
     return Syntax(self).hasParent
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public var keyPathInParent: AnyKeyPath? {
     guard let parent = self.parent else {
       return nil
@@ -232,6 +235,7 @@ extension SyntaxProtocol {
     }
     return childrenKeyPaths[Syntax(self).layoutIndexInParent]
   }
+  #endif
 
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
   public var previousToken: TokenSyntax? {

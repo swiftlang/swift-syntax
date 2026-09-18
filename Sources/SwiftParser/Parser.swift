@@ -115,8 +115,16 @@ public struct Parser {
   /// See comments in ``IncrementalParseLookup``
   var parseLookup: IncrementalParseLookup?
 
-  /// See comments in ``LookaheadRanges``
+  /// See comments in ``LookaheadRanges``.
+  ///
+  /// Only populated when the parser was asked to collect them. Recording a range
+  /// for every node costs a hash table insertion per node, and only an
+  /// incremental reparse ever reads them, so a plain parse does not pay for it.
   public internal(set) var lookaheadRanges = LookaheadRanges()
+
+  /// Whether to record how far the parser looked ahead to parse each node, for a
+  /// later incremental reparse to consult.
+  let collectsLookaheadRanges: Bool
 
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
   private let lookaheadTrackerOwner: LookaheadTrackerOwner
@@ -234,7 +242,8 @@ public struct Parser {
     arena: ParsingRawSyntaxArena?,
     copySource: Bool,
     swiftVersion: SwiftVersion?,
-    languageFeatures: LanguageFeatures
+    languageFeatures: LanguageFeatures,
+    collectsLookaheadRanges: Bool
   ) {
     // A full parse allocates in proportion to the source, so the arena can size
     // its slabs for it. An incremental reparse allocates for what it re-lexes,
@@ -245,6 +254,14 @@ public struct Parser {
         parseTriviaFunction: TriviaParser.parseTrivia,
         sourceByteCount: parseTransition == nil ? input.count : nil
       )
+
+    // Recording how far the parser looked ahead for each node costs a hash table
+    // insertion per node, and only an incremental reparse ever reads those ranges, so
+    // a plain parse does not pay for them. An incremental parse records them whatever
+    // the caller asked for: it is handed the previous parse's ranges and has to hand
+    // on ranges that describe this one, or the reparse after it reuses nodes against
+    // stale information.
+    self.collectsLookaheadRanges = collectsLookaheadRanges || parseTransition != nil
 
     var input = input
     if parseTransition == nil {
@@ -271,6 +288,11 @@ public struct Parser {
     self.swiftVersion = swiftVersion ?? Self.defaultSwiftVersion
     self.languageFeatures = languageFeatures
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
+    // Only a full parse: an incremental one is handed the previous parse's ranges
+    // below, which replaces whatever this reserved.
+    if self.collectsLookaheadRanges, parseTransition == nil {
+      self.lookaheadRanges.reserveCapacity(utf8ByteCount: input.count)
+    }
 
     self.lexemes = Lexer.tokenize(
       input,
@@ -303,7 +325,8 @@ public struct Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
-    languageFeatures: LanguageFeatures = []
+    languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = false
   ) {
     var input = input
     input.makeContiguousUTF8()
@@ -318,7 +341,8 @@ public struct Parser {
         // copied into a parser-owned buffer.
         copySource: true,
         swiftVersion: swiftVersion,
-        languageFeatures: languageFeatures
+        languageFeatures: languageFeatures,
+        collectsLookaheadRanges: collectsLookaheadRanges
       )
     }
   }
@@ -343,7 +367,8 @@ public struct Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
-    languageFeatures: LanguageFeatures = []
+    languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = false
   ) {
     // Copy the source so the caller may free `input` after this initializer
     // returns.
@@ -354,7 +379,8 @@ public struct Parser {
       arena: nil,
       copySource: true,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      collectsLookaheadRanges: collectsLookaheadRanges
     )
   }
 
@@ -367,7 +393,8 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     arena: ParsingRawSyntaxArena,
     swiftVersion: SwiftVersion? = nil,
-    languageFeatures: LanguageFeatures = []
+    languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = false
   ) {
     // Copy the source so the caller may free `input` after this initializer
     // returns, and so the resulting tree does not depend on `input` (its tokens
@@ -379,7 +406,8 @@ public struct Parser {
       arena: arena,
       copySource: true,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      collectsLookaheadRanges: collectsLookaheadRanges
     )
   }
 
@@ -403,6 +431,7 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
     languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = false,
     body: (inout Parser) -> T
   ) -> T {
     var parser = Parser(
@@ -412,7 +441,8 @@ public struct Parser {
       arena: nil,
       copySource: false,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      collectsLookaheadRanges: collectsLookaheadRanges
     )
     return body(&parser)
   }
@@ -431,6 +461,7 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
     languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = false,
     body: (inout Parser) -> T
   ) -> T {
     var input = input
@@ -442,6 +473,7 @@ public struct Parser {
         parseTransition: parseTransition,
         swiftVersion: swiftVersion,
         languageFeatures: languageFeatures,
+        collectsLookaheadRanges: collectsLookaheadRanges,
         body: body
       )
     }
@@ -1047,5 +1079,16 @@ public struct LookaheadRanges: Sendable {
     // Keep the larger range so registering the node after advancing the lexer
     // cannot discard lookahead that was recorded before the node was reused.
     self.lookaheadRanges[node.id] = max(self.lookaheadRanges[node.id] ?? 0, lookaheadLength)
+  }
+
+  /// Reserve room for the nodes that a source file of `utf8ByteCount` bytes is
+  /// expected to register, so that filling the table does not repeatedly resize
+  /// and rehash it.
+  ///
+  /// Measured over the parser's own sources and its performance test input, a
+  /// node is registered roughly every 90 bytes. Round that down so that a file
+  /// denser than average still does not have to grow the table.
+  mutating func reserveCapacity(utf8ByteCount: Int) {
+    self.lookaheadRanges.reserveCapacity(utf8ByteCount / 80)
   }
 }

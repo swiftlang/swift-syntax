@@ -131,7 +131,8 @@ extension Parser {
       maximumNestingLevel: nil,
       parseTransition: parseTransition,
       swiftVersion: nil,
-      languageFeatures: []
+      languageFeatures: [],
+      collectsLookaheadRanges: true
     ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 
@@ -150,7 +151,8 @@ extension Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       swiftVersion: nil,
-      languageFeatures: []
+      languageFeatures: [],
+      collectsLookaheadRanges: true
     ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 }

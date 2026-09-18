@@ -198,7 +198,19 @@ extension FunctionCallExprSyntax {
       return literalValue == targetName
     }
 
-    guard let targetCall = FunctionCallExprSyntax.findFirst(in: targetArray, matching: matchesTargetCall) else {
+    // Only check the top-level elements of the targets array. A recursive
+    // search would incorrectly match a target name that appears inside
+    // another target's `dependencies:` array — e.g. `.target(name: "Foo")`
+    // listed as a dependency has the same `name:` argument as the actual
+    // `.target(name: "Foo")` definition at the top level.
+    guard let targetCall = targetArray.elements.lazy.compactMap({ element -> FunctionCallExprSyntax? in
+      guard let call = element.expression.as(FunctionCallExprSyntax.self),
+        matchesTargetCall(call: call)
+      else {
+        return nil
+      }
+      return call
+    }).first else {
       throw ManifestEditError.cannotFindTarget(targetName: targetName)
     }
 

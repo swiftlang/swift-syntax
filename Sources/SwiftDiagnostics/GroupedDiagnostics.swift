@@ -114,12 +114,14 @@ public struct GroupedDiagnostics {
 
   /// The IDs of the source files that have been added, in the order they were
   /// added.
+  @_spi(Compiler)
   public var sourceFileIDs: [SourceFileID] {
     sourceFiles.map { $0.id }
   }
 
   /// The diagnostics that have been added for the given source file, in the
   /// order they were added.
+  @_spi(Compiler)
   public func diagnostics(in sourceFileID: SourceFileID) -> [Diagnostic] {
     sourceFiles[sourceFileID.id].diagnostics
   }

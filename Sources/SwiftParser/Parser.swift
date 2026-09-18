@@ -279,6 +279,7 @@ public struct Parser {
     self.currentToken = self.lexemes.advance()
     if let parseTransition {
       self.parseLookup = IncrementalParseLookup(transition: parseTransition)
+      self.lookaheadRanges = parseTransition.previousLookaheadRanges
     } else {
       self.parseLookup = nil
     }
@@ -1042,6 +1043,9 @@ public struct LookaheadRanges: Sendable {
   public init() {}
 
   mutating func registerNodeForIncrementalParse(node: RawSyntax, lookaheadLength: Int) {
-    self.lookaheadRanges[node.id] = lookaheadLength
+    // Reused nodes may already have a lookahead range from the previous parse.
+    // Keep the larger range so registering the node after advancing the lexer
+    // cannot discard lookahead that was recorded before the node was reused.
+    self.lookaheadRanges[node.id] = max(self.lookaheadRanges[node.id] ?? 0, lookaheadLength)
   }
 }

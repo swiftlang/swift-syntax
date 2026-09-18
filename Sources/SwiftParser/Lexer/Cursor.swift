@@ -62,6 +62,25 @@ extension UInt8 {
       return false
     }
   }
+
+  /// Whether this byte, met inside a string literal, is only part of its text: it
+  /// can neither end the segment nor need validating.
+  ///
+  /// True of the printable ASCII characters, space included, other than the three
+  /// that mean something to the lexer there: a quote can close the literal, a
+  /// backslash can begin an escape or an interpolation, and a single quote closes
+  /// a single quoted literal. A byte outside that range is a newline that ends the
+  /// segment, the tab that only a multi-line literal allows, the NUL that is an
+  /// error, or part of a multi-byte scalar, which has to be decoded to be
+  /// validated.
+  fileprivate var isOnlyTextInAStringLiteral: Bool {
+    switch self {
+    case UInt8(ascii: " ")...UInt8(ascii: "~"):
+      return self != UInt8(ascii: "\"") && self != UInt8(ascii: "\\") && self != UInt8(ascii: "'")
+    default:
+      return false
+    }
+  }
 }
 
 extension Lexer.Cursor {
@@ -707,6 +726,24 @@ extension Lexer.Cursor.Position {
       input: UnsafeBufferPointer(start: base + n, count: self.input.count - n),
       previous: base[n - 1]
     )
+  }
+
+  /// Advance past every byte that is only part of a string literal's text.
+  ///
+  /// Most of a literal is such bytes, and each one taken singly costs a peek, a
+  /// copy of the cursor out and back, a second peek, a scalar decode and an enum
+  /// to return a value the caller discards. None of that decides anything until a
+  /// byte turns up that could: a quote, a backslash, a newline, a tab, a NUL, or
+  /// anything outside ASCII.
+  mutating func advanceOverOrdinaryStringLiteralBytes() {
+    let bytes = self.input
+    var count = 0
+    while count < bytes.count, bytes[count].isOnlyTextInAStringLiteral {
+      count += 1
+    }
+    if count > 0 {
+      self = self.advanced(by: count)
+    }
   }
 }
 
@@ -2075,6 +2112,10 @@ extension Lexer.Cursor {
     var error: LexingDiagnostic? = nil
 
     while true {
+      // Take the run of bytes that are only text before looking at anything that
+      // could end the segment or need validating.
+      self.position.advanceOverOrdinaryStringLiteralBytes()
+
       switch self.peek() {
       case "\\":
         if self.isAtStringInterpolationAnchor(delimiterLength: delimiterLength) {

@@ -30,7 +30,10 @@ extension Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: nil,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      // This hands back a tree and nothing else, so no caller can read the lookahead
+      // ranges off it and no later parse can be given them.
+      collectsLookaheadRanges: false
     ) { SourceFileSyntax.parse(from: &$0) }
   }
 
@@ -47,7 +50,10 @@ extension Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: nil,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      // This hands back a tree and nothing else, so no caller can read the lookahead
+      // ranges off it and no later parse can be given them.
+      collectsLookaheadRanges: false
     ) { SourceFileSyntax.parse(from: &$0) }
   }
 
@@ -131,7 +137,8 @@ extension Parser {
       maximumNestingLevel: nil,
       parseTransition: parseTransition,
       swiftVersion: nil,
-      languageFeatures: []
+      languageFeatures: [],
+      collectsLookaheadRanges: true
     ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 
@@ -150,7 +157,8 @@ extension Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       swiftVersion: nil,
-      languageFeatures: []
+      languageFeatures: [],
+      collectsLookaheadRanges: true
     ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 }

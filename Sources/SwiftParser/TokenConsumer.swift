@@ -371,11 +371,14 @@ extension TokenConsumer {
       return true
 
     case .keyword:
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.inout), TokenSpec(.Any), TokenSpec(.Self), TokenSpec(.var), TokenSpec(.let):
-        return true
-      default:
-        return false
+      let keyword = lexeme.keyword
+      switch keyword {
+      case .inout: return true
+      case .Any: return true
+      case .Self: return true
+      case .var: return true
+      case .let: return true
+      default: return false
       }
 
     case .prefixOperator where lexeme.isContextualPunctuator("~"):

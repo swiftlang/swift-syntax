@@ -13,6 +13,43 @@
 import SwiftSyntax
 
 extension SyntaxProtocol {
+
+  @_spi(Experimental) public func lookupControlStructure() -> Syntax? {
+    let syntax = Syntax(self)
+    
+    switch syntax.as(SyntaxEnum.self) {
+    case .throwStmt, .returnStmt:
+      return lookupEnclosingControlStructure(for: [
+        FunctionDeclSyntax.self,
+        InitializerDeclSyntax.self,
+        DeinitializerDeclSyntax.self,
+        AccessorDeclSyntax.self,
+        ClosureExprSyntax.self,
+      ])
+    case .breakStmt, .continueStmt:
+      return lookupEnclosingControlStructure(for: [
+        WhileStmtSyntax.self,
+        RepeatStmtSyntax.self,
+        ForStmtSyntax.self,
+      ])
+    default:
+      return nil
+    }
+  }
+
+  private func lookupEnclosingControlStructure(for types: [SyntaxProtocol.Type]) -> Syntax? {
+    var nextSyntax: Syntax? = Syntax(self).parent
+    
+    while let currentSyntax = nextSyntax {
+      if types.contains(where: { currentSyntax.is($0) }) {
+        return currentSyntax
+      }
+      nextSyntax = currentSyntax.parent
+    }
+    
+    return nil
+  }
+
   /// Returns all labeled statements available at a particular syntax node.
   ///
   /// - Returns: Available labeled statements at a particular syntax node

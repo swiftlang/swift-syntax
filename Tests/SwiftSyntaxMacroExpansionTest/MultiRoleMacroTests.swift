@@ -257,4 +257,129 @@ final class MultiRoleMacroTests: XCTestCase {
       macros: ["decl": DeclMacro.self, "Peer": MyPeerMacro.self]
     )
   }
+
+  func testMemberAttributeAddingPeerMacroWithTrivia() {
+    struct SomeMemberMacro: MemberAttributeMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingAttributesFor member: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AttributeSyntax] {
+        return ["@somePeerMacro"]
+      }
+    }
+
+    struct SomePeerMacro: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        guard let varDecl = declaration.as(VariableDeclSyntax.self) else { return [] }
+
+        guard let firstBinding = varDecl.bindings.first,
+          let idPattern = firstBinding.pattern.as(IdentifierPatternSyntax.self)
+        else {
+          return []
+        }
+        let newPattern = idPattern.with(\.identifier, .identifier("_" + idPattern.identifier.text))
+        var newBindings = varDecl.bindings
+        newBindings[newBindings.startIndex] = firstBinding.with(\.pattern, PatternSyntax(newPattern))
+
+        let extraAttr = AttributeSyntax(
+          leadingTrivia: varDecl.leadingTrivia,
+          attributeName: IdentifierTypeSyntax(name: .identifier("extraAttribute")),
+          trailingTrivia: .newline
+        )
+
+        var newDecl = varDecl.with(\.bindings, newBindings)
+        var newAttributes = newDecl.attributes
+        newAttributes.insert(.attribute(extraAttr), at: newAttributes.startIndex)
+        newDecl = newDecl.with(\.attributes, newAttributes).with(\.leadingTrivia, [])
+
+        return [DeclSyntax(newDecl)]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @someMemberMacro
+      struct Foo {
+        @someAttribute // some trailing comment
+        let foo: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @someAttribute
+          // some trailing comment
+          let foo: Int
+
+          @extraAttribute
+
+            @someAttribute // some trailing comment
+            let _foo: Int
+        }
+        """,
+      macros: [
+        "someMemberMacro": SomeMemberMacro.self,
+        "somePeerMacro": SomePeerMacro.self,
+      ],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testMemberAttributeAddingExtensionMacro() {
+    struct SomeMemberMacro: MemberAttributeMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingAttributesFor member: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AttributeSyntax] {
+        return ["@someExtensionMacro"]
+      }
+    }
+
+    struct SomeExtensionMacro: ExtensionMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingExtensionsOf type: some TypeSyntaxProtocol,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [ExtensionDeclSyntax] {
+        let attrCount = declaration.attributes.count
+
+        return [
+          DeclSyntax("extension \(type.trimmed) /* attr count: \(raw: attrCount) */ {}").cast(ExtensionDeclSyntax.self)
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @someMemberMacro
+      struct Foo {
+        @someAttribute
+        struct Bar {}
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @someAttribute
+          struct Bar {}
+        }
+
+        extension Foo.Bar /* attr count: 1 */ {
+        }
+        """,
+      macros: [
+        "someMemberMacro": SomeMemberMacro.self,
+        "someExtensionMacro": SomeExtensionMacro.self,
+      ],
+      indentationWidth: indentationWidth
+    )
+  }
 }

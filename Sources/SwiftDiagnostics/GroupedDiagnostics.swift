@@ -260,11 +260,16 @@ extension GroupedDiagnostics {
         ) + boxSuffix + "\n"
     }
 
-    // Render the buffer.
+    // Render the buffer, expanding each diagnostic's attached notes into
+    // note-severity diagnostics so the formatter lays them out too.
+    let diagnostics = sourceFile.diagnostics.flatMap { diagnostic in
+      [diagnostic] + diagnostic.notes.map(\.asDiagnostic)
+    }
+
     return prefixString
       + formatter.annotatedSource(
         tree: sourceFile.tree,
-        diags: sourceFile.diagnostics,
+        diags: diagnostics,
         indentString: diagnosticDecorator.decorateBufferOutline(indentString),
         suffixTexts: childSources,
         sourceLocationConverter: slc
@@ -287,5 +292,21 @@ extension DiagnosticsFormatter {
   ) -> String {
     let formatter = DiagnosticsFormatter(contextSize: contextSize, colorize: colorize)
     return formatter.annotateSources(in: group)
+  }
+}
+
+/// Renders a ``NoteMessage`` as a `.note`-severity ``DiagnosticMessage`` so that
+/// notes can be laid out by ``DiagnosticsFormatter`` alongside their diagnostic.
+private struct NoteAsDiagnosticMessage: DiagnosticMessage {
+  let noteMessage: NoteMessage
+  var message: String { noteMessage.message }
+  var diagnosticID: MessageID { noteMessage.noteID }
+  var severity: DiagnosticSeverity { .note }
+}
+
+extension Note {
+  /// This note expressed as a `.note`-severity diagnostic anchored at its own location.
+  fileprivate var asDiagnostic: Diagnostic {
+    Diagnostic(node: node, position: position, message: NoteAsDiagnosticMessage(noteMessage: noteMessage))
   }
 }

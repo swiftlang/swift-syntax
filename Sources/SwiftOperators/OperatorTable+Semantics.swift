@@ -155,4 +155,33 @@ extension OperatorTable {
     try visitor.errors.forEach(errorHandler)
     self = visitor.opPrecedence
   }
+
+  /// Determine the precedence of one precedence group relative to another.
+  ///
+  /// - Parameters:
+  ///   - firstGroupName: The precedence group whose position is being queried.
+  ///   - secondGroupName: The precedence group being compared against.
+  ///   - syntax: A syntax node used as the reference location when reporting
+  ///     errors encountered while walking the precedence-group relationships.
+  ///   - errorHandler: A handler invoked when an inconsistency is found in
+  ///     the precedence-group relationships. By default the underlying
+  ///     `OperatorError` is re-thrown.
+  /// - Returns: ``Precedence/higherThan`` if `firstGroupName` has higher
+  ///   precedence than `secondGroupName`, ``Precedence/lowerThan`` if it has
+  ///   lower precedence, and ``Precedence/unrelated`` otherwise (including
+  ///   when both names refer to the same precedence group).
+  public func precedence(
+    of firstGroupName: PrecedenceGroupName,
+    relativeTo secondGroupName: PrecedenceGroupName,
+    referencedFrom syntax: Syntax,
+    errorHandler: OperatorErrorHandler = { throw $0 }
+  ) rethrows -> Precedence {
+    return try precedenceGraph.precedence(
+      relating: firstGroupName,
+      to: secondGroupName,
+      startSyntax: syntax,
+      endSyntax: syntax,
+      errorHandler: errorHandler
+    )
+  }
 }

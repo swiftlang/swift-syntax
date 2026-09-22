@@ -36,14 +36,25 @@ struct RecursiveRawSyntaxFlags: OptionSet, Sendable {
   static let hasMaximumNestingLevelOverflow = RecursiveRawSyntaxFlags(rawValue: 1 << 3)
 }
 
-/// Node data for RawSyntax tree. Tagged union plus common data.
-internal struct RawSyntaxData: Sendable {
-  internal enum Payload: Sendable {
-    /// - Important: A raw syntax node for a parsed token must always be allocated in a `ParsingRawSyntaxArena` so we can
-    ///   parse the trivia in the token.
-    case parsedToken(ParsedToken)
-    case materializedToken(MaterializedToken)
-    case layout(Layout)
+/// Which shape a node's fields have, and the arena those fields live in.
+///
+/// One word wide: a class reference has spare bits, so the shape rides along
+/// inside the reference rather than beside it. A node is this header followed by
+/// the fields of whichever shape it names, so a node takes room for its own
+/// shape instead of for the largest one.
+enum RawSyntaxData: Sendable {
+  /// - Important: A raw syntax node for a parsed token must always be allocated
+  ///   in a `ParsingRawSyntaxArena` so we can parse the trivia in the token.
+  case parsedToken(RawSyntaxArenaRef)
+  case materializedToken(RawSyntaxArenaRef)
+  case layout(RawSyntaxArenaRef)
+
+  @inline(__always)
+  var arenaReference: RawSyntaxArenaRef {
+    switch self {
+    case .parsedToken(let arenaRef), .materializedToken(let arenaRef), .layout(let arenaRef):
+      return arenaRef
+    }
   }
 
   /// Token with lazy trivia parsing.
@@ -167,29 +178,127 @@ internal struct RawSyntaxData: Sendable {
     var descendantCount: Int
     var recursiveFlags: RecursiveRawSyntaxFlags
   }
-
-  var payload: Payload
-  var arenaReference: RawSyntaxArenaRef
 }
 
 extension RawSyntaxData.ParsedToken {
-  var tokenText: SyntaxText {
-    SyntaxText(rebasing: wholeText[textRange])
-  }
-  var leadingTriviaText: SyntaxText {
-    SyntaxText(rebasing: wholeText[..<textRange.lowerBound])
-  }
-  var trailingTriviaText: SyntaxText {
-    SyntaxText(rebasing: wholeText[textRange.upperBound...])
+  /// A parsed token's fields in a node's tail.
+  ///
+  /// - Important: The arena that owns the node must outlive this.
+  struct Ref: Sendable {
+    typealias Fields = RawSyntaxData.ParsedToken
+
+    private let pointer: ArenaAllocatedPointer<Fields>
+
+    @inline(__always)
+    init(_ pointer: UnsafePointer<Fields>) {
+      self.pointer = ArenaAllocatedPointer(pointer)
+    }
+
+    /// The fields themselves, to make a token that differs from this one in a
+    /// field or two.
+    @inline(__always)
+    var fields: Fields { pointer.pointee }
+
+    @inline(__always)
+    var tokenKind: RawTokenKind { pointer.pointee.tokenKind }
+    @inline(__always)
+    var wholeText: SyntaxText { pointer.pointee.wholeText }
+    @inline(__always)
+    var textRange: Range<SyntaxText.Index> { pointer.pointee.textRange }
+    @inline(__always)
+    var presence: SourcePresence { pointer.pointee.presence }
+    @inline(__always)
+    var tokenDiagnostic: TokenDiagnostic? { pointer.pointee.tokenDiagnostic }
+
+    /// The token's own text, without its trivia.
+    @inline(__always)
+    var tokenText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[self.textRange])
+    }
+    @inline(__always)
+    var leadingTriviaText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[..<self.textRange.lowerBound])
+    }
+    @inline(__always)
+    var trailingTriviaText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[self.textRange.upperBound...])
+    }
   }
 }
 
 extension RawSyntaxData.MaterializedToken {
-  var leadingTrivia: RawTriviaPieceBuffer {
-    RawTriviaPieceBuffer(rebasing: triviaPieces[..<Int(numLeadingTrivia)])
+  /// A materialized token's fields in a node's tail.
+  ///
+  /// - Important: The arena that owns the node must outlive this.
+  struct Ref: Sendable {
+    typealias Fields = RawSyntaxData.MaterializedToken
+
+    private let pointer: ArenaAllocatedPointer<Fields>
+
+    @inline(__always)
+    init(_ pointer: UnsafePointer<Fields>) {
+      self.pointer = ArenaAllocatedPointer(pointer)
+    }
+
+    /// The fields themselves, to make a token that differs from this one in a
+    /// field or two.
+    @inline(__always)
+    var fields: Fields { pointer.pointee }
+
+    @inline(__always)
+    var tokenKind: RawTokenKind { pointer.pointee.tokenKind }
+    @inline(__always)
+    var tokenText: SyntaxText { pointer.pointee.tokenText }
+    @inline(__always)
+    var byteLength: UInt32 { pointer.pointee.byteLength }
+    @inline(__always)
+    var numLeadingTrivia: UInt32 { pointer.pointee.numLeadingTrivia }
+    @inline(__always)
+    var triviaPieces: RawTriviaPieceBuffer { pointer.pointee.triviaPieces }
+    @inline(__always)
+    var presence: SourcePresence { pointer.pointee.presence }
+    @inline(__always)
+    var tokenDiagnostic: TokenDiagnostic? { pointer.pointee.tokenDiagnostic }
+
+    @inline(__always)
+    var leadingTrivia: RawTriviaPieceBuffer {
+      RawTriviaPieceBuffer(rebasing: self.triviaPieces[..<Int(self.numLeadingTrivia)])
+    }
+    @inline(__always)
+    var trailingTrivia: RawTriviaPieceBuffer {
+      RawTriviaPieceBuffer(rebasing: self.triviaPieces[Int(self.numLeadingTrivia)...])
+    }
   }
-  var trailingTrivia: RawTriviaPieceBuffer {
-    RawTriviaPieceBuffer(rebasing: triviaPieces[Int(numLeadingTrivia)...])
+}
+
+extension RawSyntaxData.Layout {
+  /// A layout node's fields in a node's tail.
+  ///
+  /// - Important: The arena that owns the node must outlive this.
+  struct Ref: Sendable {
+    typealias Fields = RawSyntaxData.Layout
+
+    private let pointer: ArenaAllocatedPointer<Fields>
+
+    @inline(__always)
+    init(_ pointer: UnsafePointer<Fields>) {
+      self.pointer = ArenaAllocatedPointer(pointer)
+    }
+
+    /// The fields themselves, for a caller that wants them as a value.
+    @inline(__always)
+    var fields: Fields { pointer.pointee }
+
+    @inline(__always)
+    var kind: SyntaxKind { pointer.pointee.kind }
+    @inline(__always)
+    var layout: RawSyntaxBuffer { pointer.pointee.layout }
+    @inline(__always)
+    var byteLength: Int { pointer.pointee.byteLength }
+    @inline(__always)
+    var descendantCount: Int { pointer.pointee.descendantCount }
+    @inline(__always)
+    var recursiveFlags: RecursiveRawSyntaxFlags { pointer.pointee.recursiveFlags }
   }
 }
 
@@ -199,23 +308,76 @@ extension RawSyntaxData.MaterializedToken {
 @_spi(RawSyntax)
 public struct RawSyntax: Sendable {
 
-  /// Pointer to the actual data which resides in a RawSyntaxArena.
+  /// Pointer to the node, which resides in a RawSyntaxArena: a one-word header
+  /// followed by the fields of the shape it names.
   var pointer: ArenaAllocatedPointer<RawSyntaxData>
   init(pointer: ArenaAllocatedPointer<RawSyntaxData>) {
     self.pointer = pointer
   }
 
-  init(arena: __shared RawSyntaxArena, payload: RawSyntaxData.Payload) {
-    let arenaRef = RawSyntaxArenaRef(arena)
-    let data = RawSyntaxData(
-      payload: payload,
-      arenaReference: arenaRef
-    )
-    self.init(pointer: ArenaAllocatedPointer(arena.intern(data)))
+  /// Where a node's tail begins: immediately past its one-word header.
+  @inline(__always)
+  static var tailOffset: Int { MemoryLayout<RawSyntaxData>.stride }
+
+  @inline(__always)
+  private var tail: UnsafeRawPointer {
+    UnsafeRawPointer(pointer.pointer).advanced(by: Self.tailOffset)
   }
 
-  var rawData: RawSyntaxData {
-    @_transparent unsafeAddress { pointer.pointer }
+  /// Takes room for a header and `tailByteCount` bytes after it, writes the
+  /// header, and hands back the node together with where its tail begins.
+  @inline(__always)
+  private static func allocate(
+    _ header: RawSyntaxData,
+    tailByteCount: Int,
+    arena: __shared RawSyntaxArena
+  ) -> (node: RawSyntax, tail: UnsafeMutableRawPointer) {
+    let base = arena.allocateNode(byteCount: Self.tailOffset + tailByteCount)
+    let headerPointer = base.assumingMemoryBound(to: RawSyntaxData.self)
+    headerPointer.initialize(to: header)
+    return (
+      RawSyntax(pointer: ArenaAllocatedPointer(UnsafePointer(headerPointer))),
+      base.advanced(by: Self.tailOffset)
+    )
+  }
+
+  /// Which of the three shapes this node has, and the arena that owns it.
+  @inline(__always)
+  var header: RawSyntaxData {
+    pointer.pointer.pointee
+  }
+
+  /// - Precondition: this is a parsed token.
+  @inline(__always)
+  var asParsedToken: RawSyntaxData.ParsedToken.Ref {
+    switch self.header {
+    case .parsedToken:
+      return RawSyntaxData.ParsedToken.Ref(tail.assumingMemoryBound(to: RawSyntaxData.ParsedToken.self))
+    case .materializedToken, .layout:
+      preconditionFailure("not a parsed token")
+    }
+  }
+
+  /// - Precondition: this is a materialized token.
+  @inline(__always)
+  var asMaterializedToken: RawSyntaxData.MaterializedToken.Ref {
+    switch self.header {
+    case .materializedToken:
+      return RawSyntaxData.MaterializedToken.Ref(tail.assumingMemoryBound(to: RawSyntaxData.MaterializedToken.self))
+    case .parsedToken, .layout:
+      preconditionFailure("not a materialized token")
+    }
+  }
+
+  /// - Precondition: this is a layout node or a collection.
+  @inline(__always)
+  var asLayout: RawSyntaxData.Layout.Ref {
+    switch self.header {
+    case .layout:
+      return RawSyntaxData.Layout.Ref(tail.assumingMemoryBound(to: RawSyntaxData.Layout.self))
+    case .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
   }
 
   public var arena: RetainedRawSyntaxArena {
@@ -223,11 +385,7 @@ public struct RawSyntax: Sendable {
   }
 
   internal var arenaReference: RawSyntaxArenaRef {
-    rawData.arenaReference
-  }
-
-  internal var payload: RawSyntaxData.Payload {
-    rawData.payload
+    header.arenaReference
   }
 }
 
@@ -237,10 +395,10 @@ extension RawSyntax {
   /// The syntax kind of this raw syntax.
   @_spi(RawSyntax)
   public var kind: SyntaxKind {
-    switch rawData.payload {
-    case .parsedToken(_): return .token
-    case .materializedToken(_): return .token
-    case .layout(let dat): return dat.kind
+    switch header {
+    case .parsedToken: return .token
+    case .materializedToken: return .token
+    case .layout: return asLayout.kind
     }
   }
 
@@ -273,12 +431,12 @@ extension RawSyntax {
 
   /// Total number of nodes in this sub-tree, including `self` node.
   var totalNodes: Int {
-    switch rawData.payload {
-    case .parsedToken(_),
+    switch header {
+    case .parsedToken,
       .materializedToken(_):
       return 1
-    case .layout(let dat):
-      return dat.descendantCount + 1
+    case .layout:
+      return asLayout.descendantCount + 1
     }
   }
 
@@ -287,21 +445,21 @@ extension RawSyntax {
   /// Sum of text byte lengths of all present descendant token nodes.
   @_spi(RawSyntax)
   public var byteLength: Int {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      if dat.presence == .present {
-        return dat.wholeText.count
+    switch header {
+    case .parsedToken:
+      if asParsedToken.presence == .present {
+        return asParsedToken.wholeText.count
       } else {
         return 0
       }
-    case .materializedToken(let dat):
-      if dat.presence == .present {
-        return Int(dat.byteLength)
+    case .materializedToken:
+      if asMaterializedToken.presence == .present {
+        return Int(asMaterializedToken.byteLength)
       } else {
         return 0
       }
-    case .layout(let dat):
-      return dat.byteLength
+    case .layout:
+      return asLayout.byteLength
     }
   }
 
@@ -397,23 +555,23 @@ extension RawSyntax {
   /// visitor are only guaranteed to be valid within that call. Otherwise, they
   /// are valid as long as the raw syntax is alive.
   public func withEachSyntaxText(body: (SyntaxText, _ isEphemeral: Bool) throws -> Void) rethrows {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      if dat.presence == .present {
-        try body(dat.wholeText, /*isEphemeral*/ false)
+    switch header {
+    case .parsedToken:
+      if asParsedToken.presence == .present {
+        try body(asParsedToken.wholeText, /*isEphemeral*/ false)
       }
-    case .materializedToken(let dat):
-      if dat.presence == .present {
-        for p in dat.leadingTrivia {
+    case .materializedToken:
+      if asMaterializedToken.presence == .present {
+        for p in asMaterializedToken.leadingTrivia {
           try p.withSyntaxText(body: body)
         }
-        try body(dat.tokenText, /*isEphemeral*/ false)
-        for p in dat.trailingTrivia {
+        try body(asMaterializedToken.tokenText, /*isEphemeral*/ false)
+        for p in asMaterializedToken.trailingTrivia {
           try p.withSyntaxText(body: body)
         }
       }
-    case .layout(let dat):
-      for case let child? in dat.layout {
+    case .layout:
+      for case let child? in asLayout.layout {
         try child.withEachSyntaxText(body: body)
       }
     }
@@ -446,19 +604,19 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   /// stream. This implementation must be source-accurate.
   /// - Parameter stream: The stream on which to output this node.
   public func write<Target: TextOutputStream>(to target: inout Target) {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      if dat.presence == .present {
-        String(syntaxText: dat.wholeText).write(to: &target)
+    switch header {
+    case .parsedToken:
+      if asParsedToken.presence == .present {
+        String(syntaxText: asParsedToken.wholeText).write(to: &target)
       }
-    case .materializedToken(let dat):
-      if dat.presence == .present {
-        for p in dat.leadingTrivia { p.write(to: &target) }
-        String(syntaxText: dat.tokenText).write(to: &target)
-        for p in dat.trailingTrivia { p.write(to: &target) }
+    case .materializedToken:
+      if asMaterializedToken.presence == .present {
+        for p in asMaterializedToken.leadingTrivia { p.write(to: &target) }
+        String(syntaxText: asMaterializedToken.tokenText).write(to: &target)
+        for p in asMaterializedToken.trailingTrivia { p.write(to: &target) }
       }
-    case .layout(let dat):
-      for case let child? in dat.layout {
+    case .layout:
+      for case let child? in asLayout.layout {
         child.write(to: &target)
       }
     }
@@ -589,10 +747,23 @@ extension RawSyntax {
       tokenDiagnostic: tokenDiagnostic
     )
     precondition(
-      kind != .keyword || Keyword(payload.tokenText) != nil,
+      kind != .keyword || Keyword(SyntaxText(rebasing: wholeText[textRange])) != nil,
       "If kind is keyword, the text must be a known token kind"
     )
-    return RawSyntax(arena: arena, payload: .parsedToken(payload))
+    return RawSyntax.allocateParsedToken(payload, arena: arena)
+  }
+
+  static func allocateParsedToken(
+    _ fields: RawSyntaxData.ParsedToken,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let (node, tail) = Self.allocate(
+      .parsedToken(RawSyntaxArenaRef(arena)),
+      tailByteCount: MemoryLayout<RawSyntaxData.ParsedToken>.stride,
+      arena: arena
+    )
+    tail.bindMemory(to: RawSyntaxData.ParsedToken.self, capacity: 1).initialize(to: fields)
+    return node
   }
 
   /// "Designated" factory method to create a materialized token node.
@@ -637,7 +808,20 @@ extension RawSyntax {
       tokenDiagnostic: tokenDiagnostic
     )
     precondition(kind != .keyword || Keyword(text) != nil, "If kind is keyword, the text must be a known token kind")
-    return RawSyntax(arena: arena, payload: .materializedToken(payload))
+    return RawSyntax.allocateMaterializedToken(payload, arena: arena)
+  }
+
+  static func allocateMaterializedToken(
+    _ fields: RawSyntaxData.MaterializedToken,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let (node, tail) = Self.allocate(
+      .materializedToken(RawSyntaxArenaRef(arena)),
+      tailByteCount: MemoryLayout<RawSyntaxData.MaterializedToken>.stride,
+      arena: arena
+    )
+    tail.bindMemory(to: RawSyntaxData.MaterializedToken.self, capacity: 1).initialize(to: fields)
+    return node
   }
 
   /// Factory method to create a materialized token node.
@@ -777,7 +961,20 @@ extension RawSyntax {
       descendantCount: descendantCount,
       recursiveFlags: recursiveFlags
     )
-    return RawSyntax(arena: arena, payload: .layout(payload))
+    return RawSyntax.allocateLayout(payload, arena: arena)
+  }
+
+  private static func allocateLayout(
+    _ fields: RawSyntaxData.Layout,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let (node, tail) = Self.allocate(
+      .layout(RawSyntaxArenaRef(arena)),
+      tailByteCount: MemoryLayout<RawSyntaxData.Layout>.stride,
+      arena: arena
+    )
+    tail.bindMemory(to: RawSyntaxData.Layout.self, capacity: 1).initialize(to: fields)
+    return node
   }
 
   /// Factory method to create a layout node.
@@ -887,26 +1084,26 @@ extension RawSyntax: CustomDebugStringConvertible {
 
   private func debugWrite(to target: inout some TextOutputStream, indent: Int, withChildren: Bool = false) {
     let childIndent = indent + 2
-    switch rawData.payload {
-    case .parsedToken(let dat):
+    switch header {
+    case .parsedToken:
       target.write(".parsedToken(")
-      target.write(String(describing: dat.tokenKind))
-      target.write(" wholeText=\(dat.wholeText.debugDescription)")
-      target.write(" textRange=\(dat.textRange.description)")
-    case .materializedToken(let dat):
+      target.write(String(describing: asParsedToken.tokenKind))
+      target.write(" wholeText=\(asParsedToken.wholeText.debugDescription)")
+      target.write(" textRange=\(asParsedToken.textRange.description)")
+    case .materializedToken:
       target.write(".materializedToken(")
-      target.write(String(describing: dat.tokenKind))
-      target.write(" text=\(dat.tokenText.debugDescription)")
-      target.write(" numLeadingTrivia=\(dat.numLeadingTrivia)")
-      target.write(" byteLength=\(dat.byteLength)")
+      target.write(String(describing: asMaterializedToken.tokenKind))
+      target.write(" text=\(asMaterializedToken.tokenText.debugDescription)")
+      target.write(" numLeadingTrivia=\(asMaterializedToken.numLeadingTrivia)")
+      target.write(" byteLength=\(asMaterializedToken.byteLength)")
       break
-    case .layout(let dat):
+    case .layout:
       target.write(".layout(")
       target.write(String(describing: kind))
-      target.write(" byteLength=\(dat.byteLength)")
-      target.write(" descendantCount=\(dat.descendantCount)")
+      target.write(" byteLength=\(asLayout.byteLength)")
+      target.write(" descendantCount=\(asLayout.descendantCount)")
       if withChildren {
-        for (num, child) in dat.layout.enumerated() {
+        for (num, child) in asLayout.layout.enumerated() {
           target.write("\n")
           target.write(String(repeating: " ", count: childIndent))
           target.write("\(num): ")
@@ -954,7 +1151,7 @@ enum RawSyntaxView {
 
 extension RawSyntax {
   var view: RawSyntaxView {
-    switch raw.payload {
+    switch header {
     case .parsedToken, .materializedToken:
       return .token(tokenView!)
     case .layout:

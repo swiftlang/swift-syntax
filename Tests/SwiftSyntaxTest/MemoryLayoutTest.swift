@@ -25,11 +25,15 @@ final class MemoryLayoutTest: XCTestCase {
     /// numbers as low as possible, nothing should rely on them, and are not hard
     /// limits in any way.
     /// If this fails, just update the numbers.
+    ///
+    /// A node is a ``RawSyntaxData`` header followed by the fields of the shape
+    /// that header names, in one allocation, so what a node costs is the header
+    /// plus one of the three strides below rather than the largest of them.
     let expected: [String: SyntaxMemoryLayout.Value] = [
       "RawSyntaxData.Layout": .init(size: 41, stride: 48, alignment: 8),
       "RawSyntaxData.ParsedToken": .init(size: 44, stride: 48, alignment: 8),
       "RawSyntaxData.MaterializedToken": .init(size: 52, stride: 56, alignment: 8),
-      "RawSyntaxData": .init(size: 64, stride: 64, alignment: 8),
+      "RawSyntaxData": .init(size: 8, stride: 8, alignment: 8),
       "RawSyntax?": .init(size: 8, stride: 8, alignment: 8),
 
       "Syntax": .init(size: 16, stride: 16, alignment: 8),

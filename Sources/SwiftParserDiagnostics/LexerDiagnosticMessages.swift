@@ -65,14 +65,17 @@ public enum StaticTokenError: String, DiagnosticMessage {
   case editorPlaceholder = "editor placeholder in source file"
   case equalMustHaveConsistentWhitespaceOnBothSides = "'=' must have consistent whitespace on both sides"
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
+  case expectedClosingBraceInRawCodeUnitEscape = #"expected '}' in \x{...} escape sequence"#
   case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
+  case expectedHexCodeInRawCodeUnitEscape = #"expected hexadecimal code in \x{...} escape sequence"#
   case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
   case expectedHexDigitInHexLiteral = "expected hexadecimal digit (0-9, A-F) in integer literal"
   case invalidBackslashInRawIdentifier = "a raw identifier cannot contain a backslash"
   case invalidCharacter = "invalid character in source file"
   case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
   case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
+  case invalidNumberOfHexDigitsInRawCodeUnitEscape = #"\x{...} escape sequence expects between 1 and 8 hex digits"#
   case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
   case invalidUtf8 = "invalid UTF-8 found in source file"
   case invalidWhitespaceInRawIdentifier = "invalid whitespace found in raw identifier"
@@ -199,8 +202,10 @@ extension SwiftSyntax.TokenDiagnostic {
     case .equalMustHaveConsistentWhitespaceOnBothSides:
       return StaticTokenError.equalMustHaveConsistentWhitespaceOnBothSides
     case .expectedBinaryExponentInHexFloatLiteral: return StaticTokenError.expectedBinaryExponentInHexFloatLiteral
+    case .expectedClosingBraceInRawCodeUnitEscape: return StaticTokenError.expectedClosingBraceInRawCodeUnitEscape
     case .expectedClosingBraceInUnicodeEscape: return StaticTokenError.expectedClosingBraceInUnicodeEscape
     case .expectedDigitInFloatLiteral: return StaticTokenError.expectedDigitInFloatLiteral
+    case .expectedHexCodeInRawCodeUnitEscape: return StaticTokenError.expectedHexCodeInRawCodeUnitEscape
     case .expectedHexCodeInUnicodeEscape: return StaticTokenError.expectedHexCodeInUnicodeEscape
     case .expectedHexDigitInHexLiteral: return StaticTokenError.expectedHexDigitInHexLiteral
     case .extraneousLeadingWhitespaceError: return ExtraneousLeadingWhitespaceError(tokenText: token.rawText)
@@ -224,6 +229,8 @@ extension SwiftSyntax.TokenDiagnostic {
     case .invalidFloatingPointExponentDigit: return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
     case .invalidHexDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
     case .invalidIdentifierStartCharacter: return StaticTokenError.invalidIdentifierStartCharacter
+    case .invalidNumberOfHexDigitsInRawCodeUnitEscape:
+      return StaticTokenError.invalidNumberOfHexDigitsInRawCodeUnitEscape
     case .invalidNumberOfHexDigitsInUnicodeEscape: return StaticTokenError.invalidNumberOfHexDigitsInUnicodeEscape
     case .invalidOctalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
     case .invalidUtf8: return StaticTokenError.invalidUtf8

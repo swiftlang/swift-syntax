@@ -35,10 +35,10 @@ extension Parser {
     }
 
     init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.poundElseif): self = .poundElseif
-      case TokenSpec(.poundElse): self = .poundElse
-      case TokenSpec(.pound): self = .pound
+      switch lexeme.rawTokenKind {
+      case .poundElseif: self = .poundElseif
+      case .poundElse: self = .poundElse
+      case .pound: self = .pound
       default: return nil
       }
     }

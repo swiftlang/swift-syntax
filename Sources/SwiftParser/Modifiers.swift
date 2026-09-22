@@ -182,11 +182,12 @@ extension Parser {
       }
 
       init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.private): self = .private
-        case TokenSpec(.fileprivate): self = .fileprivate
-        case TokenSpec(.internal): self = .internal
-        case TokenSpec(.public): self = .public
+        let keyword = lexeme.keyword
+        switch keyword {
+        case .private: self = .private
+        case .fileprivate: self = .fileprivate
+        case .internal: self = .internal
+        case .public: self = .public
         default: return nil
         }
       }

@@ -12,6 +12,7 @@
 
 #if canImport(Testing)
 import Testing
+import SwiftSyntax
 import SwiftSyntaxMacrosTestSupport
 
 @Suite("Swift Testing Macro Expansion Tests")

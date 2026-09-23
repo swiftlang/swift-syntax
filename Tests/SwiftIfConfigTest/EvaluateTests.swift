@@ -14,6 +14,7 @@ import SwiftDiagnostics
 import SwiftIfConfig
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 @_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
 import _SwiftSyntaxGenericTestSupport

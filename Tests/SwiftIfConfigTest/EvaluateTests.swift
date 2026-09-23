@@ -211,6 +211,43 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("hasAttribute(unsafeUnavailable)", .inactive, configuration: buildConfig)
   }
 
+  func testTargetFeature() throws {
+    let buildConfig = TestingBuildConfiguration(
+      features: ["TargetFeaturePredicate"],
+      targetFeatures: ["avx2"]
+    )
+
+    assertIfConfig("_hasTargetFeature(\"avx2\")", .active, configuration: buildConfig)
+    assertIfConfig("_hasTargetFeature(\"avx512f\")", .inactive, configuration: buildConfig)
+    assertIfConfig(
+      "_hasTargetFeature(avx2)",
+      .unparsed,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'_hasTargetFeature' requires a single unlabeled argument for the target feature name",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
+
+    // TargetFeaturePredicate is disabled.
+    let disabledBuildConfig = TestingBuildConfiguration(targetFeatures: ["avx2"])
+    assertIfConfig(
+      "_hasTargetFeature(\"avx2\")",
+      .unparsed,
+      configuration: disabledBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
+  }
+
   func testPlatform() throws {
     assertIfConfig("os(Linux)", .active)
     assertIfConfig("os(BeOS)", .inactive)

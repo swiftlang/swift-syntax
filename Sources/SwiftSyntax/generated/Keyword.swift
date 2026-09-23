@@ -283,18 +283,19 @@ public enum Keyword: UInt8, Hashable, Sendable {
   }
 
   private init?(_length2 text: SyntaxText) {
-    switch text {
-    case "as":
+    let packed = UInt64(text[0]) | UInt64(text[1]) << 8
+    switch packed {
+    case 0x7361:  // as
       self = .as
-    case "do":
+    case 0x6f64:  // do
       self = .do
-    case "if":
+    case 0x6669:  // if
       self = .if
-    case "in":
+    case 0x6e69:  // in
       self = .in
-    case "is":
+    case 0x7369:  // is
       self = .is
-    case "of":
+    case 0x666f:  // of
       self = .of
     default:
       return nil
@@ -302,30 +303,31 @@ public enum Keyword: UInt8, Hashable, Sendable {
   }
 
   private init?(_length3 text: SyntaxText) {
-    switch text {
-    case "abi":
+    let packed = UInt64(text[0]) | UInt64(text[1]) << 8 | UInt64(text[2]) << 16
+    switch packed {
+    case 0x696261:  // abi
       self = .abi
-    case "any":
+    case 0x796e61:  // any
       self = .any
-    case "Any":
+    case 0x796e41:  // Any
       self = .Any
-    case "for":
+    case 0x726f66:  // for
       self = .for
-    case "get":
+    case 0x746567:  // get
       self = .get
-    case "let":
+    case 0x74656c:  // let
       self = .let
-    case "nil":
+    case 0x6c696e:  // nil
       self = .nil
-    case "set":
+    case 0x746573:  // set
       self = .set
-    case "spi":
+    case 0x697073:  // spi
       self = .spi
-    case "try":
+    case 0x797274:  // try
       self = .try
-    case "var":
+    case 0x726176:  // var
       self = .var
-    case "wrt":
+    case 0x747277:  // wrt
       self = .wrt
     default:
       return nil
@@ -333,54 +335,55 @@ public enum Keyword: UInt8, Hashable, Sendable {
   }
 
   private init?(_length4 text: SyntaxText) {
-    switch text {
-    case "case":
+    let packed = UInt64(text[0]) | UInt64(text[1]) << 8 | UInt64(text[2]) << 16 | UInt64(text[3]) << 24
+    switch packed {
+    case 0x65736163:  // case
       self = .case
-    case "copy":
+    case 0x79706f63:  // copy
       self = .copy
-    case "each":
+    case 0x68636165:  // each
       self = .each
-    case "else":
+    case 0x65736c65:  // else
       self = .else
-    case "enum":
+    case 0x6d756e65:  // enum
       self = .enum
-    case "file":
+    case 0x656c6966:  // file
       self = .file
-    case "func":
+    case 0x636e7566:  // func
       self = .func
-    case "init":
+    case 0x74696e69:  // init
       self = .`init`
-    case "kind":
+    case 0x646e696b:  // kind
       self = .kind
-    case "lazy":
+    case 0x797a616c:  // lazy
       self = .lazy
-    case "left":
+    case 0x7466656c:  // left
       self = .left
-    case "line":
+    case 0x656e696c:  // line
       self = .line
-    case "none":
+    case 0x656e6f6e:  // none
       self = .none
-    case "objc":
+    case 0x636a626f:  // objc
       self = .objc
-    case "open":
+    case 0x6e65706f:  // open
       self = .open
-    case "read":
+    case 0x64616572:  // read
       self = .read
-    case "safe":
+    case 0x65666173:  // safe
       self = .safe
-    case "self":
+    case 0x666c6573:  // self
       self = .self
-    case "Self":
+    case 0x666c6553:  // Self
       self = .Self
-    case "some":
+    case 0x656d6f73:  // some
       self = .some
-    case "then":
+    case 0x6e656874:  // then
       self = .then
-    case "true":
+    case 0x65757274:  // true
       self = .true
-    case "Type":
+    case 0x65707954:  // Type
       self = .Type
-    case "weak":
+    case 0x6b616577:  // weak
       self = .weak
     default:
       return nil
@@ -388,52 +391,53 @@ public enum Keyword: UInt8, Hashable, Sendable {
   }
 
   private init?(_length5 text: SyntaxText) {
-    switch text {
-    case "_move":
+    let packed = UInt64(text[0]) | UInt64(text[1]) << 8 | UInt64(text[2]) << 16 | UInt64(text[3]) << 24 | UInt64(text[4]) << 32
+    switch packed {
+    case 0x65766f6d5f:  // _move
       self = ._move
-    case "_read":
+    case 0x646165725f:  // _read
       self = ._read
-    case "actor":
+    case 0x726f746361:  // actor
       self = .actor
-    case "async":
+    case 0x636e797361:  // async
       self = .async
-    case "await":
+    case 0x7469617761:  // await
       self = .await
-    case "block":
+    case 0x6b636f6c62:  // block
       self = .block
-    case "break":
+    case 0x6b61657262:  // break
       self = .break
-    case "catch":
+    case 0x6863746163:  // catch
       self = .catch
-    case "class":
+    case 0x7373616c63:  // class
       self = .class
-    case "defer":
+    case 0x7265666564:  // defer
       self = .defer
-    case "false":
+    case 0x65736c6166:  // false
       self = .false
-    case "final":
+    case 0x6c616e6966:  // final
       self = .final
-    case "guard":
+    case 0x6472617567:  // guard
       self = .guard
-    case "infix":
+    case 0x7869666e69:  // infix
       self = .infix
-    case "inout":
+    case 0x74756f6e69:  // inout
       self = .inout
-    case "macro":
+    case 0x6f7263616d:  // macro
       self = .macro
-    case "right":
+    case 0x7468676972:  // right
       self = .right
-    case "super":
+    case 0x7265707573:  // super
       self = .super
-    case "swift":
+    case 0x7466697773:  // swift
       self = .swift
-    case "throw":
+    case 0x776f726874:  // throw
       self = .throw
-    case "where":
+    case 0x6572656877:  // where
       self = .where
-    case "while":
+    case 0x656c696877:  // while
       self = .while
-    case "yield":
+    case 0x646c656979:  // yield
       self = .yield
     default:
       return nil
@@ -441,54 +445,55 @@ public enum Keyword: UInt8, Hashable, Sendable {
   }
 
   private init?(_length6 text: SyntaxText) {
-    switch text {
-    case "_Class":
+    let packed = UInt64(text[0]) | UInt64(text[1]) << 8 | UInt64(text[2]) << 16 | UInt64(text[3]) << 24 | UInt64(text[4]) << 32 | UInt64(text[5]) << 40
+    switch packed {
+    case 0x7373616c435f:  // _Class
       self = ._Class
-    case "_const":
+    case 0x74736e6f635f:  // _const
       self = ._const
-    case "_local":
+    case 0x6c61636f6c5f:  // _local
       self = ._local
-    case "before":
+    case 0x65726f666562:  // before
       self = .before
-    case "borrow":
+    case 0x776f72726f62:  // borrow
       self = .borrow
-    case "deinit":
+    case 0x74696e696564:  // deinit
       self = .deinit
-    case "didSet":
+    case 0x746553646964:  // didSet
       self = .didSet
-    case "import":
+    case 0x74726f706d69:  // import
       self = .import
-    case "linear":
+    case 0x7261656e696c:  // linear
       self = .linear
-    case "modify":
+    case 0x796669646f6d:  // modify
       self = .modify
-    case "module":
+    case 0x656c75646f6d:  // module
       self = .module
-    case "mutate":
+    case 0x65746174756d:  // mutate
       self = .mutate
-    case "prefix":
+    case 0x786966657270:  // prefix
       self = .prefix
-    case "public":
+    case 0x63696c627570:  // public
       self = .public
-    case "repeat":
+    case 0x746165706572:  // repeat
       self = .repeat
-    case "return":
+    case 0x6e7275746572:  // return
       self = .return
-    case "scoped":
+    case 0x6465706f6373:  // scoped
       self = .scoped
-    case "static":
+    case 0x636974617473:  // static
       self = .static
-    case "struct":
+    case 0x746375727473:  // struct
       self = .struct
-    case "switch":
+    case 0x686374697773:  // switch
       self = .switch
-    case "target":
+    case 0x746567726174:  // target
       self = .target
-    case "throws":
+    case 0x73776f726874:  // throws
       self = .throws
-    case "unsafe":
+    case 0x656661736e75:  // unsafe
       self = .unsafe
-    case "yields":
+    case 0x73646c656979:  // yields
       self = .yields
     default:
       return nil
@@ -496,48 +501,49 @@ public enum Keyword: UInt8, Hashable, Sendable {
   }
 
   private init?(_length7 text: SyntaxText) {
-    switch text {
-    case "__owned":
+    let packed = UInt64(text[0]) | UInt64(text[1]) << 8 | UInt64(text[2]) << 16 | UInt64(text[3]) << 24 | UInt64(text[4]) << 32 | UInt64(text[5]) << 40 | UInt64(text[6]) << 48
+    switch packed {
+    case 0x64656e776f5f5f:  // __owned
       self = .__owned
-    case "_borrow":
+    case 0x776f72726f625f:  // _borrow
       self = ._borrow
-    case "_linear":
+    case 0x7261656e696c5f:  // _linear
       self = ._linear
-    case "_modify":
+    case 0x796669646f6d5f:  // _modify
       self = ._modify
-    case "consume":
+    case 0x656d75736e6f63:  // consume
       self = .consume
-    case "default":
+    case 0x746c7561666564:  // default
       self = .default
-    case "dynamic":
+    case 0x63696d616e7964:  // dynamic
       self = .dynamic
-    case "discard":
+    case 0x64726163736964:  // discard
       self = .discard
-    case "forward":
+    case 0x64726177726f66:  // forward
       self = .forward
-    case "message":
+    case 0x6567617373656d:  // message
       self = .message
-    case "noasync":
+    case 0x636e7973616f6e:  // noasync
       self = .noasync
-    case "package":
+    case 0x6567616b636170:  // package
       self = .package
-    case "postfix":
+    case 0x78696674736f70:  // postfix
       self = .postfix
-    case "private":
+    case 0x65746176697270:  // private
       self = .private
-    case "reasync":
+    case 0x636e7973616572:  // reasync
       self = .reasync
-    case "renamed":
+    case 0x64656d616e6572:  // renamed
       self = .renamed
-    case "reverse":
+    case 0x65737265766572:  // reverse
       self = .reverse
-    case "section":
+    case 0x6e6f6974636573:  // section
       self = .section
-    case "sending":
+    case 0x676e69646e6573:  // sending
       self = .sending
-    case "unowned":
+    case 0x64656e776f6e75:  // unowned
       self = .unowned
-    case "willSet":
+    case 0x7465536c6c6977:  // willSet
       self = .willSet
     default:
       return nil
@@ -545,58 +551,59 @@ public enum Keyword: UInt8, Hashable, Sendable {
   }
 
   private init?(_length8 text: SyntaxText) {
-    switch text {
-    case "__shared":
+    let packed = UInt64(text[0]) | UInt64(text[1]) << 8 | UInt64(text[2]) << 16 | UInt64(text[3]) << 24 | UInt64(text[4]) << 32 | UInt64(text[5]) << 40 | UInt64(text[6]) << 48 | UInt64(text[7]) << 56
+    switch packed {
+    case 0x6465726168735f5f:  // __shared
       self = .__shared
-    case "_effects":
+    case 0x737463656666655f:  // _effects
       self = ._effects
-    case "_forward":
+    case 0x64726177726f665f:  // _forward
       self = ._forward
-    case "_Trivial":
+    case 0x6c6169766972545f:  // _Trivial
       self = ._Trivial
-    case "_version":
+    case 0x6e6f69737265765f:  // _version
       self = ._version
-    case "accesses":
+    case 0x7365737365636361:  // accesses
       self = .accesses
-    case "attached":
+    case 0x6465686361747461:  // attached
       self = .attached
-    case "compiler":
+    case 0x72656c69706d6f63:  // compiler
       self = .compiler
-    case "continue":
+    case 0x65756e69746e6f63:  // continue
       self = .continue
-    case "escaping":
+    case 0x676e697061637365:  // escaping
       self = .escaping
-    case "exported":
+    case 0x646574726f707865:  // exported
       self = .exported
-    case "indirect":
+    case 0x7463657269646e69:  // indirect
       self = .indirect
-    case "internal":
+    case 0x6c616e7265746e69:  // internal
       self = .internal
-    case "isolated":
+    case 0x646574616c6f7369:  // isolated
       self = .isolated
-    case "metadata":
+    case 0x617461646174656d:  // metadata
       self = .metadata
-    case "mutating":
+    case 0x676e69746174756d:  // mutating
       self = .mutating
-    case "noescape":
+    case 0x6570616373656f6e:  // noescape
       self = .noescape
-    case "operator":
+    case 0x726f74617265706f:  // operator
       self = .operator
-    case "optional":
+    case 0x6c616e6f6974706f:  // optional
       self = .optional
-    case "override":
+    case 0x656469727265766f:  // override
       self = .override
-    case "Protocol":
+    case 0x6c6f636f746f7250:  // Protocol
       self = .Protocol
-    case "protocol":
+    case 0x6c6f636f746f7270:  // protocol
       self = .protocol
-    case "required":
+    case 0x6465726975716572:  // required
       self = .required
-    case "rethrows":
+    case 0x73776f7268746572:  // rethrows
       self = .rethrows
-    case "Sendable":
+    case 0x656c6261646e6553:  // Sendable
       self = .Sendable
-    case "yielding":
+    case 0x676e69646c656979:  // yielding
       self = .yielding
     default:
       return nil

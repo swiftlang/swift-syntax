@@ -154,6 +154,52 @@ class IncrementalParsingTests: ParserTestCase {
     XCTAssertTrue(reusedNodes.contains(where: { $0.trimmedDescription == "func f() {}" }))
   }
 
+  /// A client that drives `Parser` itself, rather than through `parseIncrementally`,
+  /// still gets lookahead ranges it can hand to the next parse. `SyntaxTreeManager` in
+  /// sourcekit-lsp does exactly this, because `parseIncrementally` cannot be given
+  /// language features: it constructs a `Parser`, parses, and builds an
+  /// `IncrementalParseResult` from `parser.lookaheadRanges`. A node with no recorded
+  /// range is never reused, so if the first parse in such a chain records none, the
+  /// parse after it reuses nothing — correct output, no diagnostic, and no incremental
+  /// parsing.
+  public func testLookaheadRangesAreRecordedForAParserDrivenDirectly() {
+    let originalSource = """
+      foo() {}
+      label: switch x {
+        default: break
+      }
+      """
+
+    // The first parse of the chain, driven the way a client with its own `Parser` does
+    // it. Whether the call's lookahead — past `label:`, to rule out a labeled trailing
+    // closure — is recorded is decided here.
+    var firstParser = Parser(originalSource, parseTransition: nil)
+    let originalResult = IncrementalParseResult(
+      tree: SourceFileSyntax.parse(from: &firstParser),
+      lookaheadRanges: firstParser.lookaheadRanges
+    )
+
+    // An edit after the call, so reuse is decided by the recorded range rather than by
+    // the node sitting past every edit.
+    let (editedSource, laterEdit) = replacing("default: break", with: "default: return", in: originalSource)
+    var reusedNodes: [Syntax] = []
+    var secondParser = Parser(
+      editedSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: originalResult,
+        edits: ConcurrentEdits(laterEdit),
+        reusedNodeCallback: { reusedNodes.append($0) }
+      )
+    )
+    let editedTree = SourceFileSyntax.parse(from: &secondParser)
+
+    XCTAssertTrue(
+      reusedNodes.contains(where: { $0.trimmedDescription == "foo() {}" }),
+      "nothing the first parse produced was reusable: \(reusedNodes.map(\.trimmedDescription))"
+    )
+    XCTAssertEqual(editedTree.description, Parser.parse(source: editedSource).description)
+  }
+
   public func testAddElse() {
     assertIncrementalParse(
       """

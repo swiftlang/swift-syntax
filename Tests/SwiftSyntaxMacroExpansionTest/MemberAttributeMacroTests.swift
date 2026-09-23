@@ -101,6 +101,83 @@ final class MemberAttributeMacroTests: XCTestCase {
     )
   }
 
+  func testAttributeWithIfConfigDecl() {
+    assertMacroExpansion(
+      """
+      @wrapAllProperties struct S {
+        #if true
+        var value = 1
+        #endif
+      }
+      """,
+      expandedSource: """
+        struct S {
+          #if true
+          @Wrapper
+          var value = 1
+          #endif
+        }
+        """,
+      macros: ["wrapAllProperties": WrapAllProperties.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAttributeWithIfConfigDeclElseBranch() {
+    assertMacroExpansion(
+      """
+      @wrapAllProperties struct S {
+        #if os(macOS)
+        var value = 1
+        #else
+        var value = 2
+        func f() {}
+        #endif
+      }
+      """,
+      expandedSource: """
+        struct S {
+          #if os(macOS)
+          @Wrapper
+          var value = 1
+          #else
+          @Wrapper
+          var value = 2
+          func f() {}
+          #endif
+        }
+        """,
+      macros: ["wrapAllProperties": WrapAllProperties.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAttributeWithNestedIfConfigDecl() {
+    assertMacroExpansion(
+      """
+      @wrapAllProperties struct S {
+        #if true
+        #if true
+        var value = 1
+        #endif
+        #endif
+      }
+      """,
+      expandedSource: """
+        struct S {
+          #if true
+          #if true
+          @Wrapper
+          var value = 1
+          #endif
+          #endif
+        }
+        """,
+      macros: ["wrapAllProperties": WrapAllProperties.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testWrapStoredProperties() {
     struct WrapStoredProperties: MemberAttributeMacro {
       static func expansion(

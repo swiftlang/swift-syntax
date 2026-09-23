@@ -66,6 +66,30 @@ final class ExtensionMacroTests: XCTestCase {
     )
   }
 
+  func testNotExpandedInsideIfConfigDecl() {
+    // Extensions are added at the top level, where the `#if` no longer applies,
+    // so expanding the macro here would extend a type that may not be compiled.
+    assertMacroExpansion(
+      """
+      struct Wrapper {
+        #if os(macOS)
+        @AddSendableExtension
+        struct MyType {}
+        #endif
+      }
+      """,
+      expandedSource: """
+        struct Wrapper {
+          #if os(macOS)
+          struct MyType {}
+          #endif
+        }
+        """,
+      macros: ["AddSendableExtension": SendableExtensionMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testNestedInExtensionExpansion() {
     assertMacroExpansion(
       """

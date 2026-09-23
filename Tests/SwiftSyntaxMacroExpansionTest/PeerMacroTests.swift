@@ -217,6 +217,40 @@ final class PeerMacroTests: XCTestCase {
     )
   }
 
+  func testPeerMacroOnMemberInsideIfConfigDecl() {
+    struct TestMacro: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return ["var peer: Int = 0"]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      struct S {
+        #if true
+        @Test
+        var value = 1
+        #endif
+      }
+      """,
+      expandedSource: """
+        struct S {
+          #if true
+          var value = 1
+
+          var peer: Int = 0
+          #endif
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testAddCompletionHandlerWhereThereIsNotAsync() {
     assertMacroExpansion(
       """

@@ -15,6 +15,16 @@
 import XCTest
 
 final class DirectiveTests: ParserTestCase {
+  func testDeploymentTargetAtLeastCondition() {
+    assertParse(
+      """
+      #if deploymentTargetAtLeast(macOS 15, iOS 18, *)
+      let value = 1
+      #endif
+      """
+    )
+  }
+
   func testSwitchIfConfig() {
     assertParse(
       """

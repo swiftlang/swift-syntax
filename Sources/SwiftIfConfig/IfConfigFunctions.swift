@@ -24,6 +24,10 @@ enum IfConfigFunctions: String {
   /// A check for the Swift compiler version via `compiler(>=version)`.
   case compiler
 
+  /// A check for minimum deployment targets via
+  /// `deploymentTargetAtLeast(macOS 15, iOS 18, *)`.
+  case deploymentTargetAtLeast
+
   /// A check to determine whether a given module can be imported via `canImport(<import path>)`.
   case canImport
 
@@ -71,8 +75,9 @@ enum IfConfigFunctions: String {
     case .swift, .compiler, ._compiler_version:
       return true
 
-    case .hasAttribute, .hasFeature, .canImport, .os, .arch, .targetEnvironment,
-      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, .objectFormat, ._runtime, ._ptrauth, .defined:
+    case .hasAttribute, .hasFeature, .deploymentTargetAtLeast, .canImport, .os,
+      .arch, .targetEnvironment, ._hasAtomicBitWidth, ._endian,
+      ._pointerBitWidth, .objectFormat, ._runtime, ._ptrauth, .defined:
       return false
     }
   }

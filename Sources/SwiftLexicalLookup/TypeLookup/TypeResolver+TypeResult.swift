@@ -113,6 +113,24 @@ extension TypeResolver.TypeResult: CustomDebugStringConvertible {
       return ".failure(\(failure.debugDescription))"
     }
   }
+
+  /// A succinct description focusing on the produced nominal types.
+  var _succinctDescription: String {
+    switch self {
+    case .nominalTypes(let baseTypes):
+      return baseTypes.map(\.type._succinctDescription).joined(separator: " & ")
+    case .function:
+      return "<function>"
+    case .tuple:
+      return "<tuple>"
+    case .anyType:
+      return "<any>"
+    case .metatype:
+      return "<metatype>"
+    case .failure:
+      return "<failure>"
+    }
+  }
 }
 
 // MARK: ResolvedTypeSyntax + Test Hook

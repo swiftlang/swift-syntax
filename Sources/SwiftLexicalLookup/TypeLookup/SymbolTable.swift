@@ -30,19 +30,10 @@ public final class SymbolTable {
   private let fileToInfo: [SourceFileSyntax: FileInfo]
 
   /// Tracks requested extensions for extension binding.
-  var requestedExtensions: RequestedExtensions = RequestedExtensions()
+  var requestedExtensions: RequestedExtensions
 
-  // TODO: Setters should be private
-  //
-  /// The extensions that have not yet been admitted to the type graph.
-  public internal(set) lazy var unresolvedExtensions = [Attached<ExtensionDeclSyntax>]()
   /// A graph that keeps tracks of types and their extensions.
   public internal(set) var typeGraph = TypeGraph()
-
-  // Logging/debug properties
-  let _verbose: Bool = false
-  let _logNestingLimit: Int? = nil
-  var logPrefix = [String]()
 
   private init(
     moduleName: ModuleName,
@@ -54,6 +45,7 @@ public final class SymbolTable {
     self.moduleToSources = moduleToSources
     self.buildConfiguration = buildConfiguration
     self.fileToInfo = fileToInfo
+    self.requestedExtensions = RequestedExtensions(fileToInfo: fileToInfo)
   }
 }
 
@@ -113,39 +105,7 @@ extension SymbolTable {
   public func resolve(
     typeSyntax: Attached<TypeSyntax>
   ) -> TypeResolver.TypeResult {
-    var typeResolver = TypeResolver(symbolTable: self, _verbose: _verbose)
+    var typeResolver = TypeResolver(symbolTable: self)
     return typeResolver.resolve(typeSyntax: typeSyntax)
-  }
-}
-
-// MARK: Logging
-
-extension SymbolTable {
-  func log(_ component: Any, file: StaticString = #file, line: UInt = #line) {
-    guard _verbose else { return }
-    // Calculate log text
-    let newLine = "\(logPrefix.map({ "[\($0)]" }).joined()) \(component)\n"
-    // Print new line
-    print(newLine)
-  }
-
-  func withLogging<T>(
-    request: String,
-    describe: (T) -> String,
-    perform action: (_ mutableSelf: borrowing SymbolTable) -> T,
-    file: StaticString = #file,
-    line: UInt = #line
-  ) -> T {
-    if let nestingLimit = self._logNestingLimit, logPrefix.count >= nestingLimit {
-      fatalError(
-        "Exceeded log nesting limit of \(nestingLimit), suggesting there's an infinite loop. If you think this is a mistake, you may change the limit in `TypeQualifier`."
-      )
-    }
-    logPrefix.append(request)
-    log("Resolving...", file: file, line: line)
-    let result = action(self)
-    log("Resolved \(describe(result))", file: file, line: line)
-    logPrefix.removeLast()
-    return result
   }
 }

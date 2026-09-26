@@ -421,7 +421,7 @@ extension Parser {
     let additionalArgs = self.parseArgumentListElements(
       pattern: .none,
       flavor: .attributeArguments,
-      allowTrailingComma: false
+      allowTrailingComma: true
     )
     return [roleElement] + additionalArgs
   }

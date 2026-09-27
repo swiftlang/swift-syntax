@@ -66,9 +66,7 @@ extension CompilerPlugin {
     let qualifedName = "\(moduleName).\(typeName)"
 
     for type in providingMacros {
-      // FIXME: Is `String(reflecting:)` stable?
-      // Getting the module name and type name should be more robust.
-      let name = String(reflecting: type)
+      let name = _typeName(type, qualified: true)
       if name == qualifedName {
         return type
       }

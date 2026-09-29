@@ -686,7 +686,7 @@ extension TypeResolver {
 
       // Find this nominal declaration through qualified lookup
       let resolvedBase: ResolvedTypeSyntax
-      switch resolveType(typeReference: baseType) {
+      switch resolveType(typeReference: consume baseType) {
       case .success(let success):
         resolvedBase = success
       case .failure(let failure):
@@ -709,7 +709,7 @@ extension TypeResolver {
         // We should have diagnosed an ambiguity if there was a different
         // nominal decl or we couldn't find a member
         fatalError(
-          "[SwiftLexicalLookup] Internal error: Qualified lookup of \(baseType.debugDescription) > '\(declName.name)' unexpectedly returned `\(unexpectedResult.debugDescription)`"
+          "[SwiftLexicalLookup] Internal error: Qualified lookup of \(resolvedBase.debugDescription) > '\(declName.name)' unexpectedly returned `\(unexpectedResult.debugDescription)`"
         )
       case .failure(let failure):
         return .failure(failure)
@@ -722,7 +722,7 @@ extension TypeResolver {
           declName: declName,
           declFileInfo: declFileInfo,
           baseDeclGroup: declGroupParent,
-          baseType: baseType,
+          baseType: resolvedBase,
           originatingSyntax: originatingSyntax
         ) as Result<ResolvedTypeSyntax, TypeGraph.NestedNominalRegistrationFailure>
 
@@ -738,7 +738,7 @@ extension TypeResolver {
         // .baseNotRegistered, .baseDeclGroupUnbound -> We should have a valid base from the recursive step
         case .other(.cannotRegisterRedeclaration), .baseNotRegistered, .baseDeclGroupUnbound:
           fatalError(
-            "[SwiftLexicalLookup] Internal error: While registering '\(baseType.debugDescription)' > '\(nominalDecl._memberlessDescription)': \(registrationFailure)"
+            "[SwiftLexicalLookup] Internal error: While registering '\(resolvedBase.debugDescription)' > '\(nominalDecl._memberlessDescription)': \(registrationFailure)"
           )
         }
       }

@@ -95,7 +95,7 @@ extension SymbolTable {
 extension SymbolTable {
   @_spi(_QualifiedLookupTests)
   public func admitExtensions(accessibleFrom sourceFile: SourceFileSyntax) {
-    // TODO: Implement
+    fatalError("TODO")
   }
 
   /// Returns the nominal-type reference with the extension's extended-type

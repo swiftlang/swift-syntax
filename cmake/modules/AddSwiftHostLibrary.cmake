@@ -43,16 +43,22 @@ function(add_swift_syntax_library name)
     # Determine where Swift modules will be built and installed.
     set(module_dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(module_base "${module_dir}/${name}.swiftmodule")
-    set(module_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.swiftmodule")
     set(module_interface_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.swiftinterface")
     set(module_private_interface_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.private.swiftinterface")
 
-    # Configure the emission of the Swift module files.
+    # Point CMake's module output into the module directory. CMake's Swift
+    # support always appends its own -emit-module-path after our compile
+    # options, so emitting it as a sibling of the directory would collide with
+    # the .swiftinterface files written into the directory. Ninja creates the
+    # directory automatically as the parent of the module output.
+    set(swift_module_directory ${module_base})
+
+    # Configure the emission of the Swift module interface files. The .swiftmodule
+    # itself is emitted by CMake into swift_module_directory.
     target_compile_options("${target}" PRIVATE
       $<$<COMPILE_LANGUAGE:Swift>:
         -DRESILIENT_LIBRARIES;
         -enable-library-evolution;
-        -emit-module-path;${module_file};
         -emit-module-interface-path;${module_interface_file};
         -emit-private-module-interface-path;${module_private_interface_file}
     >)
@@ -76,11 +82,12 @@ function(add_swift_syntax_library name)
   else()
     set(module_dir ${CMAKE_CURRENT_BINARY_DIR})
     set(module_base "${module_dir}/${name}.swiftmodule")
+    set(swift_module_directory ${module_dir})
   endif()
 
   set_target_properties(${target} PROPERTIES
     Swift_MODULE_NAME ${name}
-    Swift_MODULE_DIRECTORY ${module_dir}
+    Swift_MODULE_DIRECTORY ${swift_module_directory}
     INTERFACE_INCLUDE_DIRECTORIES ${module_dir}
   )
 

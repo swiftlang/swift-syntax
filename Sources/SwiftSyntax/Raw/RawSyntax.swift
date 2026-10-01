@@ -1341,6 +1341,15 @@ extension RawSyntax {
       trailingByteCount: slotCount * MemoryLayout<RawSyntax?>.stride,
       arena: arena
     )
+    // The slots follow the fields, so they start that far into a node aligned only
+    // to `nodeAlignment`.
+    assert(
+      MemoryLayout<RawSyntax?>.alignment <= RawSyntaxArena.nodeAlignment
+        && (Self.tailOffset + MemoryLayout<RawSyntaxData.Layout>.stride).isMultiple(
+          of: MemoryLayout<RawSyntax?>.alignment
+        ),
+      "a layout node's slots need more alignment than where they start has"
+    )
     let slots = UnsafeMutableBufferPointer<RawSyntax?>(
       start: trailing.bindMemory(to: RawSyntax?.self, capacity: slotCount),
       count: slotCount

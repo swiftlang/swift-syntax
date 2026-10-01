@@ -137,13 +137,19 @@ public class RawSyntaxArena {
     }
   }
 
-  /// Copies a `RawSyntaxData` to the memory this arena manages, and returns the
-  /// pointer to the destination.
-  func intern(_ value: RawSyntaxData) -> UnsafePointer<RawSyntaxData> {
-    let allocated = allocator.allocate(RawSyntaxData.self, count: 1).baseAddress!
-    allocated.initialize(to: value)
-    return UnsafePointer(allocated)
+  /// Allocates `byteCount` bytes for one node, aligned for a node's header and
+  /// for anything its tail can hold, and returns the uninitialized memory.
+  ///
+  /// A node is a header followed by a tail whose shape and size depend on which
+  /// of the three kinds of node it is, so its size is not a type's size.
+  func allocateNode(byteCount: Int) -> UnsafeMutableRawPointer {
+    return allocator.allocate(byteCount: byteCount, alignment: Self.nodeAlignment).baseAddress!
   }
+
+  /// The alignment of every node, and so the most that a node's header or the
+  /// fields in its tail may ask for.
+  @inline(__always)
+  static var nodeAlignment: Int { 8 }
 
   /// Adds an ``RawSyntaxArena`` to this arena as a "child". Do nothing if `arenaRef`
   /// refers `self`.

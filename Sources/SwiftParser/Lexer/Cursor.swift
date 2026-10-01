@@ -657,7 +657,7 @@ extension Lexer.Cursor {
 
   /// Same as `advanceValidatingUTF8Character` but without advancing the cursor.
   func peekScalar() -> Unicode.Scalar? {
-    var tmp = self
+    var tmp = self.position
     return tmp.advanceValidatingUTF8Character()
   }
 
@@ -677,6 +677,94 @@ extension Lexer.Cursor {
   }
 
   // MARK: Positive matches
+
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is `character`.
+  func `is`(offset: Int = 0, at character: CharacterByte) -> Bool {
+    self.position.is(offset: offset, at: character)
+  }
+
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is `character1` or `character2`.
+  func `is`(offset: Int = 0, at character1: CharacterByte, _ character2: CharacterByte) -> Bool {
+    self.position.is(offset: offset, at: character1, character2)
+  }
+
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is `character1`, `character2`, or `character3`.
+  func `is`(
+    offset: Int = 0,
+    at character1: CharacterByte,
+    _ character2: CharacterByte,
+    _ character3: CharacterByte
+  ) -> Bool {
+    self.position.is(offset: offset, at: character1, character2, character3)
+  }
+
+  // MARK: Negative matches
+
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is not `character`.
+  func `is`(offset: Int = 0, notAt character: CharacterByte) -> Bool {
+    self.position.is(offset: offset, notAt: character)
+  }
+
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is neither `character1` nor `character2`.
+  func `is`(offset: Int = 0, notAt character1: CharacterByte, _ character2: CharacterByte) -> Bool {
+    self.position.is(offset: offset, notAt: character1, character2)
+  }
+
+  /// Returns `true` if we are not at the end of the file and the character at
+  /// offset `offset` is neither `character1` nor `character2` nor `character3`.
+  func `is`(
+    offset: Int = 0,
+    notAt character1: CharacterByte,
+    _ character2: CharacterByte,
+    _ character3: CharacterByte
+  ) -> Bool {
+    self.position.is(offset: offset, notAt: character1, character2, character3)
+  }
+
+  // MARK: Misc
+
+  /// Returns the text from `self` to `other`.
+  func text(upTo other: Lexer.Cursor) -> SyntaxText {
+    self.position.text(upTo: other.position)
+  }
+}
+
+// MARK: - Advancing the cursor
+
+extension Lexer.Cursor.Position {
+  /// If there is a character in the input, and return it, advancing the cursor.
+  /// If the end of the input is reached, return `nil`.
+  mutating func advance() -> UInt8? {
+    var input = self.input[...]
+    guard let c = input.popFirst() else {
+      return nil  // end of input
+    }
+    self.previous = c
+    self.input = UnsafeBufferPointer(rebasing: input)
+    return c
+  }
+
+  /// Returns the text from `self` to `other`.
+  func text(upTo other: Self) -> SyntaxText {
+    let count = other.input.baseAddress! - self.input.baseAddress!
+    precondition(count >= 0)
+    return SyntaxText(baseAddress: self.input.baseAddress, count: count)
+  }
+
+  /// Peek at the byte `offset` bytes ahead without advancing, or `nil` if the
+  /// input does not reach that far.
+  func peek(at offset: Int = 0) -> UInt8? {
+    precondition(offset >= 0)
+    guard offset < self.input.count else {
+      return nil
+    }
+    return self.input[offset]
+  }
 
   /// Returns `true` if we are not at the end of the file and the character at
   /// offset `offset` is `character`.
@@ -710,8 +798,6 @@ extension Lexer.Cursor {
     return peeked == character1.value || peeked == character2.value || peeked == character3.value
   }
 
-  // MARK: Negative matches
-
   /// Returns `true` if we are not at the end of the file and the character at
   /// offset `offset` is not `character`.
   func `is`(offset: Int = 0, notAt character: CharacterByte) -> Bool {
@@ -744,29 +830,30 @@ extension Lexer.Cursor {
     return peeked != character1.value && peeked != character2.value && peeked != character3.value
   }
 
-  // MARK: Misc
-
-  /// Returns the text from `self` to `other`.
-  func text(upTo other: Lexer.Cursor) -> SyntaxText {
-    let count = other.input.baseAddress! - self.input.baseAddress!
-    precondition(count >= 0)
-    return SyntaxText(baseAddress: self.input.baseAddress, count: count)
-  }
-}
-
-// MARK: - Advancing the cursor
-
-extension Lexer.Cursor.Position {
-  /// If there is a character in the input, and return it, advancing the cursor.
-  /// If the end of the input is reached, return `nil`.
-  mutating func advance() -> UInt8? {
-    var input = self.input[...]
-    guard let c = input.popFirst() else {
-      return nil  // end of input
-    }
-    self.previous = c
-    self.input = UnsafeBufferPointer(rebasing: input)
-    return c
+  /// Read a single UTF-8 scalar, which may span multiple bytes.
+  /// Returns `nil` if
+  ///  - The position is at the end of the buffer or reaches the end of the
+  ///    buffer while reading the character
+  ///  - The position is currently placed at an invalid UTF-8 byte sequence. In
+  ///    that case bytes are consumed until we reach the next start of a UTF-8
+  ///    character.
+  ///
+  /// Reading a scalar needs a position and nothing else, so a caller that reads
+  /// one without committing to it copies a position rather than a whole cursor.
+  /// - Important: `@inline(__always)` because `advance(if:)` calls this for
+  ///   every character it looks at. Out of line, the position is passed by
+  ///   address, so reading one byte becomes a pair of loads and three stores
+  ///   rather than register arithmetic. Inlined, the caller keeps the position
+  ///   in registers. Worth about 1% of parsing ASCII source and 3% of parsing
+  ///   source with multi-byte scalars in it.
+  ///
+  ///   For the same reason `Unicode.Scalar.lexing` must stay inlinable as a
+  ///   whole: outlining its multi-byte half stops this from being a leaf
+  ///   function, and the frame it then has to set up is paid on every character,
+  ///   ASCII included.
+  @inline(__always)
+  mutating func advanceValidatingUTF8Character() -> Unicode.Scalar? {
+    return Unicode.Scalar.lexing(advance: { self.advance() }, peek: { self.peek(at: 0) })
   }
 
   /// Advance the cursor position by `n` bytes. The offset must be valid.
@@ -803,6 +890,87 @@ extension Lexer.Cursor.Position {
       self = self.advanced(by: count)
     }
   }
+
+  /// If the current character is `matching`, advance and return `true`.
+  /// Otherwise, this is a no-op and returns `false`.
+  mutating func advance(matching: CharacterByte) -> Bool {
+    if self.is(at: matching) {
+      _ = self.advance()
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// If the current character is `character1` or `character2`, advance and
+  /// return `true`. Otherwise, this is a no-op and returns `false`.
+  mutating func advance(matching character1: CharacterByte, _ character2: CharacterByte) -> Bool {
+    if self.is(at: character1) || self.is(at: character2) {
+      _ = self.advance()
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// If the current character matches `predicate`, consume it and return `true`.
+  /// Otherwise, this is a no-op and returns `false`.
+  mutating func advance(if predicate: (Unicode.Scalar) -> Bool) -> Bool {
+    // Reading a scalar at the end of the input yields `nil`, because the
+    // `advance()` it is built on does, so this needs no end-of-file check of
+    // its own.
+    var tmp = self
+    guard let c = tmp.advanceValidatingUTF8Character() else {
+      return false
+    }
+
+    if predicate(c) {
+      self = tmp
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// Advance while `predicate` is satisfied.
+  mutating func advance(while predicate: (Unicode.Scalar) -> Bool) {
+    while self.advance(if: predicate) {}
+  }
+
+  /// Advance past every character that can continue an identifier.
+  ///
+  /// Roughly half the bytes of a source file pass through here, so the run is
+  /// counted over the buffer and the position moved once at the end of it.
+  /// Taking the bytes one at a time means a bounds check to look at each and,
+  /// to consume it, a second one plus storing `previous` and rebasing the
+  /// buffer, none of which anything needs until the run ends.
+  mutating func advanceOverIdentifierContinuationCharacters() {
+    while true {
+      let bytes = self.input
+      var count = 0
+      while count < bytes.count, bytes[count].isAsciiIdentifierContinue {
+        count += 1
+      }
+      if count > 0 {
+        self = self.advanced(by: count)
+      }
+
+      // Whatever stopped the run either ends the identifier or begins a scalar
+      // outside ASCII, which has to be decoded to find out which.
+      guard let byte = self.peek(), byte >= 0x80,
+        self.advance(if: { $0.isValidIdentifierContinuationCodePoint })
+      else {
+        return
+      }
+    }
+  }
+
+  /// Advance to the end of the current line.
+  mutating func advanceToEndOfLine() {
+    while self.is(notAt: "\n", "\r") {
+      _ = self.advance()
+    }
+  }
 }
 
 extension Lexer.Cursor {
@@ -815,23 +983,13 @@ extension Lexer.Cursor {
   /// If the current character is `matching`, advance the cursor and return `true`.
   /// Otherwise, this is a no-op and returns `false`.
   mutating func advance(matching: CharacterByte) -> Bool {
-    if self.is(at: matching) {
-      _ = self.advance()
-      return true
-    } else {
-      return false
-    }
+    self.position.advance(matching: matching)
   }
 
   /// If the current character is `matching`, advance the cursor and return `true`.
   /// Otherwise, this is a no-op and returns `false`.
   mutating func advance(matching character1: CharacterByte, _ character2: CharacterByte) -> Bool {
-    if self.is(at: character1) || self.is(at: character2) {
-      _ = self.advance()
-      return true
-    } else {
-      return false
-    }
+    self.position.advance(matching: character1, character2)
   }
 
   /// If the current character is in `matching`, advance the cursor and return `true`.
@@ -849,72 +1007,22 @@ extension Lexer.Cursor {
   /// If the current character matches `predicate`, consume it and return `true`.
   /// Otherwise, this is a no-op and returns `false`.
   mutating func advance(if predicate: (Unicode.Scalar) -> Bool) -> Bool {
-    guard let byte = self.peek() else {
-      return false
-    }
-
-    // An ASCII byte is a scalar on its own, so it needs no decoding, and the
-    // cursor does not have to be copied in order to be restored when the
-    // predicate rejects it.
-    if byte < 0x80 {
-      guard predicate(Unicode.Scalar(byte)) else {
-        return false
-      }
-      _ = self.advance()
-      return true
-    }
-
-    var tmp = self
-    guard let c = tmp.advanceValidatingUTF8Character() else {
-      return false
-    }
-
-    if predicate(c) {
-      self = tmp
-      return true
-    } else {
-      return false
-    }
+    self.position.advance(if: predicate)
   }
 
   /// Advance the cursor while `predicate` is satisfied.
   mutating func advance(while predicate: (Unicode.Scalar) -> Bool) {
-    while self.advance(if: predicate) {}
+    self.position.advance(while: predicate)
   }
 
   /// Advance the cursor past every character that can continue an identifier.
-  ///
-  /// Roughly half the bytes of a source file pass through here, so the run is
-  /// counted over the buffer and the position moved once at the end of it.
-  /// Taking the bytes one at a time means a bounds check to look at each and,
-  /// to consume it, a second one plus storing `previous` and rebasing the
-  /// buffer, none of which anything needs until the run ends.
   mutating func advanceOverIdentifierContinuationCharacters() {
-    while true {
-      let bytes = self.input
-      var count = 0
-      while count < bytes.count, bytes[count].isAsciiIdentifierContinue {
-        count += 1
-      }
-      if count > 0 {
-        self.position = self.position.advanced(by: count)
-      }
-
-      // Whatever stopped the run either ends the identifier or begins a scalar
-      // outside ASCII, which has to be decoded to find out which.
-      guard let byte = self.peek(), byte >= 0x80,
-        self.advance(if: { $0.isValidIdentifierContinuationCodePoint })
-      else {
-        return
-      }
-    }
+    self.position.advanceOverIdentifierContinuationCharacters()
   }
 
   /// Advance the cursor to the end of the current line.
   mutating func advanceToEndOfLine() {
-    while self.is(notAt: "\n", "\r") {
-      _ = self.advance()
-    }
+    self.position.advanceToEndOfLine()
   }
 
   /// Returns `true` if the comment spanned multiple lines and `false` otherwise.
@@ -1021,15 +1129,10 @@ extension Lexer.Cursor {
     return true
   }
 
-  /// Read a single UTF-8 scalar, which may span multiple bytes.
-  /// Returns `nil` if
-  ///  - The cursor is at the end of the buffer or reaches the end of the buffer
-  ///    while reading the character
-  ///  - The cursor is currently placed at an invalid UTF-8 byte sequence. In
-  ///    that case bytes are consumed until we reach the next start of a UTF-8
-  ///    character.
+  /// Read a single UTF-8 scalar, which may span multiple bytes. See
+  /// `Position.advanceValidatingUTF8Character`.
   mutating func advanceValidatingUTF8Character() -> Unicode.Scalar? {
-    return Unicode.Scalar.lexing(advance: { self.advance() }, peek: { self.peek(at: 0) })
+    return self.position.advanceValidatingUTF8Character()
   }
 }
 
@@ -1553,7 +1656,7 @@ extension Lexer.Cursor {
       let oConsumed = self.advance(matching: "o")  // Consume 'o'
       precondition(zeroConsumed && oConsumed)
       if let peeked = self.peek(), peeked < UInt8(ascii: "0") || peeked > UInt8(ascii: "7") {
-        let errorPos = self
+        let errorPos = self.position
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
@@ -1563,7 +1666,7 @@ extension Lexer.Cursor {
 
       self.advance(while: { ($0 >= "0" && $0 <= "7") || $0 == "_" })
 
-      let tmp = self
+      let tmp = self.position
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
@@ -1582,7 +1685,7 @@ extension Lexer.Cursor {
       let bConsumed = self.advance(matching: "b")  // Consume 'b'
       precondition(zeroConsumed && bConsumed)
       if self.is(notAt: "0", "1") {
-        let errorPos = self
+        let errorPos = self.position
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
@@ -1592,7 +1695,7 @@ extension Lexer.Cursor {
 
       self.advance(while: { $0 == "0" || $0 == "1" || $0 == "_" })
 
-      let tmp = self
+      let tmp = self.position
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
@@ -1626,7 +1729,7 @@ extension Lexer.Cursor {
     } else if self.isAtEndOfFile || self.is(notAt: "e", "E") {
       // Floating literals must have '.', 'e', or 'E' after digits.  If it is
       // something else, then this is the end of the token.
-      let tmp = self
+      let tmp = self.position
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
@@ -1653,7 +1756,7 @@ extension Lexer.Cursor {
         // There are 3 cases to diagnose if the exponent starts with a non-digit:
         // identifier (invalid character), underscore (invalid first character),
         // non-identifier (empty exponent)
-        let tmp = self
+        let tmp = self.position
         var errorKind: TokenDiagnostic.Kind
         if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
           if tmp.is(at: "_") {
@@ -1675,7 +1778,7 @@ extension Lexer.Cursor {
 
       self.advance(while: { $0.isDigit || $0 == "_" })
 
-      let tmp = self
+      let tmp = self.position
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
@@ -1702,7 +1805,7 @@ extension Lexer.Cursor {
 
     guard Unicode.Scalar(peeked).isHexDigit else {
       if Unicode.Scalar(peeked).isValidIdentifierContinuationCodePoint {
-        let errorPos = self
+        let errorPos = self.position
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
           .integerLiteral,
@@ -1716,7 +1819,7 @@ extension Lexer.Cursor {
     self.advance(while: { $0.isHexDigit || $0 == "_" })
 
     if self.isAtEndOfFile || self.is(notAt: ".", "p", "P") {
-      let tmp = self
+      let tmp = self.position
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
@@ -1781,7 +1884,7 @@ extension Lexer.Cursor {
       // There are 3 cases to diagnose if the exponent starts with a non-digit:
       // identifier (invalid character), underscore (invalid first character),
       // non-identifier (empty exponent)
-      let tmp = self
+      let tmp = self.position
       let errorKind: TokenDiagnostic.Kind
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
         if tmp.is(at: "_") {
@@ -1802,7 +1905,7 @@ extension Lexer.Cursor {
 
     self.advance(while: { $0.isDigit || $0 == "_" })
 
-    let tmp = self
+    let tmp = self.position
     if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
       let errorPos = tmp
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
@@ -2003,12 +2106,12 @@ extension Lexer.Cursor {
     let quoteConsumed = self.advance(matching: "{")
     precondition(quoteConsumed)
 
-    let digitStart = self
+    let digitStart = self.position
     self.advance(while: { $0.isHexDigit })
 
     let digitText = SyntaxText(
       baseAddress: digitStart.pointer,
-      count: digitStart.distance(to: self)
+      count: digitStart.distance(to: self.position)
     )
 
     guard self.advance(matching: "}") else {
@@ -2031,7 +2134,7 @@ extension Lexer.Cursor {
   }
 
   private mutating func maybeConsumeNewlineEscape() -> Bool {
-    var tmp = self
+    var tmp = self.position
     while true {
       switch tmp.advance() {
       case " ", "\t":
@@ -2040,7 +2143,7 @@ extension Lexer.Cursor {
         _ = tmp.advance(if: { $0 == "\n" })
         fallthrough
       case "\n":
-        self = tmp
+        self.position = tmp
         return true
       case 0:
         return false
@@ -2276,14 +2379,14 @@ extension Lexer.Cursor {
 extension Lexer.Cursor {
   /// lexIdentifier - Match [a-zA-Z_][a-zA-Z_$0-9]*
   mutating func lexIdentifier() -> Lexer.Result {
-    let tokStart = self
+    let tokStart = self.position
     let didStart = self.advance(if: { $0.isValidIdentifierStartCodePoint })
     precondition(didStart, "Unexpected start")
 
     // Lex [a-zA-Z_$0-9[[:XID_Continue:]]]*
     self.advanceOverIdentifierContinuationCharacters()
 
-    let text = tokStart.text(upTo: self)
+    let text = tokStart.text(upTo: self.position)
     let keyword = Keyword(text)
     if let keyword, keyword.isLexerClassified {
       return Lexer.Result.keyword(keyword)
@@ -2322,7 +2425,7 @@ extension Lexer.Cursor {
       if ch == nil || ch == "`" || ch == "\n" || ch == "\r" {
         break
       }
-      let position = self
+      let position = self.position
       guard let scalar = self.advanceValidatingUTF8Character() else {
         error = LexingDiagnostic(.invalidUtf8, position: position)
         continue
@@ -2541,7 +2644,7 @@ extension Lexer.Cursor {
   }
 
   mutating func lexDollarIdentifier() -> Lexer.Result {
-    let tokStart = self
+    let tokStart = self.position
     let dollarConsumed = self.advance(matching: "$")
     precondition(dollarConsumed)
 
@@ -2650,7 +2753,7 @@ extension Lexer.Cursor {
       !(self.peekScalar()?.isValidIdentifierStartCodePoint ?? false)
         && !(self.peekScalar()?.isOperatorStartCodePoint ?? false)
     )
-    let start = self
+    let start = self.position
     var tmp = self
     if tmp.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier

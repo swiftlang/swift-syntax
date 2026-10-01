@@ -43,8 +43,9 @@ struct RecursiveRawSyntaxFlags: OptionSet, Sendable {
 /// the fields of whichever shape it names, so a node takes room for its own
 /// shape instead of for the largest one.
 enum RawSyntaxData: Sendable {
-  /// - Important: A raw syntax node for a parsed token must always be allocated
-  ///   in a `ParsingRawSyntaxArena` so we can parse the trivia in the token.
+  /// A token that is present, carries no diagnostic, and whose text is short
+  /// enough to measure in a byte, which is almost every token in a file.
+  case smolParsedToken(RawSyntaxArenaRef)
   case parsedToken(RawSyntaxArenaRef)
   case materializedToken(RawSyntaxArenaRef)
   case layout(RawSyntaxArenaRef)
@@ -52,9 +53,23 @@ enum RawSyntaxData: Sendable {
   @inline(__always)
   var arenaReference: RawSyntaxArenaRef {
     switch self {
-    case .parsedToken(let arenaRef), .materializedToken(let arenaRef), .layout(let arenaRef):
+    case .smolParsedToken(let arenaRef), .parsedToken(let arenaRef),
+      .materializedToken(let arenaRef), .layout(let arenaRef):
       return arenaRef
     }
+  }
+
+  /// The fields of a token whose presence, absent diagnostic and short text let
+  /// four bytes say what twenty otherwise would.
+  struct SmolParsedToken: Sendable {
+    /// Byte count of this token's whole text, including leading and trailing trivia.
+    var wholeTextLength: UInt8
+    var textLowerBound: UInt8
+    var textUpperBound: UInt8
+    var tokenKind: RawTokenKind
+
+    /// The largest text a token of this shape can hold.
+    static let maximumTextLength = Int(UInt8.max)
   }
 
   /// Token with lazy trivia parsing.
@@ -62,58 +77,13 @@ enum RawSyntaxData: Sendable {
   /// The RawSyntax's `arena` must have a valid trivia parsing function to
   /// lazily materialize the leading/trailing trivia pieces.
   struct ParsedToken: Sendable {
+    /// Byte count of this token's whole text, including leading and trailing trivia.
+    var wholeTextLength: UInt32
+    var textLowerBound: UInt32
+    var textUpperBound: UInt32
+    var tokenDiagnostic: TokenDiagnostic?
     var tokenKind: RawTokenKind
-
-    /// Whole text of this token including leading/trailing trivia.
-    var wholeText: SyntaxText
-
-    /// Range of the actual token’s text.
-    ///
-    /// Text in `wholeText` before `textRange.lowerBound` is leading trivia and
-    /// after `textRange.upperBound` is trailing trivia.
-    var textRange: Range<SyntaxText.Index>
-
     var presence: SourcePresence
-
-    /// Store the members of ``TokenDiagnostic`` individually so the compiler can pack
-    /// `ParsedToken` more efficiently (saving 2 bytes)
-    /// `tokenDiagnosticByteOffset` is ignored if `tokenDiagnosticKind` is `nil`
-    private var tokenDiagnosticKind: TokenDiagnostic.Kind?
-    private var tokenDiagnosticByteOffset: UInt16
-
-    var tokenDiagnostic: TokenDiagnostic? {
-      get {
-        if let kind = tokenDiagnosticKind {
-          return TokenDiagnostic(kind, byteOffset: tokenDiagnosticByteOffset)
-        } else {
-          return nil
-        }
-      }
-      set {
-        if let newValue {
-          self.tokenDiagnosticKind = newValue.kind
-          self.tokenDiagnosticByteOffset = newValue.byteOffset
-        } else {
-          self.tokenDiagnosticKind = nil
-          self.tokenDiagnosticByteOffset = 0
-        }
-      }
-    }
-
-    init(
-      tokenKind: RawTokenKind,
-      wholeText: SyntaxText,
-      textRange: Range<SyntaxText.Index>,
-      presence: SourcePresence,
-      tokenDiagnostic: TokenDiagnostic?
-    ) {
-      self.tokenKind = tokenKind
-      self.wholeText = wholeText
-      self.textRange = textRange
-      self.presence = presence
-      self.tokenDiagnosticKind = tokenDiagnostic?.kind
-      self.tokenDiagnosticByteOffset = tokenDiagnostic?.byteOffset ?? 0
-    }
   }
 
   /// Token typically created with `TokenSyntax.<someToken>`.
@@ -124,49 +94,7 @@ enum RawSyntaxData: Sendable {
     var numLeadingTrivia: UInt32
     var byteLength: UInt32
     var presence: SourcePresence
-    /// Store the members of ``TokenDiagnostic`` individually so the compiler can pack
-    /// `ParsedToken` more efficiently (saving 2 bytes)
-    /// `tokenDiagnosticByteOffset` is ignored if `tokenDiagnosticKind` is `nil`
-    private var tokenDiagnosticKind: TokenDiagnostic.Kind?
-    private var tokenDiagnosticByteOffset: UInt16
-
-    init(
-      tokenKind: RawTokenKind,
-      tokenText: SyntaxText,
-      triviaPieces: RawTriviaPieceBuffer,
-      numLeadingTrivia: UInt32,
-      byteLength: UInt32,
-      presence: SourcePresence,
-      tokenDiagnostic: TokenDiagnostic?
-    ) {
-      self.tokenKind = tokenKind
-      self.tokenText = tokenText
-      self.triviaPieces = triviaPieces
-      self.numLeadingTrivia = numLeadingTrivia
-      self.byteLength = byteLength
-      self.presence = presence
-      self.tokenDiagnosticKind = tokenDiagnostic?.kind
-      self.tokenDiagnosticByteOffset = tokenDiagnostic?.byteOffset ?? 0
-    }
-
-    var tokenDiagnostic: TokenDiagnostic? {
-      get {
-        if let kind = tokenDiagnosticKind {
-          return TokenDiagnostic(kind, byteOffset: tokenDiagnosticByteOffset)
-        } else {
-          return nil
-        }
-      }
-      set {
-        if let newValue {
-          self.tokenDiagnosticKind = newValue.kind
-          self.tokenDiagnosticByteOffset = newValue.byteOffset
-        } else {
-          self.tokenDiagnosticKind = nil
-          self.tokenDiagnosticByteOffset = 0
-        }
-      }
-    }
+    var tokenDiagnostic: TokenDiagnostic?
   }
 
   /// Layout node including collections.
@@ -180,8 +108,111 @@ enum RawSyntaxData: Sendable {
   }
 }
 
+/// The fields a node keeps at the start of its tail, immediately past its header.
+protocol RawSyntaxDataFields: Sendable {
+  /// Traps unless `header` names a node whose tail starts with these fields.
+  ///
+  /// A `switch` that traps rather than a `Bool`: once this is inlined where the
+  /// header's case is already known, the optimizer removes a `switch` but not a
+  /// test of the `Bool` one would return.
+  static func requireShape(of header: RawSyntaxData)
+}
+
+extension RawSyntaxData.SmolParsedToken: RawSyntaxDataFields {
+  @inline(__always)
+  static func requireShape(of header: RawSyntaxData) {
+    switch header {
+    case .smolParsedToken: return
+    default: preconditionFailure("not a short parsed token")
+    }
+  }
+}
+
+extension RawSyntaxData.ParsedToken: RawSyntaxDataFields {
+  @inline(__always)
+  static func requireShape(of header: RawSyntaxData) {
+    switch header {
+    case .parsedToken: return
+    default: preconditionFailure("not a parsed token")
+    }
+  }
+}
+
+extension RawSyntaxData.MaterializedToken: RawSyntaxDataFields {
+  @inline(__always)
+  static func requireShape(of header: RawSyntaxData) {
+    switch header {
+    case .materializedToken: return
+    default: preconditionFailure("not a materialized token")
+    }
+  }
+}
+
+extension RawSyntaxData.Layout: RawSyntaxDataFields {
+  @inline(__always)
+  static func requireShape(of header: RawSyntaxData) {
+    switch header {
+    case .layout: return
+    default: preconditionFailure("not a layout node")
+    }
+  }
+}
+
+extension RawSyntaxData.SmolParsedToken {
+  /// A short parsed token's fields in a node's tail, and the text laid out after
+  /// them.
+  ///
+  /// - Important: The arena that owns the node must outlive this.
+  struct Ref: Sendable {
+    typealias Fields = RawSyntaxData.SmolParsedToken
+
+    private let pointer: ArenaAllocatedPointer<Fields>
+
+    @inline(__always)
+    init(_ pointer: UnsafePointer<Fields>) {
+      self.pointer = ArenaAllocatedPointer(pointer)
+    }
+
+    @inline(__always)
+    var tokenKind: RawTokenKind { pointer.pointee.tokenKind }
+    @inline(__always)
+    var wholeTextLength: UInt8 { pointer.pointee.wholeTextLength }
+    /// Range of the token's own text within `wholeText`.
+    @inline(__always)
+    var textRange: Range<SyntaxText.Index> {
+      Int(pointer.pointee.textLowerBound)..<Int(pointer.pointee.textUpperBound)
+    }
+
+    /// Where this token's text begins, a fixed offset past its fields.
+    @inline(__always)
+    private var textBase: UnsafePointer<UInt8> {
+      UnsafeRawPointer(pointer.pointer)
+        .advanced(by: MemoryLayout<Fields>.stride)
+        .assumingMemoryBound(to: UInt8.self)
+    }
+
+    @inline(__always)
+    var wholeText: SyntaxText {
+      SyntaxText(baseAddress: self.textBase, count: Int(self.wholeTextLength))
+    }
+    /// The token's own text, without its trivia.
+    @inline(__always)
+    var tokenText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[self.textRange])
+    }
+    @inline(__always)
+    var leadingTriviaText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[..<self.textRange.lowerBound])
+    }
+    @inline(__always)
+    var trailingTriviaText: SyntaxText {
+      SyntaxText(rebasing: self.wholeText[self.textRange.upperBound...])
+    }
+  }
+}
+
 extension RawSyntaxData.ParsedToken {
-  /// A parsed token's fields in a node's tail.
+  /// A parsed token's fields in a node's tail, and the text laid out after them.
   ///
   /// - Important: The arena that owns the node must outlive this.
   struct Ref: Sendable {
@@ -202,14 +233,30 @@ extension RawSyntaxData.ParsedToken {
     @inline(__always)
     var tokenKind: RawTokenKind { pointer.pointee.tokenKind }
     @inline(__always)
-    var wholeText: SyntaxText { pointer.pointee.wholeText }
+    var wholeTextLength: UInt32 { pointer.pointee.wholeTextLength }
+    /// Range of the token's own text within `wholeText`: what precedes it is
+    /// leading trivia and what follows it is trailing.
     @inline(__always)
-    var textRange: Range<SyntaxText.Index> { pointer.pointee.textRange }
+    var textRange: Range<SyntaxText.Index> {
+      Int(pointer.pointee.textLowerBound)..<Int(pointer.pointee.textUpperBound)
+    }
     @inline(__always)
     var presence: SourcePresence { pointer.pointee.presence }
     @inline(__always)
     var tokenDiagnostic: TokenDiagnostic? { pointer.pointee.tokenDiagnostic }
 
+    /// Where this token's text begins, a fixed offset past its fields.
+    @inline(__always)
+    private var textBase: UnsafePointer<UInt8> {
+      UnsafeRawPointer(pointer.pointer)
+        .advanced(by: MemoryLayout<Fields>.stride)
+        .assumingMemoryBound(to: UInt8.self)
+    }
+
+    @inline(__always)
+    var wholeText: SyntaxText {
+      SyntaxText(baseAddress: self.textBase, count: Int(self.wholeTextLength))
+    }
     /// The token's own text, without its trivia.
     @inline(__always)
     var tokenText: SyntaxText {
@@ -324,42 +371,39 @@ public struct RawSyntax: Sendable {
     UnsafeRawPointer(pointer.pointer).advanced(by: Self.tailOffset)
   }
 
-  /// Takes room for a header and `tailByteCount` bytes after it, writes the
-  /// header, and hands back the node together with where its tail begins.
+  /// Allocates a node, writes its header and the fields at the start of its tail,
+  /// and hands back the node together with where the tail continues past them, for
+  /// `trailingByteCount` more bytes.
+  ///
+  /// A node is aligned only to ``RawSyntaxArena/nodeAlignment``, and its fields
+  /// begin at ``tailOffset``, so both the header and `Fields` have to fit that.
   @inline(__always)
-  private static func allocate(
+  private static func allocate<Fields: RawSyntaxDataFields>(
     _ header: RawSyntaxData,
-    tailByteCount: Int,
+    _ fields: Fields,
+    trailingByteCount: Int = 0,
     arena: __shared RawSyntaxArena
-  ) -> (node: RawSyntax, tail: UnsafeMutableRawPointer) {
+  ) -> (node: RawSyntax, trailing: UnsafeMutableRawPointer) {
+    Fields.requireShape(of: header)
     assert(
       MemoryLayout<RawSyntaxData>.alignment <= RawSyntaxArena.nodeAlignment,
       "a node's header needs more alignment than a node has"
     )
-    let base = arena.allocateNode(byteCount: Self.tailOffset + tailByteCount)
-    let headerPointer = base.bindMemory(to: RawSyntaxData.self, capacity: 1)
-    headerPointer.initialize(to: header)
-    return (
-      RawSyntax(pointer: ArenaAllocatedPointer(UnsafePointer(headerPointer))),
-      base.advanced(by: Self.tailOffset)
-    )
-  }
-
-  /// Binds the start of a node's tail to the fields of its shape.
-  ///
-  /// A node is aligned only to ``RawSyntaxArena/nodeAlignment``, and its tail
-  /// begins at ``tailOffset``, so `Fields` has to fit both.
-  @inline(__always)
-  private static func bindFields<Fields>(
-    _ tail: UnsafeMutableRawPointer,
-    to fields: Fields.Type
-  ) -> UnsafeMutablePointer<Fields> {
     assert(
       MemoryLayout<Fields>.alignment <= RawSyntaxArena.nodeAlignment
         && Self.tailOffset.isMultiple(of: MemoryLayout<Fields>.alignment),
       "\(Fields.self) needs more alignment than a node's tail has"
     )
-    return tail.bindMemory(to: Fields.self, capacity: 1)
+    let fieldsSize = MemoryLayout<Fields>.stride
+    let base = arena.allocateNode(byteCount: Self.tailOffset + fieldsSize + trailingByteCount)
+    let headerPointer = base.bindMemory(to: RawSyntaxData.self, capacity: 1)
+    headerPointer.initialize(to: header)
+    let tail = base.advanced(by: Self.tailOffset)
+    tail.bindMemory(to: Fields.self, capacity: 1).initialize(to: fields)
+    return (
+      RawSyntax(pointer: ArenaAllocatedPointer(UnsafePointer(headerPointer))),
+      tail.advanced(by: fieldsSize)
+    )
   }
 
   /// Which of the three shapes this node has, and the arena that owns it.
@@ -368,37 +412,37 @@ public struct RawSyntax: Sendable {
     pointer.pointer.pointee
   }
 
+  /// The fields at the start of this node's tail.
+  ///
+  /// - Precondition: this node's header names a shape whose tail holds `Fields`.
+  @inline(__always)
+  private func fields<Fields: RawSyntaxDataFields>(as fields: Fields.Type) -> UnsafePointer<Fields> {
+    Fields.requireShape(of: self.header)
+    return tail.assumingMemoryBound(to: Fields.self)
+  }
+
+  /// - Precondition: this is a short parsed token.
+  @inline(__always)
+  var asSmolParsedToken: RawSyntaxData.SmolParsedToken.Ref {
+    RawSyntaxData.SmolParsedToken.Ref(fields(as: RawSyntaxData.SmolParsedToken.self))
+  }
+
   /// - Precondition: this is a parsed token.
   @inline(__always)
   var asParsedToken: RawSyntaxData.ParsedToken.Ref {
-    switch self.header {
-    case .parsedToken:
-      return RawSyntaxData.ParsedToken.Ref(tail.assumingMemoryBound(to: RawSyntaxData.ParsedToken.self))
-    case .materializedToken, .layout:
-      preconditionFailure("not a parsed token")
-    }
+    RawSyntaxData.ParsedToken.Ref(fields(as: RawSyntaxData.ParsedToken.self))
   }
 
   /// - Precondition: this is a materialized token.
   @inline(__always)
   var asMaterializedToken: RawSyntaxData.MaterializedToken.Ref {
-    switch self.header {
-    case .materializedToken:
-      return RawSyntaxData.MaterializedToken.Ref(tail.assumingMemoryBound(to: RawSyntaxData.MaterializedToken.self))
-    case .parsedToken, .layout:
-      preconditionFailure("not a materialized token")
-    }
+    RawSyntaxData.MaterializedToken.Ref(fields(as: RawSyntaxData.MaterializedToken.self))
   }
 
   /// - Precondition: this is a layout node or a collection.
   @inline(__always)
   var asLayout: RawSyntaxData.Layout.Ref {
-    switch self.header {
-    case .layout:
-      return RawSyntaxData.Layout.Ref(tail.assumingMemoryBound(to: RawSyntaxData.Layout.self))
-    case .parsedToken, .materializedToken:
-      preconditionFailure("not a layout node")
-    }
+    RawSyntaxData.Layout.Ref(fields(as: RawSyntaxData.Layout.self))
   }
 
   public var arena: RetainedRawSyntaxArena {
@@ -417,8 +461,7 @@ extension RawSyntax {
   @_spi(RawSyntax)
   public var kind: SyntaxKind {
     switch header {
-    case .parsedToken: return .token
-    case .materializedToken: return .token
+    case .smolParsedToken, .parsedToken, .materializedToken: return .token
     case .layout: return asLayout.kind
     }
   }
@@ -453,8 +496,7 @@ extension RawSyntax {
   /// Total number of nodes in this sub-tree, including `self` node.
   var totalNodes: Int {
     switch header {
-    case .parsedToken,
-      .materializedToken(_):
+    case .smolParsedToken, .parsedToken, .materializedToken:
       return 1
     case .layout:
       return asLayout.descendantCount + 1
@@ -467,9 +509,12 @@ extension RawSyntax {
   @_spi(RawSyntax)
   public var byteLength: Int {
     switch header {
+    case .smolParsedToken:
+      // Present by construction, so nothing to test.
+      return Int(asSmolParsedToken.wholeTextLength)
     case .parsedToken:
       if asParsedToken.presence == .present {
-        return asParsedToken.wholeText.count
+        return Int(asParsedToken.wholeTextLength)
       } else {
         return 0
       }
@@ -546,77 +591,86 @@ extension RawSyntax {
 extension RawTriviaPiece {
   /// Call `body` with the syntax text of this trivia piece.
   ///
-  /// If `isEphemeral` is `true`, the ``SyntaxText`` argument is only guaranteed
-  /// to be valid within the call.
-  func withSyntaxText(body: (SyntaxText, _ isEphemeral: Bool) throws -> Void) rethrows {
+  /// - Important: A piece that stores no text is described into a temporary, so the
+  ///   text is only valid within the call.
+  func withSyntaxText(body: (SyntaxText) throws -> Void) rethrows {
     if let syntaxText = storedText {
-      try body(syntaxText, /*isEphemeral*/ false)
+      try body(syntaxText)
       return
     }
 
     var description = ""
     write(to: &description)
     try description.withUTF8 { buffer in
-      try body(
-        SyntaxText(baseAddress: buffer.baseAddress, count: buffer.count),
-        /*isEphemeral*/ true
-      )
+      try body(SyntaxText(baseAddress: buffer.baseAddress, count: buffer.count))
     }
   }
 }
 
 extension RawSyntax {
-  /// Enumerate all of the syntax text present in this node, and all
-  /// of its children, to give a source-accurate view of the bytes.
+  /// Retrieve the syntax text as an array of bytes that models the input
+  /// source even in the presence of invalid UTF-8.
   ///
-  /// Unlike `description`, this provides a source-accurate representation
-  /// even in the presence of malformed UTF-8 in the input source.
-  ///
-  /// If `isEphemeral` is `true`, the ``SyntaxText`` arguments passed to the
-  /// visitor are only guaranteed to be valid within that call. Otherwise, they
-  /// are valid as long as the raw syntax is alive.
-  public func withEachSyntaxText(body: (SyntaxText, _ isEphemeral: Bool) throws -> Void) rethrows {
+  /// The result is exactly ``byteLength`` bytes, so it is allocated once rather than
+  /// grown, and a parsed token's text is copied a whole unit at a time — which is
+  /// safe only where `copyText` wrote it into room rounded up for it, so the walk
+  /// below has to know which shape it is reading.
+  public var syntaxTextBytes: [UInt8] {
+    let total = self.byteLength
+    // `copyText` may write up to seven bytes past a token's text, so the destination
+    // carries the same slack the node's tail does. Those bytes stay outside the
+    // array's count.
+    return [UInt8](unsafeUninitializedCapacity: total + 7) { buffer, initialized in
+      var written = 0
+      self.writeSyntaxTextBytes(to: buffer.baseAddress!, at: &written)
+      assert(written == total, "a node's byte length must be the text it holds")
+      initialized = total
+    }
+  }
+
+  /// Writes this node's syntax text into `destination`, advancing `written` by what
+  /// it wrote.
+  private func writeSyntaxTextBytes(to destination: UnsafeMutablePointer<UInt8>, at written: inout Int) {
+    /// Text a node's tail holds, which `copyText` padded to a whole unit.
+    func padded(_ text: SyntaxText) {
+      Self.copyText(
+        text,
+        to: UnsafeMutableRawPointer(destination + written),
+        sourceBufferEnd: text.baseAddress.map { $0 + Self.textByteCount(for: text.count) }
+      )
+      written += text.count
+    }
+    /// Text the arena interned or a trivia piece described, which has no slack.
+    func exact(_ text: SyntaxText) {
+      if let base = text.baseAddress, !text.isEmpty {
+        UnsafeMutableRawPointer(destination + written).copyMemory(from: base, byteCount: text.count)
+      }
+      written += text.count
+    }
+
     switch header {
+    case .smolParsedToken:
+      // Present by construction.
+      padded(asSmolParsedToken.wholeText)
     case .parsedToken:
       if asParsedToken.presence == .present {
-        try body(asParsedToken.wholeText, /*isEphemeral*/ false)
+        padded(asParsedToken.wholeText)
       }
     case .materializedToken:
       if asMaterializedToken.presence == .present {
-        for p in asMaterializedToken.leadingTrivia {
-          try p.withSyntaxText(body: body)
+        for piece in asMaterializedToken.leadingTrivia {
+          piece.withSyntaxText { exact($0) }
         }
-        try body(asMaterializedToken.tokenText, /*isEphemeral*/ false)
-        for p in asMaterializedToken.trailingTrivia {
-          try p.withSyntaxText(body: body)
+        exact(asMaterializedToken.tokenText)
+        for piece in asMaterializedToken.trailingTrivia {
+          piece.withSyntaxText { exact($0) }
         }
       }
     case .layout:
       for case let child? in asLayout.layout {
-        try child.withEachSyntaxText(body: body)
+        child.writeSyntaxTextBytes(to: destination, at: &written)
       }
     }
-  }
-
-  /// Retrieve the syntax text as an array of bytes that models the input
-  /// source even in the presence of invalid UTF-8.
-  public var syntaxTextBytes: [UInt8] {
-    var result: [UInt8] = []
-    var buf: SyntaxText = ""
-    withEachSyntaxText { syntaxText, isEphemeral in
-      if isEphemeral {
-        result.append(contentsOf: buf)
-        result.append(contentsOf: syntaxText)
-        buf = ""
-      } else if let base = buf.baseAddress, base + buf.count == syntaxText.baseAddress {
-        buf = SyntaxText(baseAddress: base, count: buf.count + syntaxText.count)
-      } else {
-        result.append(contentsOf: buf)
-        buf = syntaxText
-      }
-    }
-    result.append(contentsOf: buf)
-    return result
   }
 }
 
@@ -626,6 +680,9 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   /// - Parameter stream: The stream on which to output this node.
   public func write<Target: TextOutputStream>(to target: inout Target) {
     switch header {
+    case .smolParsedToken:
+      // Present by construction.
+      String(syntaxText: asSmolParsedToken.wholeText).write(to: &target)
     case .parsedToken:
       if asParsedToken.presence == .present {
         String(syntaxText: asParsedToken.wholeText).write(to: &target)
@@ -740,51 +797,165 @@ extension RawSyntax {
 // MARK: - Factories.
 
 extension RawSyntax {
-  /// "Designated" factory method to create a parsed token node.
+  /// Makes a parsed token from what the lexer already holds: the buffer it is
+  /// reading, positioned at the token, and the token's byte lengths.
+  ///
+  /// Taking those rather than a `SyntaxText` and a `Range` means neither is built
+  /// only to be taken apart again here, and the buffer answers both where the text
+  /// is and how far ``copyText`` may read past it.
+  ///
+  /// The whole text is copied into the node, so the tree does not depend on the
+  /// buffer outliving the parse.
   ///
   /// - Parameters:
   ///   - kind: Token kind.
-  ///   - wholeText: Whole text of this token including trailing/leading trivia.
-  ///   - textRange: Range of the token text in `wholeText`.
-  ///   - presence: Whether the token appeared in the source code or if it was synthesized.
-  ///   - arena: RawSyntaxArena to the result node data resides.
+  ///   - sourceBuffer: The buffer being lexed, positioned at the first byte of this
+  ///     token's whole text.
+  ///   - leadingTriviaByteLength: Bytes of leading trivia before the token's text.
+  ///   - textByteLength: Bytes of the token's own text.
+  ///   - wholeTextLength: Bytes of the whole text, both trivia included.
+  ///   - presence: Whether the token appeared in the source or was synthesized.
+  ///   - tokenDiagnostic: The diagnostic to carry, if the token has one.
+  ///   - arena: RawSyntaxArena in which the node is allocated.
   internal static func parsedToken(
     kind: RawTokenKind,
-    wholeText: SyntaxText,
-    textRange: Range<SyntaxText.Index>,
+    sourceBuffer: UnsafeBufferPointer<UInt8>,
+    leadingTriviaByteLength: Int,
+    textByteLength: Int,
+    wholeTextLength: Int,
     presence: SourcePresence,
     tokenDiagnostic: TokenDiagnostic?,
     arena: __shared ParsingRawSyntaxArena
   ) -> RawSyntax {
-    // Intern the token's whole text into the arena's node allocator so the tree
-    // does not depend on the source buffer outliving the parse. `textRange` is
-    // 0-based within `wholeText`, so it is unaffected by the copy.
-    let wholeText = arena.internParsedTokenText(wholeText)
-    let payload = RawSyntaxData.ParsedToken(
-      tokenKind: kind,
-      wholeText: wholeText,
-      textRange: textRange,
-      presence: presence,
-      tokenDiagnostic: tokenDiagnostic
-    )
+    let wholeText = SyntaxText(baseAddress: sourceBuffer.baseAddress, count: wholeTextLength)
+    // `&+` because these are byte counts within one token, taken from the lexer,
+    // and cannot overflow: the check is a branch per token on a sum bounded by the
+    // size of the source.
+    let textRange = leadingTriviaByteLength..<(leadingTriviaByteLength &+ textByteLength)
+    let sourceBufferEnd = sourceBuffer.baseAddress.map { $0 + sourceBuffer.count }
     precondition(
       kind != .keyword || Keyword(SyntaxText(rebasing: wholeText[textRange])) != nil,
       "If kind is keyword, the text must be a known token kind"
     )
-    return RawSyntax.allocateParsedToken(payload, arena: arena)
-  }
+    // Four bytes of fields rather than twenty, where the shape of the node can
+    // imply the presence and the absent diagnostic, and a byte can hold each
+    // length. `textRange` is 0-based within the whole text, so the copy does not
+    // disturb it.
+    if presence == .present, tokenDiagnostic == nil,
+      wholeText.count <= RawSyntaxData.SmolParsedToken.maximumTextLength
+    {
+      return Self.allocateParsedToken(
+        .smolParsedToken(RawSyntaxArenaRef(arena)),
+        RawSyntaxData.SmolParsedToken(
+          wholeTextLength: UInt8(wholeText.count),
+          textLowerBound: UInt8(textRange.lowerBound),
+          textUpperBound: UInt8(textRange.upperBound),
+          tokenKind: kind
+        ),
+        wholeText: wholeText,
+        sourceBufferEnd: sourceBufferEnd,
+        arena: arena
+      )
+    }
 
-  static func allocateParsedToken(
-    _ fields: RawSyntaxData.ParsedToken,
-    arena: __shared RawSyntaxArena
-  ) -> RawSyntax {
-    let (node, tail) = Self.allocate(
+    return Self.allocateParsedToken(
       .parsedToken(RawSyntaxArenaRef(arena)),
-      tailByteCount: MemoryLayout<RawSyntaxData.ParsedToken>.stride,
+      RawSyntaxData.ParsedToken(
+        wholeTextLength: UInt32(wholeText.count),
+        textLowerBound: UInt32(textRange.lowerBound),
+        textUpperBound: UInt32(textRange.upperBound),
+        tokenDiagnostic: tokenDiagnostic,
+        tokenKind: kind,
+        presence: presence
+      ),
+      wholeText: wholeText,
+      sourceBufferEnd: sourceBufferEnd,
       arena: arena
     )
-    Self.bindFields(tail, to: RawSyntaxData.ParsedToken.self).initialize(to: fields)
+  }
+
+  /// Allocates a parsed token, in either of its two shapes: `header` names which,
+  /// `fields` are that shape's, and the token's whole text follows them in the
+  /// tail.
+  ///
+  /// The text is rounded up to a whole unit: it is the last thing in the node, the
+  /// next node is word aligned anyway, and it lets the copy write whole units.
+  ///
+  /// - Important: A raw syntax node for a parsed token must always be allocated
+  ///   in a `ParsingRawSyntaxArena` so we can parse the trivia in the token.
+  static func allocateParsedToken<Fields: RawSyntaxDataFields>(
+    _ header: RawSyntaxData,
+    _ fields: Fields,
+    wholeText: SyntaxText,
+    sourceBufferEnd: UnsafePointer<UInt8>? = nil,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let textByteCount = Self.textByteCount(for: wholeText.count)
+    let (node, trailing) = Self.allocate(header, fields, trailingByteCount: textByteCount, arena: arena)
+    Self.copyText(
+      wholeText,
+      to: Self.bindText(trailing, byteCount: textByteCount),
+      sourceBufferEnd: sourceBufferEnd
+    )
     return node
+  }
+
+  /// The room a token's text needs in a node's tail: enough for ``copyText`` to
+  /// write whole units without spilling past what was allocated.
+  ///
+  /// Four-byte units for short texts, which most punctuation and operators are:
+  /// a three-byte token then wastes one byte rather than five. Identifiers and
+  /// keywords are longer and keep the eight-byte units.
+  ///
+  /// - Important: ``copyText`` writes exactly this much, so the two must agree.
+  @inline(__always)
+  static func textByteCount(for count: Int) -> Int {
+    count <= 4 ? (count + 3) & ~3 : (count + 7) & ~7
+  }
+
+  /// Binds the `byteCount` bytes of room for a token's text in a node's tail, as
+  /// ``textByteCount(for:)`` allots it, and returns it for ``copyText`` to write.
+  @inline(__always)
+  private static func bindText(_ start: UnsafeMutableRawPointer, byteCount: Int) -> UnsafeMutableRawPointer {
+    UnsafeMutableRawPointer(start.bindMemory(to: UInt8.self, capacity: byteCount))
+  }
+
+  /// Copies `text` into a node's tail, which must have ``textByteCount(for:)``
+  /// bytes of room.
+  ///
+  /// A short token is one load and one store this way, where `memcpy` spends
+  /// longer choosing how to copy than it does copying. Reading the last unit runs
+  /// past the token's end, so that form is taken only where those bytes are still
+  /// inside the buffer being lexed.
+  @inline(__always)
+  private static func copyText(
+    _ text: SyntaxText,
+    to destination: UnsafeMutableRawPointer,
+    sourceBufferEnd: UnsafePointer<UInt8>?
+  ) {
+    guard let source = text.baseAddress, !text.isEmpty else { return }
+    let count = text.count
+    guard let sourceBufferEnd,
+      source + Self.textByteCount(for: count) <= sourceBufferEnd
+    else {
+      destination.copyMemory(from: source, byteCount: count)
+      return
+    }
+    if count <= 4 {
+      destination.storeBytes(
+        of: UnsafeRawPointer(source).loadUnaligned(as: UInt32.self),
+        as: UInt32.self
+      )
+    } else {
+      var written = 0
+      while written < count {
+        destination.advanced(by: written).storeBytes(
+          of: UnsafeRawPointer(source + written).loadUnaligned(as: UInt64.self),
+          as: UInt64.self
+        )
+        written += 8
+      }
+    }
   }
 
   /// "Designated" factory method to create a materialized token node.
@@ -829,20 +1000,14 @@ extension RawSyntax {
       tokenDiagnostic: tokenDiagnostic
     )
     precondition(kind != .keyword || Keyword(text) != nil, "If kind is keyword, the text must be a known token kind")
-    return RawSyntax.allocateMaterializedToken(payload, arena: arena)
+    return Self.allocateMaterializedToken(payload, arena: arena)
   }
 
   static func allocateMaterializedToken(
     _ fields: RawSyntaxData.MaterializedToken,
     arena: __shared RawSyntaxArena
   ) -> RawSyntax {
-    let (node, tail) = Self.allocate(
-      .materializedToken(RawSyntaxArenaRef(arena)),
-      tailByteCount: MemoryLayout<RawSyntaxData.MaterializedToken>.stride,
-      arena: arena
-    )
-    Self.bindFields(tail, to: RawSyntaxData.MaterializedToken.self).initialize(to: fields)
-    return node
+    Self.allocate(.materializedToken(RawSyntaxArenaRef(arena)), fields, arena: arena).node
   }
 
   /// Factory method to create a materialized token node.
@@ -982,20 +1147,17 @@ extension RawSyntax {
       descendantCount: descendantCount,
       recursiveFlags: recursiveFlags
     )
-    return RawSyntax.allocateLayout(payload, arena: arena)
+    return Self.allocateLayout(payload, arena: arena)
   }
 
+  /// A call rather than `allocate` inlined: the factory that calls this is reached
+  /// from every generated layout initializer, and inlining `allocate`'s body into it
+  /// costs them 0.15% of a parse.
   private static func allocateLayout(
     _ fields: RawSyntaxData.Layout,
     arena: __shared RawSyntaxArena
   ) -> RawSyntax {
-    let (node, tail) = Self.allocate(
-      .layout(RawSyntaxArenaRef(arena)),
-      tailByteCount: MemoryLayout<RawSyntaxData.Layout>.stride,
-      arena: arena
-    )
-    Self.bindFields(tail, to: RawSyntaxData.Layout.self).initialize(to: fields)
-    return node
+    Self.allocate(.layout(RawSyntaxArenaRef(arena)), fields, arena: arena).node
   }
 
   /// Factory method to create a layout node.
@@ -1106,6 +1268,11 @@ extension RawSyntax: CustomDebugStringConvertible {
   private func debugWrite(to target: inout some TextOutputStream, indent: Int, withChildren: Bool = false) {
     let childIndent = indent + 2
     switch header {
+    case .smolParsedToken:
+      target.write(".parsedToken(")
+      target.write(String(describing: asSmolParsedToken.tokenKind))
+      target.write(" wholeText=\(asSmolParsedToken.wholeText.debugDescription)")
+      target.write(" textRange=\(asSmolParsedToken.textRange.description)")
     case .parsedToken:
       target.write(".parsedToken(")
       target.write(String(describing: asParsedToken.tokenKind))
@@ -1173,7 +1340,7 @@ enum RawSyntaxView {
 extension RawSyntax {
   var view: RawSyntaxView {
     switch header {
-    case .parsedToken, .materializedToken:
+    case .smolParsedToken, .parsedToken, .materializedToken:
       return .token(tokenView!)
     case .layout:
       return .layout(layoutView!)
@@ -1199,6 +1366,7 @@ extension RawSyntax: Identifiable {
 let RawSyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "RawSyntaxData": .init(RawSyntaxData.self),
   "RawSyntaxData.Layout": .init(RawSyntaxData.Layout.self),
+  "RawSyntaxData.SmolParsedToken": .init(RawSyntaxData.SmolParsedToken.self),
   "RawSyntaxData.ParsedToken": .init(RawSyntaxData.ParsedToken.self),
   "RawSyntaxData.MaterializedToken": .init(RawSyntaxData.MaterializedToken.self),
   "RawSyntax?": .init(RawSyntax?.self),

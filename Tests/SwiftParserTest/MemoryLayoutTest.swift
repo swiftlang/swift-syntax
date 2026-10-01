@@ -35,10 +35,10 @@ final class MemoryLayoutTest: XCTestCase {
       "Lexer.Cursor.Position": .init(size: 17, stride: 24, alignment: 8),
       "Lexer.Cursor.State": .init(size: 10, stride: 16, alignment: 8),
       "Lexer.Cursor.StateStack": .init(size: 8, stride: 8, alignment: 8),
-      "Lexer.Lexeme": .init(size: 72, stride: 72, alignment: 8),
-      "Lexer.LexemeSequence": .init(size: 128, stride: 128, alignment: 8),
+      "Lexer.Lexeme": .init(size: 64, stride: 64, alignment: 8),
+      "Lexer.LexemeSequence": .init(size: 120, stride: 120, alignment: 8),
 
-      "Parser.Lookahead": .init(size: 224, stride: 224, alignment: 8),
+      "Parser.Lookahead": .init(size: 208, stride: 208, alignment: 8),
       "TokenSpec": .init(size: 5, stride: 5, alignment: 1),
     ]
 

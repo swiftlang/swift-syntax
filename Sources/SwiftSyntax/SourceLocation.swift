@@ -815,8 +815,12 @@ fileprivate extension RawSyntax {
   ) -> AbsolutePosition {
     var position = position
     switch self.header {
+    case .smolParsedToken:
+      position = self.asSmolParsedToken.wholeText
+        .forEachEndOfLine(position: position, body: body)
     case .parsedToken:
-      position = self.asParsedToken.wholeText.forEachEndOfLine(position: position, body: body)
+      position = self.asParsedToken.wholeText
+        .forEachEndOfLine(position: position, body: body)
     case .materializedToken:
       position = self.asMaterializedToken.leadingTrivia.forEachEndOfLine(position: position, body: body)
       position = self.asMaterializedToken.tokenText.forEachEndOfLine(position: position, body: body)

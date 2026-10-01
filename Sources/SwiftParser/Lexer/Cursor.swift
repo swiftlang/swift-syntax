@@ -368,6 +368,14 @@ extension Lexer {
     }
 
     var input: UnsafeBufferPointer<UInt8> { position.input }
+
+    /// The end of the buffer being lexed.
+    ///
+    /// A token's text can be copied a whole unit at a time while that unit stays
+    /// inside this, which is what makes a short token one load and one store.
+    var sourceBufferEnd: UnsafePointer<UInt8>? {
+      input.baseAddress.map { $0 + input.count }
+    }
     var previous: UInt8 { position.previous }
 
     var currentState: State {
@@ -615,10 +623,9 @@ extension Lexer.Cursor {
       flags: flags,
       diagnostic: diagnostic,
       keyword: result.keywordKind,
-      start: leadingTriviaStart.pointer,
       leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
       textLength: textStart.distance(to: trailingTriviaStart),
-      trailingTriviaLength: trailingTriviaStart.distance(to: self),
+      wholeTextLength: leadingTriviaStart.distance(to: self),
       cursor: cursor
     )
     self.previousTokenKind = result.tokenKind

@@ -11,10 +11,12 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
+internal import SwiftBasicFormat
 public import SwiftDiagnostics
 @_spi(Diagnostics) internal import SwiftParser
 @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
 #else
+import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(Diagnostics) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax

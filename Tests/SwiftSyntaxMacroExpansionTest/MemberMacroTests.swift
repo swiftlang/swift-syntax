@@ -19,9 +19,12 @@
 //==========================================================================//
 
 import SwiftDiagnostics
+import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
+import SwiftSyntaxMacrosGenericTestSupport
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 

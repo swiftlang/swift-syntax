@@ -14,6 +14,7 @@
 
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class ModuleSelectorTests: ParserTestCase {

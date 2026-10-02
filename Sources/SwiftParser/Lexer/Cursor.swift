@@ -366,10 +366,10 @@ extension Lexer {
         self.metadata < 0
       }
 
-      /// The byte before this position, or nul if it is at the start of the input.
-      var previous: UInt8 {
+      /// The byte before this position, or `nil` if it is at the start of the input.
+      var previous: UInt8? {
         guard !self.isAtStartOfInput, let ptr = self.ptr else {
-          return 0
+          return nil
         }
         return (ptr - 1).pointee
       }
@@ -407,7 +407,7 @@ extension Lexer {
     }
 
     var input: UnsafeBufferPointer<UInt8> { position.input }
-    var previous: UInt8 { position.previous }
+    var previous: UInt8? { position.previous }
 
     var currentState: State {
       stateStack.currentState
@@ -1191,7 +1191,8 @@ extension Lexer.Cursor {
     case " ", "\r", "\n", "\t",  // whitespace
       "(", "[", "{",  // opening delimiters
       ",", ";", ":",  // expression separators
-      0:  // whitespace / last char in file
+      0,  // a nul byte, which is trivia
+      nil:  // the start of the input
       return false
     case "/":
       if self.peekBack(by: 2, bufferBegin: sourceBufferStart) == "*" {
@@ -2869,7 +2870,7 @@ extension Lexer.Cursor {
   }
   mutating func tryLexConflictMarker(start: Lexer.Cursor) -> Bool {
     // Only a conflict marker if it starts at the beginning of a line.
-    guard start.previous == "\n" || start.previous == "\r" || start.previous == 0 else {
+    guard start.previous == "\n" || start.previous == "\r" || start.previous == nil else {
       return false
     }
 

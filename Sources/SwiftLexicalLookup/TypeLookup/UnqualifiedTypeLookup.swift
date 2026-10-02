@@ -42,7 +42,6 @@ public enum GenericUnqualifiedTypeLookupResult<Scope: Sendable> {
   /// }
   /// ```
   case lookForGenericParameters(extensionDecl: Attached<ExtensionDeclSyntax>)
-  case lookInModule
 }
 
 @_spi(_QualifiedLookupTests)
@@ -235,8 +234,7 @@ extension Attached /* <SyntaxNode> */ {
         return nil
       }
     })
-    // TODO: Generate `lookInImports` using the file's import declarations
-    return filteredResults + [.lookInModule]
+    return filteredResults
   }
 }
 
@@ -259,8 +257,6 @@ extension GenericUnqualifiedTypeLookupResult {
       return ".lookForMember(declGroupParent: `\(declGroupParent._memberlessDescription)`, lookForSelf: \(lookForSelf))"
     case .lookForGenericParameters(let extensionDecl):
       return ".lookForGenericParameters(in: `\(extensionDecl._memberlessDescription)`)"
-    case .lookInModule:
-      return ".lookInModule"
     }
   }
 
@@ -280,8 +276,6 @@ extension GenericUnqualifiedTypeLookupResult {
       return "`\(declGroupParent._memberlessDescription)`\(lookForSelf ? memberSearchDescription : "")"
     case .lookForGenericParameters(let extensionDecl):
       return "'\(extensionDecl._memberlessDescription)' > generic parameters"
-    case .lookInModule:
-      return ".lookInModule"
     }
   }
 }

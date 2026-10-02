@@ -73,6 +73,11 @@ extension Attached {
   internal var position: AbsolutePosition {
     node.position
   }
+
+  /// The `statements` property of `fileRoot`.
+  var fileRootStatements: Attached<CodeBlockItemListSyntax> {
+    Attached<CodeBlockItemListSyntax>(fileRoot.statements)!
+  }
 }
 
 extension Attached where Node == ExtensionDeclSyntax {

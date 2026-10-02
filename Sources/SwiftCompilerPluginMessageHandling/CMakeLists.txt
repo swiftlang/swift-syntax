@@ -34,4 +34,5 @@ target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PUBLIC
 
 target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PRIVATE
   _SwiftSyntaxCShims
+  SwiftParserDiagnostics
 )

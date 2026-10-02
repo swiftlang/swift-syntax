@@ -32,6 +32,7 @@ struct TestingBuildConfiguration: BuildConfiguration {
   var customConditions: Set<String> = []
   var features: Set<String> = []
   var attributes: Set<String> = []
+  var targetFeatures: Set<String> = []
 
   /// A set of attribute names that are "bad", causing the build configuration
   /// to throw an error if queried.
@@ -101,6 +102,10 @@ struct TestingBuildConfiguration: BuildConfiguration {
 
   func isActiveTargetObjectFormat(name: String) throws -> Bool {
     name == "ELF"
+  }
+
+  func hasTargetFeature(name: String) -> Bool {
+    targetFeatures.contains(name)
   }
 
   var targetPointerBitWidth: Int { 64 }

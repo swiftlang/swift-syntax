@@ -38,6 +38,7 @@ public struct StaticBuildConfiguration: Codable {
     targetPointerBitWidth: Int = 64,
     targetAtomicBitWidths: [Int] = [],
     endianness: Endianness = .little,
+    deploymentTargetVersion: VersionTuple? = nil,
     languageVersion: VersionTuple,
     compilerVersion: VersionTuple
   ) {
@@ -53,6 +54,7 @@ public struct StaticBuildConfiguration: Codable {
     self.targetPointerBitWidth = targetPointerBitWidth
     self.targetAtomicBitWidths = targetAtomicBitWidths
     self.endianness = endianness
+    self.deploymentTargetVersion = deploymentTargetVersion
     self.languageMode = languageVersion
     self.compilerVersion = compilerVersion
   }
@@ -205,6 +207,11 @@ public struct StaticBuildConfiguration: Codable {
   /// #endif
   /// ```
   public var endianness: Endianness = .little
+
+  /// The minimum deployment target version for the module being compiled.
+  /// A value of `nil` means that no meaningful deployment version is available
+  /// for the active platform.
+  public var deploymentTargetVersion: VersionTuple?
 
   /// The effective language mode, which can be set by the user (e.g., 5.0).
   ///

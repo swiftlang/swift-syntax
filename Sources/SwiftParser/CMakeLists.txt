@@ -28,6 +28,7 @@ add_swift_syntax_library(SwiftParser
   Parser.swift
   ParseSourceFile.swift
   Patterns.swift
+  RawSyntaxNodeListBuilder.swift
   TokenSpec.swift
   TokenSpecSet.swift
   Recovery.swift

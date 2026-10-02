@@ -62,7 +62,7 @@ extension Parser {
         leftParen = RawTokenSyntax(missing: .leftParen, arena: self.arena)
         unexpectedBetweenLeftParenAndElements = nil
         parameters = RawTupleTypeElementListSyntax(
-          elements: [
+          elements: self.nodeListAllocator.listOfOne(
             RawTupleTypeElementSyntax(
               inoutKeyword: nil,
               firstName: nil,
@@ -73,7 +73,7 @@ extension Parser {
               trailingComma: nil,
               arena: self.arena
             )
-          ],
+          ),
           arena: self.arena
         )
         unexpectedBetweenElementsAndRightParen = nil
@@ -152,13 +152,14 @@ extension Parser {
     // (e.g., `some P? & Q`), this check fails and we fall through to the
     // recovery path below.
     if let firstAmpersand = self.consumeIfContextualPunctuator("&") {
-      var elements = [RawCompositionTypeElementSyntax]()
+      var elements = RawSyntaxNodeListBuilder<RawCompositionTypeElementSyntax>()
       elements.append(
         RawCompositionTypeElementSyntax(
           type: base,
           ampersand: firstAmpersand,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
 
       var keepGoing: RawTokenSyntax? = nil
@@ -196,13 +197,14 @@ extension Parser {
             type: elementType,
             ampersand: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
 
       base = RawTypeSyntax(
         RawCompositionTypeSyntax(
-          elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
+          elements: RawCompositionTypeElementListSyntax(elements: elements.build(), arena: self.arena),
           arena: self.arena
         )
       )
@@ -220,7 +222,7 @@ extension Parser {
           RawTupleTypeSyntax(
             leftParen: RawTokenSyntax(missing: .leftParen, arena: self.arena),
             elements: RawTupleTypeElementListSyntax(
-              elements: [
+              elements: self.nodeListAllocator.listOfOne(
                 RawTupleTypeElementSyntax(
                   inoutKeyword: nil,
                   firstName: nil,
@@ -231,7 +233,7 @@ extension Parser {
                   trailingComma: nil,
                   arena: self.arena
                 )
-              ],
+              ),
               arena: self.arena
             ),
             rightParen: RawTokenSyntax(missing: .rightParen, arena: self.arena),
@@ -254,13 +256,14 @@ extension Parser {
     // element (`(some P)? & Q ...`). This ensures we produce a reasonable AST,
     // and the type checker will reject it.
     if let firstAmpersand = self.consumeIfContextualPunctuator("&") {
-      var elements = [RawCompositionTypeElementSyntax]()
+      var elements = RawSyntaxNodeListBuilder<RawCompositionTypeElementSyntax>()
       elements.append(
         RawCompositionTypeElementSyntax(
           type: base,
           ampersand: firstAmpersand,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
 
       var keepGoing: RawTokenSyntax? = nil
@@ -273,13 +276,14 @@ extension Parser {
             type: elementType,
             ampersand: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
 
       base = RawTypeSyntax(
         RawCompositionTypeSyntax(
-          elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
+          elements: RawCompositionTypeElementListSyntax(elements: elements.build(), arena: self.arena),
           arena: self.arena
         )
       )
@@ -585,7 +589,7 @@ extension Parser {
   /// Parse the generic arguments applied to a type.
   mutating func parseGenericArguments() -> RawGenericArgumentClauseSyntax {
     let langle = self.expectWithoutRecovery(prefix: "<", as: .leftAngle)
-    var arguments = [RawGenericArgumentSyntax]()
+    var arguments = RawSyntaxNodeListBuilder<RawGenericArgumentSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -602,7 +606,8 @@ extension Parser {
             argument: argument,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
 
         // If this was a trailing comma, we're done parsing the list
@@ -616,9 +621,9 @@ extension Parser {
 
     let args: RawGenericArgumentListSyntax
     if arguments.isEmpty && rangle.isMissing {
-      args = RawGenericArgumentListSyntax(elements: [], arena: self.arena)
+      args = RawGenericArgumentListSyntax(elements: .init(), arena: self.arena)
     } else {
-      args = RawGenericArgumentListSyntax(elements: arguments, arena: self.arena)
+      args = RawGenericArgumentListSyntax(elements: arguments.build(), arena: self.arena)
     }
     return RawGenericArgumentClauseSyntax(
       leftAngle: langle,
@@ -644,14 +649,14 @@ extension Parser {
       return RawTupleTypeSyntax(
         remainingTokens,
         leftParen: missingToken(.leftParen),
-        elements: RawTupleTypeElementListSyntax(elements: [], arena: self.arena),
+        elements: RawTupleTypeElementListSyntax(elements: .init(), arena: self.arena),
         rightParen: missingToken(.rightParen),
         arena: self.arena
       )
     }
 
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    var elements = [RawTupleTypeElementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawTupleTypeElementSyntax>()
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
@@ -717,7 +722,8 @@ extension Parser {
               ellipsis: nil,
               trailingComma: self.missingToken(.comma),
               arena: self.arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
           keepGoing = true
           continue
@@ -744,7 +750,8 @@ extension Parser {
             ellipsis: ellipsis,
             trailingComma: trailingComma,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       }
     }
@@ -752,7 +759,7 @@ extension Parser {
     return RawTupleTypeSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
-      elements: RawTupleTypeElementListSyntax(elements: elements, arena: self.arena),
+      elements: RawTupleTypeElementListSyntax(elements: elements.build(), arena: self.arena),
       unexpectedBeforeRParen,
       rightParen: rparen,
       arena: self.arena
@@ -1267,9 +1274,13 @@ extension Parser {
       // If there is no left paren, add an entirely missing detail. Otherwise, we start to consume the following type
       // name as a token inside the detail, which leads to confusing recovery results.
       let lifetimeSpecifierArgumentList = RawLifetimeSpecifierArgumentListSyntax(
-        elements: [
-          RawLifetimeSpecifierArgumentSyntax(parameter: missingToken(.identifier), trailingComma: nil, arena: arena)
-        ],
+        elements: self.nodeListAllocator.listOfOne(
+          RawLifetimeSpecifierArgumentSyntax(
+            parameter: missingToken(.identifier),
+            trailingComma: nil,
+            arena: arena
+          )
+        ),
         arena: self.arena
       )
       let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
@@ -1286,7 +1297,7 @@ extension Parser {
 
     let scoped = self.consume(if: .keyword(.scoped))
     var keepGoing: RawTokenSyntax?
-    var arguments: [RawLifetimeSpecifierArgumentSyntax] = []
+    var arguments = RawSyntaxNodeListBuilder<RawLifetimeSpecifierArgumentSyntax>()
     var loopProgress = LoopProgressCondition()
     repeat {
       let (unexpectedBeforeParameter, parameter) = self.expect(
@@ -1300,10 +1311,14 @@ extension Parser {
           parameter: parameter,
           trailingComma: keepGoing,
           arena: arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     } while keepGoing != nil && self.hasProgressed(&loopProgress)
-    let lifetimeSpecifierArgumentList = RawLifetimeSpecifierArgumentListSyntax(elements: arguments, arena: self.arena)
+    let lifetimeSpecifierArgumentList = RawLifetimeSpecifierArgumentListSyntax(
+      elements: arguments.build(),
+      arena: self.arena
+    )
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
       unexpectedBeforeDependsOnKeyword,
@@ -1395,13 +1410,13 @@ extension Parser {
     attributes: RawAttributeListSyntax,
     lateSpecifiers: RawTypeSpecifierListSyntax
   )? {
-    var specifiers: [RawTypeSpecifierListSyntax.Element] = []
+    var specifiers = RawSyntaxNodeListBuilder<RawTypeSpecifierListSyntax.Element>()
     SPECIFIER_PARSING: while canHaveParameterSpecifier {
       if let (_, specifierHandle) = self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) {
-        specifiers.append(parseSimpleTypeSpecifier(specifierHandle: specifierHandle))
+        specifiers.append(parseSimpleTypeSpecifier(specifierHandle: specifierHandle), allocator: self.nodeListAllocator)
       } else if self.at(.keyword(.dependsOn)) {
         if self.languageFeatures.contains(.nonescapableTypes) {
-          specifiers.append(parseLifetimeTypeSpecifier())
+          specifiers.append(parseLifetimeTypeSpecifier(), allocator: self.nodeListAllocator)
         } else {
           break SPECIFIER_PARSING
         }
@@ -1411,17 +1426,20 @@ extension Parser {
         if self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine {
           break SPECIFIER_PARSING
         }
-        specifiers.append(parseNonisolatedTypeSpecifier())
+        specifiers.append(parseNonisolatedTypeSpecifier(), allocator: self.nodeListAllocator)
       } else {
         break SPECIFIER_PARSING
       }
     }
-    specifiers += misplacedSpecifiers.map {
-      .simpleTypeSpecifier(
-        RawSimpleTypeSpecifierSyntax(
-          specifier: missingToken($0.tokenKind, text: $0.tokenText),
-          arena: arena
-        )
+    for misplacedSpecifier in misplacedSpecifiers {
+      specifiers.append(
+        .simpleTypeSpecifier(
+          RawSimpleTypeSpecifierSyntax(
+            specifier: missingToken(misplacedSpecifier.tokenKind, text: misplacedSpecifier.tokenText),
+            arena: arena
+          )
+        ),
+        allocator: self.nodeListAllocator
       )
     }
 
@@ -1433,14 +1451,14 @@ extension Parser {
     }
 
     // Only handle `nonisolated` as a late specifier.
-    var lateSpecifiers: [RawTypeSpecifierListSyntax.Element] = []
+    var lateSpecifier: RawTypeSpecifierListSyntax.Element? = nil
     if self.at(.keyword(.nonisolated)) && !(self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine)
       && canHaveParameterSpecifier
     {
-      lateSpecifiers.append(parseNonisolatedTypeSpecifier())
+      lateSpecifier = parseNonisolatedTypeSpecifier()
     }
 
-    guard !specifiers.isEmpty || attributes != nil || !lateSpecifiers.isEmpty else {
+    guard !specifiers.isEmpty || attributes != nil || lateSpecifier != nil else {
       // No specifiers or attributes on this type
       return nil
     }
@@ -1448,14 +1466,17 @@ extension Parser {
     if specifiers.isEmpty {
       specifierList = self.emptyCollection(RawTypeSpecifierListSyntax.self)
     } else {
-      specifierList = RawTypeSpecifierListSyntax(elements: specifiers, arena: arena)
+      specifierList = RawTypeSpecifierListSyntax(elements: specifiers.build(), arena: arena)
     }
 
     let lateSpecifierList: RawTypeSpecifierListSyntax
-    if lateSpecifiers.isEmpty {
-      lateSpecifierList = self.emptyCollection(RawTypeSpecifierListSyntax.self)
+    if let lateSpecifier {
+      lateSpecifierList = RawTypeSpecifierListSyntax(
+        elements: self.nodeListAllocator.listOfOne(lateSpecifier),
+        arena: arena
+      )
     } else {
-      lateSpecifierList = RawTypeSpecifierListSyntax(elements: lateSpecifiers, arena: arena)
+      lateSpecifierList = self.emptyCollection(RawTypeSpecifierListSyntax.self)
     }
 
     return (
@@ -1466,12 +1487,12 @@ extension Parser {
   }
 
   mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
-    var elements = [RawAttributeListSyntax.Element]()
+    var elements = RawSyntaxNodeListBuilder<RawAttributeListSyntax.Element>()
     var attributeProgress = LoopProgressCondition()
     while self.at(.atSign) && self.hasProgressed(&attributeProgress) {
-      elements.append(self.parseTypeAttribute())
+      elements.append(self.parseTypeAttribute(), allocator: self.nodeListAllocator)
     }
-    return RawAttributeListSyntax(elements: elements, arena: self.arena)
+    return RawAttributeListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {

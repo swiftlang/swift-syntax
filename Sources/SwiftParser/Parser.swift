@@ -121,6 +121,12 @@ public struct Parser {
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
   private let lookaheadTrackerOwner: LookaheadTrackerOwner
 
+  /// Owns the memory that gathering the elements of a syntax collection uses.
+  ///
+  /// See ``RawSyntaxNodeListAllocator``: this is not the syntax arena, because
+  /// what is gathered dies with the parse rather than with the tree.
+  let nodeListAllocator: RawSyntaxNodeListAllocator
+
   /// Owns the memory that the lexer's state stack spills into.
   ///
   /// ``Lexer/LexemeSequence`` refers to this without owning it, so this parser,
@@ -163,7 +169,7 @@ public struct Parser {
   ) -> RawMultipleTrailingClosureElementListSyntax {
     if _emptyRawMultipleTrailingClosureElementListSyntax == nil {
       _emptyRawMultipleTrailingClosureElementListSyntax = RawMultipleTrailingClosureElementListSyntax(
-        elements: [],
+        elements: .init(),
         arena: self.arena
       )
     }
@@ -178,7 +184,7 @@ public struct Parser {
   /// on subsequent calls, reducing memory usage.
   mutating func emptyCollection(_: RawDeclModifierListSyntax.Type) -> RawDeclModifierListSyntax {
     if _emptyRawDeclModifierListSyntax == nil {
-      _emptyRawDeclModifierListSyntax = RawDeclModifierListSyntax(elements: [], arena: self.arena)
+      _emptyRawDeclModifierListSyntax = RawDeclModifierListSyntax(elements: .init(), arena: self.arena)
     }
     return _emptyRawDeclModifierListSyntax!
   }
@@ -191,7 +197,7 @@ public struct Parser {
   /// on subsequent calls, reducing memory usage.
   mutating func emptyCollection(_: RawAttributeListSyntax.Type) -> RawAttributeListSyntax {
     if _emptyRawAttributeListSyntax == nil {
-      _emptyRawAttributeListSyntax = RawAttributeListSyntax(elements: [], arena: self.arena)
+      _emptyRawAttributeListSyntax = RawAttributeListSyntax(elements: .init(), arena: self.arena)
     }
     return _emptyRawAttributeListSyntax!
   }
@@ -204,7 +210,7 @@ public struct Parser {
   /// on subsequent calls, reducing memory usage.
   mutating func emptyCollection(_: RawTypeSpecifierListSyntax.Type) -> RawTypeSpecifierListSyntax {
     if _emptyRawTypeSpecifierListSyntax == nil {
-      _emptyRawTypeSpecifierListSyntax = RawTypeSpecifierListSyntax(elements: [], arena: self.arena)
+      _emptyRawTypeSpecifierListSyntax = RawTypeSpecifierListSyntax(elements: .init(), arena: self.arena)
     }
     return _emptyRawTypeSpecifierListSyntax!
   }
@@ -279,6 +285,7 @@ public struct Parser {
     self.languageFeatures = languageFeatures
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
     self.lexerStateAllocator = Lexer.StateAllocator()
+    self.nodeListAllocator = RawSyntaxNodeListAllocator()
 
     self.lexemes = Lexer.tokenize(
       input,

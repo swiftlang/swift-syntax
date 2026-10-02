@@ -19,7 +19,7 @@
 extension Parser {
   /// Parse a list of availability arguments.
   mutating func parseAvailabilitySpecList() -> RawAvailabilityArgumentListSyntax {
-    var elements = [RawAvailabilityArgumentSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawAvailabilityArgumentSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var availabilityArgumentProgress = LoopProgressCondition()
@@ -45,13 +45,14 @@ extension Parser {
             unexpectedBeforeKeepGoing,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil
         && self.hasProgressed(&availabilityArgumentProgress)
     }
 
-    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   enum AvailabilityArgumentKind: TokenSpecSet {
@@ -112,7 +113,7 @@ extension Parser {
   }
 
   mutating func parseAvailabilityArgumentSpecList() -> RawAvailabilityArgumentListSyntax {
-    var elements = [RawAvailabilityArgumentSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawAvailabilityArgumentSyntax>()
     var keepGoing: RawTokenSyntax? = nil
 
     var loopProgress = LoopProgressCondition()
@@ -187,10 +188,11 @@ extension Parser {
           argument: entry,
           trailingComma: keepGoing,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     } while keepGoing != nil && self.hasProgressed(&loopProgress)
-    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   /// Parse an availability argument.
@@ -283,7 +285,7 @@ extension Parser {
         as: .integerLiteral
       )
 
-      var components: [RawVersionComponentSyntax] = []
+      var components = RawSyntaxNodeListBuilder<RawVersionComponentSyntax>()
 
       var loopProgress = LoopProgressCondition()
       while self.hasProgressed(&loopProgress) {
@@ -294,7 +296,7 @@ extension Parser {
 
         let versionComponent = RawVersionComponentSyntax(period: period, number: version, arena: self.arena)
 
-        components.append(versionComponent)
+        components.append(versionComponent, allocator: self.nodeListAllocator)
 
         if version.isMissing {
           break
@@ -304,7 +306,7 @@ extension Parser {
       let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
       return RawVersionTupleSyntax(
         major: major,
-        components: RawVersionComponentListSyntax(elements: components, arena: self.arena),
+        components: RawVersionComponentListSyntax(elements: components.build(), arena: self.arena),
         unexpectedAfterComponents,
         arena: self.arena
       )
@@ -313,7 +315,7 @@ extension Parser {
       let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
       return RawVersionTupleSyntax(
         major: major,
-        components: RawVersionComponentListSyntax(elements: [], arena: self.arena),
+        components: RawVersionComponentListSyntax(elements: .init(), arena: self.arena),
         unexpectedAfterComponents,
         arena: self.arena
       )

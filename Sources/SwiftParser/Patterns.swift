@@ -159,7 +159,7 @@ extension Parser {
   mutating func parsePatternTupleElements() -> RawTuplePatternElementListSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawTuplePatternElementListSyntax(
-        elements: [
+        elements: self.nodeListAllocator.listOfOne(
           RawTuplePatternElementSyntax(
             remainingTokens,
             label: nil,
@@ -168,11 +168,11 @@ extension Parser {
             trailingComma: nil,
             arena: self.arena
           )
-        ],
+        ),
         arena: self.arena
       )
     }
-    var elements = [RawTuplePatternElementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawTuplePatternElementSyntax>()
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
@@ -205,11 +205,12 @@ extension Parser {
             pattern: pattern,
             trailingComma: trailingComma,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       }
     }
-    return RawTuplePatternElementListSyntax(elements: elements, arena: self.arena)
+    return RawTuplePatternElementListSyntax(elements: elements.build(), arena: self.arena)
   }
 }
 

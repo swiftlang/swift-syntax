@@ -50,7 +50,7 @@ extension Parser {
 
     return RawAccessorBlockFileSyntax(
       leftBrace: leftBrace,
-      accessors: accessors ?? RawAccessorDeclListSyntax(elements: [], arena: self.arena),
+      accessors: accessors ?? RawAccessorDeclListSyntax(elements: .init(), arena: self.arena),
       unexpectedBeforeRightBrace,
       rightBrace: rightBrace,
       unexpectedBeforeEndOfFileToken,

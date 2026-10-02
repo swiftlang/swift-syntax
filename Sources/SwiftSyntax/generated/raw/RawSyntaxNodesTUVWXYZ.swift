@@ -550,13 +550,13 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawTuplePatternElementSyntax], arena: __shared RawSyntaxArena) {
+  public init(elements: RawSyntaxNodeList<RawTuplePatternElementSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .tuplePatternElementList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
-        for elem in elements {
+        for elem in elements.buffer {
           ptr.initialize(to: elem.raw)
           ptr += 1
         }
@@ -776,13 +776,13 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawTupleTypeElementSyntax], arena: __shared RawSyntaxArena) {
+  public init(elements: RawSyntaxNodeList<RawTupleTypeElementSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
-        for elem in elements {
+        for elem in elements.buffer {
           ptr.initialize(to: elem.raw)
           ptr += 1
         }
@@ -1473,13 +1473,13 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [Element], arena: __shared RawSyntaxArena) {
+  public init(elements: RawSyntaxNodeList<Element>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .typeSpecifierList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
-        for elem in elements {
+        for elem in elements.buffer {
           ptr.initialize(to: elem.raw)
           ptr += 1
         }
@@ -1605,13 +1605,13 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawSyntax], arena: __shared RawSyntaxArena) {
+  public init(elements: RawSyntaxNodeList<RawSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .unexpectedNodes, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
-        for elem in elements {
+        for elem in elements.buffer {
           ptr.initialize(to: elem.raw)
           ptr += 1
         }
@@ -2099,13 +2099,13 @@ public struct RawVersionComponentListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawVersionComponentSyntax], arena: __shared RawSyntaxArena) {
+  public init(elements: RawSyntaxNodeList<RawVersionComponentSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .versionComponentList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
-        for elem in elements {
+        for elem in elements.buffer {
           ptr.initialize(to: elem.raw)
           ptr += 1
         }
@@ -2601,13 +2601,13 @@ public struct RawYieldedExpressionListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawYieldedExpressionSyntax], arena: __shared RawSyntaxArena) {
+  public init(elements: RawSyntaxNodeList<RawYieldedExpressionSyntax>, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .yieldedExpressionList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
           return
         }
-        for elem in elements {
+        for elem in elements.buffer {
           ptr.initialize(to: elem.raw)
           ptr += 1
         }

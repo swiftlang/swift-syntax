@@ -170,7 +170,7 @@ extension Parser {
   private func reclassifyNewlineOfLastSegmentAsTrivia(
     rawStringDelimitersToken: RawTokenSyntax?,
     openQuoteHasTrailingNewline: Bool,
-    middleSegments: inout [RawStringLiteralSegmentListSyntax.Element]
+    middleSegments: inout RawSyntaxNodeListBuilder<RawStringLiteralSegmentListSyntax.Element>
   ) -> Bool {
     guard let segment = middleSegments.last else {
       return openQuoteHasTrailingNewline
@@ -244,7 +244,7 @@ extension Parser {
   /// attached to the string segment token.
   private func postProcessIndentationAndEscapedNewlineOfMiddleSegments(
     rawStringDelimitersToken: RawTokenSyntax?,
-    middleSegments: inout [RawStringLiteralSegmentListSyntax.Element],
+    middleSegments: inout RawSyntaxNodeListBuilder<RawStringLiteralSegmentListSyntax.Element>,
     isFirstSegmentOnNewLine: Bool,
     indentation: SyntaxText
   ) {
@@ -254,8 +254,8 @@ extension Parser {
     )
 
     var isSegmentOnNewLine = isFirstSegmentOnNewLine
-    for (index, segment) in middleSegments.enumerated() {
-      switch segment {
+    for index in 0..<middleSegments.count {
+      switch middleSegments[index] {
       case .stringSegment(var segment):
         // We are not considering leading trivia for indentation computation.
         // If these assertions are violated, we can probably lift them but we
@@ -331,21 +331,29 @@ extension Parser {
   private func postProcessMultilineStringLiteral(
     rawStringDelimitersToken: RawTokenSyntax?,
     openQuote: RawTokenSyntax,
-    segments allSegments: [RawStringLiteralSegmentListSyntax.Element],
+    segments allSegments: RawSyntaxNodeList<RawStringLiteralSegmentListSyntax.Element>,
     closeQuote: RawTokenSyntax
   ) -> (
     unexpectedBeforeOpeningQuote: [RawTokenSyntax],
     openingQuote: RawTokenSyntax,
-    segments: [RawStringLiteralSegmentListSyntax.Element],
+    segments: RawSyntaxNodeList<RawStringLiteralSegmentListSyntax.Element>,
     unexpectedBeforeClosingQuote: [RawTokenSyntax],
     closingQuote: RawTokenSyntax
   ) {
     // -------------------------------------------------------------------------
     // Variables
 
-    var middleSegments = allSegments
+    // A copy rather than `allSegments` itself, which is returned untouched if the
+    // closing quote is not on a line of its own.
+    var middleSegments = RawSyntaxNodeListBuilder<RawStringLiteralSegmentListSyntax.Element>(
+      initialCapacity: max(allSegments.count, 1)
+    )
+    middleSegments.append(
+      contentsOf: UnsafeBufferPointer(rebasing: allSegments.buffer.dropLast()),
+      allocator: self.nodeListAllocator
+    )
     // In a well-formed string literal, the last segment only consists of whitespace and contains the closing quote's indentation
-    let lastSegment = middleSegments.popLast()?.as(RawStringSegmentSyntax.self)
+    let lastSegment = allSegments.buffer.last?.as(RawStringSegmentSyntax.self)
 
     let indentation: SyntaxText
     let indentationTrivia: [RawTriviaPiece]
@@ -401,7 +409,7 @@ extension Parser {
           .prefix(while: \.isIndentationWhitespace)
         let indentationByteLength = indentationTrivia.reduce(0, { $0 + $1.byteLength })
         indentation = SyntaxText(rebasing: lastSegment.content.tokenText[0..<indentationByteLength])
-        middleSegments.append(.stringSegment(lastSegment))
+        middleSegments.append(.stringSegment(lastSegment), allocator: self.nodeListAllocator)
       } else {
         indentationTrivia = []
         indentation = ""
@@ -446,7 +454,7 @@ extension Parser {
     return (
       unexpectedBeforeOpenQuote,
       openQuote,
-      middleSegments,
+      middleSegments.build(),
       unexpectedBeforeCloseQuote,
       closeQuote
     )
@@ -521,7 +529,7 @@ extension Parser {
     }
 
     /// Parse segments.
-    var segments: [RawStringLiteralSegmentListSyntax.Element] = []
+    var segments = RawSyntaxNodeListBuilder<RawStringLiteralSegmentListSyntax.Element>()
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
       // If we encounter a token with leading trivia, we're no longer in the
@@ -529,20 +537,21 @@ extension Parser {
       guard currentToken.leadingTriviaText.isEmpty else { break }
 
       if let stringSegment = self.consume(if: .stringSegment, TokenSpec(.identifier, remapping: .stringSegment)) {
-        segments.append(.stringSegment(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)))
+        segments.append(
+          .stringSegment(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)),
+          allocator: self.nodeListAllocator
+        )
       } else if let backslash = self.consume(if: .backslash) {
         let (unexpectedBeforeDelimiter, delimiter) = self.parsePoundDelimiter(
           .rawStringPoundDelimiter,
           matching: openingPounds
         )
         let leftParen = self.expectWithoutRecoveryOrLeadingTrivia(.leftParen)
-        let expressions = RawLabeledExprListSyntax(
-          elements: self.parseArgumentListElements(
-            pattern: .none,
-            allowTrailingComma: true
-          ),
-          arena: self.arena
+        let arguments = self.parseArgumentListElements(
+          pattern: .none,
+          allowTrailingComma: true
         )
+        let expressions = RawLabeledExprListSyntax(elements: arguments, arena: self.arena)
 
         // For recovery, eat anything up to the next token that either starts a new string segment or terminates the string.
         // This allows us to skip over extraneous identifiers etc. in an unterminated string interpolation.
@@ -587,7 +596,8 @@ extension Parser {
               rightParen: rightParen,
               arena: self.arena
             )
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } else {
         break
@@ -615,7 +625,7 @@ extension Parser {
       let postProcessed = postProcessMultilineStringLiteral(
         rawStringDelimitersToken: openingPounds,
         openQuote: openQuote,
-        segments: segments,
+        segments: segments.build(),
         closeQuote: closingQuote
       )
       return RawStringLiteralExprSyntax(
@@ -642,7 +652,7 @@ extension Parser {
         openingPounds: openingPounds,
         unexpectedBeforeOpeningQuote,
         openingQuote: openQuote,
-        segments: RawStringLiteralSegmentListSyntax(elements: segments, arena: self.arena),
+        segments: RawStringLiteralSegmentListSyntax(elements: segments.build(), arena: self.arena),
         unexpectedBeforeClosingQuote,
         closingQuote: closingQuote,
         unexpectedBeforeClosingPounds,
@@ -660,7 +670,7 @@ extension Parser {
     )
 
     /// Parse segments.
-    var segments: [RawStringSegmentSyntax] = []
+    var segments = RawSyntaxNodeListBuilder<RawStringSegmentSyntax>()
     var loopProgress = LoopProgressCondition()
     while hasProgressed(&loopProgress) {
       // If we encounter a token with leading trivia, we're no longer in the
@@ -683,7 +693,10 @@ extension Parser {
           )
         }
 
-        segments.append(RawStringSegmentSyntax(content: stringSegment, unexpectedAfterContent, arena: self.arena))
+        segments.append(
+          RawStringSegmentSyntax(content: stringSegment, unexpectedAfterContent, arena: self.arena),
+          allocator: self.nodeListAllocator
+        )
       } else {
         break
       }
@@ -693,12 +706,26 @@ extension Parser {
     let closeDelimiter = self.consume(if: .rawStringPoundDelimiter)
 
     if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {
+      var allSegments = RawSyntaxNodeListBuilder<RawStringLiteralSegmentListSyntax.Element>(
+        initialCapacity: max(segments.count, 1)
+      )
+      for segment in segments.elements {
+        allSegments.append(.stringSegment(segment), allocator: self.nodeListAllocator)
+      }
       let postProcessed = postProcessMultilineStringLiteral(
         rawStringDelimitersToken: openDelimiter,
         openQuote: openQuote,
-        segments: segments.compactMap { RawStringLiteralSegmentListSyntax.Element.stringSegment($0) },
+        segments: allSegments.build(),
         closeQuote: closeQuote
       )
+      // `RawSimpleStringLiteralSegmentListSyntax` only accepts
+      // `RawStringSegmentSyntax`, so this can safely cast.
+      var simpleSegments = RawSyntaxNodeListBuilder<RawStringSegmentSyntax>(
+        initialCapacity: max(postProcessed.segments.count, 1)
+      )
+      for segment in postProcessed.segments.buffer {
+        simpleSegments.append(segment.cast(RawStringSegmentSyntax.self), allocator: self.nodeListAllocator)
+      }
 
       return RawSimpleStringLiteralExprSyntax(
         RawUnexpectedNodesSyntax(
@@ -708,12 +735,7 @@ extension Parser {
           arena: self.arena
         ),
         openingQuote: postProcessed.openingQuote,
-        segments: RawSimpleStringLiteralSegmentListSyntax(
-          // `RawSimpleStringLiteralSegmentListSyntax` only accepts `RawStringSegmentSyntax`.
-          // So we can safely cast.
-          elements: postProcessed.segments.map { $0.cast(RawStringSegmentSyntax.self) },
-          arena: self.arena
-        ),
+        segments: RawSimpleStringLiteralSegmentListSyntax(elements: simpleSegments.build(), arena: self.arena),
         RawUnexpectedNodesSyntax(
           combining: unexpectedBetweenSegmentAndCloseQuote,
           postProcessed.unexpectedBeforeClosingQuote,
@@ -730,7 +752,7 @@ extension Parser {
       return RawSimpleStringLiteralExprSyntax(
         RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, openDelimiter, arena: self.arena),
         openingQuote: openQuote,
-        segments: RawSimpleStringLiteralSegmentListSyntax(elements: segments, arena: self.arena),
+        segments: RawSimpleStringLiteralSegmentListSyntax(elements: segments.build(), arena: self.arena),
         unexpectedBetweenSegmentAndCloseQuote,
         closingQuote: closeQuote,
         RawUnexpectedNodesSyntax([closeDelimiter], arena: self.arena),

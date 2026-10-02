@@ -191,7 +191,8 @@ extension Parser {
     } else {
       existingUnexpected = []
     }
-    let unexpected = RawUnexpectedNodesSyntax(elements: existingUnexpected + remainingTokens, arena: self.arena)
+    // Not empty, since `remainingTokens` is not.
+    let unexpected = RawUnexpectedNodesSyntax(existingUnexpected + remainingTokens, arena: self.arena)!
 
     let withUnexpected = layout.replacingChild(at: layout.children.count - 1, with: unexpected.raw, arena: self.arena)
 

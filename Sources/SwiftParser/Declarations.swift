@@ -427,7 +427,7 @@ extension Parser {
   }
 
   mutating func parseImportPath(hasImportKind: Bool) -> RawImportPathComponentListSyntax {
-    var elements = [RawImportPathComponentSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawImportPathComponentSyntax>()
 
     // Special case: scoped import with module selector-style syntax. This always has exactly two path components
     // separated by '::'.
@@ -448,7 +448,7 @@ extension Parser {
 
       let declName = skipQualifiedName ? self.missingToken(.identifier) : self.parseAnyIdentifier()
 
-      elements = [
+      elements.append(
         RawImportPathComponentSyntax(
           unexpectedBeforeModuleName,
           name: moduleName,
@@ -456,12 +456,16 @@ extension Parser {
           RawUnexpectedNodesSyntax(unexpectedAfterColonColon, arena: self.arena),
           arena: self.arena
         ),
+        allocator: self.nodeListAllocator
+      )
+      elements.append(
         RawImportPathComponentSyntax(
           name: declName,
           trailingPeriod: nil,
           arena: self.arena
         ),
-      ]
+        allocator: self.nodeListAllocator
+      )
     } else {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -484,11 +488,12 @@ extension Parser {
             trailingPeriod: keepGoing,
             unexpectedAfterTrailingPeriod,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
-    return RawImportPathComponentListSyntax(elements: elements, arena: self.arena)
+    return RawImportPathComponentListSyntax(elements: elements.build(), arena: self.arena)
   }
 }
 
@@ -584,7 +589,7 @@ extension Parser {
       return RawGenericParameterClauseSyntax(
         remainingTokens,
         leftAngle: missingToken(.leftAngle),
-        parameters: RawGenericParameterListSyntax(elements: [], arena: self.arena),
+        parameters: RawGenericParameterListSyntax(elements: .init(), arena: self.arena),
         genericWhereClause: nil,
         rightAngle: missingToken(.rightAngle),
         arena: self.arena
@@ -592,7 +597,7 @@ extension Parser {
     }
 
     let langle = self.expectWithoutRecovery(prefix: "<", as: .leftAngle)
-    var elements = [RawGenericParameterSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawGenericParameterSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -660,7 +665,8 @@ extension Parser {
             inheritedType: inherited,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && !atGenericParametersListTerminator() && self.hasProgressed(&loopProgress)
     }
@@ -676,9 +682,9 @@ extension Parser {
 
     let parameters: RawGenericParameterListSyntax
     if elements.isEmpty && rangle.isMissing {
-      parameters = RawGenericParameterListSyntax(elements: [], arena: self.arena)
+      parameters = RawGenericParameterListSyntax(elements: .init(), arena: self.arena)
     } else {
-      parameters = RawGenericParameterListSyntax(elements: elements, arena: self.arena)
+      parameters = RawGenericParameterListSyntax(elements: elements.build(), arena: self.arena)
     }
     return RawGenericParameterClauseSyntax(
       leftAngle: langle,
@@ -712,7 +718,7 @@ extension Parser {
   mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
     let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.keyword(.where))
 
-    var elements = [RawGenericRequirementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawGenericRequirementSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -733,7 +739,8 @@ extension Parser {
               ),
               trailingComma: keepGoing,
               arena: self.arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
           continue
         }
@@ -913,7 +920,8 @@ extension Parser {
             unexpectedBetweenBodyAndTrailingComma,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && !self.atWhereClauseListTerminator() && self.hasProgressed(&loopProgress)
     }
@@ -921,7 +929,7 @@ extension Parser {
     return RawGenericWhereClauseSyntax(
       unexpectedBeforeWhereKeyword,
       whereKeyword: whereKeyword,
-      requirements: RawGenericRequirementListSyntax(elements: elements, arena: self.arena),
+      requirements: RawGenericRequirementListSyntax(elements: elements.build(), arena: self.arena),
       arena: self.arena
     )
   }
@@ -1009,7 +1017,7 @@ extension Parser {
   mutating func parseMemberDeclList(
     until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) || $0.atEndOfIfConfigClauseBody() }
   ) -> RawMemberBlockItemListSyntax {
-    var elements = [RawMemberBlockItemSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawMemberBlockItemSyntax>()
     do {
       var loopProgress = LoopProgressCondition()
       while !stopCondition(&self), !self.at(.endOfFile), self.hasProgressed(&loopProgress) {
@@ -1030,10 +1038,10 @@ extension Parser {
           )
 
         }
-        elements.append(newElement)
+        elements.append(newElement, allocator: self.nodeListAllocator)
       }
     }
-    return RawMemberBlockItemListSyntax(elements: elements, arena: self.arena)
+    return RawMemberBlockItemListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
@@ -1062,7 +1070,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawEnumCaseDeclSyntax {
     let (unexpectedBeforeCaseKeyword, caseKeyword) = self.eat(handle)
-    var elements = [RawEnumCaseElementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawEnumCaseElementSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -1111,7 +1119,8 @@ extension Parser {
             rawValue: rawValue,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
@@ -1121,7 +1130,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeCaseKeyword,
       caseKeyword: caseKeyword,
-      elements: RawEnumCaseElementListSyntax(elements: elements, arena: self.arena),
+      elements: RawEnumCaseElementListSyntax(elements: elements.build(), arena: self.arena),
       arena: self.arena
     )
   }
@@ -1518,7 +1527,7 @@ extension Parser {
     let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
 
     var attrs = attrs
-    var elements = [RawPatternBindingSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawPatternBindingSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -1620,7 +1629,8 @@ extension Parser {
             accessorBlock: accessors,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
@@ -1630,7 +1640,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeIntroducer,
       bindingSpecifier: introducer,
-      bindings: RawPatternBindingListSyntax(elements: elements, arena: self.arena),
+      bindings: RawPatternBindingListSyntax(elements: elements.build(), arena: self.arena),
       arena: self.arena
     )
   }
@@ -1644,7 +1654,7 @@ extension Parser {
   }
 
   mutating func parseAccessorModifierList(count: Int) -> RawDeclModifierListSyntax {
-    var elements = [RawDeclModifierSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawDeclModifierSyntax>()
 
     for _ in 0..<count {
       let (unexpectedBeforeName, name) = self.expect(anyIn: AccessorModifier.self, default: .mutating)
@@ -1654,11 +1664,11 @@ extension Parser {
         detail: nil,
         arena: self.arena
       )
-      elements.append(modifier)
+      elements.append(modifier, allocator: self.nodeListAllocator)
     }
 
     return RawDeclModifierListSyntax(
-      elements: elements,
+      elements: elements.build(),
       arena: self.arena
     )
   }
@@ -1736,7 +1746,7 @@ extension Parser {
 
   mutating func parseAccessorList() -> RawAccessorDeclListSyntax? {
     // Collect all explicit accessors to a list.
-    var elements = [RawAccessorDeclSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawAccessorDeclSyntax>()
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightBrace) && self.hasProgressed(&loopProgress) {
@@ -1744,13 +1754,13 @@ extension Parser {
           break
         }
 
-        elements.append(parseAccessorDecl(introducer: introducer))
+        elements.append(parseAccessorDecl(introducer: introducer), allocator: self.nodeListAllocator)
       }
     }
     if elements.isEmpty {
       return nil
     } else {
-      return RawAccessorDeclListSyntax(elements: elements, arena: self.arena)
+      return RawAccessorDeclListSyntax(elements: elements.build(), arena: self.arena)
     }
   }
 
@@ -1970,7 +1980,7 @@ extension Parser {
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
       let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-      var types = [RawDesignatedTypeSyntax]()
+      var types = RawSyntaxNodeListBuilder<RawDesignatedTypeSyntax>()
       while let comma = self.consume(if: .comma) {
         // Technically, we should only accept identifiers for the designated
         // types but the C++ parser accepted anything, which we mimick.
@@ -1982,7 +1992,8 @@ extension Parser {
             leadingComma: comma,
             name: designatedType,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       }
       precedenceAndTypes = RawOperatorPrecedenceAndTypesSyntax(
@@ -1990,7 +2001,7 @@ extension Parser {
         unexpectedBeforeIdentifier,
         precedenceGroup: identifier,
         designatedTypes: RawDesignatedTypeListSyntax(
-          elements: types,
+          elements: types.build(),
           arena: self.arena
         ),
         arena: self.arena
@@ -2003,11 +2014,7 @@ extension Parser {
       let attributeList = self.parsePrecedenceGroupAttributeListSyntax()
       let rightBrace = self.consume(if: .rightBrace)
       unexpectedAtEnd = RawUnexpectedNodesSyntax(
-        elements: [
-          RawSyntax(leftBrace),
-          RawSyntax(attributeList),
-          rightBrace.map(RawSyntax.init),
-        ].compactMap({ $0 }),
+        [RawSyntax(leftBrace), RawSyntax(attributeList), rightBrace.map(RawSyntax.init)],
         arena: self.arena
       )
     } else {
@@ -2083,7 +2090,7 @@ extension Parser {
       }
     }
 
-    var elements = [RawPrecedenceGroupAttributeListSyntax.Element]()
+    var elements = RawSyntaxNodeListBuilder<RawPrecedenceGroupAttributeListSyntax.Element>()
     do {
       var attributesProgress = LoopProgressCondition()
       LOOP: while !self.at(.endOfFile, .rightBrace) && self.hasProgressed(&attributesProgress) {
@@ -2114,7 +2121,8 @@ extension Parser {
                 value: value,
                 arena: self.arena
               )
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
         case (.assignment, let handle)?:
           let assignmentKeyword = self.eat(handle)
@@ -2142,14 +2150,15 @@ extension Parser {
                 unexpectedAfterFlag,
                 arena: self.arena
               )
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
         case (.higherThan, let handle)?,
           (.lowerThan, let handle)?:
           // "lowerThan" and "higherThan" are contextual keywords.
           let level = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          var names = [RawPrecedenceGroupNameSyntax]()
+          var names = RawSyntaxNodeListBuilder<RawPrecedenceGroupNameSyntax>()
           do {
             var keepGoing: RawTokenSyntax? = nil
             var namesProgress = LoopProgressCondition()
@@ -2162,7 +2171,8 @@ extension Parser {
                   name: name,
                   trailingComma: keepGoing,
                   arena: self.arena
-                )
+                ),
+                allocator: self.nodeListAllocator
               )
             } while keepGoing != nil && self.hasProgressed(&namesProgress)
           }
@@ -2172,17 +2182,18 @@ extension Parser {
                 higherThanOrLowerThanLabel: level,
                 unexpectedBeforeColon,
                 colon: colon,
-                precedenceGroups: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),
+                precedenceGroups: RawPrecedenceGroupNameListSyntax(elements: names.build(), arena: self.arena),
                 arena: self.arena
               )
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
         case nil:
           break LOOP
         }
       }
     }
-    return RawPrecedenceGroupAttributeListSyntax(elements: elements, arena: self.arena)
+    return RawPrecedenceGroupAttributeListSyntax(elements: elements.build(), arena: self.arena)
   }
 }
 
@@ -2284,7 +2295,7 @@ extension Parser {
 
     // Parse the optional parenthesized argument list.
     let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
-    let args: [RawLabeledExprSyntax]
+    let args: RawSyntaxNodeList<RawLabeledExprSyntax>
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
@@ -2294,7 +2305,7 @@ extension Parser {
       )
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
-      args = []
+      args = .init()
       unexpectedBeforeRightParen = nil
       rightParen = nil
     }
@@ -2322,10 +2333,7 @@ extension Parser {
       macroName: macro,
       genericArgumentClause: generics,
       leftParen: leftParen,
-      arguments: RawLabeledExprListSyntax(
-        elements: args,
-        arena: self.arena
-      ),
+      arguments: RawLabeledExprListSyntax(elements: args, arena: self.arena),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       trailingClosure: trailingClosure,
@@ -2341,7 +2349,7 @@ extension Parser {
     requiresDecl: Bool,
     until stopCondition: (inout Parser) -> Bool
   ) -> RawUnexpectedCodeDeclSyntax {
-    var unexpectedTokens = [RawSyntax]()
+    var unexpectedTokens = RawSyntaxNodeListBuilder<RawSyntax>()
     var loopProgress = LoopProgressCondition()
     while !self.at(.endOfFile, .semicolon), !stopCondition(&self), self.hasProgressed(&loopProgress) {
       let numTokensToSkip = self.withLookahead {
@@ -2349,7 +2357,10 @@ extension Parser {
         return $0.tokensConsumed
       }
       for _ in 0..<numTokensToSkip {
-        unexpectedTokens.append(RawSyntax(self.consumeAnyTokenWithoutAdjustingNestingLevel()))
+        unexpectedTokens.append(
+          RawSyntax(self.consumeAnyTokenWithoutAdjustingNestingLevel()),
+          allocator: self.nodeListAllocator
+        )
       }
 
       if self.at(.poundIf) {
@@ -2375,7 +2386,7 @@ extension Parser {
       }
     }
     return RawUnexpectedCodeDeclSyntax(
-      unexpectedCode: RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena),
+      unexpectedCode: RawUnexpectedNodesSyntax(elements: unexpectedTokens.build(), arena: self.arena),
       arena: arena
     )
   }

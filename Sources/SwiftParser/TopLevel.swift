@@ -53,7 +53,7 @@ extension Parser {
     } else {
       // For testing purposes, parse everything as 'unexpectedBeforeEndOfFileToken'.
       shebang = nil
-      items = RawCodeBlockItemListSyntax(elements: [], arena: self.arena)
+      items = RawCodeBlockItemListSyntax(elements: .init(), arena: self.arena)
     }
 
     let (unexpectedBeforeEndOfFileToken, endOfFile) = self.expectEndOfFile()
@@ -81,7 +81,7 @@ extension Parser {
     allowInitDecl: Bool = true,
     until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) || $0.atEndOfIfConfigClauseBody() }
   ) -> RawCodeBlockItemListSyntax {
-    var elements = [RawCodeBlockItemSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawCodeBlockItemSyntax>()
     var loopProgress = LoopProgressCondition()
     while !stopCondition(&self), !self.at(.endOfFile), self.hasProgressed(&loopProgress) {
       let newItemAtStartOfLine = self.atStartOfLine
@@ -102,9 +102,9 @@ extension Parser {
           arena: self.arena
         )
       }
-      elements.append(newItem)
+      elements.append(newItem, allocator: self.nodeListAllocator)
     }
-    return .init(elements: elements, arena: self.arena)
+    return .init(elements: elements.build(), arena: self.arena)
   }
 
   /// Parse the top level items in a source file.
@@ -259,11 +259,12 @@ extension Parser {
         let (op, rhs) = parseUnresolvedAsExpr(
           handle: .init(spec: .keyword(.as))
         )
+        var elements = RawSyntaxNodeListBuilder<RawExprSyntax>(initialCapacity: 3)
+        elements.append(expr, allocator: self.nodeListAllocator)
+        elements.append(op, allocator: self.nodeListAllocator)
+        elements.append(rhs, allocator: self.nodeListAllocator)
         let sequence = RawSequenceExprSyntax(
-          elements: RawExprListSyntax(
-            elements: [expr, op, rhs],
-            arena: self.arena
-          ),
+          elements: RawExprListSyntax(elements: elements.build(), arena: self.arena),
           arena: self.arena
         )
         return .init(expr: sequence)

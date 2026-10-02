@@ -395,15 +395,13 @@ extension RegexLiteralLexemes {
     private(set) var patternByteLength: Int = 0
     private(set) var numClosePounds: Int = 0
 
-    // The start position is split into its component input buffer and
-    // previous char to allow for a more optimized layout.
-    private let _startInput: UnsafeBufferPointer<UInt8>
+    /// Where the literal begins: its first opening `#`, or its opening `/` if it
+    /// has no pounds.
+    let start: Lexer.Cursor.Position
 
     // The pattern diagnostic is split for a more optimized layout.
     private var _patternErrorOffset: Int?
     private var _patternErrorKind: TokenDiagnostic.Kind?
-
-    private let _startPrevious: UInt8
 
     /// The number of lexemes. This is a UInt8 as there can only be a maximum
     /// of 5 lexemes for a regex literal (open pounds, open slash, pattern,
@@ -411,11 +409,7 @@ extension RegexLiteralLexemes {
     private(set) var lexemeCount: UInt8 = 0
 
     init(startingAt start: Lexer.Cursor.Position) {
-      self._startInput = start.input
-      self._startPrevious = start.previous
-    }
-    var start: Lexer.Cursor.Position {
-      .init(input: _startInput, previous: _startPrevious)
+      self.start = start
     }
 
     private(set) var patternError: Lexer.Cursor.LexingDiagnostic? {

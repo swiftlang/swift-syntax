@@ -181,10 +181,9 @@ extension Lexer {
     stateAllocator: StateAllocator
   ) -> LexemeSequence {
     precondition(input.isEmpty || startIndex < input.endIndex)
-    let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
     let cursor = Cursor(
       input: UnsafeBufferPointer(rebasing: input[startIndex...]),
-      previous: startChar
+      isAtStartOfInput: startIndex == input.startIndex
     )
     return LexemeSequence(
       sourceBufferStart: input.baseAddress,

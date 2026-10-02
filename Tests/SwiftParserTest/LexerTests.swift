@@ -1485,6 +1485,21 @@ class LexerTests: ParserTestCase {
     )
   }
 
+  func testShebangAfterNullCharacterIsNotAtStartOfFile() {
+    // Only the start of the input begins a shebang. A nul byte in the middle of a
+    // file is the byte before the `#` here, which is not the same as there being
+    // no byte before it.
+    assertLexemes(
+      "11️⃣\0#!a",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "1", trailing: "\0", diagnostic: "nul character embedded in middle of file"),
+        LexemeSpec(.pound, text: "#"),
+        LexemeSpec(.exclamationMark, text: "!"),
+        LexemeSpec(.identifier, text: "a"),
+      ]
+    )
+  }
+
   func testNullCharacterInStringLiteral() {
     assertLexemes(
       """

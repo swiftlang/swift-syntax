@@ -32,6 +32,9 @@ extension Parser {
   }
 
   mutating func registerNodeForIncrementalParse(node: RawSyntax, startToken: Lexer.Lexeme) {
+    guard collectsLookaheadRanges else {
+      return
+    }
     lookaheadRanges.registerNodeForIncrementalParse(
       node: node,
       lookaheadLength: lexemes.lookaheadTracker.pointee.furthestOffset - self.lexemes.offsetToStart(startToken)

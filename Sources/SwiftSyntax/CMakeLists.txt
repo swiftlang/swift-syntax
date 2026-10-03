@@ -42,6 +42,7 @@ add_swift_syntax_library(SwiftSyntax
   Raw/RawSyntax.swift
   Raw/RawSyntaxArena.swift
   Raw/RawSyntaxLayoutView.swift
+  Raw/RawSyntaxNodeList.swift
   Raw/RawSyntaxNodeProtocol.swift
   Raw/RawSyntaxTokenView.swift
 

@@ -18,7 +18,7 @@
 
 extension Parser {
   mutating func parseDeclModifierList() -> RawDeclModifierListSyntax {
-    var elements = [RawDeclModifierSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawDeclModifierSyntax>()
     var modifierLoopProgress = LoopProgressCondition()
     MODIFIER_LOOP: while self.hasProgressed(&modifierLoopProgress) {
       switch self.canRecoverTo(anyIn: DeclarationStart.self) {
@@ -26,11 +26,11 @@ extension Parser {
         (.declarationModifier(.fileprivate), _)?,
         (.declarationModifier(.internal), _)?,
         (.declarationModifier(.public), _)?:
-        elements.append(parseAccessLevelModifier())
+        elements.append(parseAccessLevelModifier(), allocator: self.nodeListAllocator)
       case (.declarationModifier(.package), _)?:
-        elements.append(parsePackageAccessLevelModifier())
+        elements.append(parsePackageAccessLevelModifier(), allocator: self.nodeListAllocator)
       case (.declarationModifier(.open), _)?:
-        elements.append(parseOpenAccessLevelModifier())
+        elements.append(parseOpenAccessLevelModifier(), allocator: self.nodeListAllocator)
       case (.declarationModifier(.static), let handle)?:
         let (unexpectedBeforeKeyword, staticKeyword) = self.eat(handle)
         elements.append(
@@ -39,7 +39,8 @@ extension Parser {
             name: staticKeyword,
             detail: nil,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       case (.declarationModifier(.class), let handle)?:
         var lookahead = self.lookahead()
@@ -56,16 +57,17 @@ extension Parser {
               name: classKeyword,
               detail: nil,
               arena: self.arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
           continue
         } else {
           break MODIFIER_LOOP
         }
       case (.declarationModifier(.unowned), let handle)?:
-        elements.append(self.parseUnownedModifier(handle))
+        elements.append(self.parseUnownedModifier(handle), allocator: self.nodeListAllocator)
       case (.declarationModifier(.nonisolated), let handle)?:
-        elements.append(parseNonisolatedModifier(handle))
+        elements.append(parseNonisolatedModifier(handle), allocator: self.nodeListAllocator)
       case (.declarationModifier(.final), let handle)?,
         (.declarationModifier(.required), let handle)?,
         (.declarationModifier(.optional), let handle)?,
@@ -92,7 +94,10 @@ extension Parser {
         (.declarationModifier(.reasync), let handle)?
       where languageFeatures.contains(.nonescapableTypes):
         let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
-        elements.append(RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena))
+        elements.append(
+          RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena),
+          allocator: self.nodeListAllocator
+        )
       case (.declarationModifier(.rethrows), _)?:
         fallthrough
       default:
@@ -101,7 +106,7 @@ extension Parser {
     }
     return elements.isEmpty
       ? self.emptyCollection(RawDeclModifierListSyntax.self)
-      : RawDeclModifierListSyntax(elements: elements, arena: arena)
+      : RawDeclModifierListSyntax(elements: elements.build(), arena: arena)
   }
 }
 

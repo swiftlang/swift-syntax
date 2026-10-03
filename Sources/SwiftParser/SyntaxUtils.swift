@@ -35,15 +35,27 @@ extension RawUnexpectedNodesSyntax {
   init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType], arena: __shared RawSyntaxArena) {
     if nodes.isEmpty {
       return nil
-    } else {
-      self.init(elements: nodes.map(RawSyntax.init), arena: arena)
     }
+    let raw = RawSyntax.makeLayout(kind: .unexpectedNodes, uninitializedCount: nodes.count, arena: arena) { layout in
+      _ = layout.initialize(from: nodes.lazy.map({ $0.raw }))
+    }
+    self = raw.cast(RawUnexpectedNodesSyntax.self)
   }
 
   /// If `nodes` contains non-`nil` values, construct a ``RawUnexpectedNodesSyntax``
   /// containing those tokens, otherwise return `nil`.
   init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType?], arena: __shared RawSyntaxArena) {
-    self.init(nodes.compactMap({ $0 }), arena: arena)
+    var count = 0
+    for case .some in nodes {
+      count += 1
+    }
+    if count == 0 {
+      return nil
+    }
+    let raw = RawSyntax.makeLayout(kind: .unexpectedNodes, uninitializedCount: count, arena: arena) { layout in
+      _ = layout.initialize(from: nodes.lazy.compactMap({ $0?.raw }))
+    }
+    self = raw.cast(RawUnexpectedNodesSyntax.self)
   }
 }
 

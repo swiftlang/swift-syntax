@@ -168,7 +168,7 @@ extension Parser {
     }
 
     // Parsed sequence elements except 'lastElement'.
-    var elements = [RawExprSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawExprSyntax>()
 
     // The last element parsed. we don't eagerly append to 'elements' because we
     // don't want to populate the 'Array' unless the expression is actually
@@ -198,8 +198,8 @@ extension Parser {
         break
       }
 
-      elements.append(lastElement)
-      elements.append(operatorExpr)
+      elements.append(lastElement, allocator: self.nodeListAllocator)
+      elements.append(operatorExpr, allocator: self.nodeListAllocator)
 
       if let rhsExpr {
         // Operator parsing returned the RHS.
@@ -226,11 +226,11 @@ extension Parser {
       "elements must have an even number of elements"
     )
 
-    elements.append(lastElement)
+    elements.append(lastElement, allocator: self.nodeListAllocator)
 
     return RawExprSyntax(
       RawSequenceExprSyntax(
-        elements: RawExprListSyntax(elements: elements, arena: self.arena),
+        elements: RawExprListSyntax(elements: elements.build(), arena: self.arena),
         arena: self.arena
       )
     )
@@ -916,9 +916,9 @@ extension Parser {
       return nil
     }
 
-    let args: [RawLabeledExprSyntax]
+    let args: RawSyntaxNodeList<RawLabeledExprSyntax>
     if self.at(.rightSquare) {
-      args = []
+      args = .init()
     } else {
       args = self.parseArgumentListElements(
         pattern: pattern,
@@ -964,7 +964,7 @@ extension Parser {
     }
 
     // Add dummy blank argument list to the call expression syntax.
-    let list = RawLabeledExprListSyntax(elements: [], arena: self.arena)
+    let list = RawLabeledExprListSyntax(elements: .init(), arena: self.arena)
     let (first, rest) = self.parseTrailingClosures(flavor: flavor)
 
     return RawExprSyntax(
@@ -1090,8 +1090,8 @@ extension Parser {
   private mutating func consumeOptionalKeyPathPostfix(
     numComponents: Int,
     mayBeAfterTypeName: inout Bool
-  ) -> [RawKeyPathComponentSyntax] {
-    var components: [RawKeyPathComponentSyntax] = []
+  ) -> RawSyntaxNodeList<RawKeyPathComponentSyntax> {
+    var components = RawSyntaxNodeListBuilder<RawKeyPathComponentSyntax>()
 
     for _ in 0..<numComponents {
       // Consume a period, if there is one.
@@ -1120,11 +1120,12 @@ extension Parser {
             )
           ),
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     }
 
-    return components
+    return components.build()
   }
 
   /// Parse a keypath expression.
@@ -1144,7 +1145,7 @@ extension Parser {
       rootType = nil
     }
 
-    var components: [RawKeyPathComponentSyntax] = []
+    var components = RawSyntaxNodeListBuilder<RawKeyPathComponentSyntax>()
     var loopProgress = LoopProgressCondition()
     // Whether all components parsed so far are property components and we could thus be after the base type name of the
     // subscript. Syntax like `.[2]` or `.?` is only permitted after the type name. Since we don't know what constitutes
@@ -1166,9 +1167,9 @@ extension Parser {
 
         precondition(self.at(.leftSquare))
         let lsquare = self.consumeAnyToken()
-        let args: [RawLabeledExprSyntax]
+        let args: RawSyntaxNodeList<RawLabeledExprSyntax>
         if self.at(.rightSquare) {
-          args = []
+          args = .init()
         } else {
           args = self.parseArgumentListElements(
             pattern: pattern,
@@ -1184,17 +1185,15 @@ extension Parser {
             component: .subscript(
               RawKeyPathSubscriptComponentSyntax(
                 leftSquare: lsquare,
-                arguments: RawLabeledExprListSyntax(
-                  elements: args,
-                  arena: self.arena
-                ),
+                arguments: RawLabeledExprListSyntax(elements: args, arena: self.arena),
                 unexpectedBeforeRSquare,
                 rightSquare: rsquare,
                 arena: self.arena
               )
             ),
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
         continue
       }
@@ -1208,9 +1207,12 @@ extension Parser {
         ),
         numComponents > 0
       {
-        components += self.consumeOptionalKeyPathPostfix(
-          numComponents: numComponents,
-          mayBeAfterTypeName: &mayBeAfterTypeName
+        components.append(
+          contentsOf: self.consumeOptionalKeyPathPostfix(
+            numComponents: numComponents,
+            mayBeAfterTypeName: &mayBeAfterTypeName
+          ).buffer,
+          allocator: self.nodeListAllocator
         )
         continue
       }
@@ -1248,17 +1250,15 @@ extension Parser {
                   declName: declName,
                   unexpectedBeforeLParen,
                   leftParen: leftParen,
-                  arguments: RawLabeledExprListSyntax(
-                    elements: args,
-                    arena: self.arena
-                  ),
+                  arguments: RawLabeledExprListSyntax(elements: args, arena: self.arena),
                   unexpectedBeforeRParen,
                   rightParen: rightParen,
                   arena: self.arena
                 )
               ),
               arena: self.arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
           continue
         }
@@ -1275,7 +1275,8 @@ extension Parser {
               )
             ),
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
         continue
       }
@@ -1288,7 +1289,7 @@ extension Parser {
       backslash: backslash,
       root: rootType,
       components: RawKeyPathComponentListSyntax(
-        elements: components,
+        elements: components.build(),
         arena: self.arena
       ),
       arena: self.arena
@@ -1521,7 +1522,7 @@ extension Parser {
 
     // Parse the optional parenthesized argument list.
     let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
-    let args: [RawLabeledExprSyntax]
+    let args: RawSyntaxNodeList<RawLabeledExprSyntax>
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
@@ -1531,7 +1532,7 @@ extension Parser {
       )
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
-      args = []
+      args = .init()
       unexpectedBeforeRightParen = nil
       rightParen = nil
     }
@@ -1554,10 +1555,7 @@ extension Parser {
       macroName: macroName,
       genericArgumentClause: generics,
       leftParen: leftParen,
-      arguments: RawLabeledExprListSyntax(
-        elements: args,
-        arena: self.arena
-      ),
+      arguments: RawLabeledExprListSyntax(elements: args, arena: self.arena),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       trailingClosure: trailingClosure,
@@ -1669,34 +1667,54 @@ extension Parser {
     )
     case array(RawExprSyntax)
 
-    fileprivate func makeElement(trailingComma: RawTokenSyntax?, arena: RawSyntaxArena) -> RawSyntax {
+    /// The elements of a collection literal, gathered as whichever kind of
+    /// element its first one decided.
+    fileprivate struct Elements {
+      var array = RawSyntaxNodeListBuilder<RawArrayElementSyntax>()
+      var dictionary = RawSyntaxNodeListBuilder<RawDictionaryElementSyntax>()
+    }
+
+    /// Append the element this describes to `elements`, unless it is empty.
+    ///
+    /// Returns `false` if it is empty.
+    fileprivate func appendElement(
+      trailingComma: RawTokenSyntax?,
+      to elements: inout Elements,
+      allocator: RawSyntaxNodeListAllocator,
+      arena: RawSyntaxArena
+    ) -> Bool {
       switch self {
       case .array(let el):
-        return RawSyntax(
-          RawArrayElementSyntax(
-            expression: el,
-            trailingComma: trailingComma,
-            arena: arena
-          )
+        let element = RawArrayElementSyntax(
+          expression: el,
+          trailingComma: trailingComma,
+          arena: arena
         )
+        if element.isEmpty {
+          return false
+        }
+        elements.array.append(element, allocator: allocator)
       case .dictionary(let key, let unexpectedBeforeColon, let colon, let value):
-        return RawSyntax(
-          RawDictionaryElementSyntax(
-            key: key,
-            unexpectedBeforeColon,
-            colon: colon,
-            value: value,
-            trailingComma: trailingComma,
-            arena: arena
-          )
+        let element = RawDictionaryElementSyntax(
+          key: key,
+          unexpectedBeforeColon,
+          colon: colon,
+          value: value,
+          trailingComma: trailingComma,
+          arena: arena
         )
+        if element.isEmpty {
+          return false
+        }
+        elements.dictionary.append(element, allocator: allocator)
       }
+      return true
     }
 
     fileprivate func makeCollection(
       _ unexpectedBeforeLSquare: RawUnexpectedNodesSyntax?,
       lsquare: RawTokenSyntax,
-      elements: [RawSyntax],
+      elements: Elements,
       _ unexpectedBeforeRSquare: RawUnexpectedNodesSyntax?,
       rsquare: RawTokenSyntax,
       arena: RawSyntaxArena
@@ -1707,14 +1725,7 @@ extension Parser {
           RawDictionaryExprSyntax(
             unexpectedBeforeLSquare,
             leftSquare: lsquare,
-            content: .elements(
-              RawDictionaryElementListSyntax(
-                elements: elements.map {
-                  $0.as(RawDictionaryElementSyntax.self)!
-                },
-                arena: arena
-              )
-            ),
+            content: .elements(RawDictionaryElementListSyntax(elements: elements.dictionary.build(), arena: arena)),
             unexpectedBeforeRSquare,
             rightSquare: rsquare,
             arena: arena
@@ -1725,12 +1736,7 @@ extension Parser {
           RawArrayExprSyntax(
             unexpectedBeforeLSquare,
             leftSquare: lsquare,
-            elements: RawArrayElementListSyntax(
-              elements: elements.map {
-                $0.as(RawArrayElementSyntax.self)!
-              },
-              arena: arena
-            ),
+            elements: RawArrayElementListSyntax(elements: elements.array.build(), arena: arena),
             unexpectedBeforeRSquare,
             rightSquare: rsquare,
             arena: arena
@@ -1765,7 +1771,7 @@ extension Parser {
         RawArrayExprSyntax(
           remainingTokens,
           leftSquare: missingToken(.leftSquare),
-          elements: RawArrayElementListSyntax(elements: [], arena: self.arena),
+          elements: RawArrayElementListSyntax(elements: .init(), arena: self.arena),
           rightSquare: missingToken(.rightSquare),
           arena: self.arena
         )
@@ -1782,7 +1788,7 @@ extension Parser {
     }
 
     var elementKind: CollectionKind? = nil
-    var elements = [RawSyntax]()
+    var elements = CollectionKind.Elements()
     do {
       var collectionProgress = LoopProgressCondition()
       var keepGoing: RawTokenSyntax?
@@ -1812,11 +1818,14 @@ extension Parser {
           keepGoing = nil
         }
 
-        let element = elementKind!.makeElement(trailingComma: keepGoing, arena: self.arena)
-        if element.isEmpty {
+        let appended = elementKind!.appendElement(
+          trailingComma: keepGoing,
+          to: &elements,
+          allocator: self.nodeListAllocator,
+          arena: self.arena
+        )
+        if !appended {
           break
-        } else {
-          elements.append(RawSyntax(element))
         }
       } while keepGoing != nil && self.hasProgressed(&collectionProgress)
     }
@@ -1850,7 +1859,7 @@ extension Parser {
         RawArrayExprSyntax(
           unexpectedBeforeLSquare,
           leftSquare: lsquare,
-          elements: RawArrayElementListSyntax(elements: [], arena: self.arena),
+          elements: RawArrayElementListSyntax(elements: .init(), arena: self.arena),
           rightSquare: rsquare,
           arena: self.arena
         )
@@ -1918,7 +1927,7 @@ extension Parser {
         remainingTokens,
         leftBrace: missingToken(.leftBrace),
         signature: nil,
-        statements: RawCodeBlockItemListSyntax(elements: [], arena: self.arena),
+        statements: RawCodeBlockItemListSyntax(elements: .init(), arena: self.arena),
         rightBrace: missingToken(.rightBrace),
         arena: self.arena
       )
@@ -1966,7 +1975,7 @@ extension Parser {
     if let lsquare = self.consume(if: .leftSquare) {
       // At this point, we know we have a closure signature. Parse the capture list
       // and parameters.
-      var elements = [RawClosureCaptureSyntax]()
+      var elements = RawSyntaxNodeListBuilder<RawClosureCaptureSyntax>()
       if !self.at(.rightSquare) {
         var keepGoing: RawTokenSyntax? = nil
         var loopProgress = LoopProgressCondition()
@@ -2002,7 +2011,8 @@ extension Parser {
               initializer: initializer,
               trailingComma: keepGoing,
               arena: arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
         } while keepGoing != nil && !self.atCaptureListTerminator() && self.hasProgressed(&loopProgress)
       }
@@ -2016,7 +2026,7 @@ extension Parser {
 
       captures = RawClosureCaptureClauseSyntax(
         leftSquare: lsquare,
-        items: RawClosureCaptureListSyntax(elements: elements, arena: self.arena),
+        items: RawClosureCaptureListSyntax(elements: elements.build(), arena: self.arena),
         RawUnexpectedNodesSyntax(unexpectedNodes, arena: self.arena),
         rightSquare: rsquare,
         arena: self.arena
@@ -2039,7 +2049,7 @@ extension Parser {
         }
         parameterClause = .parameterClause(params)
       } else {
-        var params = [RawClosureShorthandParameterSyntax]()
+        var params = RawSyntaxNodeListBuilder<RawClosureShorthandParameterSyntax>()
         var loopProgress = LoopProgressCondition()
         do {
           // Parse identifier (',' identifier)*
@@ -2060,12 +2070,15 @@ extension Parser {
                 name: name,
                 trailingComma: keepGoing,
                 arena: self.arena
-              )
+              ),
+              allocator: self.nodeListAllocator
             )
           } while keepGoing != nil && self.hasProgressed(&loopProgress)
         }
 
-        parameterClause = .simpleInput(RawClosureShorthandParameterListSyntax(elements: params, arena: self.arena))
+        parameterClause = .simpleInput(
+          RawClosureShorthandParameterListSyntax(elements: params.build(), arena: self.arena)
+        )
       }
 
       (effectSpecifiers, yields) = self.parseTypeEffectSpecifiers()
@@ -2167,9 +2180,9 @@ extension Parser {
     pattern: PatternContext,
     flavor: ExprFlavor = .basic,
     allowTrailingComma: Bool
-  ) -> [RawLabeledExprSyntax] {
+  ) -> RawSyntaxNodeList<RawLabeledExprSyntax> {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
-      return [
+      return self.nodeListAllocator.listOfOne(
         RawLabeledExprSyntax(
           remainingTokens,
           label: nil,
@@ -2178,14 +2191,15 @@ extension Parser {
           trailingComma: nil,
           arena: self.arena
         )
-      ]
+      )
     }
+
+    var result = RawSyntaxNodeListBuilder<RawLabeledExprSyntax>()
 
     guard !self.at(.rightParen) else {
-      return []
+      return result.build()
     }
 
-    var result = [RawLabeledExprSyntax]()
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
@@ -2223,10 +2237,11 @@ extension Parser {
           expression: expr,
           trailingComma: keepGoing,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     } while keepGoing != nil && !atArgumentListTerminator(allowTrailingComma) && self.hasProgressed(&loopProgress)
-    return result
+    return result.build()
   }
 
   mutating func atArgumentListTerminator(_ allowTrailingComma: Bool) -> Bool {
@@ -2243,7 +2258,7 @@ extension Parser {
     let closure = self.parseClosureExpression()
 
     // Parse labeled trailing closures.
-    var elements = [RawMultipleTrailingClosureElementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawMultipleTrailingClosureElementSyntax>()
     var loopProgress = LoopProgressCondition()
     while self.withLookahead({ $0.atStartOfLabelledTrailingClosure() }) && self.hasProgressed(&loopProgress) {
       let (unexpectedBeforeLabel, label) = self.parseArgumentLabel()
@@ -2257,14 +2272,15 @@ extension Parser {
           colon: colon,
           closure: closure,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     }
 
     let trailing =
       elements.isEmpty
       ? self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
-      : RawMultipleTrailingClosureElementListSyntax(elements: elements, arena: self.arena)
+      : RawMultipleTrailingClosureElementListSyntax(elements: elements.build(), arena: self.arena)
     return (closure, trailing)
   }
 }
@@ -2388,18 +2404,18 @@ extension Parser {
     let body = self.parseCodeBlock(introducer: doKeyword)
 
     // If the next token is 'catch', this is a 'do'/'catch'.
-    var elements = [RawCatchClauseSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawCatchClauseSyntax>()
     var loopProgress = LoopProgressCondition()
     while self.at(.keyword(.catch)) && self.hasProgressed(&loopProgress) {
       // Parse 'catch' clauses
-      elements.append(self.parseCatchClause())
+      elements.append(self.parseCatchClause(), allocator: self.nodeListAllocator)
     }
 
     return RawDoExprSyntax(
       unexpectedBeforeDoKeyword,
       doKeyword: doKeyword,
       body: body,
-      catchClauses: RawCatchClauseListSyntax(elements: elements, arena: self.arena),
+      catchClauses: RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena),
       arena: self.arena
     )
   }
@@ -2416,13 +2432,13 @@ extension Parser {
 
     if self.at(.leftBrace) {
       conditions = RawConditionElementListSyntax(
-        elements: [
+        elements: self.nodeListAllocator.listOfOne(
           RawConditionElementSyntax(
             condition: .init(expression: RawMissingExprSyntax(arena: self.arena)),
             trailingComma: nil,
             arena: self.arena
           )
-        ],
+        ),
         arena: self.arena
       )
     } else {
@@ -2502,11 +2518,11 @@ extension Parser {
   /// `case` and synthesize it. If `allowStandaloneStmtOrDeclRecovery` is `false`,
   /// this recovery is disabled.
   mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
-    var elements = [RawSwitchCaseListSyntax.Element]()
+    var elements = RawSyntaxNodeListBuilder<RawSwitchCaseListSyntax.Element>(initialCapacity: 8)
     var elementsProgress = LoopProgressCondition()
     while !self.at(.endOfFile, .rightBrace), !self.atEndOfIfConfigClauseBody(), self.hasProgressed(&elementsProgress) {
       if self.withLookahead({ $0.atStartOfSwitchCase() }) {
-        elements.append(.switchCase(self.parseSwitchCase()))
+        elements.append(.switchCase(self.parseSwitchCase()), allocator: self.nodeListAllocator)
       } else if self.at(.pound), self.peek().tokenText == "warning" || self.peek().tokenText == "error" {
         // Check for '#warning'/'#error' before '#if' recovery, otherwise a
         // later '#if' in the source would cause the directive to be consumed as
@@ -2520,7 +2536,8 @@ extension Parser {
               ),
               .constant(.pound)
             )
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } else if self.canRecoverTo(.poundIf) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
@@ -2530,7 +2547,8 @@ extension Parser {
             self.parsePoundIfDirective({ parser in
               .switchCases(parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery))
             })
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } else if allowStandaloneStmtRecovery {
         // Synthesize a label for the statement or declaration that isn't covered by a case right now.
@@ -2546,7 +2564,7 @@ extension Parser {
                 RawSwitchCaseLabelSyntax(
                   caseKeyword: missingToken(.case),
                   caseItems: RawSwitchCaseItemListSyntax(
-                    elements: [
+                    elements: self.nodeListAllocator.listOfOne(
                       RawSwitchCaseItemSyntax(
                         pattern: RawIdentifierPatternSyntax(
                           identifier: missingToken(.identifier),
@@ -2556,7 +2574,7 @@ extension Parser {
                         trailingComma: nil,
                         arena: self.arena
                       )
-                    ],
+                    ),
                     arena: self.arena
                   ),
                   colon: missingToken(.colon),
@@ -2566,13 +2584,14 @@ extension Parser {
               statements: statements,
               arena: self.arena
             )
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } else {
         break
       }
     }
-    return RawSwitchCaseListSyntax(elements: elements, arena: self.arena)
+    return RawSwitchCaseListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
@@ -2622,14 +2641,14 @@ extension Parser {
         RawSwitchCaseLabelSyntax(
           caseKeyword: missingToken(.keyword(.case)),
           caseItems: RawSwitchCaseItemListSyntax(
-            elements: [
+            elements: self.nodeListAllocator.listOfOne(
               RawSwitchCaseItemSyntax(
                 pattern: RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena),
                 whereClause: nil,
                 trailingComma: nil,
                 arena: self.arena
               )
-            ],
+            ),
             arena: self.arena
           ),
           colon: missingToken(.colon),
@@ -2654,7 +2673,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawSwitchCaseLabelSyntax {
     let (unexpectedBeforeCaseKeyword, caseKeyword) = self.eat(handle)
-    var caseItems = [RawSwitchCaseItemSyntax]()
+    var caseItems = RawSyntaxNodeListBuilder<RawSwitchCaseItemSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -2669,7 +2688,8 @@ extension Parser {
             whereClause: whereClause,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
 
         if keepGoing != nil, let caseToken = self.consume(if: .keyword(.case)) {
@@ -2686,7 +2706,7 @@ extension Parser {
     return RawSwitchCaseLabelSyntax(
       unexpectedBeforeCaseKeyword,
       caseKeyword: caseKeyword,
-      caseItems: RawSwitchCaseItemListSyntax(elements: caseItems, arena: self.arena),
+      caseItems: RawSwitchCaseItemListSyntax(elements: caseItems.build(), arena: self.arena),
       unexpectedBeforeColon,
       colon: colon,
       arena: self.arena

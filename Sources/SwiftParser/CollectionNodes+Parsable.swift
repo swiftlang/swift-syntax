@@ -65,7 +65,7 @@ extension AccessorDeclListSyntax: SyntaxParseable {
     let emptyAttributes = parser.emptyCollection(RawAttributeListSyntax.self)
     let emptyModifiers = parser.emptyCollection(RawDeclModifierListSyntax.self)
     return parse(from: &parser) { parser in
-      return parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: [], arena: parser.arena)
+      return parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: .init(), arena: parser.arena)
     } makeMissing: { remainingTokens, arena in
       return RawAccessorDeclSyntax(
         attributes: emptyAttributes,
@@ -121,8 +121,8 @@ extension MemberBlockItemListSyntax: SyntaxParseable {
       return parser.parseMemberDeclList(until: { _ in false })
     } makeMissing: { remainingTokens, arena in
       let missingDecl = RawMissingDeclSyntax(
-        attributes: RawAttributeListSyntax(elements: [], arena: arena),
-        modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
+        attributes: RawAttributeListSyntax(elements: .init(), arena: arena),
+        modifiers: RawDeclModifierListSyntax(elements: .init(), arena: arena),
         placeholder: RawTokenSyntax(missing: .identifier, text: "<#declaration#>", arena: arena),
         RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena

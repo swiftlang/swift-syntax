@@ -54,13 +54,13 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawIfConfigDeclSyntax(
         remainingTokens,
-        clauses: RawIfConfigClauseListSyntax(elements: [], arena: self.arena),
+        clauses: RawIfConfigClauseListSyntax(elements: .init(), arena: self.arena),
         poundEndif: missingToken(.poundEndif),
         arena: self.arena
       )
     }
 
-    var clauses = [RawIfConfigClauseSyntax]()
+    var clauses = RawSyntaxNodeListBuilder<RawIfConfigClauseSyntax>()
 
     // Parse #if
     let (unexpectedBeforePoundIf, poundIf) = self.expect(.poundIf)
@@ -75,7 +75,8 @@ extension Parser {
         unexpectedBetweenConditionAndElements,
         elements: parseBody(&self),
         arena: self.arena
-      )
+      ),
+      allocator: self.nodeListAllocator
     )
 
     // Proceed to parse #if continuation clauses (#elseif, #else, check #elif typo, #endif)
@@ -136,14 +137,15 @@ extension Parser {
           unexpectedBetweenConditionAndElements,
           elements: parseBody(&self),
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndif)
     let unexpectedAfterPoundEndif = self.consumeRemainingTokenOnLine()
     return RawIfConfigDeclSyntax(
-      clauses: RawIfConfigClauseListSyntax(elements: clauses, arena: self.arena),
+      clauses: RawIfConfigClauseListSyntax(elements: clauses.build(), arena: self.arena),
       unexpectedBeforePoundEndIf,
       poundEndif: poundEndIf,
       unexpectedAfterPoundEndif,

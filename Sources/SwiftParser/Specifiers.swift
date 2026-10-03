@@ -654,7 +654,7 @@ extension Parser {
     }
 
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    var elements = [RawFunctionYieldSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawFunctionYieldSyntax>()
     if !leftParen.isMissing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
@@ -667,11 +667,11 @@ extension Parser {
           keepGoing = false
         } else {
           keepGoing = yield.trailingComma != nil
-          elements.append(yield)
+          elements.append(yield, allocator: self.nodeListAllocator)
         }
       }
     }
-    let yields = RawFunctionYieldListSyntax(elements: elements, arena: self.arena)
+    let yields = RawFunctionYieldListSyntax(elements: elements.build(), arena: self.arena)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
     return RawFunctionYieldClauseSyntax(

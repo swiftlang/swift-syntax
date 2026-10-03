@@ -147,7 +147,7 @@ extension Parser {
     // We have a simple comma separated list of clauses, but also need to handle
     // a variety of common errors situations (including migrating from Swift 2
     // syntax).
-    var elements = [RawConditionElementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawConditionElementSyntax>()
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
@@ -170,12 +170,13 @@ extension Parser {
           unexpectedBeforeKeepGoing,
           trailingComma: keepGoing,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     } while keepGoing != nil && !atConditionListTerminator(isGuardStatement: isGuardStatement)
       && self.hasProgressed(&loopProgress)
 
-    return RawConditionElementListSyntax(elements: elements, arena: self.arena)
+    return RawConditionElementListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   mutating func atConditionListTerminator(isGuardStatement: Bool) -> Bool {
@@ -416,11 +417,11 @@ extension Parser {
     let body = self.parseCodeBlock(introducer: doKeyword)
 
     // If the next token is 'catch', this is a 'do'/'catch' statement.
-    var elements = [RawCatchClauseSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawCatchClauseSyntax>()
     var loopProgress = LoopProgressCondition()
     while self.at(.keyword(.catch)) && self.hasProgressed(&loopProgress) {
       // Parse 'catch' clauses
-      elements.append(self.parseCatchClause())
+      elements.append(self.parseCatchClause(), allocator: self.nodeListAllocator)
     }
 
     return RawDoStmtSyntax(
@@ -428,7 +429,7 @@ extension Parser {
       doKeyword: doKeyword,
       throwsClause: throwsClause,
       body: body,
-      catchClauses: RawCatchClauseListSyntax(elements: elements, arena: self.arena),
+      catchClauses: RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena),
       arena: self.arena
     )
   }
@@ -439,7 +440,7 @@ extension Parser {
   /// following a 'do' statement.
   mutating func parseCatchClause() -> RawCatchClauseSyntax {
     let (unexpectedBeforeCatchKeyword, catchKeyword) = self.expect(.keyword(.catch))
-    var catchItems = [RawCatchItemSyntax]()
+    var catchItems = RawSyntaxNodeListBuilder<RawCatchItemSyntax>()
     if !self.at(.leftBrace) {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -452,7 +453,8 @@ extension Parser {
             whereClause: whereClause,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
@@ -460,7 +462,7 @@ extension Parser {
     return RawCatchClauseSyntax(
       unexpectedBeforeCatchKeyword,
       catchKeyword: catchKeyword,
-      catchItems: RawCatchItemListSyntax(elements: catchItems, arena: self.arena),
+      catchItems: RawCatchItemListSyntax(elements: catchItems.build(), arena: self.arena),
       body: body,
       arena: self.arena
     )
@@ -503,13 +505,13 @@ extension Parser {
     let conditions: RawConditionElementListSyntax
     if self.at(.leftBrace) {
       conditions = RawConditionElementListSyntax(
-        elements: [
+        elements: self.nodeListAllocator.listOfOne(
           RawConditionElementSyntax(
             condition: .init(expression: RawMissingExprSyntax(arena: self.arena)),
             trailingComma: nil,
             arena: self.arena
           )
-        ],
+        ),
         arena: self.arena
       )
     } else {
@@ -758,7 +760,7 @@ extension Parser {
       let exprList: RawYieldedExpressionListSyntax
       do {
         var keepGoing = true
-        var elementList = [RawYieldedExpressionSyntax]()
+        var elementList = RawSyntaxNodeListBuilder<RawYieldedExpressionSyntax>()
         var loopProgress = LoopProgressCondition()
         while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
           let expr = self.parseExpression(flavor: .basic, pattern: .none)
@@ -768,12 +770,13 @@ extension Parser {
               expression: expr,
               comma: comma,
               arena: self.arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
 
           keepGoing = (comma != nil)
         }
-        exprList = RawYieldedExpressionListSyntax(elements: elementList, arena: self.arena)
+        exprList = RawYieldedExpressionListSyntax(elements: elementList.build(), arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       yieldedExpressions = .multiple(

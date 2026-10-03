@@ -251,7 +251,7 @@ extension Parser {
 
   mutating func parsePresentArgumentLabelList() -> RawDeclNameArgumentsSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    var elements = [RawDeclNameArgumentSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawDeclNameArgumentSyntax>()
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightParen) && self.hasProgressed(&loopProgress) {
@@ -265,7 +265,8 @@ extension Parser {
             unexpectedBeforeColon,
             colon: colon,
             arena: arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       }
     }
@@ -273,7 +274,7 @@ extension Parser {
     return RawDeclNameArgumentsSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
-      arguments: RawDeclNameArgumentListSyntax(elements: elements, arena: self.arena),
+      arguments: RawDeclNameArgumentListSyntax(elements: elements.build(), arena: self.arena),
       unexpectedBeforeRParen,
       rightParen: rparen,
       arena: arena

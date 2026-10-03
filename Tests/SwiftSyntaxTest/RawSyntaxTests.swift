@@ -48,13 +48,13 @@ private func cannedStructDecl(arena: ParsingRawSyntaxArena) -> RawStructDeclSynt
   )
   let memberBlock = RawMemberBlockSyntax(
     leftBrace: lBrace,
-    members: RawMemberBlockItemListSyntax(elements: [], arena: arena),
+    members: RawMemberBlockItemListSyntax(elements: .init(), arena: arena),
     rightBrace: rBrace,
     arena: arena
   )
   return RawStructDeclSyntax(
-    attributes: RawAttributeListSyntax(elements: [], arena: arena),
-    modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
+    attributes: RawAttributeListSyntax(elements: .init(), arena: arena),
+    modifiers: RawDeclModifierListSyntax(elements: .init(), arena: arena),
     structKeyword: structKW,
     name: fooID,
     genericParameterClause: nil,

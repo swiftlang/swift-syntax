@@ -259,24 +259,19 @@ public struct Parser {
         sourceByteCount: parseTransition == nil ? input.count : nil
       )
 
+    // Each token's text is copied into the token's own node, so nothing in the
+    // tree points into the buffer being lexed and the whole source does not need
+    // copying into the arena first.
     var input = input
-    if parseTransition == nil {
-      // Full parse: copy the whole source into the arena and lex over that copy,
-      // so parsed tokens point into arena-owned memory and need no per-token
-      // interning.
-      input = self.arena.internSourceBuffer(input)
-      self.sourceBufferOwner = nil
-    } else if copySource {
-      // Incremental reparse over a buffer that will not outlive this
-      // initializer: keep a parser-owned copy, freed when this `Parser` is
-      // destroyed. Each re-lexed token's text is interned into the arena.
+    if copySource {
+      // A buffer that will not outlive this initializer: keep a parser-owned
+      // copy, freed when this `Parser` is destroyed.
       let owner = ParserSourceBufferOwner(copying: input)
       self.sourceBufferOwner = owner
       input = owner.buffer
     } else {
-      // Incremental reparse over the caller-provided buffer, which the caller
-      // guarantees stays valid for the parse (see `withParser`). Each re-lexed
-      // token's text is interned into the arena.
+      // The caller guarantees the buffer stays valid for the parse; see
+      // `withParser`.
       self.sourceBufferOwner = nil
     }
 
@@ -485,8 +480,10 @@ public struct Parser {
     self.currentToken = self.lexemes.advance()
     return RawTokenSyntax(
       kind: tok.rawTokenKind,
-      wholeText: tok.wholeText,
-      textRange: tok.textRange,
+      sourceBuffer: tok.cursor.input,
+      leadingTriviaByteLength: tok.leadingTriviaByteLength,
+      textByteLength: tok.textByteLength,
+      wholeTextLength: tok.wholeTextByteLength,
       presence: .present,
       tokenDiagnostic: tok.diagnostic,
       arena: arena
@@ -924,8 +921,10 @@ extension Parser {
 
     let tok = RawTokenSyntax(
       kind: tokenKind,
-      wholeText: SyntaxText(rebasing: current.wholeText[..<endIndex]),
-      textRange: current.textRange.lowerBound..<endIndex,
+      sourceBuffer: current.cursor.input,
+      leadingTriviaByteLength: current.leadingTriviaByteLength,
+      textByteLength: prefix.count,
+      wholeTextLength: current.leadingTriviaByteLength &+ prefix.count,
       presence: .present,
       tokenDiagnostic: tokenDiagnostic,
       arena: self.arena

@@ -185,10 +185,38 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     tokenDiagnostic: TokenDiagnostic?,
     arena: __shared ParsingRawSyntaxArena
   ) {
+    // This text is already arena owned rather than lexed, so the buffer stops at
+    // the token and its text is copied exactly.
+    self.init(
+      kind: kind,
+      sourceBuffer: UnsafeBufferPointer(start: wholeText.baseAddress, count: wholeText.count),
+      leadingTriviaByteLength: textRange.lowerBound,
+      textByteLength: textRange.count,
+      wholeTextLength: wholeText.count,
+      presence: presence,
+      tokenDiagnostic: tokenDiagnostic,
+      arena: arena
+    )
+  }
+
+  /// Creates a ``RawTokenSyntax`` from what the lexer holds: the buffer it is
+  /// reading, positioned at the token, and the token's byte lengths.
+  public init(
+    kind: RawTokenKind,
+    sourceBuffer: UnsafeBufferPointer<UInt8>,
+    leadingTriviaByteLength: Int,
+    textByteLength: Int,
+    wholeTextLength: Int,
+    presence: SourcePresence,
+    tokenDiagnostic: TokenDiagnostic?,
+    arena: __shared ParsingRawSyntaxArena
+  ) {
     let raw = RawSyntax.parsedToken(
       kind: kind,
-      wholeText: wholeText,
-      textRange: textRange,
+      sourceBuffer: sourceBuffer,
+      leadingTriviaByteLength: leadingTriviaByteLength,
+      textByteLength: textByteLength,
+      wholeTextLength: wholeTextLength,
       presence: presence,
       tokenDiagnostic: tokenDiagnostic,
       arena: arena

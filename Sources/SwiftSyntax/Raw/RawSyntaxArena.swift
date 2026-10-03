@@ -208,17 +208,6 @@ public class ParsingRawSyntaxArena: RawSyntaxArena {
   /// - Important: Must never be changed to a mutable value. See `RawSyntaxArenaRef.parseTrivia`.
   private let parseTriviaFunction: ParseTriviaFunction
 
-  /// The arena's own copy of the whole source buffer, made by
-  /// `internSourceBuffer` for a full parse. `nil` for an incremental reparse,
-  /// which does not copy the whole buffer. When set, the lexer runs over this
-  /// copy, so a parsed token whose text lies within it is already arena-owned
-  /// and `internParsedTokenText` returns it unchanged.
-  private struct SourceCopy {
-    let start: UnsafePointer<UInt8>
-    let end: UnsafePointer<UInt8>
-  }
-  private var sourceCopy: SourceCopy?
-
   /// The size of slab to take when nothing is known about what will be
   /// allocated.
   private static let defaultSlabSize = 4096
@@ -256,48 +245,6 @@ public class ParsingRawSyntaxArena: RawSyntaxArena {
   public init(parseTriviaFunction: @escaping ParseTriviaFunction, sourceByteCount: Int? = nil) {
     self.parseTriviaFunction = parseTriviaFunction
     super.init(slabSize: sourceByteCount.map(Self.slabSize(forSourceOf:)) ?? Self.defaultSlabSize)
-  }
-
-  /// Copy the whole source buffer into this arena and return the copy, so the
-  /// caller can lex over arena-owned memory. Parsed tokens then point directly
-  /// into the copy and need no per-token interning, and the resulting tree is
-  /// self-contained without referencing the caller's buffer.
-  ///
-  /// This suits a full parse, where every token's text is needed and the tree
-  /// legitimately retains text the size of the source. It must not be used for
-  /// an incremental reparse, where copying the whole buffer would defeat the
-  /// point of reusing nodes; there, `internParsedTokenText` copies each
-  /// re-lexed token individually instead.
-  public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
-    guard buffer.count > 0 else {
-      self.sourceCopy = nil
-      return buffer
-    }
-    let dest = allocateTextBuffer(count: buffer.count)
-    _ = dest.initialize(from: buffer)
-    let copyBase = UnsafePointer(dest.baseAddress!)
-    self.sourceCopy = SourceCopy(start: copyBase, end: copyBase + buffer.count)
-    return UnsafeBufferPointer(dest)
-  }
-
-  /// Intern a parsed token's whole text so the resulting node owns its text and
-  /// does not depend on the caller's source buffer.
-  ///
-  /// For a full parse the source was copied into the arena up front
-  /// (`internSourceBuffer`), so a token whose text lies within that copy is
-  /// already arena-owned and is returned unchanged. Otherwise — an incremental
-  /// reparse, or text that is not part of the source buffer such as a
-  /// synthesized token — the text is copied into the arena.
-  func internParsedTokenText(_ text: SyntaxText) -> SyntaxText {
-    guard let base = text.baseAddress, !text.isEmpty else {
-      return text
-    }
-    if let sourceCopy, base >= sourceCopy.start, base + text.count <= sourceCopy.end {
-      return text
-    }
-    let allocated = allocateTextBuffer(count: text.count)
-    _ = allocated.initialize(from: text)
-    return SyntaxText(baseAddress: allocated.baseAddress, count: allocated.count)
   }
 
   /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.

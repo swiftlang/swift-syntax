@@ -16,7 +16,7 @@ extension RawSyntax {
   @_spi(RawSyntax)
   public var tokenView: RawSyntaxTokenView? {
     switch header {
-    case .parsedToken, .materializedToken:
+    case .smolParsedToken, .parsedToken, .materializedToken:
       return RawSyntaxTokenView(raw: self)
     case .layout:
       return nil
@@ -32,7 +32,7 @@ public struct RawSyntaxTokenView: Sendable {
   fileprivate init(raw: RawSyntax) {
     self.raw = raw
     switch raw.header {
-    case .parsedToken, .materializedToken:
+    case .smolParsedToken, .parsedToken, .materializedToken:
       break
     case .layout:
       preconditionFailure("RawSyntax must be a token")
@@ -45,6 +45,8 @@ public struct RawSyntaxTokenView: Sendable {
     switch raw.header {
     case .materializedToken:
       return raw.asMaterializedToken.tokenKind
+    case .smolParsedToken:
+      return raw.asSmolParsedToken.tokenKind
     case .parsedToken:
       return raw.asParsedToken.tokenKind
     case .layout:
@@ -56,6 +58,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var rawText: SyntaxText {
     switch raw.header {
+    case .smolParsedToken:
+      return raw.asSmolParsedToken.tokenText
     case .parsedToken:
       return raw.asParsedToken.tokenText
     case .materializedToken:
@@ -69,6 +73,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var leadingTriviaByteLength: Int {
     switch raw.header {
+    case .smolParsedToken:
+      return raw.asSmolParsedToken.leadingTriviaText.count
     case .parsedToken:
       return raw.asParsedToken.leadingTriviaText.count
     case .materializedToken:
@@ -82,6 +88,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var trailingTriviaByteLength: Int {
     switch raw.header {
+    case .smolParsedToken:
+      return raw.asSmolParsedToken.trailingTriviaText.count
     case .parsedToken:
       return raw.asParsedToken.trailingTriviaText.count
     case .materializedToken:
@@ -94,8 +102,16 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var leadingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.header {
+    case .smolParsedToken:
+      return raw.arenaReference.parseTrivia(
+        source: raw.asSmolParsedToken.leadingTriviaText,
+        position: .leading
+      )
     case .parsedToken:
-      return raw.arenaReference.parseTrivia(source: raw.asParsedToken.leadingTriviaText, position: .leading)
+      return raw.arenaReference.parseTrivia(
+        source: raw.asParsedToken.leadingTriviaText,
+        position: .leading
+      )
     case .materializedToken:
       return Array(raw.asMaterializedToken.leadingTrivia)
     case .layout:
@@ -106,8 +122,16 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var trailingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.header {
+    case .smolParsedToken:
+      return raw.arenaReference.parseTrivia(
+        source: raw.asSmolParsedToken.trailingTriviaText,
+        position: .trailing
+      )
     case .parsedToken:
-      return raw.arenaReference.parseTrivia(source: raw.asParsedToken.trailingTriviaText, position: .trailing)
+      return raw.arenaReference.parseTrivia(
+        source: raw.asParsedToken.trailingTriviaText,
+        position: .trailing
+      )
     case .materializedToken:
       return Array(raw.asMaterializedToken.trailingTrivia)
     case .layout:
@@ -131,6 +155,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public func leadingTrivia<T>(_ body: (SyntaxText) -> T) -> T {
     switch raw.header {
+    case .smolParsedToken:
+      return body(raw.asSmolParsedToken.leadingTriviaText)
     case .parsedToken:
       return body(raw.asParsedToken.leadingTriviaText)
     case .materializedToken:
@@ -146,6 +172,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public func trailingTrivia<T>(_ body: (SyntaxText) -> T) -> T {
     switch raw.header {
+    case .smolParsedToken:
+      return body(raw.asSmolParsedToken.trailingTriviaText)
     case .parsedToken:
       return body(raw.asParsedToken.trailingTriviaText)
     case .materializedToken:
@@ -176,6 +204,16 @@ public struct RawSyntaxTokenView: Sendable {
   public func withKind(_ newValue: TokenKind, arena: RawSyntaxArena) -> RawSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.header {
+    case .smolParsedToken:
+      // The wholeText can't be continuous anymore. Make a materialized token.
+      return .makeMaterializedToken(
+        kind: newValue,
+        leadingTrivia: formLeadingTrivia(),
+        trailingTrivia: formTrailingTrivia(),
+        presence: presence,
+        tokenDiagnostic: tokenDiagnostic,
+        arena: arena
+      )
     case .parsedToken:
       // The wholeText can't be continuous anymore. Make a materialized token.
       return .makeMaterializedToken(
@@ -199,26 +237,75 @@ public struct RawSyntaxTokenView: Sendable {
     }
   }
 
+  /// This parsed token, made again with `presence` and `tokenDiagnostic`, in
+  /// `arena`.
+  ///
+  /// Where `arena` is not the one this token lives in, the result has to be a
+  /// materialized token: a parsed token keeps its trivia unparsed and asks its
+  /// arena to parse it on demand, so it can only live in a
+  /// `ParsingRawSyntaxArena`, and another one's function may differ or be absent.
+  /// Otherwise it goes through
+  /// ``RawSyntax/parsedToken(kind:sourceBuffer:leadingTriviaByteLength:textByteLength:wholeTextLength:presence:tokenDiagnostic:arena:)``,
+  /// so that the result takes whichever shape fits it.
+  private func rebuiltParsedToken(
+    tokenKind: RawTokenKind,
+    wholeText: SyntaxText,
+    textRange: Range<SyntaxText.Index>,
+    presence: SourcePresence,
+    tokenDiagnostic: TokenDiagnostic?,
+    arena: RawSyntaxArena
+  ) -> RawSyntax {
+    guard arena == self.raw.arenaReference else {
+      return .makeMaterializedToken(
+        kind: formKind(),
+        leadingTrivia: formLeadingTrivia(),
+        trailingTrivia: formTrailingTrivia(),
+        presence: presence,
+        tokenDiagnostic: tokenDiagnostic,
+        arena: arena
+      )
+    }
+    return RawSyntax.parsedToken(
+      kind: tokenKind,
+      // The text already sits in a node's tail, rounded up to a whole unit, which
+      // is as far as the copy may read.
+      sourceBuffer: UnsafeBufferPointer(
+        start: wholeText.baseAddress,
+        count: RawSyntax.textByteCount(for: wholeText.count)
+      ),
+      leadingTriviaByteLength: textRange.lowerBound,
+      textByteLength: textRange.count,
+      wholeTextLength: wholeText.count,
+      presence: presence,
+      tokenDiagnostic: tokenDiagnostic,
+      // The arena this token was parsed into, which is a parsing one.
+      arena: unsafeDowncast(arena, to: ParsingRawSyntaxArena.self)
+    )
+  }
+
   /// Returns a ``RawSyntax`` node with the presence changed to `newValue`.
   @_spi(RawSyntax)
   public func withPresence(_ newValue: SourcePresence, arena: RawSyntaxArena) -> RawSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.header {
-    case .parsedToken:
-      var payload = raw.asParsedToken.fields
-      if arena == self.raw.arenaReference {
-        payload.presence = newValue
-        return RawSyntax.allocateParsedToken(payload, arena: arena)
-      }
-      // If the modified token is allocated in a different arena, it might have
-      // a different or no `parseTrivia` function. We thus cannot use a
-      // `parsedToken` anymore.
-      return .makeMaterializedToken(
-        kind: formKind(),
-        leadingTrivia: formLeadingTrivia(),
-        trailingTrivia: formTrailingTrivia(),
+    case .smolParsedToken:
+      let token = raw.asSmolParsedToken
+      return rebuiltParsedToken(
+        tokenKind: token.tokenKind,
+        wholeText: token.wholeText,
+        textRange: token.textRange,
         presence: newValue,
-        tokenDiagnostic: tokenDiagnostic,
+        tokenDiagnostic: nil,
+        arena: arena
+      )
+    case .parsedToken:
+      let token = raw.asParsedToken
+      return rebuiltParsedToken(
+        tokenKind: token.tokenKind,
+        wholeText: token.wholeText,
+        textRange: token.textRange,
+        presence: newValue,
+        tokenDiagnostic: token.fields.tokenDiagnostic,
         arena: arena
       )
     case .materializedToken:
@@ -235,6 +322,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var textByteLength: Int {
     switch raw.header {
+    case .smolParsedToken:
+      return raw.asSmolParsedToken.tokenText.count
     case .parsedToken:
       return raw.asParsedToken.tokenText.count
     case .materializedToken:
@@ -252,6 +341,11 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public func formKind() -> TokenKind {
     switch raw.header {
+    case .smolParsedToken:
+      return TokenKind.fromRaw(
+        kind: raw.asSmolParsedToken.tokenKind,
+        text: String(syntaxText: raw.asSmolParsedToken.tokenText)
+      )
     case .parsedToken:
       return TokenKind.fromRaw(
         kind: raw.asParsedToken.tokenKind,
@@ -270,6 +364,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var presence: SourcePresence {
     switch raw.header {
+    case .smolParsedToken:
+      return .present
     case .parsedToken:
       return raw.asParsedToken.presence
     case .materializedToken:
@@ -282,6 +378,8 @@ public struct RawSyntaxTokenView: Sendable {
   @_spi(RawSyntax)
   public var tokenDiagnostic: TokenDiagnostic? {
     switch raw.header {
+    case .smolParsedToken:
+      return nil
     case .parsedToken:
       return raw.asParsedToken.tokenDiagnostic
     case .materializedToken:
@@ -295,20 +393,23 @@ public struct RawSyntaxTokenView: Sendable {
   public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: RawSyntaxArena) -> RawTokenSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.header {
+    case .smolParsedToken:
+      let token = raw.asSmolParsedToken
+      return rebuiltParsedToken(
+        tokenKind: token.tokenKind,
+        wholeText: token.wholeText,
+        textRange: token.textRange,
+        presence: .present,
+        tokenDiagnostic: tokenDiagnostic,
+        arena: arena
+      ).cast(RawTokenSyntax.self)
     case .parsedToken:
-      var dat = raw.asParsedToken.fields
-      if arena == self.raw.arenaReference {
-        dat.tokenDiagnostic = tokenDiagnostic
-        return RawSyntax.allocateParsedToken(dat, arena: arena).cast(RawTokenSyntax.self)
-      }
-      // If the modified token is allocated in a different arena, it might have
-      // a different or no `parseTrivia` function. We thus cannot use a
-      // `parsedToken` anymore.
-      return RawSyntax.makeMaterializedToken(
-        kind: formKind(),
-        leadingTrivia: formLeadingTrivia(),
-        trailingTrivia: formTrailingTrivia(),
-        presence: presence,
+      let token = raw.asParsedToken
+      return rebuiltParsedToken(
+        tokenKind: token.tokenKind,
+        wholeText: token.wholeText,
+        textRange: token.textRange,
+        presence: token.fields.presence,
         tokenDiagnostic: tokenDiagnostic,
         arena: arena
       ).cast(RawTokenSyntax.self)

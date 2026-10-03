@@ -61,17 +61,27 @@ extension Lexer {
     /// several ``TokenSpec`` does not recompute it from the text each time.
     var keyword: Keyword?
 
-    var start: UnsafePointer<UInt8>
-
     var leadingTriviaByteLength: Int
 
     var textByteLength: Int
 
-    var trailingTriviaByteLength: Int
+    /// Byte count of this lexeme's whole text, leading and trailing trivia
+    /// included.
+    var wholeTextByteLength: Int
+
+    /// Byte count of this lexeme's trailing trivia.
+    var trailingTriviaByteLength: Int {
+      self.wholeTextByteLength &- self.leadingTriviaByteLength &- self.textByteLength
+    }
 
     /// The cursor that produces this lexeme by calling `nextToken` on it.
     /// Used if the token needs to be re-lexed in a different lexer state.
     var cursor: Lexer.Cursor
+
+    /// Where this lexeme's text begins, including its leading trivia.
+    var start: UnsafePointer<UInt8> {
+      self.cursor.position.pointer
+    }
 
     var isAtStartOfLine: Bool {
       return self.flags.contains(.isAtStartOfLine)
@@ -86,26 +96,24 @@ extension Lexer {
       flags: Flags,
       diagnostic: TokenDiagnostic?,
       keyword: Keyword?,
-      start: UnsafePointer<UInt8>,
       leadingTriviaLength: Int,
       textLength: Int,
-      trailingTriviaLength: Int,
+      wholeTextLength: Int,
       cursor: Lexer.Cursor
     ) {
       self.rawTokenKind = tokenKind
       self.flags = flags
       self.diagnostic = diagnostic
       self.keyword = keyword
-      self.start = start
       self.leadingTriviaByteLength = leadingTriviaLength
       self.textByteLength = textLength
-      self.trailingTriviaByteLength = trailingTriviaLength
+      self.wholeTextByteLength = wholeTextLength
       self.cursor = cursor
     }
 
     @_spi(Testing)
     public var byteLength: Int {
-      leadingTriviaByteLength + textByteLength + trailingTriviaByteLength
+      self.wholeTextByteLength
     }
 
     @_spi(Testing)

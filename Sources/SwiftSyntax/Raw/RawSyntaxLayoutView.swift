@@ -16,7 +16,7 @@ extension RawSyntax {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView? {
     switch header {
-    case .parsedToken, .materializedToken:
+    case .smolParsedToken, .parsedToken, .materializedToken:
       return nil
     case .layout:
       return RawSyntaxLayoutView(raw: self)
@@ -32,7 +32,7 @@ public struct RawSyntaxLayoutView {
   fileprivate init(raw: RawSyntax) {
     self.raw = raw
     switch raw.header {
-    case .parsedToken, .materializedToken:
+    case .smolParsedToken, .parsedToken, .materializedToken:
       preconditionFailure("RawSyntax must be a layout")
     case .layout:
       break
@@ -41,8 +41,7 @@ public struct RawSyntaxLayoutView {
 
   private var layoutData: RawSyntaxData.Layout {
     switch raw.header {
-    case .parsedToken,
-      .materializedToken(_):
+    case .smolParsedToken, .parsedToken, .materializedToken:
       preconditionFailure("RawSyntax must be a layout")
     case .layout:
       return raw.asLayout.fields

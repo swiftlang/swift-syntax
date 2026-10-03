@@ -107,22 +107,18 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             },
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {
-              if node.children.isEmpty {
-                DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(node.memberCallName), arena: arena)")
-              } else {
-                DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
-                DeclSyntax(
-                  """
-                  let raw = RawSyntax.makeLayout(
-                    kind: SyntaxKind.\(node.memberCallName),
-                    from: layout,
-                    arena: arena,
-                    leadingTrivia: leadingTrivia,
-                    trailingTrivia: trailingTrivia
-                  )
-                  """
+              DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
+              DeclSyntax(
+                """
+                let raw = RawSyntax.makeLayout(
+                  kind: SyntaxKind.\(node.memberCallName),
+                  from: layout,
+                  arena: arena,
+                  leadingTrivia: leadingTrivia,
+                  trailingTrivia: trailingTrivia
                 )
-              }
+                """
+              )
               StmtSyntax("return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)")
             }
           )

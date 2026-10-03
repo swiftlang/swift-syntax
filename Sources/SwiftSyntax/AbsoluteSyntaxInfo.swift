@@ -23,6 +23,11 @@ struct AbsoluteSyntaxInfo: Sendable {
   /// This skips `nil` children in the parent's layout.
   let indexInTree: UInt32
 
+  /// - Important: `@inline(__always)` because this runs once per slot of every node a
+  ///   client visits, and it is small enough that a caller of any size should take it.
+  ///   Left to the inliner it is dropped as soon as the caller grows, which cost 3%
+  ///   of a tree walk once.
+  @inline(__always)
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
     if let raw {
       // '&+' operations are safe because we have the preconditions in 'forRoot(_:)'.

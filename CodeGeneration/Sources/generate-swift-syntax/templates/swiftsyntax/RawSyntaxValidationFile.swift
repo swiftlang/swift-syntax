@@ -22,7 +22,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
     ///
     /// Note that this only validates the immediate children.
     /// Results in an assertion failure if the layout is invalid.
-    func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind)
+    func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind)
     """
   ) {
     IfConfigDeclSyntax(
@@ -192,7 +192,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
 
               for node in NON_BASE_SYNTAX_NODES {
                 try FunctionDeclSyntax(
-                  "func validate\(node.kind.syntaxType)(kind: SyntaxKind, layout: RawSyntaxBuffer)"
+                  "func validate\(node.kind.syntaxType)(kind: SyntaxKind, layout: RawLayoutChildren)"
                 ) {
                   if let node = node.layoutNode {
                     ExprSyntax("assert(layout.count == \(raw: node.children.count))")

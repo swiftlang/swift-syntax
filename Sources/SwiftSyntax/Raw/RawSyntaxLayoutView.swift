@@ -18,7 +18,7 @@ extension RawSyntax {
     switch header {
     case .smolParsedToken, .parsedToken, .materializedToken:
       return nil
-    case .layout:
+    case .flat, .layout, .layoutWithUnexpected:
       return RawSyntaxLayoutView(raw: self)
     }
   }
@@ -34,22 +34,13 @@ public struct RawSyntaxLayoutView {
     switch raw.header {
     case .smolParsedToken, .parsedToken, .materializedToken:
       preconditionFailure("RawSyntax must be a layout")
-    case .layout:
+    case .flat, .layout, .layoutWithUnexpected:
       break
     }
   }
 
-  private var layoutData: RawSyntaxData.Layout {
-    switch raw.header {
-    case .smolParsedToken, .parsedToken, .materializedToken:
-      preconditionFailure("RawSyntax must be a layout")
-    case .layout:
-      return raw.asLayout.fields
-    }
-  }
-
   var recursiveFlags: RecursiveRawSyntaxFlags {
-    return layoutData.recursiveFlags
+    return raw.asLayout.recursiveFlags
   }
 
   /// Creates a new node of the same kind but with children replaced by `elements`.
@@ -82,11 +73,15 @@ public struct RawSyntaxLayoutView {
       uninitializedCount: children.count + 1,
       arena: arena
     ) { buffer in
-      var childIterator = children.makeIterator()
-      let base = buffer.baseAddress!
+      let children = self.children
+      var source = 0
       for i in 0..<buffer.count {
-        base.advanced(by: i)
-          .initialize(to: i == index ? newChild : childIterator.next()!)
+        if i == index {
+          buffer.initializeElement(at: i, to: newChild)
+        } else {
+          buffer.initializeElement(at: i, to: children[source])
+          source += 1
+        }
       }
     }
   }
@@ -104,18 +99,14 @@ public struct RawSyntaxLayoutView {
       arena: arena
     ) { buffer in
       if buffer.isEmpty { return }
-      let newBase = buffer.baseAddress!
-      let oldBase = children.baseAddress!
-
-      // Copy elements up to the index.
-      newBase.initialize(from: oldBase, count: index)
-
-      // Copy elements from the index + 1.
-      newBase.advanced(by: index)
-        .initialize(
-          from: oldBase.advanced(by: index + 1),
-          count: children.count - index - 1
-        )
+      let children = self.children
+      // Everything before the index, then everything after it.
+      for i in 0..<index {
+        buffer.initializeElement(at: i, to: children[i])
+      }
+      for i in index..<count {
+        buffer.initializeElement(at: i, to: children[i + 1])
+      }
     }
   }
 
@@ -138,19 +129,20 @@ public struct RawSyntaxLayoutView {
       arena: arena
     ) { buffer in
       if buffer.isEmpty { return }
-      var current = buffer.baseAddress!
-
-      // Initialize
-      current.initialize(from: children.baseAddress!, count: range.lowerBound)
-      current = current.advanced(by: range.lowerBound)
-      for elem in elements {
-        current.initialize(to: elem)
-        current += 1
+      let children = self.children
+      var next = 0
+      for i in 0..<range.lowerBound {
+        buffer.initializeElement(at: next, to: children[i])
+        next += 1
       }
-      current.initialize(
-        from: children.baseAddress!.advanced(by: range.upperBound),
-        count: children.count - range.upperBound
-      )
+      for elem in elements {
+        buffer.initializeElement(at: next, to: elem)
+        next += 1
+      }
+      for i in range.upperBound..<children.count {
+        buffer.initializeElement(at: next, to: children[i])
+        next += 1
+      }
     }
   }
 
@@ -178,7 +170,180 @@ public struct RawSyntaxLayoutView {
 
   /// Child nodes.
   @_spi(RawSyntax)
-  public var children: RawSyntaxBuffer {
-    layoutData.layout
+  public var children: RawLayoutChildren {
+    raw.logicalChildren
+  }
+}
+
+/// A layout node's children as the tree describes them: an `unexpected` slot
+/// before the first child, between each pair and after the last, for the kinds
+/// that interleave them.
+///
+/// A node that has nothing unexpected in it keeps no room for those slots, so
+/// they are not read from memory but answered as nil. Indices here are the ones
+/// the tree is described by and the generated accessors used before the shapes
+/// diverged; where a child physically sits is this type's business.
+@_spi(RawSyntax)
+public struct RawLayoutChildren: RandomAccessCollection {
+  public typealias Element = RawSyntax?
+  public typealias Index = Int
+
+  /// The real children, in source order.
+  private let real: UnsafeBufferPointer<RawSyntax?>
+
+  /// The `unexpected` slots, or empty when the node kept no room for them.
+  private let unexpected: UnsafeBufferPointer<RawSyntax?>
+
+  /// Whether this node's kind interleaves `unexpected` slots with its children.
+  private let interleaves: Bool
+
+  init(
+    real: UnsafeBufferPointer<RawSyntax?>,
+    unexpected: UnsafeBufferPointer<RawSyntax?>,
+    interleaves: Bool
+  ) {
+    self.real = real
+    self.unexpected = unexpected
+    self.interleaves = interleaves
+  }
+
+  public var startIndex: Int { 0 }
+
+  public var endIndex: Int { self.interleaves ? 2 * self.real.count + 1 : self.real.count }
+
+  public subscript(position: Int) -> RawSyntax? {
+    precondition(position >= 0 && position < self.endIndex)
+    guard self.interleaves else {
+      return self.real[position]
+    }
+    if position % 2 == 1 {
+      return self.real[(position - 1) / 2]
+    }
+    let slot = position / 2
+    return slot < self.unexpected.count ? self.unexpected[slot] : nil
+  }
+}
+
+extension RawSyntaxLayoutView {
+  /// The `index`th real child, counting only the node's own children and not the
+  /// `unexpected` slots between them.
+  ///
+  /// Real children come first in a node's slots whichever shape it has, so this
+  /// is the same load either way — which is why the generated accessors use it
+  /// rather than an index into the layout as the tree describes it.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public func realChild(at index: Int) -> RawSyntax? {
+    let (base, childCount) = raw.slotBase
+    precondition(index >= 0 && index < childCount)
+    return base[index]
+  }
+
+  /// The `index`th `unexpected` slot, or `nil` for a node that kept no room for
+  /// them, which is almost every node.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public func unexpectedSlot(at index: Int) -> RawSyntax? {
+    switch raw.header {
+    case .layoutWithUnexpected:
+      let (base, childCount) = raw.slotBase
+      precondition(index >= 0 && index <= childCount)
+      return base[childCount + index]
+    case .flat, .layout:
+      return nil
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
+  }
+}
+
+/// A collection's elements, none of which is ever absent.
+///
+/// A layout node's children include the `unexpected` slots and the optional
+/// children it does not have, so they are read as `RawSyntax?`. A collection's
+/// are neither: every slot holds an element, which `makeLayout` asserts when it
+/// builds one. Iterating them therefore needs no test per element.
+@_spi(RawSyntax)
+public struct RawSyntaxElements: RandomAccessCollection {
+  public typealias Element = RawSyntax
+  public typealias Index = Int
+
+  private let slots: UnsafeBufferPointer<RawSyntax?>
+
+  init(slots: UnsafeBufferPointer<RawSyntax?>) {
+    self.slots = slots
+  }
+
+  public var startIndex: Int { 0 }
+
+  public var endIndex: Int { self.slots.count }
+
+  public subscript(position: Int) -> RawSyntax {
+    // Guaranteed by construction: see `RawSyntax.makeLayout`.
+    self.slots[position].unsafelyUnwrapped
+  }
+}
+
+extension RawSyntaxLayoutView {
+  /// This node's slots if they are laid out one after another, and `nil` if they
+  /// are interleaved with `unexpected` slots and so have to be read as the tree
+  /// describes them.
+  ///
+  /// Asking this way costs a test of the word a reader has already loaded, where
+  /// asking the kind costs a switch over every kind there is.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public var flatSlots: RawSyntaxElements? {
+    switch raw.header {
+    case .flat:
+      let (base, childCount) = raw.slotBase
+      return RawSyntaxElements(slots: UnsafeBufferPointer(start: base, count: childCount))
+    case .layout, .layoutWithUnexpected:
+      return nil
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
+  }
+
+  /// The elements of this collection.
+  ///
+  /// - Precondition: this is a collection.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public var elements: RawSyntaxElements {
+    switch raw.header {
+    case .flat:
+      let (base, childCount) = raw.slotBase
+      return RawSyntaxElements(slots: UnsafeBufferPointer(start: base, count: childCount))
+    case .layout, .layoutWithUnexpected:
+      preconditionFailure("this node's children are interleaved with unexpected slots")
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
+  }
+}
+
+extension RawSyntaxLayoutView {
+  /// This node's slots as two regions, for a reader that places them where the tree
+  /// describes them without asking which position each one is: the real children,
+  /// and the `unexpected` slots, which are empty for a node that kept no room for
+  /// them. `nil` for a node whose slots are all children.
+  @_spi(RawSyntax)
+  @inline(__always)
+  public var interleavedRegions: (real: UnsafeBufferPointer<RawSyntax?>, unexpected: UnsafeBufferPointer<RawSyntax?>)? {
+    let (base, childCount) = raw.slotBase
+    switch raw.header {
+    case .layout:
+      return (UnsafeBufferPointer(start: base, count: childCount), UnsafeBufferPointer(start: nil, count: 0))
+    case .layoutWithUnexpected:
+      return (
+        UnsafeBufferPointer(start: base, count: childCount),
+        UnsafeBufferPointer(start: base + childCount, count: childCount + 1)
+      )
+    case .flat:
+      return nil
+    case .smolParsedToken, .parsedToken, .materializedToken:
+      preconditionFailure("not a layout node")
+    }
   }
 }

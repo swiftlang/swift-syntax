@@ -121,7 +121,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             """
             public init(elements: RawSyntaxNodeList<\(element)>, arena: __shared RawSyntaxArena) {
               let raw = RawSyntax.makeLayout(
-                kind: .\(node.memberCallName), uninitializedCount: elements.count, arena: arena) { layout in
+                kind: .\(node.memberCallName), childCount: elements.count, storage: .flat, arena: arena) { layout in
                   guard var ptr = layout.baseAddress else { return }
                   for elem in elements.buffer {
                     ptr.initialize(to: elem.raw)
@@ -157,44 +157,96 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             FunctionParameterSyntax("arena: __shared RawSyntaxArena")
           }
           try InitializerDeclSyntax("public init(\(params))") {
-            if !node.children.isEmpty {
-              let list = ExprListSyntax {
-                ExprSyntax("layout.initialize(repeating: nil)")
-                for (index, child) in node.children.enumerated() {
-                  let optionalMark = child.isOptional ? "?" : ""
+            // A node that interleaves keeps its real children and its
+            // `unexpected` slots in separate regions, real ones first, so that
+            // the slots can be left out of a node that has nothing to put in
+            // them. A node that does not interleave has only real children.
+            let interleaves = node.interleavesUnexpectedChildren
+            let realChildren = interleaves ? node.children.filter { !$0.isUnexpectedNodes } : node.children
+            let unexpectedChildren = interleaves ? node.children.filter { $0.isUnexpectedNodes } : []
 
-                  ExprSyntax(
-                    "layout[\(raw: index)] = \(child.baseCallName)\(raw: optionalMark).raw"
-                  )
-                  .with(\.leadingTrivia, .newline)
-                }
+            // Every slot is written exactly once — the `unexpected` ones exist
+            // only when they are being written — so initializing them and then
+            // assigning over them would be a `memset` of the whole tail for
+            // nothing.
+            let list = ExprListSyntax {
+              for (index, child) in realChildren.enumerated() {
+                let optionalMark = child.isOptional ? "?" : ""
+                ExprSyntax(
+                  "layout.initializeElement(at: \(raw: index), to: \(child.baseCallName)\(raw: optionalMark).raw)"
+                )
+                .with(\.leadingTrivia, .newline)
               }
-
-              DeclSyntax(
-                """
-                let raw = RawSyntax.makeLayout(
-                  kind: .\(node.memberCallName), uninitializedCount: \(raw: node.children.count), arena: arena) { layout in
-                  \(list)
-                }
-                """
-              )
-            } else {
-              DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: .\(node.memberCallName), arena: arena)")
+              if !unexpectedChildren.isEmpty {
+                let assignments = unexpectedChildren.enumerated()
+                  .map {
+                    "layout.initializeElement(at: \(realChildren.count + $0.offset), to: \($0.element.baseCallName)?.raw)"
+                  }
+                  .joined(separator: "\n")
+                ExprSyntax(
+                  """
+                  if hasUnexpected {
+                    \(raw: assignments)
+                  }
+                  """
+                )
+                .with(\.leadingTrivia, .newline)
+              }
             }
+
+            // A kind interleaves `unexpected` slots exactly when its layout has any,
+            // which is known here; whether one of them is occupied is not, so only an
+            // interleaving node works that out.
+            if !unexpectedChildren.isEmpty {
+              let occupied = unexpectedChildren.map { "\($0.baseCallName) != nil" }.joined(separator: " || ")
+              DeclSyntax("let hasUnexpected = \(raw: occupied)")
+            }
+            let storage =
+              unexpectedChildren.isEmpty
+              ? ".flat"
+              : "hasUnexpected ? .interleavedWithUnexpected : .interleaved"
+            DeclSyntax(
+              """
+              let raw = RawSyntax.makeLayout(
+                kind: .\(node.memberCallName), childCount: \(raw: realChildren.count), storage: \(raw: storage), arena: arena) { layout in
+                \(list)
+              }
+              """
+            )
             ExprSyntax("self.init(unchecked: raw)")
           }
 
-          for (index, child) in node.children.enumerated() {
+          // Reach a child by where it sits rather than by its index in the
+          // layout as the tree describes it: a real child is at the same slot
+          // whichever shape the node has, and an `unexpected` slot is absent from
+          // a node that has nothing to put in it.
+          let childAccessors: [String] = {
+            var result: [String] = []
+            var realIndex = 0
+            var unexpectedIndex = 0
+            for child in node.children {
+              if node.interleavesUnexpectedChildren && child.isUnexpectedNodes {
+                result.append("layoutView.unexpectedSlot(at: \(unexpectedIndex))")
+                unexpectedIndex += 1
+              } else {
+                result.append("layoutView.realChild(at: \(realIndex))")
+                realIndex += 1
+              }
+            }
+            return result
+          }()
+
+          for (child, accessor) in zip(node.children, childAccessors) {
             try VariableDeclSyntax(
               "public var \(child.varDeclName): Raw\(child.buildableType.buildable)"
             ) {
               let exclamationMark = child.isOptional ? "" : "!"
 
               if child.syntaxNodeKind == .syntax {
-                ExprSyntax("layoutView.children[\(raw: index)]\(raw: exclamationMark)")
+                ExprSyntax("\(raw: accessor)\(raw: exclamationMark)")
               } else {
                 ExprSyntax(
-                  "layoutView.children[\(raw: index)].map(\(child.syntaxNodeKind.raw.syntaxType).init(raw:))\(raw: exclamationMark)"
+                  "\(raw: accessor).map(\(child.syntaxNodeKind.raw.syntaxType).init(raw:))\(raw: exclamationMark)"
                 )
               }
             }

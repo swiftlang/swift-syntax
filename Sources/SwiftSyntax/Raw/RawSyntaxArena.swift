@@ -92,12 +92,6 @@ public class RawSyntaxArena {
     #endif
   }
 
-  /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
-  /// uninitialized memory range as a `UnsafeMutableBufferPointer<RawSyntax?>`.
-  func allocateRawSyntaxBuffer(count: Int) -> UnsafeMutableBufferPointer<RawSyntax?> {
-    return allocator.allocate(RawSyntax?.self, count: count)
-  }
-
   /// Allocates a buffer of ``RawTriviaPiece`` with the given count, then returns
   /// the uninitialized memory range as a `UnsafeMutableBufferPointer<RawTriviaPiece>`.
   func allocateRawTriviaPieceBuffer(

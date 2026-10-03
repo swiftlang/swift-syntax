@@ -39,17 +39,8 @@ public struct RawSyntaxLayoutView {
     }
   }
 
-  private var layoutData: RawSyntaxData.Layout {
-    switch raw.header {
-    case .smolParsedToken, .parsedToken, .materializedToken:
-      preconditionFailure("RawSyntax must be a layout")
-    case .layout:
-      return raw.asLayout.fields
-    }
-  }
-
   var recursiveFlags: RecursiveRawSyntaxFlags {
-    return layoutData.recursiveFlags
+    return raw.asLayout.recursiveFlags
   }
 
   /// Creates a new node of the same kind but with children replaced by `elements`.
@@ -179,6 +170,6 @@ public struct RawSyntaxLayoutView {
   /// Child nodes.
   @_spi(RawSyntax)
   public var children: RawSyntaxBuffer {
-    layoutData.layout
+    raw.asLayout.layout
   }
 }

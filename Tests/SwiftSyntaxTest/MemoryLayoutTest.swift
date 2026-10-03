@@ -30,11 +30,11 @@ final class MemoryLayoutTest: XCTestCase {
     /// that header names, in one allocation, so what a node costs is the header
     /// plus one of the three strides below rather than the largest of them.
     let expected: [String: SyntaxMemoryLayout.Value] = [
-      "RawSyntaxData.Layout": .init(size: 41, stride: 48, alignment: 8),
+      "RawSyntaxData": .init(size: 8, stride: 8, alignment: 8),
       "RawSyntaxData.SmolParsedToken": .init(size: 4, stride: 4, alignment: 1),
       "RawSyntaxData.ParsedToken": .init(size: 18, stride: 20, alignment: 4),
       "RawSyntaxData.MaterializedToken": .init(size: 54, stride: 56, alignment: 8),
-      "RawSyntaxData": .init(size: 8, stride: 8, alignment: 8),
+      "RawSyntaxData.Layout": .init(size: 15, stride: 16, alignment: 4),
       "RawSyntax?": .init(size: 8, stride: 8, alignment: 8),
 
       "Syntax": .init(size: 16, stride: 16, alignment: 8),

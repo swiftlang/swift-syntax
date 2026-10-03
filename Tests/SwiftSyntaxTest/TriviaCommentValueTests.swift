@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftParser
-import SwiftSyntax
+@_spi(SourceKitLSP) import SwiftSyntax
 import XCTest
 
 class TriviaCommentValueTests: XCTestCase {
@@ -282,6 +282,62 @@ class TriviaCommentValueTests: XCTestCase {
       docCommentValue: "def"
     )
   }
+  func testDocCommentLinePositions() {
+    assertCommentLines(
+      "/// hi",
+      docCommentLines: ["hi"]
+    )
+
+    assertCommentLines(
+      """
+      /// Some doc line comment
+      /// Another
+      """,
+      docCommentLines: ["Some doc line comment", "Another"]
+    )
+
+    assertCommentLines(
+      """
+      /// - Task
+      ///   - Subtask
+      /// - Task 2
+      """,
+      docCommentLines: ["- Task", "  - Subtask", "- Task 2"]
+    )
+
+    assertCommentLines(
+      """
+      ///- Task
+      ///  - Subtask
+      """,
+      docCommentLines: ["- Task", "  - Subtask"]
+    )
+
+    assertCommentLines(
+      "/** Some doc block comment */",
+      docCommentLines: ["Some doc block comment"]
+    )
+
+    assertCommentLines(
+      """
+      /**
+      Some doc block comment
+      spread on many lines
+      */
+      """,
+      docCommentLines: ["Some doc block comment", "spread on many lines"]
+    )
+
+    assertCommentLines(
+      """
+      /**
+       *  Some doc block comment
+       *  with a line comment
+       */
+      """,
+      docCommentLines: ["*  Some doc block comment", "*  with a line comment"]
+    )
+  }
 }
 
 private func assertCommentValue(
@@ -294,19 +350,51 @@ private func assertCommentValue(
   XCTAssertEqual(trivia.docCommentValue, expected, file: file, line: line)
 }
 
-private func parseTrivia(from input: String) -> Trivia {
-  // Wrap the input in valid Swift code so the parser can recognize it
-  let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
-  let sourceFile = Parser.parse(source: wrappedSource)
-
-  // Find the token where the comment would appear (before `let _ = 1`)
-  guard
-    let commentToken = sourceFile.tokens(viewMode: .sourceAccurate).first(where: {
-      $0.leadingTrivia.contains(where: { $0.isComment })
-    })
-  else {
-    return []
+private func assertCommentLines(
+  _ input: String,
+  docCommentLines expectedTexts: [String],
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  guard let commentToken = parseCommentToken(from: input) else {
+    XCTFail("Failed to find comment token", file: file, line: line)
+    return
   }
 
-  return commentToken.leadingTrivia
+  guard let actualLines = commentToken.leadingTrivia.docCommentLines(startingAt: commentToken.position) else {
+    XCTFail("Expected doc comment lines but got nil", file: file, line: line)
+    return
+  }
+
+  XCTAssertEqual(actualLines.count, expectedTexts.count, "line count mismatch", file: file, line: line)
+
+  let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
+  for (actual, expectedText) in zip(actualLines, expectedTexts) {
+    XCTAssertEqual(String(actual.text), expectedText, file: file, line: line)
+
+    guard let range = wrappedSource.range(of: expectedText) else {
+      XCTFail("Expected text '\(expectedText)' not found in wrapped source", file: file, line: line)
+      continue
+    }
+    let expectedOffset = wrappedSource.utf8.distance(from: wrappedSource.utf8.startIndex, to: range.lowerBound)
+    XCTAssertEqual(
+      actual.position.utf8Offset,
+      expectedOffset,
+      "position mismatch for line '\(expectedText)'",
+      file: file,
+      line: line
+    )
+  }
+}
+
+private func parseCommentToken(from input: String) -> TokenSyntax? {
+  let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
+  let sourceFile = Parser.parse(source: wrappedSource)
+  return sourceFile.tokens(viewMode: .sourceAccurate).first(where: {
+    $0.leadingTrivia.contains(where: { $0.isComment })
+  })
+}
+
+private func parseTrivia(from input: String) -> Trivia {
+  parseCommentToken(from: input)?.leadingTrivia ?? []
 }

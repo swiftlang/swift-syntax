@@ -243,6 +243,22 @@ public protocol BuildConfiguration {
   /// - Returns: Whether the target object file format matches the given name.
   func isActiveTargetObjectFormat(name: String) throws -> Bool
 
+  /// Determine whether the given ISA/CPU feature name (e.g., "avx2") is part of
+  /// the module codegen baseline.
+  ///
+  /// This can be queried by the experimental syntax
+  /// `_hasTargetFeature("<name>")`, e.g.,
+  ///
+  /// ```swift
+  /// #if _hasTargetFeature("avx2")
+  /// // AVX2-specific code
+  /// #endif
+  /// ```
+  /// - Parameters:
+  ///   - name: The name of the ISA feature to check.
+  /// - Returns: Whether the given feature is part of the target baseline.
+  func hasTargetFeature(name: String) throws -> Bool
+
   /// The bit width of a data pointer for the target architecture.
   ///
   /// The target's pointer bit width (which also corresponds to the number of
@@ -313,5 +329,10 @@ extension BuildConfiguration {
   @available(*, deprecated, message: "`BuildConfiguration` conformance must implement `isActiveTargetObjectFormat`")
   public func isActiveTargetObjectFormat(name: String) throws -> Bool {
     throw BuildConfigurationError.notImplemented(name: "isActiveTargetObjectFormat")
+  }
+
+  @available(*, deprecated, message: "`BuildConfiguration` conformance must implement `hasTargetFeature`")
+  public func hasTargetFeature(name: String) throws -> Bool {
+    throw BuildConfigurationError.notImplemented(name: "hasTargetFeature")
   }
 }

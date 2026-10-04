@@ -411,7 +411,7 @@ private class FindFeatureCheckVisitor: SyntaxVisitor {
   override func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
     if let calleeDeclRef = node.calledExpression.as(DeclReferenceExprSyntax.self),
       let calleeName = calleeDeclRef.simpleIdentifier?.name,
-      calleeName == "compiler" || calleeName == "_compiler_version"
+      calleeName == "compiler" || calleeName == "_compiler_version" || calleeName == "_hasTargetFeature"
     {
       foundFeatureCheck = true
     }

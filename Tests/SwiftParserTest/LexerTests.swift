@@ -1807,6 +1807,22 @@ class LexerTests: ParserTestCase {
     )
   }
 
+  func testConflictMarkerAfterNullCharacterIsNotAtStartOfLine() {
+    // A conflict marker begins a line: after a newline, or at the start of the input.
+    // A nul byte in the middle of a file is neither.
+    assertLexemes(
+      "11️⃣\0<<<<<<< a\n=======\n>>>>>>> a",
+      lexemes: [
+        LexemeSpec(.integerLiteral, text: "1", trailing: "\0", diagnostic: "nul character embedded in middle of file"),
+        LexemeSpec(.binaryOperator, text: "<<<<<<<", trailing: " "),
+        LexemeSpec(.identifier, text: "a"),
+        LexemeSpec(.binaryOperator, leading: "\n", text: "=======", flags: [.isAtStartOfLine]),
+        LexemeSpec(.binaryOperator, leading: "\n", text: ">>>>>>>", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.identifier, text: "a"),
+      ]
+    )
+  }
+
   func testConflictMarkerNotAtStartOfLine() {
     assertLexemes(
       #"""

@@ -529,13 +529,13 @@ extension RegexLiteralLexemes.Builder {
         guard hasPounds && byteLength > 0 else { return nil }
 
         // If the last characeter is '/', we can use that.
-        if UnicodeScalar(end.previous) == "/" {
+        if end.previous == UInt8(ascii: "/") {
           return (end, numPounds: 0)
         }
         // If the last character is '#', scan from the candidate last slash to
         // see if we only have '#' characters until the end. In such a case,
         // we can claim those characters as part of the delimiter.
-        if UnicodeScalar(end.previous) == "#",
+        if end.previous == UInt8(ascii: "#"),
           let candidateCloseSlashEnd = candidateCloseSlashEnd
         {
           var poundScan = candidateCloseSlashEnd

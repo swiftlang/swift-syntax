@@ -331,7 +331,7 @@ extension SyntaxProtocol {
       if i == indexInTree {
         return node
       }
-      guard i < indexInTree, indexInTree < i &+ UInt32(truncatingIfNeeded: node.raw.totalNodes) else {
+      guard i < indexInTree, indexInTree < i &+ node.raw.totalNodes else {
         return nil
       }
       for child in node.children(viewMode: .all) {

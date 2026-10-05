@@ -142,7 +142,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var byteLength: Int {
-    return raw.byteLength
+    return Int(raw.byteLength)
   }
 
   @_spi(RawSyntax)

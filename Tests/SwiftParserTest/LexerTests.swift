@@ -22,21 +22,23 @@ private func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) 
   lookaheadTracker.initialize(to: LookaheadTracker())
   // Outlives the lexeme sequence, which refers to it without owning it.
   let stateAllocator = Lexer.StateAllocator()
-  try sourceBytes.withUnsafeBufferPointer { (buf) in
-    var lexemes = [Lexer.Lexeme]()
-    for token in Lexer.tokenize(
-      buf,
-      from: 0,
-      lookaheadTracker: lookaheadTracker,
-      stateAllocator: stateAllocator
-    ) {
-      lexemes.append(token)
+  try withExtendedLifetime(stateAllocator) {
+    try sourceBytes.withUnsafeBufferPointer { (buf) in
+      var lexemes = [Lexer.Lexeme]()
+      for token in Lexer.tokenize(
+        buf,
+        from: 0,
+        lookaheadTracker: lookaheadTracker,
+        stateAllocator: stateAllocator
+      ) {
+        lexemes.append(token)
 
-      if token.rawTokenKind == .endOfFile {
-        break
+        if token.rawTokenKind == .endOfFile {
+          break
+        }
       }
+      try body(lexemes)
     }
-    try body(lexemes)
   }
 }
 

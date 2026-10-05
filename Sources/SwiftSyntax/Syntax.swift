@@ -492,7 +492,7 @@ final class SyntaxDataArena: @unchecked Sendable {
     let dataSize = MemoryLayout<SyntaxData>.stride
     let pointerSize = MemoryLayout<UnsafeRawPointer>.stride
 
-    let nodeCount = raw.totalNodes
+    let nodeCount = Int(raw.totalNodes)
     assert(nodeCount != 0, "The tree needs to contain at least the root node")
     let totalSize = dataSize + (dataSize + pointerSize * 4) * (nodeCount &- 1)
     // Power of 2 might look nicer, but 'BumpPtrAllocator' doesn't require that.

@@ -106,8 +106,8 @@ enum RawSyntaxData: Sendable {
     /// Byte count of this subtree's text.
     var byteLength: UInt32
 
-    /// Number of nodes in this subtree, excluding this node.
-    var descendantCount: UInt32
+    /// Number of nodes in this subtree, including this node.
+    var nodeCount: UInt32
 
     var kind: SyntaxKind
     var recursiveFlags: RecursiveRawSyntaxFlags
@@ -345,7 +345,7 @@ extension RawSyntaxData.Layout {
     @inline(__always)
     var byteLength: UInt32 { pointer.pointee.byteLength }
     @inline(__always)
-    var descendantCount: UInt32 { pointer.pointee.descendantCount }
+    var nodeCount: UInt32 { pointer.pointee.nodeCount }
     @inline(__always)
     var recursiveFlags: RecursiveRawSyntaxFlags { pointer.pointee.recursiveFlags }
 
@@ -530,16 +530,21 @@ extension RawSyntax {
     }
   }
 
-  var totalNodes32: UInt32 {
+  /// Total number of nodes in this sub-tree, including `self` node.
+  var totalNodes: UInt32 {
     switch header {
     case .smolParsedToken, .parsedToken, .materializedToken:
       return 1
     case .layout:
-      return asLayout.descendantCount + 1
+      return asLayout.nodeCount
     }
   }
 
-  var byteLength32: UInt32 {
+  /// The "width" of the node.
+  ///
+  /// Sum of text byte lengths of all present descendant token nodes.
+  @_spi(RawSyntax)
+  public var byteLength: UInt32 {
     switch header {
     case .smolParsedToken:
       // Present by construction, so nothing to test.
@@ -555,44 +560,8 @@ extension RawSyntax {
     }
   }
 
-  /// Total number of nodes in this sub-tree, including `self` node.
-  var totalNodes: Int {
-    switch header {
-    case .smolParsedToken, .parsedToken, .materializedToken:
-      return 1
-    case .layout:
-      return Int(asLayout.descendantCount) + 1
-    }
-  }
-
-  /// The "width" of the node.
-  ///
-  /// Sum of text byte lengths of all present descendant token nodes.
-  @_spi(RawSyntax)
-  public var byteLength: Int {
-    switch header {
-    case .smolParsedToken:
-      // Present by construction, so nothing to test.
-      return Int(asSmolParsedToken.wholeTextLength)
-    case .parsedToken:
-      if asParsedToken.presence == .present {
-        return Int(asParsedToken.wholeTextLength)
-      } else {
-        return 0
-      }
-    case .materializedToken:
-      if asMaterializedToken.presence == .present {
-        return Int(asMaterializedToken.byteLength)
-      } else {
-        return 0
-      }
-    case .layout:
-      return Int(asLayout.byteLength)
-    }
-  }
-
   var totalLength: SourceLength {
-    SourceLength(utf8Length: byteLength)
+    SourceLength(utf8Length: Int(byteLength))
   }
 
   /// Replaces the leading trivia of the first token in this syntax tree by `leadingTrivia`.
@@ -678,7 +647,7 @@ extension RawSyntax {
   /// safe only where `copyText` wrote it into room rounded up for it, so the walk
   /// below has to know which shape it is reading.
   public var syntaxTextBytes: [UInt8] {
-    let total = self.byteLength
+    let total = Int(self.byteLength)
     // `copyText` may write up to seven bytes past a token's text, so the destination
     // carries the same slack the node's tail does. Those bytes stay outside the
     // array's count.
@@ -837,7 +806,7 @@ extension RawSyntax {
   /// trailing trivia. Intermediate trivia inside a layout node is included in
   /// this.
   var trimmedByteLength: Int {
-    let result = byteLength - leadingTriviaByteLength - trailingTriviaByteLength
+    let result = Int(byteLength) - leadingTriviaByteLength - trailingTriviaByteLength
     precondition(result >= 0)
     return result
   }
@@ -1222,14 +1191,14 @@ extension RawSyntax {
     initializer(slots)
 
     var byteLength: UInt32 = 0
-    var descendantCount: UInt32 = 0
+    var nodeCount: UInt32 = 1
     var recursiveFlags = RecursiveRawSyntaxFlags()
     if kind.hasError {
       recursiveFlags.insert(.hasError)
     }
     for case let child? in slots {
-      byteLength += child.byteLength32
-      descendantCount += child.totalNodes32
+      byteLength += child.byteLength
+      nodeCount += child.totalNodes
       recursiveFlags.insert(child.recursiveFlags)
       arena.addChild(child.arenaReference)
     }
@@ -1243,7 +1212,7 @@ extension RawSyntax {
       to: RawSyntaxData.Layout(
         childCount: UInt32(count),
         byteLength: byteLength,
-        descendantCount: descendantCount,
+        nodeCount: nodeCount,
         kind: kind,
         recursiveFlags: recursiveFlags
       )
@@ -1323,7 +1292,7 @@ extension RawSyntax: CustomDebugStringConvertible {
       target.write(".layout(")
       target.write(String(describing: kind))
       target.write(" byteLength=\(Int(asLayout.byteLength))")
-      target.write(" descendantCount=\(Int(asLayout.descendantCount))")
+      target.write(" nodeCount=\(Int(asLayout.nodeCount))")
       if withChildren {
         for (num, child) in asLayout.layout.enumerated() {
           target.write("\n")

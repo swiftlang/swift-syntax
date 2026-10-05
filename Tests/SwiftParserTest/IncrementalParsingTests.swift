@@ -154,6 +154,38 @@ class IncrementalParsingTests: ParserTestCase {
     XCTAssertTrue(reusedNodes.contains(where: { $0.trimmedDescription == "func f() {}" }))
   }
 
+  /// The parser records how far it looked ahead only for the items it parses.
+  /// An item it rebuilds afterwards, such as one given a missing semicolon
+  /// because another statement follows on the same line, has no recorded
+  /// range, so an incremental parse must not reuse it across a later edit.
+  public func testItemWithoutRecordedLookaheadIsNotReused() {
+    let originalSource = """
+      let a = 1 let b = 2
+      let c = 3
+      """
+    let originalResult = Parser.parseIncrementally(source: originalSource, parseTransition: nil)
+
+    let (editedSource, edit) = replacing("3", with: "4", in: originalSource)
+    var reusedNodes: [Syntax] = []
+    let incrementalTree = Parser.parseIncrementally(
+      source: editedSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: originalResult,
+        edits: ConcurrentEdits(edit),
+        reusedNodeCallback: { reusedNodes.append($0) }
+      )
+    ).tree
+
+    XCTAssertFalse(reusedNodes.contains(where: { $0.trimmedDescription == "let a = 1" }))
+    XCTAssertTrue(reusedNodes.contains(where: { $0.trimmedDescription == "let b = 2" }))
+    let subtreeMatcher = SubtreeMatcher(incrementalTree, markers: [:])
+    do {
+      try subtreeMatcher.assertSameStructure(Parser.parse(source: editedSource), includeTrivia: true)
+    } catch {
+      XCTFail("Matching for a subtree failed with error: \(error)")
+    }
+  }
+
   public func testAddElse() {
     assertIncrementalParse(
       """

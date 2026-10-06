@@ -290,7 +290,6 @@ public struct Parser {
     self.currentToken = self.lexemes.advance()
     if let parseTransition {
       self.parseLookup = IncrementalParseLookup(transition: parseTransition)
-      self.lookaheadRanges = parseTransition.previousLookaheadRanges
     } else {
       self.parseLookup = nil
     }
@@ -1048,19 +1047,11 @@ private final class ParserSourceBufferOwner {
   }
 }
 
-/// Record the lookahead ranges for syntax nodes.
+/// Kept for source compatibility; carries no information.
+///
+/// How far the parser looked ahead to parse each node is recorded in the arena
+/// that holds the node, so it travels with the syntax tree. See
+/// `ParsingRawSyntaxArena.lookaheadLengths`.
 public struct LookaheadRanges: Sendable {
-  /// For each node that is recorded for re-use, the number of UTF-8 bytes that the parser looked ahead to parse the node, measured from the start of the node’s leading trivia.
-  ///
-  /// This information can be used to determine whether a node can be reused in incremental parse. A node can only be re-used if no byte in its looked range has changed.
-  var lookaheadRanges: [RawSyntax.ID: Int] = [:]
-
   public init() {}
-
-  mutating func registerNodeForIncrementalParse(node: RawSyntax, lookaheadLength: Int) {
-    // Reused nodes may already have a lookahead range from the previous parse.
-    // Keep the larger range so registering the node after advancing the lexer
-    // cannot discard lookahead that was recorded before the node was reused.
-    self.lookaheadRanges[node.id] = max(self.lookaheadRanges[node.id] ?? 0, lookaheadLength)
-  }
 }

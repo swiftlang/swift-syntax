@@ -31,11 +31,12 @@ extension Parser {
     return nil
   }
 
+  /// Records how far the parser looked ahead to parse `node`, which must have
+  /// been allocated by this parser, so an incremental parse can decide whether
+  /// to reuse it.
   mutating func registerNodeForIncrementalParse(node: RawSyntax, startToken: Lexer.Lexeme) {
-    lookaheadRanges.registerNodeForIncrementalParse(
-      node: node,
-      lookaheadLength: lexemes.lookaheadTracker.pointee.furthestOffset - self.lexemes.offsetToStart(startToken)
-    )
+    arena.lookaheadLengths[node.id] =
+      lexemes.lookaheadTracker.pointee.furthestOffset - self.lexemes.offsetToStart(startToken)
   }
 }
 
@@ -62,10 +63,6 @@ public final class IncrementalParseTransition {
   fileprivate let previousIncrementalParseResult: IncrementalParseResult
   fileprivate let edits: ConcurrentEdits
   fileprivate let reusedNodeCallback: ReusedNodeCallback?
-
-  var previousLookaheadRanges: LookaheadRanges {
-    return previousIncrementalParseResult.lookaheadRanges
-  }
 
   /// When the previous tree retains at least this many arenas, the next
   /// incremental parse is replaced by a full reparse that collapses the result
@@ -209,9 +206,7 @@ struct IncrementalParseLookup {
       return true
     }
 
-    guard
-      let nodeAffectRangeLength = transition.previousIncrementalParseResult.lookaheadRanges.lookaheadRanges[node.raw.id]
-    else {
+    guard let nodeAffectRangeLength = node.raw.lookaheadLength else {
       return false
     }
 

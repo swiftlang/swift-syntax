@@ -943,7 +943,6 @@ extension Parser {
   mutating func parseMemberBlockItem(until stopCondition: (inout Parser) -> Bool) -> RawMemberBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .memberBlockItem) {
-      self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
       return RawMemberBlockItemSyntax(syntax.raw)
     }
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {

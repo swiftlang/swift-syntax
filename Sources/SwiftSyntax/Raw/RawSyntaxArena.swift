@@ -202,6 +202,17 @@ public class ParsingRawSyntaxArena: RawSyntaxArena {
   /// - Important: Must never be changed to a mutable value. See `RawSyntaxArenaRef.parseTrivia`.
   private let parseTriviaFunction: ParseTriviaFunction
 
+  /// For each node in this arena that the parser recorded for reuse by an
+  /// incremental parse, the number of UTF-8 bytes the parser looked ahead to
+  /// parse the node, measured from the start of the node's leading trivia.
+  ///
+  /// Only the parser allocating into this arena writes to it; after the parse
+  /// it is only read. Keeping the lengths here ties each entry's lifetime to the
+  /// node it describes, so no entry can outlive its node and be mistaken for a
+  /// node allocated at the same address.
+  @_spi(RawSyntax)
+  public var lookaheadLengths: [RawSyntax.ID: Int] = [:]
+
   /// The size of slab to take when nothing is known about what will be
   /// allocated.
   private static let defaultSlabSize = 4096
@@ -347,5 +358,14 @@ struct RawSyntaxArenaRef: Hashable, @unchecked Sendable {
 
   static func == (lhs: RetainedRawSyntaxArena, rhs: RawSyntaxArenaRef) -> Bool {
     return rhs == lhs
+  }
+}
+
+extension RawSyntax {
+  /// The lookahead length the parser recorded for this node in its arena, or
+  /// `nil` if it recorded none. See ``ParsingRawSyntaxArena/lookaheadLengths``.
+  @_spi(RawSyntax)
+  public var lookaheadLength: Int? {
+    return (arenaReference.value as? ParsingRawSyntaxArena)?.lookaheadLengths[id]
   }
 }

@@ -154,7 +154,6 @@ extension Parser {
   ) -> RawCodeBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .codeBlockItem) {
-      self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
       return RawCodeBlockItemSyntax(syntax.raw)
     }
 

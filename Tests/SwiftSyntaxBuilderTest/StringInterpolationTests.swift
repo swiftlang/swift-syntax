@@ -15,6 +15,7 @@ import SwiftParser
 import SwiftSyntax
 @_spi(Testing) import SwiftSyntaxBuilder
 import XCTest
+import _SwiftSyntaxGenericTestSupport
 import _SwiftSyntaxTestSupport
 
 class TwoSpacesFormat: BasicFormat {

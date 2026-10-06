@@ -46,6 +46,12 @@ if(SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
   add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -disable-implicit-string-processing-module-import>")
 endif()
 
+# Require every file to import the modules that define the members it uses.
+# Keep in sync with Package.swift.
+add_compile_options(
+  "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-enable-upcoming-feature MemberImportVisibility>"
+)
+
 if(NOT DEFINED Swift_COMPILER_PACKAGE_CMO_SUPPORT AND SWIFTSYNTAX_EMIT_MODULE)
   swift_get_package_cmo_support(Swift_COMPILER_PACKAGE_CMO_SUPPORT)
 endif()

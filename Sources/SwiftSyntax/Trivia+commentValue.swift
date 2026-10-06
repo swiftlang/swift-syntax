@@ -31,6 +31,9 @@ extension Trivia {
   ///
   /// Returns `nil` if no documentation comment is present.
   public var docCommentValue: String? {
+    // `docCommentValue` only needs the text of each line, not its position, so the
+    // token start is irrelevant here. Callers that need real source positions
+    // (e.g. SourceKit-LSP) use `docCommentLines(startingAt:)` with the actual token start.
     extractDocCommentLines(tokenStart: AbsolutePosition(utf8Offset: 0))?
       .map(\.text)
       .joined(separator: "\n")
@@ -68,22 +71,23 @@ extension Trivia {
     var currentLineComments: [CommentEntry] = []
     var isInsideDocLineCommentSection = false
     var consecutiveNewlines = 0
-    var offset = 0  // UTF-8 byte offset from tokenStart, i.e. from the start of `pieces`
+    var currentPiecePosition = tokenStart
 
     for piece in pieces {
-      defer { offset += piece.sourceLength.utf8Length }
+      defer { currentPiecePosition += piece.sourceLength }
 
       switch piece {
       case .docBlockComment(let text):
-        let pieceStart = AbsolutePosition(utf8Offset: tokenStart.utf8Offset + offset)
-        if let entry = processBlockComment(text, pieceStart: pieceStart) {
+        if let entry = processBlockComment(text, pieceStart: currentPiecePosition) {
           comments = [entry]
         }
         currentLineComments = []
         consecutiveNewlines = 0
       case .docLineComment(let text):
-        let position = AbsolutePosition(utf8Offset: tokenStart.utf8Offset + offset)
-        let entry = CommentEntry(wholeText: text[...], lines: [DocCommentLine(text: text[...], position: position)])
+        let entry = CommentEntry(
+          wholeText: text[...],
+          lines: [DocCommentLine(text: text[...], position: currentPiecePosition)]
+        )
         if isInsideDocLineCommentSection {
           currentLineComments.append(entry)
         } else {
@@ -186,17 +190,14 @@ extension Trivia {
     // very start of `wholeText` — lines 1..n of a block are always passed through unchanged.
     return comments.flatMap { entry -> [DocCommentLine] in
       guard entry.wholeText.hasPrefix(prefix) else {
-        return entry.lines.map { DocCommentLine(text: $0.text, position: $0.position) }
+        return entry.lines
       }
-      return entry.lines.enumerated().map { index, line in
-        guard index == 0 else {
-          return DocCommentLine(text: line.text, position: line.position)
-        }
-        return DocCommentLine(
-          text: line.text.dropFirst(prefix.count),
-          position: AbsolutePosition(utf8Offset: line.position.utf8Offset + prefix.utf8.count)
-        )
-      }
+      var lines = entry.lines
+      lines[0] = DocCommentLine(
+        text: lines[0].text.dropFirst(prefix.count),
+        position: AbsolutePosition(utf8Offset: lines[0].position.utf8Offset + prefix.utf8.count)
+      )
+      return lines
     }
   }
 }

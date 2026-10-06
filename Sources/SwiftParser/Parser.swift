@@ -911,7 +911,6 @@ extension Parser {
     }
     precondition(tokenText.hasPrefix(prefix))
 
-    let endIndex = current.textRange.lowerBound.advanced(by: prefix.count)
     var tokenDiagnostic = current.diagnostic
     if let error = tokenDiagnostic, error.byteOffset > prefix.count + current.leadingTriviaByteLength {
       // The lexer error isn't in the prefix. Drop it.

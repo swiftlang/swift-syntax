@@ -884,6 +884,10 @@ private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>
     return try other.isActiveTargetObjectFormat(name: name)
   }
 
+  func minimumDeploymentVersion(forTargetOS targetOS: String) throws -> VersionTuple? {
+    return try other.minimumDeploymentVersion(forTargetOS: targetOS)
+  }
+
   var targetPointerBitWidth: Int { return other.targetPointerBitWidth }
 
   var targetAtomicBitWidths: [Int] { return other.targetAtomicBitWidths }

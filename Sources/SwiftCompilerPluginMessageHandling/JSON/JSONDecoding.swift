@@ -549,18 +549,42 @@ private enum _JSONStringParser {
         source: UnsafeBufferPointer(start: cursor, count: 4)
       )
       guard let result else { return true }
-
-      // Transcode UTF-16 code unit to UTF-8.
-      // FIXME: Support surrogate pairs.
-      let hadError = transcode(
-        CollectionOfOne(result).makeIterator(),
-        from: UTF16.self,
-        to: UTF8.self,
-        stoppingOnError: true,
-        into: processCodeUnit
-      )
-      guard !hadError else { return true }
       cursor += 4
+
+      if UTF16.isLeadSurrogate(result) {
+        // Expect a trail surrogate.
+        guard cursor.distance(to: end) >= 6,
+          cursor[0] == UInt8(ascii: "\\"),
+          cursor[1] == UInt8(ascii: "u")
+        else { return true }
+
+        let trail: UInt16? = _JSONNumberParser.parseHexIntegerDigits(
+          source: UnsafeBufferPointer(start: cursor + 2, count: 4)
+        )
+        guard let trail, UTF16.isTrailSurrogate(trail) else { return true }
+        cursor += 6
+
+        let hadError = transcode(
+          [result, trail].makeIterator(),
+          from: UTF16.self,
+          to: UTF8.self,
+          stoppingOnError: true,
+          into: processCodeUnit
+        )
+        guard !hadError else { return true }
+      } else if UTF16.isTrailSurrogate(result) {
+        return true
+      } else {
+        // Transcode UTF-16 code unit to UTF-8.
+        let hadError = transcode(
+          CollectionOfOne(result).makeIterator(),
+          from: UTF16.self,
+          to: UTF8.self,
+          stoppingOnError: true,
+          into: processCodeUnit
+        )
+        guard !hadError else { return true }
+      }
     default:
       // invalid escape sequence.
       return true

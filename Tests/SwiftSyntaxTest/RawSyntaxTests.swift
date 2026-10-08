@@ -117,6 +117,16 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
+  func testMaterializedTokenWithKind() {
+    let privateKeyword = TokenSyntax.keyword(.private, trailingTrivia: .space)
+    let fileprivateKeyword = privateKeyword.with(\.tokenKind, .keyword(.fileprivate))
+
+    XCTAssertEqual(fileprivateKeyword.tokenKind, .keyword(.fileprivate))
+    XCTAssertEqual(fileprivateKeyword.description, "fileprivate ")
+    XCTAssertEqual(fileprivateKeyword.totalLength, SourceLength(utf8Length: 12))
+    XCTAssertEqual(fileprivateKeyword.syntaxTextBytes, Array("fileprivate ".utf8))
+  }
+
   func testParsedToken() {
     withExtendedLifetime(ParsingRawSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let ident = RawTokenSyntax(

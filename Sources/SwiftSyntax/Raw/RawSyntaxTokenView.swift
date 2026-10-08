@@ -230,6 +230,7 @@ public struct RawSyntaxTokenView: Sendable {
       let rawKind = decomposed.rawKind
       let text: SyntaxText = (decomposed.string.map({ arena.intern($0) }) ?? decomposed.rawKind.defaultText ?? "")
       payload.tokenKind = rawKind
+      payload.byteLength = payload.byteLength - UInt32(payload.tokenText.count) + UInt32(text.count)
       payload.tokenText = text
       return RawSyntax.allocateMaterializedToken(payload, arena: arena)
     default:

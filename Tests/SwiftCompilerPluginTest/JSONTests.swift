@@ -139,6 +139,15 @@ final class JSONTests: XCTestCase {
     assertInvalidStrng(#""\uEFGH""#)  // Invalid HEX characters.
   }
 
+  func testEscapedUnicodeScalars() throws {
+    for codePoint in [0x7F, 0x80, 0x7FF, 0x800, 0xD7FF, 0xE000, 0xFFFF] {
+      let hex = String(codePoint, radix: 16, uppercase: true)
+      var json = "\"prefix\\u\(String(repeating: "0", count: 4 - hex.count))\(hex)suffix\""
+      let decoded = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
+      XCTAssertEqual(decoded, "prefix\(UnicodeScalar(codePoint)!)suffix")
+    }
+  }
+
   func testStringSurrogatePairDecoding() {
     // FIXME: Escaped surrogate pairs are not supported.
     // Currently parsed as "invalid", but this should be valid '𐐷' (U+10437) character

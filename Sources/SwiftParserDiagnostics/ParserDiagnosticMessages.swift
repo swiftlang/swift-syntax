@@ -269,6 +269,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var versionComparisonNotNeeded: Self {
     .init("version comparison not needed")
   }
+  public static var whereClauseMustFollowFunctionReturnType: Self {
+    .init("'where' clause must follow the function's return type")
+  }
 }
 
 // MARK: - Diagnostics (please sort alphabetically)
@@ -711,6 +714,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var joinIdentifiersWithCamelCase: Self {
     .init("join the identifiers together with camel-case")
+  }
+  public static var moveWhereClauseAfterReturnType: Self {
+    .init("move 'where' clause after return type")
   }
   public static var removeBackslash: Self {
     .init(#"remove '\'"#)

@@ -179,6 +179,7 @@ private struct JSONMapBuilder {
 private enum JSONError: Error, CustomStringConvertible {
   case unexpectedEndOfFile
   case unexpectedCharacter(UInt8, context: String)
+  case invalidUTF8
 
   var description: String {
     switch self {
@@ -187,6 +188,8 @@ private enum JSONError: Error, CustomStringConvertible {
     case .unexpectedCharacter(let c, let ctxt):
       let char = c < 0x80 ? String(UnicodeScalar(c)) : "0x" + String(c, radix: 16, uppercase: true)
       return "unexpected character '\(char)'; \(ctxt)"
+    case .invalidUTF8:
+      return "invalid UTF-8 sequence in string"
     }
   }
 }
@@ -287,19 +290,60 @@ private struct JSONScanner {
 
     var hasEscape = false
     var hasNonASCII = false
-    while hasData && ptr.pointee != UInt8(ascii: "\"") {
-      // FIXME: Error for non-escaped control characters.
-      // FIXME: Error for invalid UTF8 sequences.
+    while hasData {
+      // Skip ordinary ASCII eight bytes at a time. Loads stay within the input,
+      // and any quote, escape, control character, or non-ASCII byte falls back
+      // to the scalar scan below.
+      let first = ptr.pointee
+      if first >= 0x20, first < 0x80, first != UInt8(ascii: "\""), first != UInt8(ascii: "\\"),
+        ptr.distance(to: endPtr) >= MemoryLayout<UInt64>.size
+      {
+        let word = UInt64(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: UInt64.self))
+        if word & 0x8080_8080_8080_8080 == 0 {
+          let special =
+            Self.zeroByteMask(word & 0xE0E0_E0E0_E0E0_E0E0)
+            | Self.zeroByteMask(word ^ 0x2222_2222_2222_2222)
+            | Self.zeroByteMask(word ^ 0x5C5C_5C5C_5C5C_5C5C)
+          ptr += special.trailingZeroBitCount / 8
+          if special == 0 {
+            continue
+          }
+        } else {
+          // A non-ASCII byte is within these eight bytes, so this short ASCII
+          // run will stop before reaching the end of the input.
+          while true {
+            let char = ptr.pointee
+            if char &- 0x20 >= 0x60 || char == UInt8(ascii: "\"") || char == UInt8(ascii: "\\") {
+              break
+            }
+            ptr += 1
+          }
+        }
+      }
+      if ptr.pointee == UInt8(ascii: "\"") {
+        break
+      }
       if ptr.pointee == UInt8(ascii: "\\") {
         hasEscape = true
-        // eat '\'. Rest of the escape sequence are all ASCII. We just skip them
-        // ignoring how many bytes are actually for the escape sequence. For
-        // decoding, they are revisited in _JSONStingDecoder.decodeStringWithEscapes()
-        _ = try advance()
-      } else if ptr.pointee >= 0x80 {
-        hasNonASCII = true
+        // Skip the backslash and validate the next character. Escape sequences
+        // are decoded later by _JSONStringParser.decodeStringWithEscapes().
+        ptr += 1
+        guard hasData else {
+          throw JSONError.unexpectedEndOfFile
+        }
       }
-      _ = try advance()
+      let char = ptr.pointee
+      if char >= 0x80 {
+        hasNonASCII = true
+        repeat {
+          try scanUTF8Scalars()
+        } while hasData && ptr.pointee >= 0x80
+      } else {
+        guard char >= 0x20 else {
+          throw JSONError.unexpectedCharacter(char, context: "unescaped control character in string")
+        }
+        ptr += 1
+      }
     }
     try expect(ascii: "\"")
 
@@ -312,6 +356,64 @@ private struct JSONScanner {
       kind = .asciiSimpleString
     }
     map.record(kind, range: (start + 1)..<(ptr - 1))
+  }
+
+  /// Mark zero bytes with their high bit. Subtraction may also mark the byte
+  /// following a zero, but the first marked byte is always a zero when the
+  /// word is interpreted in little-endian order.
+  @inline(__always)
+  private static func zeroByteMask(_ word: UInt64) -> UInt64 {
+    (word &- 0x0101_0101_0101_0101) & ~word & 0x8080_8080_8080_8080
+  }
+
+  /// Validate and consume non-ASCII scalars during the string scan, so that
+  /// validating UTF-8 doesn't require a second pass over the whole string.
+  @inline(__always)
+  mutating func scanUTF8Scalars() throws {
+    let first = ptr.pointee
+    let remaining = ptr.distance(to: endPtr)
+    if first < 0xE0 {
+      guard first >= 0xC2, remaining >= 2, ptr[1] & 0xC0 == 0x80 else {
+        throw JSONError.invalidUTF8
+      }
+      ptr += 2
+    } else if first < 0xF0 {
+      // Validate two ordinary three-byte scalars together. E0 and ED need
+      // stricter second-byte bounds and use the scalar checks below.
+      if remaining >= MemoryLayout<UInt64>.size, first != 0xE0, first != 0xED {
+        let pair = UInt64(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: UInt64.self))
+        let next = UInt8(truncatingIfNeeded: pair >> 24)
+        if pair & 0x0000_C0C0_F0C0_C0F0 == 0x0000_8080_E080_80E0, next != 0xE0, next != 0xED {
+          ptr += 6
+          return
+        }
+      }
+      guard remaining >= 3 else {
+        throw JSONError.invalidUTF8
+      }
+      let continuation = UInt16(littleEndian: UnsafeRawPointer(ptr + 1).loadUnaligned(as: UInt16.self))
+      let second = UInt8(truncatingIfNeeded: continuation)
+      guard continuation & 0xC0C0 == 0x8080,
+        first != 0xE0 || second >= 0xA0,  // Exclude overlong encodings.
+        first != 0xED || second < 0xA0  // Exclude UTF-16 surrogates.
+      else {
+        throw JSONError.invalidUTF8
+      }
+      ptr += 3
+    } else {
+      guard first <= 0xF4, remaining >= 4 else {
+        throw JSONError.invalidUTF8
+      }
+      let scalar = UInt32(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: UInt32.self))
+      let second = UInt8(truncatingIfNeeded: scalar >> 8)
+      guard scalar & 0xC0C0_C000 == 0x8080_8000,
+        first != 0xF0 || second >= 0x90,  // Exclude overlong encodings.
+        first != 0xF4 || second < 0x90  // Exclude scalars above U+10FFFF.
+      else {
+        throw JSONError.invalidUTF8
+      }
+      ptr += 4
+    }
   }
 
   mutating func scanNumber(start: Cursor) throws {
@@ -495,11 +597,8 @@ private enum _JSONStringParser {
         // Found an escape sequence. Flush the skipped source into the buffer.
         flush()
 
-        let hadError = decodeEscapeSequence(cursor: &cursor, end: end) {
-          dest.initialize(to: $0)
-          dest += 1
-        }
-        guard !hadError else { return 0 }
+        guard let count = decodeEscapeSequence(cursor: &cursor, end: end, into: dest) else { return 0 }
+        dest += count
 
         // Mark the position of the end of the escape sequence.
         mark = cursor
@@ -516,56 +615,63 @@ private enum _JSONStringParser {
   }
 
   /// Decode a JSON escape sequence, advance 'cursor' to end of the escape
-  /// sequence, and call 'processCodeUnit' with the decoded value.
-  /// Returns 'true' on error.
+  /// sequence, and write the decoded bytes to 'destination'.
+  /// Returns the number of bytes written, or 'nil' on error.
   ///
   ///  - Note: We don't report detailed errors for now because we only care
   ///          well-formed payloads from the compiler.
   private static func decodeEscapeSequence(
     cursor: inout UnsafePointer<UInt8>,
     end: UnsafePointer<UInt8>,
-    into processCodeUnit: (UInt8) -> Void
-  ) -> Bool {
+    into destination: UnsafeMutablePointer<UInt8>
+  ) -> Int? {
     assert(cursor.pointee == UInt8(ascii: "\\"))
-    guard cursor.distance(to: end) >= 2 else { return true }
+    guard cursor.distance(to: end) >= 2 else { return nil }
 
     // Eat backslash and the next character.
     cursor += 2
+    let byte: UInt8
     switch cursor[-1] {
-    case UInt8(ascii: "\""): processCodeUnit(UInt8(ascii: "\""))
-    case UInt8(ascii: "'"): processCodeUnit(UInt8(ascii: "'"))
-    case UInt8(ascii: "\\"): processCodeUnit(UInt8(ascii: "\\"))
-    case UInt8(ascii: "/"): processCodeUnit(UInt8(ascii: "/"))
-    case UInt8(ascii: "b"): processCodeUnit(0x08)
-    case UInt8(ascii: "f"): processCodeUnit(0x0C)
-    case UInt8(ascii: "n"): processCodeUnit(0x0A)
-    case UInt8(ascii: "r"): processCodeUnit(0x0D)
-    case UInt8(ascii: "t"): processCodeUnit(0x09)
+    case UInt8(ascii: "\""): byte = UInt8(ascii: "\"")
+    case UInt8(ascii: "'"): byte = UInt8(ascii: "'")
+    case UInt8(ascii: "\\"): byte = UInt8(ascii: "\\")
+    case UInt8(ascii: "/"): byte = UInt8(ascii: "/")
+    case UInt8(ascii: "b"): byte = 0x08
+    case UInt8(ascii: "f"): byte = 0x0C
+    case UInt8(ascii: "n"): byte = 0x0A
+    case UInt8(ascii: "r"): byte = 0x0D
+    case UInt8(ascii: "t"): byte = 0x09
     case UInt8(ascii: "u"):
-      guard cursor.distance(to: end) >= 4 else { return true }
+      guard cursor.distance(to: end) >= 4 else { return nil }
 
       // Parse 4 hex digits into a UTF-16 code unit.
       let result: UInt16? = _JSONNumberParser.parseHexIntegerDigits(
         source: UnsafeBufferPointer(start: cursor, count: 4)
       )
-      guard let result else { return true }
+      guard let result else { return nil }
 
       // Transcode UTF-16 code unit to UTF-8.
       // FIXME: Support surrogate pairs.
+      var count = 0
       let hadError = transcode(
         CollectionOfOne(result).makeIterator(),
         from: UTF16.self,
         to: UTF8.self,
         stoppingOnError: true,
-        into: processCodeUnit
+        into: {
+          destination.advanced(by: count).initialize(to: $0)
+          count += 1
+        }
       )
-      guard !hadError else { return true }
+      guard !hadError else { return nil }
       cursor += 4
+      return count
     default:
       // invalid escape sequence.
-      return true
+      return nil
     }
-    return false
+    destination.initialize(to: byte)
+    return 1
   }
 
   /// SwiftStdlib 5.3 compatibility shim for

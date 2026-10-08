@@ -139,6 +139,139 @@ final class JSONTests: XCTestCase {
     assertInvalidStrng(#""\uEFGH""#)  // Invalid HEX characters.
   }
 
+  func testUnescapedControlCharacters() {
+    for codePoint in 0x00...0x1F {
+      let control = String(UnicodeScalar(codePoint)!)
+      assertParseError(
+        "\"\(control)\"",
+        message: "unexpected character '\(control)'; unescaped control character in string"
+      )
+    }
+    // Use LF to cover escapes, object keys, and field values.
+    for json in ["\"\\n\n\"", "\"\\\n\"", "{\"\n\":true}", "{\"ignored\":\"\n\"}", "{\"ignored\":\"\\\n\"}"] {
+      assertParseError(json, message: "unexpected character '\n'; unescaped control character in string")
+    }
+  }
+
+  func testEscapedControlCharacters() throws {
+    for codePoint in 0x00...0x1F {
+      let hex = String(codePoint, radix: 16, uppercase: true)
+      var json = "\"\\u\(String(repeating: "0", count: 4 - hex.count))\(hex)\""
+      let decoded = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
+      XCTAssertEqual(decoded, String(UnicodeScalar(codePoint)!))
+    }
+  }
+
+  func testEscapedUnicodeScalars() throws {
+    for codePoint in [0x7F, 0x80, 0x7FF, 0x800, 0xD7FF, 0xE000, 0xFFFF] {
+      let hex = String(codePoint, radix: 16, uppercase: true)
+      var json = "\"prefix\\u\(String(repeating: "0", count: 4 - hex.count))\(hex)suffix\""
+      let decoded = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
+      XCTAssertEqual(decoded, "prefix\(UnicodeScalar(codePoint)!)suffix")
+    }
+  }
+
+  func testInvalidUTF8() {
+    let invalidSequences: [[UInt8]] = [
+      // Isolated continuation bytes and overlong encodings.
+      [0x80], [0xBF], [0xC0, 0xAF], [0xC1, 0xBF],
+      // Truncated sequences and invalid continuation bytes.
+      [0xC2], [0xC2, 0x7F], [0xDF, 0xC0],
+      [0xE0], [0xE0, 0xA0], [0xE1, 0x80, 0x7F], [0xEF, 0xBF],
+      [0xF0], [0xF0, 0x90], [0xF0, 0x90, 0x80], [0xF1, 0x80, 0x80, 0x7F],
+      // Overlong three- and four-byte encodings.
+      [0xE0, 0x9F, 0xBF], [0xF0, 0x8F, 0xBF, 0xBF],
+      // UTF-8 encodings of surrogate code points.
+      [0xED, 0xA0, 0x80], [0xED, 0xBF, 0xBF],
+      // Values above U+10FFFF and invalid leading bytes.
+      [0xF4, 0x90, 0x80, 0x80], [0xF5, 0x80, 0x80, 0x80], [0xFF],
+    ]
+    for sequence in invalidSequences {
+      assertParseError([0x22] + sequence + [0x22], message: "invalid UTF-8 sequence in string")
+    }
+
+    // Use 0xFF to cover escapes and object keys.
+    for json in [
+      Array(#""\n"#.utf8) + [0xFF, 0x22],
+      [0x22, 0xFF] + Array(#"\t""#.utf8),
+      [0x22, 0x5C, 0xFF, 0x22],
+      Array("{\"".utf8) + [0xFF] + Array("\":true}".utf8),
+    ] {
+      assertParseError(json, message: "invalid UTF-8 sequence in string")
+    }
+
+    // Invalid UTF-8 must also be rejected in fields the decoded type ignores.
+    let json = Array("{\"ignored\":\"\\".utf8) + [0xFF] + Array("\"}".utf8)
+    XCTAssertThrowsError(try json.withUnsafeBufferPointer { try JSON.decode(EmptyStruct.self, from: $0) }) { error in
+      guard case DecodingError.dataCorrupted = error else {
+        XCTFail("expected corrupted JSON, got \(error)")
+        return
+      }
+    }
+  }
+
+  func testUTF8Boundaries() throws {
+    for codePoint in [0x20, 0x7F, 0x80, 0x7FF, 0x800, 0xD7FF, 0xE000, 0xFFFD, 0xFFFF, 0x10000, 0x10FFFF] {
+      let value = String(UnicodeScalar(codePoint)!)
+      var json = "\n\t \"\(value)\" \r\n"
+      let decoded = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
+      XCTAssertEqual(decoded, value)
+    }
+    assertRoundTrip(of: ["\u{10FFFF}": "\u{10FFFF}"], expectedJSON: "{\"\u{10FFFF}\":\"\u{10FFFF}\"}")
+  }
+
+  func testTruncatedUTF8Buffer() {
+    let sequences: [[UInt8]] = [[0xC2, 0x80], [0xE0, 0xA0, 0x80], [0xF0, 0x90, 0x80, 0x80]]
+    for sequence in sequences {
+      let json = [UInt8(0x22)] + sequence + [0x22]
+      json.withUnsafeBufferPointer { buffer in
+        // The complete scalar exists in storage, but is outside the supplied buffer.
+        for end in 2...sequence.count {
+          assertParseError(
+            UnsafeBufferPointer(rebasing: buffer[..<end]),
+            message: "invalid UTF-8 sequence in string"
+          )
+        }
+      }
+    }
+  }
+
+  func testStringScanWordBoundaries() throws {
+    for offset in 0..<8 {
+      let prefix = String(repeating: "a", count: 8 + offset)
+      for suffix in ["end", "é", "中文", "😀", "\"\\\n"] {
+        let value = prefix + suffix
+        let json = try JSON.encode(value)
+        let decoded = try json.withUnsafeBufferPointer { try JSON.decode(String.self, from: $0) }
+        XCTAssertEqual(decoded, value)
+      }
+      assertParseError(
+        "\"\(prefix)\nremaining\"",
+        message: "unexpected character '\n'; unescaped control character in string"
+      )
+      assertParseError(
+        [0x22] + Array(prefix.utf8) + [0xFF] + Array("remaining\"".utf8),
+        message: "invalid UTF-8 sequence in string"
+      )
+    }
+  }
+
+  func testUTF8ScalarPairs() throws {
+    // Cover the fast path and the E0/ED/four-byte fallbacks, with room for an eight-byte load.
+    for value in ["中文", "\u{800}中", "中\u{D7FF}", "中\u{E000}", "中😀"] {
+      var json = "\"\(value)\"   "
+      let decoded = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
+      XCTAssertEqual(decoded, value)
+    }
+    let invalidSequences: [[UInt8]] = [[0xE1, 0x80, 0x7F], [0xE0, 0x9F, 0xBF], [0xED, 0xA0, 0x80]]
+    for sequence in invalidSequences {
+      assertParseError(
+        [0x22, 0xE1, 0x80, 0x80] + sequence + [0x22, 0x20, 0x20, 0x20],
+        message: "invalid UTF-8 sequence in string"
+      )
+    }
+  }
+
   func testStringSurrogatePairDecoding() {
     // FIXME: Escaped surrogate pairs are not supported.
     // Currently parsed as "invalid", but this should be valid '𐐷' (U+10437) character
@@ -237,9 +370,23 @@ final class JSONTests: XCTestCase {
   }
 
   private func assertParseError(_ json: String, message: String, file: StaticString = #filePath, line: UInt = #line) {
+    assertParseError(Array(json.utf8), message: message, file: file, line: line)
+  }
+
+  private func assertParseError(_ json: [UInt8], message: String, file: StaticString = #filePath, line: UInt = #line) {
+    json.withUnsafeBufferPointer {
+      assertParseError($0, message: message, file: file, line: line)
+    }
+  }
+
+  private func assertParseError(
+    _ json: UnsafeBufferPointer<UInt8>,
+    message: String,
+    file: StaticString = #filePath,
+    line: UInt = #line
+  ) {
     do {
-      var json = json
-      _ = try json.withUTF8 { try JSON.decode(Bool.self, from: $0) }
+      _ = try JSON.decode(Bool.self, from: json)
       XCTFail("decoding should fail", file: file, line: line)
     } catch DecodingError.dataCorrupted(let context) {
       XCTAssertEqual(

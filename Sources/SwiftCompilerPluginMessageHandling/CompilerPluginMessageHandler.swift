@@ -161,13 +161,38 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
   /// Syntax registry shared between multiple requests.
   let syntaxRegistry: ParsedSyntaxRegistry
 
+  /// Decoded static build configurations, keyed by their JSON representation.
+  ///
+  /// A single handler can serve multiple compiler instances with different
+  /// build configurations, e.g. in SourceKit or with the in-process plugin
+  /// server, so this keeps more than the most recent one.
+  let staticBuildConfigurationCache: LRUCache<String, StaticBuildConfiguration>
+
   /// Plugin host capability
   var hostCapability: HostCapability
 
   public init(provider: Provider) {
     self.provider = provider
     self.syntaxRegistry = ParsedSyntaxRegistry(cacheCapacity: 16)
+    self.staticBuildConfigurationCache = LRUCache(capacity: 4)
     self.hostCapability = HostCapability()
+  }
+
+  /// Decode the static build configuration from its JSON representation, or
+  /// return the cached result if the same JSON was decoded before.
+  private func staticBuildConfiguration(fromJSON json: String?) -> StaticBuildConfiguration? {
+    guard let json else {
+      return nil
+    }
+    if let cached = staticBuildConfigurationCache[json] {
+      return cached
+    }
+    var mutableJSON = json
+    let decoded = mutableJSON.withUTF8 {
+      try? JSON.decode(StaticBuildConfiguration.self, from: $0)
+    }
+    staticBuildConfigurationCache[json] = decoded
+    return decoded
   }
 
   /// Handles a single message received from the plugin host.
@@ -194,16 +219,7 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
       let lexicalContext,
       let staticBuildConfigurationString
     ):
-      // Decode the static build configuration.
-      let staticBuildConfiguration: StaticBuildConfiguration?
-      if let staticBuildConfigurationString {
-        var mutableConfigurationString = staticBuildConfigurationString
-        staticBuildConfiguration = mutableConfigurationString.withUTF8 {
-          try? JSON.decode(StaticBuildConfiguration.self, from: $0)
-        }
-      } else {
-        staticBuildConfiguration = nil
-      }
+      let staticBuildConfiguration = self.staticBuildConfiguration(fromJSON: staticBuildConfigurationString)
 
       return expandFreestandingMacro(
         macro: macro,
@@ -226,16 +242,7 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
       let lexicalContext,
       let staticBuildConfigurationString
     ):
-      // Decode the static build configuration.
-      let staticBuildConfiguration: StaticBuildConfiguration?
-      if let staticBuildConfigurationString {
-        var mutableConfigurationString = staticBuildConfigurationString
-        staticBuildConfiguration = mutableConfigurationString.withUTF8 {
-          try? JSON.decode(StaticBuildConfiguration.self, from: $0)
-        }
-      } else {
-        staticBuildConfiguration = nil
-      }
+      let staticBuildConfiguration = self.staticBuildConfiguration(fromJSON: staticBuildConfigurationString)
 
       return expandAttachedMacro(
         macro: macro,

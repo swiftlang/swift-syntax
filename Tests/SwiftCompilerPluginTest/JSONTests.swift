@@ -236,6 +236,42 @@ final class JSONTests: XCTestCase {
     }
   }
 
+  func testStringScanWordBoundaries() throws {
+    for offset in 0..<8 {
+      let prefix = String(repeating: "a", count: 8 + offset)
+      for suffix in ["end", "é", "中文", "😀", "\"\\\n"] {
+        let value = prefix + suffix
+        let json = try JSON.encode(value)
+        let decoded = try json.withUnsafeBufferPointer { try JSON.decode(String.self, from: $0) }
+        XCTAssertEqual(decoded, value)
+      }
+      assertParseError(
+        "\"\(prefix)\nremaining\"",
+        message: "unexpected character '\n'; unescaped control character in string"
+      )
+      assertParseError(
+        [0x22] + Array(prefix.utf8) + [0xFF] + Array("remaining\"".utf8),
+        message: "invalid UTF-8 sequence in string"
+      )
+    }
+  }
+
+  func testUTF8ScalarPairs() throws {
+    // Cover the fast path and the E0/ED/four-byte fallbacks, with room for an eight-byte load.
+    for value in ["中文", "\u{800}中", "中\u{D7FF}", "中\u{E000}", "中😀"] {
+      var json = "\"\(value)\"   "
+      let decoded = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
+      XCTAssertEqual(decoded, value)
+    }
+    let invalidSequences: [[UInt8]] = [[0xE1, 0x80, 0x7F], [0xE0, 0x9F, 0xBF], [0xED, 0xA0, 0x80]]
+    for sequence in invalidSequences {
+      assertParseError(
+        [0x22, 0xE1, 0x80, 0x80] + sequence + [0x22, 0x20, 0x20, 0x20],
+        message: "invalid UTF-8 sequence in string"
+      )
+    }
+  }
+
   func testStringSurrogatePairDecoding() {
     // FIXME: Escaped surrogate pairs are not supported.
     // Currently parsed as "invalid", but this should be valid '𐐷' (U+10437) character

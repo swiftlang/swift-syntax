@@ -290,7 +290,39 @@ private struct JSONScanner {
 
     var hasEscape = false
     var hasNonASCII = false
-    while hasData && ptr.pointee != UInt8(ascii: "\"") {
+    while hasData {
+      // Skip ordinary ASCII eight bytes at a time. Loads stay within the input,
+      // and any quote, escape, control character, or non-ASCII byte falls back
+      // to the scalar scan below.
+      let first = ptr.pointee
+      if first >= 0x20, first < 0x80, first != UInt8(ascii: "\""), first != UInt8(ascii: "\\"),
+        ptr.distance(to: endPtr) >= MemoryLayout<UInt64>.size
+      {
+        let word = UInt64(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: UInt64.self))
+        if word & 0x8080_8080_8080_8080 == 0 {
+          let special =
+            Self.zeroByteMask(word & 0xE0E0_E0E0_E0E0_E0E0)
+            | Self.zeroByteMask(word ^ 0x2222_2222_2222_2222)
+            | Self.zeroByteMask(word ^ 0x5C5C_5C5C_5C5C_5C5C)
+          ptr += special.trailingZeroBitCount / 8
+          if special == 0 {
+            continue
+          }
+        } else {
+          // A non-ASCII byte is within these eight bytes, so this short ASCII
+          // run will stop before reaching the end of the input.
+          while true {
+            let char = ptr.pointee
+            if char &- 0x20 >= 0x60 || char == UInt8(ascii: "\"") || char == UInt8(ascii: "\\") {
+              break
+            }
+            ptr += 1
+          }
+        }
+      }
+      if ptr.pointee == UInt8(ascii: "\"") {
+        break
+      }
       if ptr.pointee == UInt8(ascii: "\\") {
         hasEscape = true
         // Skip the backslash and validate the next character. Escape sequences
@@ -303,7 +335,9 @@ private struct JSONScanner {
       let char = ptr.pointee
       if char >= 0x80 {
         hasNonASCII = true
-        try scanUTF8Scalars()
+        repeat {
+          try scanUTF8Scalars()
+        } while hasData && ptr.pointee >= 0x80
       } else {
         guard char >= 0x20 else {
           throw JSONError.unexpectedCharacter(char, context: "unescaped control character in string")
@@ -324,7 +358,16 @@ private struct JSONScanner {
     map.record(kind, range: (start + 1)..<(ptr - 1))
   }
 
-  /// Validate and consume one non-ASCII scalar during the string scan.
+  /// Mark zero bytes with their high bit. Subtraction may also mark the byte
+  /// following a zero, but the first marked byte is always a zero when the
+  /// word is interpreted in little-endian order.
+  @inline(__always)
+  private static func zeroByteMask(_ word: UInt64) -> UInt64 {
+    (word &- 0x0101_0101_0101_0101) & ~word & 0x8080_8080_8080_8080
+  }
+
+  /// Validate and consume non-ASCII scalars during the string scan, so that
+  /// validating UTF-8 doesn't require a second pass over the whole string.
   @inline(__always)
   mutating func scanUTF8Scalars() throws {
     let first = ptr.pointee
@@ -335,17 +378,37 @@ private struct JSONScanner {
       }
       ptr += 2
     } else if first < 0xF0 {
-      guard remaining >= 3, ptr[1] & 0xC0 == 0x80, ptr[2] & 0xC0 == 0x80,
-        first != 0xE0 || ptr[1] >= 0xA0,
-        first != 0xED || ptr[1] < 0xA0
+      // Validate two ordinary three-byte scalars together. E0 and ED need
+      // stricter second-byte bounds and use the scalar checks below.
+      if remaining >= MemoryLayout<UInt64>.size, first != 0xE0, first != 0xED {
+        let pair = UInt64(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: UInt64.self))
+        let next = UInt8(truncatingIfNeeded: pair >> 24)
+        if pair & 0x0000_C0C0_F0C0_C0F0 == 0x0000_8080_E080_80E0, next != 0xE0, next != 0xED {
+          ptr += 6
+          return
+        }
+      }
+      guard remaining >= 3 else {
+        throw JSONError.invalidUTF8
+      }
+      let continuation = UInt16(littleEndian: UnsafeRawPointer(ptr + 1).loadUnaligned(as: UInt16.self))
+      let second = UInt8(truncatingIfNeeded: continuation)
+      guard continuation & 0xC0C0 == 0x8080,
+        first != 0xE0 || second >= 0xA0,  // Exclude overlong encodings.
+        first != 0xED || second < 0xA0  // Exclude UTF-16 surrogates.
       else {
         throw JSONError.invalidUTF8
       }
       ptr += 3
     } else {
-      guard first <= 0xF4, remaining >= 4, ptr[1] & 0xC0 == 0x80, ptr[2] & 0xC0 == 0x80, ptr[3] & 0xC0 == 0x80,
-        first != 0xF0 || ptr[1] >= 0x90,
-        first != 0xF4 || ptr[1] < 0x90
+      guard first <= 0xF4, remaining >= 4 else {
+        throw JSONError.invalidUTF8
+      }
+      let scalar = UInt32(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: UInt32.self))
+      let second = UInt8(truncatingIfNeeded: scalar >> 8)
+      guard scalar & 0xC0C0_C000 == 0x8080_8000,
+        first != 0xF0 || second >= 0x90,  // Exclude overlong encodings.
+        first != 0xF4 || second < 0x90  // Exclude scalars above U+10FFFF.
       else {
         throw JSONError.invalidUTF8
       }

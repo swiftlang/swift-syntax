@@ -179,6 +179,7 @@ private struct JSONMapBuilder {
 private enum JSONError: Error, CustomStringConvertible {
   case unexpectedEndOfFile
   case unexpectedCharacter(UInt8, context: String)
+  case invalidUTF8
 
   var description: String {
     switch self {
@@ -187,6 +188,8 @@ private enum JSONError: Error, CustomStringConvertible {
     case .unexpectedCharacter(let c, let ctxt):
       let char = c < 0x80 ? String(UnicodeScalar(c)) : "0x" + String(c, radix: 16, uppercase: true)
       return "unexpected character '\(char)'; \(ctxt)"
+    case .invalidUTF8:
+      return "invalid UTF-8 sequence in string"
     }
   }
 }
@@ -288,18 +291,25 @@ private struct JSONScanner {
     var hasEscape = false
     var hasNonASCII = false
     while hasData && ptr.pointee != UInt8(ascii: "\"") {
-      // FIXME: Error for non-escaped control characters.
-      // FIXME: Error for invalid UTF8 sequences.
       if ptr.pointee == UInt8(ascii: "\\") {
         hasEscape = true
-        // eat '\'. Rest of the escape sequence are all ASCII. We just skip them
-        // ignoring how many bytes are actually for the escape sequence. For
-        // decoding, they are revisited in _JSONStingDecoder.decodeStringWithEscapes()
-        _ = try advance()
-      } else if ptr.pointee >= 0x80 {
-        hasNonASCII = true
+        // Skip the backslash and validate the next character. Escape sequences
+        // are decoded later by _JSONStringParser.decodeStringWithEscapes().
+        ptr += 1
+        guard hasData else {
+          throw JSONError.unexpectedEndOfFile
+        }
       }
-      _ = try advance()
+      let char = ptr.pointee
+      if char >= 0x80 {
+        hasNonASCII = true
+        try scanUTF8Scalars()
+      } else {
+        guard char >= 0x20 else {
+          throw JSONError.unexpectedCharacter(char, context: "unescaped control character in string")
+        }
+        ptr += 1
+      }
     }
     try expect(ascii: "\"")
 
@@ -312,6 +322,35 @@ private struct JSONScanner {
       kind = .asciiSimpleString
     }
     map.record(kind, range: (start + 1)..<(ptr - 1))
+  }
+
+  /// Validate and consume one non-ASCII scalar during the string scan.
+  @inline(__always)
+  mutating func scanUTF8Scalars() throws {
+    let first = ptr.pointee
+    let remaining = ptr.distance(to: endPtr)
+    if first < 0xE0 {
+      guard first >= 0xC2, remaining >= 2, ptr[1] & 0xC0 == 0x80 else {
+        throw JSONError.invalidUTF8
+      }
+      ptr += 2
+    } else if first < 0xF0 {
+      guard remaining >= 3, ptr[1] & 0xC0 == 0x80, ptr[2] & 0xC0 == 0x80,
+        first != 0xE0 || ptr[1] >= 0xA0,
+        first != 0xED || ptr[1] < 0xA0
+      else {
+        throw JSONError.invalidUTF8
+      }
+      ptr += 3
+    } else {
+      guard first <= 0xF4, remaining >= 4, ptr[1] & 0xC0 == 0x80, ptr[2] & 0xC0 == 0x80, ptr[3] & 0xC0 == 0x80,
+        first != 0xF0 || ptr[1] >= 0x90,
+        first != 0xF4 || ptr[1] < 0x90
+      else {
+        throw JSONError.invalidUTF8
+      }
+      ptr += 4
+    }
   }
 
   mutating func scanNumber(start: Cursor) throws {

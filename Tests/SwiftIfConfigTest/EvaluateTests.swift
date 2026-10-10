@@ -12,7 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftIfConfig
-import SwiftParser
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
 @_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
@@ -545,6 +545,233 @@ public class EvaluateTests: XCTestCase {
     )
   }
 
+  func testDeploymentTargetAtLeast() throws {
+    let macOSBuildConfig = StaticBuildConfiguration(
+      features: ["DeploymentTargetCondition"],
+      targetOSs: ["macOS", "anyAppleOS"],
+      deploymentTargetVersion: VersionTuple(15, 2, 1),
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
+
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS 15, iOS 18, *)"),
+      .active,
+      configuration: macOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(OSX 15, *)"),
+      .active,
+      configuration: macOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS 15.2.2, iOS 18, *)"),
+      .inactive,
+      configuration: macOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(anyAppleOS 26, macOS 15, *)"),
+      .active,
+      configuration: macOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(anyAppleOS 26, *)"),
+      .inactive,
+      configuration: macOSBuildConfig
+    )
+
+    let macOS26BuildConfig = StaticBuildConfiguration(
+      features: ["DeploymentTargetCondition"],
+      targetOSs: ["macOS", "anyAppleOS"],
+      deploymentTargetVersion: VersionTuple(26),
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(anyAppleOS 26, *)"),
+      .active,
+      configuration: macOS26BuildConfig
+    )
+
+    let catalystBuildConfig = StaticBuildConfiguration(
+      features: ["DeploymentTargetCondition"],
+      targetOSs: ["iOS", "anyAppleOS"],
+      targetEnvironments: ["macCatalyst"],
+      deploymentTargetVersion: VersionTuple(18),
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(iOS 99, macCatalyst 18, *)"),
+      .active,
+      configuration: catalystBuildConfig
+    )
+
+    let visionOSBuildConfig = StaticBuildConfiguration(
+      features: ["DeploymentTargetCondition"],
+      targetOSs: ["visionOS", "anyAppleOS"],
+      deploymentTargetVersion: VersionTuple(1),
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(iOS 99, *)"),
+      .active,
+      configuration: visionOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(visionOS 2, *)"),
+      .inactive,
+      configuration: visionOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(xrOS 2, *)"),
+      .inactive,
+      configuration: visionOSBuildConfig
+    )
+
+    let linuxBuildConfig = StaticBuildConfiguration(
+      features: ["DeploymentTargetCondition"],
+      targetOSs: ["Linux"],
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS 15, iOS 18, *)"),
+      .active,
+      configuration: linuxBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(Linux 6, *)"),
+      .unparsed,
+      configuration: linuxBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "deployment target version is unavailable for platform 'Linux'",
+          line: 1,
+          column: 25
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS 15)"),
+      .unparsed,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'deploymentTargetAtLeast' must handle potential future platforms with '*'",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(*, macOS 15)"),
+      .unparsed,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'*' must be the last argument to 'deploymentTargetAtLeast'",
+          line: 1,
+          column: 25
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS 15, macOS 16, *)"),
+      .unparsed,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "deployment target for platform 'macOS' was already specified",
+          line: 1,
+          column: 35
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS 15, OSX 16, *)"),
+      .unparsed,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "deployment target for platform 'OSX' was already specified",
+          line: 1,
+          column: 35
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(15, *)"),
+      .unparsed,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'deploymentTargetAtLeast' expects platform-version pairs followed by '*'",
+          line: 1,
+          column: 25
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOZ 15, *)"),
+      .active,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unknown deployment target platform 'macOZ'",
+          line: 1,
+          column: 25,
+          severity: .warning
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(anyAppleOS 25, *)"),
+      .inactive,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'25' is not a valid version number for any Apple OS",
+          line: 1,
+          column: 36,
+          severity: .warning
+        )
+      ]
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS -1, *)"),
+      .unparsed,
+      configuration: macOSBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'deploymentTargetAtLeast' version check has invalid version '-1'",
+          line: 1,
+          column: 31
+        )
+      ]
+    )
+
+    let disabledBuildConfig = StaticBuildConfiguration(
+      targetOSs: ["macOS", "anyAppleOS"],
+      deploymentTargetVersion: VersionTuple(15),
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(macOS 15, *)"),
+      .unparsed,
+      configuration: disabledBuildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'deploymentTargetAtLeast' is an experimental feature that is currently disabled",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
+  }
+
   func testLikelySimulatorEnvironment() throws {
     assertIfConfig(
       "((os(iOS) || os(tvOS)) && (arch(i386) || arch(x86_64)))",
@@ -689,4 +916,10 @@ private func assertIfConfig(
       )
     }
   }
+}
+
+/// Parse a condition using the grammar used after `#if`.
+private func parseIfConfigCondition(_ condition: String) -> ExprSyntax {
+  var parser = Parser(condition)
+  return ExprSyntax.parseIfConfigCondition(from: &parser)
 }

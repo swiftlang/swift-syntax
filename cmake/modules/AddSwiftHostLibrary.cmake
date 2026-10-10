@@ -35,6 +35,7 @@ function(add_swift_syntax_library name)
 
   # Create the library target.
   add_library(${target} ${ASHL_SOURCES})
+  get_target_property(ASHL_EXCLUDE_FROM_ALL ${target} EXCLUDE_FROM_ALL)
   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(${target} PUBLIC swiftSwiftOnoneSupport)
   endif()
@@ -120,23 +121,29 @@ function(add_swift_syntax_library name)
     endif()
   endif()
 
-  if(PROJECT_IS_TOP_LEVEL OR SWIFT_SYNTAX_INSTALL_TARGETS)
-    # Install this target
-    install(TARGETS ${target}
-      EXPORT SwiftSyntaxTargets
-      ARCHIVE DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-      LIBRARY DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-      RUNTIME DESTINATION bin
-    )
+  # Targets excluded from the default build are intentionally not part of the
+  # installed toolchain, so emit no install or export rules for them. This
+  # keeps cmake --install from referencing artifacts that were never built
+  # (e.g. SwiftCompilerPlugin).
+  if(NOT ASHL_EXCLUDE_FROM_ALL)
+    if(PROJECT_IS_TOP_LEVEL OR SWIFT_SYNTAX_INSTALL_TARGETS)
+      # Install this target
+      install(TARGETS ${target}
+        EXPORT SwiftSyntaxTargets
+        ARCHIVE DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+        LIBRARY DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+        RUNTIME DESTINATION bin
+      )
 
-    # Install the module files.
-    install(
-      DIRECTORY ${module_base}
-      DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-      FILES_MATCHING PATTERN "*.swiftinterface"
-    )
-  else()
-    set_property(GLOBAL APPEND PROPERTY SWIFT_EXPORTS ${target})
+      # Install the module files.
+      install(
+        DIRECTORY ${module_base}
+        DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+        FILES_MATCHING PATTERN "*.swiftinterface"
+      )
+    else()
+      set_property(GLOBAL APPEND PROPERTY SWIFT_EXPORTS ${target})
+    endif()
   endif()
   add_library(SwiftSyntax::${target} ALIAS ${target})
 endfunction()

@@ -103,6 +103,34 @@ final class JSONTests: XCTestCase {
     )
   }
 
+  func testEscapedStringAtEveryOffset() {
+    let escapes: [(unescaped: String, escaped: String)] = [
+      ("\"", #"\""#),
+      ("\\", #"\\"#),
+      ("\n", #"\n"#),
+      ("\u{1F}", #"\u001F"#),
+    ]
+    // Cover each position relative to 16 byte chunk boundaries and the tail.
+    for length in [15, 16, 17, 31, 32, 33, 47] {
+      for offset in 0..<length {
+        for (unescaped, escaped) in escapes {
+          let prefix = String(repeating: "a", count: offset)
+          let suffix = String(repeating: "©", count: length - offset - 1)
+          assertRoundTrip(
+            of: prefix + unescaped + suffix,
+            expectedJSON: "\"" + prefix + escaped + suffix + "\""
+          )
+        }
+      }
+    }
+  }
+
+  func testStringWithManyEscapes() {
+    let value = String(repeating: #"{"key":"line\one"}"# + "\n\t\u{0}", count: 20)
+    let expected = String(repeating: #"{\"key\":\"line\\one\"}\n\t\u0000"#, count: 20)
+    assertRoundTrip(of: value, expectedJSON: "\"\(expected)\"")
+  }
+
   func testParseError() {
     assertParseError(
       #"{"foo": 1"#,

@@ -147,61 +147,140 @@ private struct JSONWriter {
 
   mutating func serialize(string: String) {
     var string = string
-    write(ascii: "\"")
     string.withUTF8 { utf8 in
-      let start = utf8.baseAddress!
-      let end = start + utf8.count
-      var mark = start
+      serialize(utf8String: utf8)
+    }
+  }
 
-      for cursor in start..<end {
-        @inline(__always) func flush() {
-          write(utf8: UnsafeBufferPointer(start: mark, count: cursor - mark))
-          mark = cursor + 1
-        }
-        switch cursor.pointee {
-        case UInt8(ascii: "\""):
-          flush()
-          write(string: "\\\"")
-        case UInt8(ascii: "\\"):
-          flush()
-          write(string: "\\\\")
-        case 0x08:
-          flush()
-          write(string: "\\b")
-        case 0x09:
-          flush()
-          write(string: "\\t")
-        case 0x0A:
-          flush()
-          write(string: "\\n")
-        case 0x0C:
-          flush()
-          write(string: "\\f")
-        case 0x0D:
-          flush()
-          write(string: "\\r")
-        case 0x00...0x1F:
-          let c = cursor.pointee
-          flush()
-          write(string: "\\u00")
-          let _0 = UInt8(ascii: "0")
-          let _A = UInt8(ascii: "A")
-          for shift in stride(from: 4, through: 0, by: -4) {
-            let d = (c >> shift) & 0xF
-            write(d < 10 ? (_0 + d) : (_A + d - 10))
-          }
-        default:
-          // Accumulate this byte.
-          break
+  /// Write `utf8` as a JSON string literal, escaping characters as needed.
+  mutating func serialize(utf8String utf8: UnsafeBufferPointer<UInt8>) {
+    let (escapeCount, controlCount) = Self.countEscapes(utf8)
+    if escapeCount == 0 {
+      // Fast path: nothing to escape.
+      data.reserveCapacity(data.count + utf8.count + 2)
+      write(ascii: "\"")
+      write(utf8: utf8)
+      write(ascii: "\"")
+      return
+    }
+
+    // Each escaped byte is written as 2 bytes, except for control characters
+    // without a short form which are written as 6 bytes ('\u00XX'). This is
+    // the upper bound; the excess is removed after writing.
+    let maxLength = 2 + utf8.count + escapeCount + controlCount &* 4
+    let oldCount = data.count
+    data.append(contentsOf: repeatElement(0, count: maxLength))
+    let written = data.withUnsafeMutableBufferPointer { buffer in
+      Self.writeEscaped(utf8, to: buffer.baseAddress! + oldCount)
+    }
+    data.removeLast(maxLength - written)
+  }
+
+  private typealias Chunk = SIMD16<UInt8>
+
+  /// Returns a mask of the lanes in `chunk` that need escaping, and a mask of
+  /// the lanes that are control characters.
+  @inline(__always)
+  private static func escapeMasks(
+    _ chunk: Chunk
+  ) -> (escape: SIMDMask<Chunk.MaskStorage>, control: SIMDMask<Chunk.MaskStorage>) {
+    let control = chunk .< Chunk(repeating: 0x20)
+    let quote = chunk .== Chunk(repeating: UInt8(ascii: "\""))
+    let backslash = chunk .== Chunk(repeating: UInt8(ascii: "\\"))
+    return (control .| quote .| backslash, control)
+  }
+
+  @inline(__always)
+  private static func needsEscape(_ byte: UInt8) -> Bool {
+    byte == UInt8(ascii: "\"") || byte == UInt8(ascii: "\\") || byte < 0x20
+  }
+
+  /// Count the bytes in `utf8` that need escaping, and the control characters
+  /// among them.
+  private static func countEscapes(_ utf8: UnsafeBufferPointer<UInt8>) -> (escape: Int, control: Int) {
+    guard let start = utf8.baseAddress else {
+      return (0, 0)
+    }
+    let end = start + utf8.count
+    var cursor = start
+    var escapeCount = 0
+    var controlCount = 0
+    while end - cursor >= Chunk.scalarCount {
+      let chunk = UnsafeRawPointer(cursor).loadUnaligned(as: Chunk.self)
+      let masks = escapeMasks(chunk)
+      escapeCount &+= Int(Chunk().replacing(with: 1, where: masks.escape).wrappedSum())
+      controlCount &+= Int(Chunk().replacing(with: 1, where: masks.control).wrappedSum())
+      cursor += Chunk.scalarCount
+    }
+    while cursor < end {
+      escapeCount &+= needsEscape(cursor.pointee) ? 1 : 0
+      controlCount &+= cursor.pointee < 0x20 ? 1 : 0
+      cursor += 1
+    }
+    return (escapeCount, controlCount)
+  }
+
+  /// Write `utf8` with escaping and the surrounding quotes to `dest`, and
+  /// return the number of bytes written. `dest` must have enough capacity.
+  private static func writeEscaped(
+    _ utf8: UnsafeBufferPointer<UInt8>,
+    to dest: UnsafeMutablePointer<UInt8>
+  ) -> Int {
+    var out = dest
+    out.pointee = UInt8(ascii: "\"")
+    out += 1
+
+    var cursor = utf8.baseAddress!
+    let end = cursor + utf8.count
+    while cursor < end {
+      if end - cursor >= Chunk.scalarCount {
+        let chunk = UnsafeRawPointer(cursor).loadUnaligned(as: Chunk.self)
+        if !any(escapeMasks(chunk).escape) {
+          UnsafeMutableRawPointer(out).storeBytes(of: chunk, as: Chunk.self)
+          cursor += Chunk.scalarCount
+          out += Chunk.scalarCount
+          continue
         }
       }
-
-      // Append accumulated bytes.
-      if end > mark {
-        write(utf8: UnsafeBufferPointer(start: mark, count: end - mark))
+      // The chunk contains bytes that need escaping, or it's the tail. Write
+      // up to a chunk byte by byte.
+      let runEnd = min(end, cursor + Chunk.scalarCount)
+      while cursor < runEnd {
+        let byte = cursor.pointee
+        cursor += 1
+        let escaped: UInt8
+        switch byte {
+        case UInt8(ascii: "\""): escaped = UInt8(ascii: "\"")
+        case UInt8(ascii: "\\"): escaped = UInt8(ascii: "\\")
+        case 0x08: escaped = UInt8(ascii: "b")
+        case 0x09: escaped = UInt8(ascii: "t")
+        case 0x0A: escaped = UInt8(ascii: "n")
+        case 0x0C: escaped = UInt8(ascii: "f")
+        case 0x0D: escaped = UInt8(ascii: "r")
+        case 0x00...0x1F:
+          let hex: StaticString = "0123456789ABCDEF"
+          out[0] = UInt8(ascii: "\\")
+          out[1] = UInt8(ascii: "u")
+          out[2] = UInt8(ascii: "0")
+          out[3] = UInt8(ascii: "0")
+          out[4] = hex.utf8Start[Int(byte >> 4)]
+          out[5] = hex.utf8Start[Int(byte & 0xF)]
+          out += 6
+          continue
+        default:
+          out.pointee = byte
+          out += 1
+          continue
+        }
+        out[0] = UInt8(ascii: "\\")
+        out[1] = escaped
+        out += 2
       }
     }
-    write(ascii: "\"")
+
+    out.pointee = UInt8(ascii: "\"")
+    out += 1
+    return out - dest
   }
 
   mutating func serialize(array: [JSONReference]) {

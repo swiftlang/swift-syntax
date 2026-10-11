@@ -39,19 +39,18 @@ extension SyntaxCollection where Self: SyntaxParseable {
     }
 
     let layoutView = node.raw.layoutView!
+    let elements = layoutView.elements
 
-    if layoutView.children.isEmpty {
+    if elements.isEmpty {
       let remainingTokens = parser.consumeRemainingTokens()
       assert(!remainingTokens.isEmpty)
       let missing = makeMissing(remainingTokens, parser.arena)
-      let raw = layoutView.insertingChild(missing.raw, at: node.raw.layoutView!.children.count, arena: parser.arena)
+      let raw = layoutView.insertingChild(missing.raw, at: elements.count, arena: parser.arena)
       return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
     } else {
-      // First unwrap: We know that children.last exists because children is not empty
-      // Second unwrap: This is a collection and collections never have optional children. Thus the last child can’t be nil.
-      let lastWithRemainder = parser.parseRemainder(into: layoutView.children[layoutView.children.count - 1]!)
+      let lastWithRemainder = parser.parseRemainder(into: elements[elements.count - 1])
       let raw = layoutView.replacingChild(
-        at: layoutView.children.count - 1,
+        at: elements.count - 1,
         with: lastWithRemainder,
         arena: parser.arena
       )

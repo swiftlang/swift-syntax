@@ -87,9 +87,12 @@ extension RawUnexpectedNodesSyntax {
   /// `isMaximumNestingLevelOverflow` error bit set, indicating that the parser
   /// overflowed its maximum nesting level and thus aborted parsing.
   public init(elements: [RawSyntax], isMaximumNestingLevelOverflow: Bool, arena: __shared RawSyntaxArena) {
+    // A collection's children are all elements, so its storage is flat and the
+    // count is known: nothing here has to be written into a temporary first.
     let raw = RawSyntax.makeLayout(
       kind: .unexpectedNodes,
-      uninitializedCount: elements.count,
+      childCount: elements.count,
+      storage: .flat,
       isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow,
       arena: arena
     ) { layout in

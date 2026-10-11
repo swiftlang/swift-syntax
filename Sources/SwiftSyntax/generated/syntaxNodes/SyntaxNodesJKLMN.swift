@@ -436,7 +436,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
   public func addKeyPathComponent(_ element: KeyPathComponentSyntax) -> KeyPathExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
@@ -623,7 +623,7 @@ public struct KeyPathMethodComponentSyntax: SyntaxProtocol, SyntaxHashable, _Lea
   public func addArgument(_ element: LabeledExprSyntax) -> KeyPathMethodComponentSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -1011,7 +1011,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
   public func addArgument(_ element: LabeledExprSyntax) -> KeyPathSubscriptComponentSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -2243,7 +2243,7 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
   public func addArguments(_ element: LifetimeSpecifierArgumentSyntax) -> LifetimeTypeSpecifierSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[7] {
+    if let col = raw.layoutView!.realChild(at: 3) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.lifetimeSpecifierArgumentList,
@@ -2437,7 +2437,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
   public func addAttribute(_ element: Syntax) -> MacroDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -2482,7 +2482,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
   public func addModifier(_ element: DeclModifierSyntax) -> MacroDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -2803,7 +2803,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
   public func addAttribute(_ element: Syntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -2848,7 +2848,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
   public func addModifier(_ element: DeclModifierSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -2994,7 +2994,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
   public func addArgument(_ element: LabeledExprSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[15] {
+    if let col = raw.layoutView!.realChild(at: 7) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -3078,7 +3078,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[21] {
+    if let col = raw.layoutView!.realChild(at: 10) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
@@ -3372,7 +3372,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
   public func addArgument(_ element: LabeledExprSyntax) -> MacroExpansionExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[11] {
+    if let col = raw.layoutView!.realChild(at: 5) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -3456,7 +3456,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[17] {
+    if let col = raw.layoutView!.realChild(at: 8) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
@@ -4203,7 +4203,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
   public func addMember(_ element: MemberBlockItemSyntax) -> MemberBlockSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.memberBlockItemList,
@@ -4718,7 +4718,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSy
   public func addAttribute(_ element: Syntax) -> MissingDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -4764,7 +4764,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSy
   public func addModifier(_ element: DeclModifierSyntax) -> MissingDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,

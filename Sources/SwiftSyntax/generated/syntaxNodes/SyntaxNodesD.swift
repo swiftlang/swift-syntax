@@ -567,7 +567,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   public func addArgument(_ element: DeclNameArgumentSyntax) -> DeclNameArgumentsSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
@@ -1030,7 +1030,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Leaf
   public func addAttribute(_ element: Syntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -1076,7 +1076,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Leaf
   public func addModifier(_ element: DeclModifierSyntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -2540,7 +2540,7 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable, 
   public func addArgument(_ element: DifferentiabilityArgumentSyntax) -> DifferentiabilityArgumentsSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityArgumentList,
@@ -3431,7 +3431,7 @@ public struct DoExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
   public func addCatchClause(_ element: CatchClauseSyntax) -> DoExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
@@ -3629,7 +3629,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
   public func addCatchClause(_ element: CatchClauseSyntax) -> DoStmtSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[7] {
+    if let col = raw.layoutView!.realChild(at: 3) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,

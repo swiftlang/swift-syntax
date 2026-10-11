@@ -16,22 +16,22 @@ import SyntaxSupport
 import Utils
 
 let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  try FunctionDeclSyntax(
-    """
-    /// Check that the `layout` is valid for the given 'SyntaxKind'.
-    ///
-    /// Note that this only validates the immediate children.
-    /// Results in an assertion failure if the layout is invalid.
-    func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind)
-    """
-  ) {
-    IfConfigDeclSyntax(
-      clauses: try IfConfigClauseListSyntax {
-        IfConfigClauseSyntax(
-          poundKeyword: .poundIfToken(),
-          condition: ExprSyntax("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"),
-          elements: .statements(
-            try CodeBlockItemListSyntax {
+  IfConfigDeclSyntax(
+    clauses: try IfConfigClauseListSyntax {
+      IfConfigClauseSyntax(
+        poundKeyword: .poundIfToken(),
+        condition: ExprSyntax("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"),
+        elements: .statements(
+          try CodeBlockItemListSyntax {
+            try FunctionDeclSyntax(
+              """
+              /// Check that the `layout` is valid for the given 'SyntaxKind'.
+              ///
+              /// Note that this only validates the immediate children.
+              /// Results in an assertion failure if the layout is invalid.
+              func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind)
+              """
+            ) {
               DeclSyntax(
                 #"""
                 enum TokenChoice: CustomStringConvertible {
@@ -192,7 +192,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
 
               for node in NON_BASE_SYNTAX_NODES {
                 try FunctionDeclSyntax(
-                  "func validate\(node.kind.syntaxType)(kind: SyntaxKind, layout: RawSyntaxBuffer)"
+                  "func validate\(node.kind.syntaxType)(kind: SyntaxKind, layout: RawLayoutChildren)"
                 ) {
                   if let node = node.layoutNode {
                     ExprSyntax("assert(layout.count == \(raw: node.children.count))")
@@ -268,9 +268,9 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                 }
               }
             }
-          )
+          }
         )
-      }
-    )
-  }
+      )
+    }
+  )
 }

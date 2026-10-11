@@ -107,22 +107,18 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             },
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {
-              if node.children.isEmpty {
-                DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(node.memberCallName), arena: arena)")
-              } else {
-                DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
-                DeclSyntax(
-                  """
-                  let raw = RawSyntax.makeLayout(
-                    kind: SyntaxKind.\(node.memberCallName),
-                    from: layout,
-                    arena: arena,
-                    leadingTrivia: leadingTrivia,
-                    trailingTrivia: trailingTrivia
-                  )
-                  """
+              DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
+              DeclSyntax(
+                """
+                let raw = RawSyntax.makeLayout(
+                  kind: SyntaxKind.\(node.memberCallName),
+                  from: layout,
+                  arena: arena,
+                  leadingTrivia: leadingTrivia,
+                  trailingTrivia: trailingTrivia
                 )
-              }
+                """
+              )
               StmtSyntax("return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)")
             }
           )
@@ -180,6 +176,11 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               child.kind
           {
             let childEltType = childNode.collectionElementType.syntaxBaseName
+            // Where the collection sits among the node's real children, which is
+            // where `realChild(at:)` reads it whatever the node's storage.
+            let realIndex =
+              node.interleavesUnexpectedChildren
+              ? node.children[..<index].filter { !$0.isUnexpectedNodes }.count : index
 
             DeclSyntax(
               """
@@ -194,7 +195,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               public func add\(raw: childElt)(_ element: \(childEltType)) -> \(node.kind.syntaxType) {
                 var collection: RawSyntax
                 let arena = RawSyntaxArena()
-                if let col = raw.layoutView!.children[\(raw: index)] {
+                if let col = raw.layoutView!.realChild(at: \(raw: realIndex)) {
                   collection = col.layoutView!.appending(element.raw, arena: arena)
                 } else {
                   collection = RawSyntax.makeLayout(kind: SyntaxKind.\(childNode.memberCallName),

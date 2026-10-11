@@ -455,23 +455,57 @@ final class SyntaxDataArena: @unchecked Sendable {
     return SyntaxDataReferenceBuffer(buffer)
   }
 
-  /// Create the layout buffer of the node.
+  /// Create the layout buffer of the node, which has an entry per position its kind
+  /// names.
   private func createLayoutDataImpl(_ parent: SyntaxDataReference) -> UnsafeBufferPointer<SyntaxDataReference?> {
-    let rawChildren = parent.pointee.raw.layoutView!.children
-    let allocated = self.allocator.allocate(SyntaxDataReference?.self, count: rawChildren.count)
-
+    let layoutView = parent.pointee.raw.layoutView!
+    let allocated = self.allocator.allocate(SyntaxDataReference?.self, count: Int(layoutView.logicalChildCount))
     var ptr = allocated.baseAddress!
     var absoluteInfo = parent.pointee.absoluteInfo.advancedToFirstChild()
-    for raw in rawChildren {
-      let dataRef: SyntaxDataReference?
+
+    @inline(__always)
+    func place(_ raw: RawSyntax?) {
       if let raw {
-        dataRef = Self.createDataImpl(allocator: self.allocator, raw: raw, parent: parent, absoluteInfo: absoluteInfo)
+        ptr.initialize(
+          to: Self.createDataImpl(allocator: self.allocator, raw: raw, parent: parent, absoluteInfo: absoluteInfo)
+        )
       } else {
-        dataRef = nil
+        ptr.initialize(to: nil)
       }
-      ptr.initialize(to: dataRef)
+      // Every position advances the layout index, occupied or not: it is the index of
+      // the slot rather than of the child.
       absoluteInfo = absoluteInfo.advancedBySibling(raw)
       ptr += 1
+    }
+
+    switch layoutView.storage {
+    case .flat:
+      // Every slot holds a child, so the children need neither the test for an absent
+      // one nor the mapping to the positions the tree describes.
+      for raw in layoutView.elements {
+        ptr.initialize(
+          to: Self.createDataImpl(allocator: self.allocator, raw: raw, parent: parent, absoluteInfo: absoluteInfo)
+        )
+        absoluteInfo = absoluteInfo.advancedBySibling(raw)
+        ptr += 1
+      }
+    case .layout, .layoutWithUnexpected:
+      // Written from the two regions the node keeps: a slot before each child, the
+      // child, and a slot after the last.
+      let (real, unexpected) = layoutView.interleavedRegions!
+      if unexpected.isEmpty {
+        for index in 0..<real.count {
+          place(nil)
+          place(real[index])
+        }
+        place(nil)
+      } else {
+        for index in 0..<real.count {
+          place(unexpected[index])
+          place(real[index])
+        }
+        place(unexpected[real.count])
+      }
     }
     return UnsafeBufferPointer(allocated)
   }

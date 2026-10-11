@@ -957,7 +957,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
   public func addElement(_ element: LabeledExprSyntax) -> TupleExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -1340,7 +1340,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPa
   public func addElement(_ element: TuplePatternElementSyntax) -> TuplePatternSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
@@ -1791,7 +1791,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
   public func addElement(_ element: TupleTypeElementSyntax) -> TupleTypeSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
@@ -1978,7 +1978,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   public func addAttribute(_ element: Syntax) -> TypeAliasDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -2023,7 +2023,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   public func addModifier(_ element: DeclModifierSyntax) -> TypeAliasDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -3413,7 +3413,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addAttribute(_ element: Syntax) -> VariableDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -3459,7 +3459,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addModifier(_ element: DeclModifierSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -3544,7 +3544,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addBinding(_ element: PatternBindingSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[7] {
+    if let col = raw.layoutView!.realChild(at: 3) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
@@ -3836,7 +3836,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
   public func addVersionComponent(_ element: VersionComponentSyntax) -> VersionTupleSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.versionComponentList,
@@ -4110,7 +4110,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
   public func addCondition(_ element: ConditionElementSyntax) -> WhileStmtSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
@@ -4694,7 +4694,7 @@ public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _L
   public func addElement(_ element: YieldedExpressionSyntax) -> YieldedExpressionsClauseSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.yieldedExpressionList,

@@ -833,8 +833,8 @@ fileprivate extension RawSyntax {
         handleSourceLocationDirective(position, self)
       }
 
-      for case let node? in self.asLayout.layout
-      where SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) {
+      self.forEachChildInSourceOrder { node in
+        guard SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) else { return }
         position = node.forEachEndOfLine(
           position: position,
           body: body,

@@ -37,6 +37,15 @@ public class Node: NodeChoiceConvertible {
   /// `SyntaxNodeKind`.
   public let kind: SyntaxNodeKind
 
+  /// Whether this node's layout carries an `unexpected` slot before its first
+  /// child, between every pair of children and after the last.
+  ///
+  /// True of almost every layout node, and of no collection. Recorded here
+  /// because it decides how a node's children are laid out, and the layout it
+  /// produces cannot be told from the children afterwards: a node that opts out
+  /// may still have a child whose kind is `unexpectedNodes`.
+  public let interleavesUnexpectedChildren: Bool
+
   /// The kind of node’s supertype. This kind must have `isBase == true`
   public let base: SyntaxNodeKind
 
@@ -141,8 +150,9 @@ public class Node: NodeChoiceConvertible {
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
 
+    self.interleavesUnexpectedChildren = !(kind.isBase || noInterleaveUnexpected)
     let childrenWithUnexpected =
-      (kind.isBase || noInterleaveUnexpected) ? children : interleaveUnexpectedChildren(children)
+      self.interleavesUnexpectedChildren ? interleaveUnexpectedChildren(children) : children
 
     self.data = .layout(children: childrenWithUnexpected, childHistory: childHistory, traits: traits)
   }
@@ -255,6 +265,7 @@ public class Node: NodeChoiceConvertible {
     self.parserFunction = parserFunction
 
     assert(!elementChoices.isEmpty)
+    self.interleavesUnexpectedChildren = false
     self.data = .collection(choices: elementChoices)
   }
 }

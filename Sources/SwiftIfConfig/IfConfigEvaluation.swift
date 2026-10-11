@@ -14,6 +14,21 @@ import SwiftDiagnostics
 import SwiftOperators
 @_spi(RawSyntax) import SwiftSyntax
 
+private let supportedDeploymentTargetPlatforms: Set<String> = [
+  "OSX", "macOS", "tvOS", "watchOS", "iOS", "visionOS", "xrOS",
+  "Firmware", "Linux", "FreeBSD", "OpenBSD", "Windows", "Android",
+  "PS4", "Cygwin", "Haiku", "WASI", "Emscripten", "none",
+  "anyAppleOS", "macCatalyst",
+]
+
+private func canonicalDeploymentTargetPlatform(_ platform: String) -> String {
+  switch platform {
+  case "OSX": return "macOS"
+  case "xrOS": return "visionOS"
+  default: return platform
+  }
+}
+
 /// Evaluate the condition of an `#if`.
 /// - Parameters:
 ///   - condition: The condition to evaluate, which we assume has already been
@@ -309,6 +324,130 @@ func evaluateIfConfig(
       }
     }
 
+    /// Check a list of platform-specific minimum deployment targets, using the
+    /// same platform-version spelling as an availability condition.
+    func doDeploymentTargetAtLeastCheck()
+      -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic])
+    {
+      do {
+        guard try configuration.hasFeature(name: "DeploymentTargetCondition") else {
+          return recordError(.deploymentTargetConditionDisabled(syntax: ExprSyntax(call)))
+        }
+      } catch {
+        return recordError(error, at: ExprSyntax(call))
+      }
+
+      var requirements: [(platform: TokenSyntax, version: VersionTuple)] = []
+      var seenPlatforms = Set<String>()
+      var hasWildcard = false
+
+      for (index, argument) in call.arguments.enumerated() {
+        if argument.label == nil,
+          argument.expression.as(DeclReferenceExprSyntax.self)?.baseName.text == "*"
+        {
+          if hasWildcard || index != call.arguments.count - 1 {
+            return recordError(
+              .deploymentTargetWildcardMustBeLast(syntax: argument.expression)
+            )
+          }
+          hasWildcard = true
+          continue
+        }
+
+        guard let platform = argument.label, argument.colon == nil else {
+          return recordError(
+            .deploymentTargetExpectedPlatformVersion(syntax: argument.expression)
+          )
+        }
+
+        let canonicalPlatform = canonicalDeploymentTargetPlatform(platform.text)
+        guard seenPlatforms.insert(canonicalPlatform).inserted else {
+          return recordError(
+            .deploymentTargetDuplicatePlatform(platform: platform.text, syntax: platform)
+          )
+        }
+
+        if !supportedDeploymentTargetPlatforms.contains(platform.text) {
+          extraDiagnostics.append(
+            IfConfigDiagnostic.deploymentTargetUnknownPlatform(
+              platform: platform.text,
+              syntax: platform
+            ).asDiagnostic
+          )
+        }
+
+        let versionText = argument.expression.trimmedDescription
+        guard
+          versionText.utf8.allSatisfy({
+            $0 == 46 || ($0 >= 48 && $0 <= 57)
+          }),
+          let version = VersionTuple(parsing: versionText)
+        else {
+          return recordError(
+            .invalidVersionOperand(name: fnName, syntax: argument.expression)
+          )
+        }
+
+        if platform.text == "anyAppleOS", version < VersionTuple(26) {
+          extraDiagnostics.append(
+            IfConfigDiagnostic.deploymentTargetInvalidAnyAppleOSVersion(
+              version: version,
+              syntax: argument.expression
+            ).asDiagnostic
+          )
+        }
+
+        requirements.append((platform, version))
+      }
+
+      guard hasWildcard else {
+        return recordError(.deploymentTargetMissingWildcard(syntax: ExprSyntax(call)))
+      }
+
+      var selectedRequirement: (platform: TokenSyntax, version: VersionTuple, priority: Int)?
+      for requirement in requirements {
+        let name = requirement.platform.text
+        let isActive: Bool
+        do {
+          if name == "macCatalyst" {
+            isActive = try configuration.isActiveTargetEnvironment(name: name)
+          } else {
+            isActive = try configuration.isActiveTargetOS(name: name)
+          }
+        } catch {
+          return recordError(error, at: requirement.platform)
+        }
+
+        guard isActive else {
+          continue
+        }
+
+        let priority = name == "anyAppleOS" ? 0 : (name == "macCatalyst" ? 2 : 1)
+        if priority > (selectedRequirement?.priority ?? -1) {
+          selectedRequirement = (requirement.platform, requirement.version, priority)
+        }
+      }
+
+      guard let selectedRequirement else {
+        return (active: true, syntaxErrorsAllowed: false, diagnostics: extraDiagnostics)
+      }
+
+      guard let deploymentTargetVersion = configuration.deploymentTargetVersion else {
+        return recordError(
+          .deploymentTargetUnavailable(
+            platform: selectedRequirement.platform.text,
+            syntax: selectedRequirement.platform
+          )
+        )
+      }
+
+      return (
+        active: deploymentTargetVersion >= selectedRequirement.version,
+        syntaxErrorsAllowed: false,
+        diagnostics: extraDiagnostics
+      )
+    }
+
     switch fn {
     case .hasAttribute:
       return doSingleIdentifierArgumentCheck(configuration.hasAttribute, role: "attribute")
@@ -419,6 +558,9 @@ func evaluateIfConfig(
 
     case .compiler:
       return doVersionComparisonCheck(configuration.compilerVersion)
+
+    case .deploymentTargetAtLeast:
+      return doDeploymentTargetAtLeastCheck()
 
     case ._compiler_version:
       // Argument is a single unlabeled argument containing a string
@@ -889,6 +1031,8 @@ private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>
   var targetAtomicBitWidths: [Int] { return other.targetAtomicBitWidths }
 
   var endianness: Endianness { return other.endianness }
+
+  var deploymentTargetVersion: VersionTuple? { return other.deploymentTargetVersion }
 
   var languageVersion: VersionTuple { return other.languageVersion }
 

@@ -409,11 +409,7 @@ func evaluateIfConfig(
         let name = requirement.platform.text
         let isActive: Bool
         do {
-          if name == "macCatalyst" {
-            isActive = try configuration.isActiveTargetEnvironment(name: name)
-          } else {
-            isActive = try configuration.isActiveTargetOS(name: name)
-          }
+          isActive = try configuration.isDeploymentTargetPlatformActive(name: name)
         } catch {
           return recordError(error, at: requirement.platform)
         }
@@ -422,7 +418,12 @@ func evaluateIfConfig(
           continue
         }
 
-        let priority = name == "anyAppleOS" ? 0 : (name == "macCatalyst" ? 2 : 1)
+        let priority: Int
+        switch canonicalDeploymentTargetPlatform(name) {
+        case "anyAppleOS": priority = 0
+        case "macCatalyst", "visionOS": priority = 2
+        default: priority = 1
+        }
         if priority > (selectedRequirement?.priority ?? -1) {
           selectedRequirement = (requirement.platform, requirement.version, priority)
         }
@@ -432,7 +433,7 @@ func evaluateIfConfig(
         return (active: true, syntaxErrorsAllowed: false, diagnostics: extraDiagnostics)
       }
 
-      guard let deploymentTargetVersion = configuration.deploymentTargetVersion else {
+      guard configuration.deploymentTargetVersion != nil else {
         return recordError(
           .deploymentTargetUnavailable(
             platform: selectedRequirement.platform.text,
@@ -442,7 +443,10 @@ func evaluateIfConfig(
       }
 
       return (
-        active: deploymentTargetVersion >= selectedRequirement.version,
+        active: configuration.isDeploymentTargetAtLeast(
+          platform: selectedRequirement.platform.text,
+          version: selectedRequirement.version
+        ),
         syntaxErrorsAllowed: false,
         diagnostics: extraDiagnostics
       )
@@ -1033,6 +1037,14 @@ private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>
   var endianness: Endianness { return other.endianness }
 
   var deploymentTargetVersion: VersionTuple? { return other.deploymentTargetVersion }
+
+  func isDeploymentTargetPlatformActive(name: String) throws -> Bool {
+    return try other.isDeploymentTargetPlatformActive(name: name)
+  }
+
+  func isDeploymentTargetAtLeast(platform: String, version: VersionTuple) -> Bool {
+    return other.isDeploymentTargetAtLeast(platform: platform, version: version)
+  }
 
   var languageVersion: VersionTuple { return other.languageVersion }
 

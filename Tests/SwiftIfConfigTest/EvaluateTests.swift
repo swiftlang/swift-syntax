@@ -560,6 +560,11 @@ public class EvaluateTests: XCTestCase {
       configuration: macOSBuildConfig
     )
     assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(OSX 15, *)"),
+      .active,
+      configuration: macOSBuildConfig
+    )
+    assertIfConfig(
       parseIfConfigCondition("deploymentTargetAtLeast(macOS 15.2.2, iOS 18, *)"),
       .inactive,
       configuration: macOSBuildConfig
@@ -600,6 +605,29 @@ public class EvaluateTests: XCTestCase {
       parseIfConfigCondition("deploymentTargetAtLeast(iOS 99, macCatalyst 18, *)"),
       .active,
       configuration: catalystBuildConfig
+    )
+
+    let visionOSBuildConfig = StaticBuildConfiguration(
+      features: ["DeploymentTargetCondition"],
+      targetOSs: ["visionOS", "anyAppleOS"],
+      deploymentTargetVersion: VersionTuple(1),
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(iOS 99, *)"),
+      .active,
+      configuration: visionOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(visionOS 2, *)"),
+      .inactive,
+      configuration: visionOSBuildConfig
+    )
+    assertIfConfig(
+      parseIfConfigCondition("deploymentTargetAtLeast(xrOS 2, *)"),
+      .inactive,
+      configuration: visionOSBuildConfig
     )
 
     let linuxBuildConfig = StaticBuildConfiguration(

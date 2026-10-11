@@ -48,6 +48,8 @@ enum RawSyntaxData: Sendable {
   case smolParsedToken(RawSyntaxArenaRef)
   case parsedToken(RawSyntaxArenaRef)
   case materializedToken(RawSyntaxArenaRef)
+  /// A layout node or a collection. Its fields are a `Layout`, which says how the
+  /// slots after them hold its children.
   case layout(RawSyntaxArenaRef)
 
   @inline(__always)
@@ -100,7 +102,9 @@ enum RawSyntaxData: Sendable {
   /// The fields of a layout node or a collection, followed in the node's tail by
   /// the slots holding its children.
   struct Layout: Sendable {
-    /// Number of children, `unexpected` slots included, which is every slot.
+    /// Number of real children, not counting `unexpected` slots. They are a node's
+    /// first `childCount` slots whatever its storage; an `.layoutWithUnexpected`
+    /// node holds its `childCount + 1` unexpected slots after them.
     var childCount: UInt32
 
     /// Byte count of this subtree's text.
@@ -111,6 +115,25 @@ enum RawSyntaxData: Sendable {
 
     var kind: SyntaxKind
     var recursiveFlags: RecursiveRawSyntaxFlags
+
+    /// How the slots hold the children, in the byte the fields have to spare.
+    var storage: Storage
+
+    /// Where a layout node keeps its children, which its fields record and its
+    /// caller knows: the generated initializers statically, from whether their node
+    /// has `unexpected` slots at all, and `hasUnexpected` for whether any of them is
+    /// occupied.
+    enum Storage: UInt8, Sendable {
+      /// Children with no `unexpected` slots among them: every collection, and the
+      /// layout kinds that do not interleave.
+      case flat
+      /// A kind that interleaves `unexpected` slots, in a node where every one of
+      /// them is empty, so it keeps room only for its real children.
+      case layout
+      /// A kind that interleaves `unexpected` slots, in a node where at least one is
+      /// occupied, so it keeps its real children and then all of them.
+      case layoutWithUnexpected
+    }
   }
 }
 
@@ -348,6 +371,8 @@ extension RawSyntaxData.Layout {
     var nodeCount: UInt32 { pointer.pointee.nodeCount }
     @inline(__always)
     var recursiveFlags: RecursiveRawSyntaxFlags { pointer.pointee.recursiveFlags }
+    @inline(__always)
+    var storage: Fields.Storage { pointer.pointee.storage }
 
     /// Where this node's slots begin, a fixed offset past its fields.
     @inline(__always)
@@ -355,12 +380,6 @@ extension RawSyntaxData.Layout {
       UnsafeRawPointer(pointer.pointer)
         .advanced(by: MemoryLayout<Fields>.stride)
         .assumingMemoryBound(to: RawSyntax?.self)
-    }
-
-    /// The slots, which follow the fields in the node's tail.
-    @inline(__always)
-    var layout: RawSyntaxBuffer {
-      RawSyntaxBuffer(UnsafeBufferPointer(start: slotBase, count: Int(pointer.pointee.childCount)))
     }
   }
 }
@@ -480,6 +499,105 @@ public struct RawSyntax: Sendable {
   @inline(__always)
   var asLayout: RawSyntaxData.Layout.Ref {
     RawSyntaxData.Layout.Ref(fields(as: RawSyntaxData.Layout.self))
+  }
+
+  /// Calls `body` with each child this node holds, in source order.
+  ///
+  /// The same order as ``logicalChildren``, without the positions a node kept no
+  /// room for: that collection reports two per child for a kind that interleaves,
+  /// and answering each costs a bounds check, a branch and a division, where almost
+  /// every node has nothing in its `unexpected` slots at all.
+  ///
+  /// - Precondition: this is a layout node or a collection.
+  @inline(__always)
+  func forEachChildInSourceOrder(_ body: (RawSyntax) throws -> Void) rethrows {
+    let layout = self.asLayout
+    let childCount = Int(layout.childCount)
+    switch layout.storage {
+    case .flat, .layout:
+      // Every slot is a real child; a kind that interleaves keeps room for its
+      // `unexpected` slots only when one of them is occupied.
+      for case let child? in UnsafeBufferPointer(start: layout.slotBase, count: childCount) {
+        try body(child)
+      }
+    case .layoutWithUnexpected:
+      // Real children first, then the `unexpected` slots. Source order interleaves
+      // them: a slot before each child, and one after the last.
+      let real = layout.slotBase
+      let unexpected = real + childCount
+      for index in 0..<childCount {
+        if let node = unexpected[index] { try body(node) }
+        if let node = real[index] { try body(node) }
+      }
+      if let node = unexpected[childCount] { try body(node) }
+    }
+  }
+
+  /// The first non-nil result of `transform` over the children this node holds,
+  /// in source order, skipping the positions a node kept no room for as
+  /// ``forEachChildInSourceOrder(_:)`` does.
+  ///
+  /// - Precondition: this is a layout node or a collection.
+  @inline(__always)
+  func firstChildResultInSourceOrder<T>(_ transform: (RawSyntax) -> T?) -> T? {
+    let layout = self.asLayout
+    let childCount = Int(layout.childCount)
+    let real = layout.slotBase
+    switch layout.storage {
+    case .flat, .layout:
+      for index in 0..<childCount {
+        if let child = real[index], let result = transform(child) { return result }
+      }
+    case .layoutWithUnexpected:
+      let unexpected = real + childCount
+      for index in 0..<childCount {
+        if let child = unexpected[index], let result = transform(child) { return result }
+        if let child = real[index], let result = transform(child) { return result }
+      }
+      if let child = unexpected[childCount], let result = transform(child) { return result }
+    }
+    return nil
+  }
+
+  /// The first non-nil result of `transform` over the children this node holds,
+  /// from the last in source order to the first.
+  ///
+  /// - Precondition: this is a layout node or a collection.
+  @inline(__always)
+  func lastChildResultInSourceOrder<T>(_ transform: (RawSyntax) -> T?) -> T? {
+    let layout = self.asLayout
+    let childCount = Int(layout.childCount)
+    let real = layout.slotBase
+    switch layout.storage {
+    case .flat, .layout:
+      for index in (0..<childCount).reversed() {
+        if let child = real[index], let result = transform(child) { return result }
+      }
+    case .layoutWithUnexpected:
+      let unexpected = real + childCount
+      if let child = unexpected[childCount], let result = transform(child) { return result }
+      for index in (0..<childCount).reversed() {
+        if let child = real[index], let result = transform(child) { return result }
+        if let child = unexpected[index], let result = transform(child) { return result }
+      }
+    }
+    return nil
+  }
+
+  /// This node's children as the tree describes them, which for a node that kept no
+  /// room for its `unexpected` slots means reading those as nil.
+  ///
+  /// - Precondition: this is a layout node or a collection.
+  var logicalChildren: RawLayoutChildren {
+    if let (real, unexpected) = self.layoutView!.interleavedRegions {
+      return RawLayoutChildren(real: real, unexpected: unexpected, interleaves: true)
+    }
+    let layout = self.asLayout
+    return RawLayoutChildren(
+      real: UnsafeBufferPointer(start: layout.slotBase, count: Int(layout.childCount)),
+      unexpected: UnsafeBufferPointer(start: nil, count: 0),
+      interleaves: false
+    )
   }
 
   public var arena: RetainedRawSyntaxArena {
@@ -698,9 +816,11 @@ extension RawSyntax {
         }
       }
     case .layout:
-      for case let child? in asLayout.layout {
-        child.writeSyntaxTextBytes(to: destination, at: &written)
+      var offset = written
+      self.forEachChildInSourceOrder { child in
+        child.writeSyntaxTextBytes(to: destination, at: &offset)
       }
+      written = offset
     }
   }
 }
@@ -725,9 +845,7 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
         for p in asMaterializedToken.trailingTrivia { p.write(to: &target) }
       }
     case .layout:
-      for case let child? in asLayout.layout {
-        child.write(to: &target)
-      }
+      self.forEachChildInSourceOrder { $0.write(to: &target) }
     }
   }
 
@@ -746,13 +864,8 @@ extension RawSyntax {
     switch view {
     case .token(let tokenView):
       return tokenView
-    case .layout(let layoutView):
-      for child in layoutView.children {
-        if let token = child?.firstToken(viewMode: viewMode) {
-          return token
-        }
-      }
-      return nil
+    case .layout:
+      return firstChildResultInSourceOrder { $0.firstToken(viewMode: viewMode) }
     }
   }
 
@@ -762,13 +875,8 @@ extension RawSyntax {
     switch view {
     case .token(let tokenView):
       return tokenView
-    case .layout(let layoutView):
-      for child in layoutView.children.reversed() {
-        if let token = child?.lastToken(viewMode: viewMode) {
-          return token
-        }
-      }
-      return nil
+    case .layout:
+      return lastChildResultInSourceOrder { $0.lastToken(viewMode: viewMode) }
     }
   }
 
@@ -1150,29 +1258,51 @@ extension RawSyntax {
 }
 
 extension RawSyntax {
-  /// Factory method to create a layout node.
+  /// Makes a layout node whose caller knows how many real children it has and
+  /// whether any of its `unexpected` slots is occupied, and writes them where they
+  /// will live: the real children first, then the `unexpected` slots if there are
+  /// any.
+  ///
+  /// The generated initializers know both statically, so this is what they call and
+  /// nothing is written twice.
   ///
   /// - Parameters:
-  ///   - kind: Syntax kind.
-  ///   - count: Number of children, `unexpected` slots included.
+  ///   - kind: Syntax kind, which decides whether this node interleaves
+  ///     `unexpected` slots with its children at all.
+  ///   - childCount: Number of real children, which `initializer` writes first.
+  ///   - storage: Where this node keeps its children. `initializer` is expected to
+  ///     write the `unexpected` slots after the real ones for `.layoutWithUnexpected`,
+  ///     and only the real children otherwise.
   ///   - isMaximumNestingLevelOverflow: Whether the parse gave up nesting here.
   ///   - arena: RawSyntaxArena in which the node is allocated.
-  ///   - initializer: A closure that initializes every slot.
+  ///   - initializer: A closure that is expected to initialize every slot.
   /// - Important: `@inline(__always)` so that this stays inlined however `Layout`
   ///   grows. Every layout node in a tree is built here, and out of line it costs
   ///   about 0.19 ms of a parse, which no test would catch.
   @inline(__always)
-  public static func makeLayout(
+  static func makeLayout(
     kind: SyntaxKind,
-    uninitializedCount count: Int,
+    childCount: Int,
+    storage: RawSyntaxData.Layout.Storage,
     isMaximumNestingLevelOverflow: Bool = false,
     arena: __shared RawSyntaxArena,
     initializingWith initializer: (UnsafeMutableBufferPointer<RawSyntax?>) -> Void
   ) -> RawSyntax {
+    assert(
+      (storage == .flat) != kind.interleavesUnexpectedChildren,
+      "a node's storage must agree with whether its kind interleaves"
+    )
+    let slotCount: Int
+    switch storage {
+    case .flat, .layout:
+      slotCount = childCount
+    case .layoutWithUnexpected:
+      slotCount = 2 &* childCount &+ 1
+    }
     let (node, fields, trailing) = Self.allocate(
       .layout(RawSyntaxArenaRef(arena)),
       binding: RawSyntaxData.Layout.self,
-      trailingByteCount: count * MemoryLayout<RawSyntax?>.stride,
+      trailingByteCount: slotCount * MemoryLayout<RawSyntax?>.stride,
       arena: arena
     )
     // The slots follow the fields, so they start that far into a node aligned only
@@ -1185,11 +1315,19 @@ extension RawSyntax {
       "a layout node's slots need more alignment than where they start has"
     )
     let slots = UnsafeMutableBufferPointer<RawSyntax?>(
-      start: trailing.bindMemory(to: RawSyntax?.self, capacity: count),
-      count: count
+      start: trailing.bindMemory(to: RawSyntax?.self, capacity: slotCount),
+      count: slotCount
     )
     initializer(slots)
+    // What ``RawSyntaxLayoutView/elements`` relies on: a collection has an element
+    // in every slot.
+    assert(
+      kind.interleavesUnexpectedChildren || slots.allSatisfy { $0 != nil },
+      "a node with a flat layout may not have an absent child"
+    )
 
+    // Summing over the slots needs no order, so it does not matter that they are
+    // not in the order the tree describes.
     var byteLength: UInt32 = 0
     var nodeCount: UInt32 = 1
     var recursiveFlags = RecursiveRawSyntaxFlags()
@@ -1210,22 +1348,93 @@ extension RawSyntax {
     }
     fields.initialize(
       to: RawSyntaxData.Layout(
-        childCount: UInt32(count),
+        childCount: UInt32(childCount),
         byteLength: byteLength,
         nodeCount: nodeCount,
         kind: kind,
-        recursiveFlags: recursiveFlags
+        recursiveFlags: recursiveFlags,
+        storage: storage
       )
     )
-    validateLayout(layout: node.asLayout.layout, as: kind)
+    #if SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION
+    // Validate the children as the tree describes them, `unexpected` slots included,
+    // since that is the layout a node's kind names. `logicalChildren` presents them
+    // that way whatever the node's storage.
+    validateLayout(layout: node.logicalChildren, as: kind)
+    #endif
     return node
   }
 
-  static func makeEmptyLayout(
+  /// Makes a layout node from the layout as the tree describes it: an `unexpected`
+  /// slot before the first child, between each pair, and after the last.
+  ///
+  /// Whether any of those slots is occupied decides how much memory the node needs,
+  /// and that is not known until `initializer` has run, so it writes into a
+  /// temporary and the node is built from what it wrote. A caller that knows the two
+  /// counts up front should take the other form instead.
+  ///
+  /// - Parameters:
+  ///   - kind: Syntax kind.
+  ///   - count: Number of slots `initializer` writes, `unexpected` ones included.
+  ///   - isMaximumNestingLevelOverflow: Whether the parse gave up nesting here.
+  ///   - arena: RawSyntaxArena in which the node is allocated.
+  ///   - initializer: A closure that initializes every slot.
+  public static func makeLayout(
     kind: SyntaxKind,
-    arena: __shared RawSyntaxArena
+    uninitializedCount count: Int,
+    isMaximumNestingLevelOverflow: Bool = false,
+    arena: __shared RawSyntaxArena,
+    initializingWith initializer: (UnsafeMutableBufferPointer<RawSyntax?>) -> Void
   ) -> RawSyntax {
-    return .makeLayout(kind: kind, uninitializedCount: 0, arena: arena) { _ in }
+    // A layout node currently has at most 23 slots, so the temporary is small.
+    return withUnsafeTemporaryAllocation(of: RawSyntax?.self, capacity: count) { logical in
+      initializer(logical)
+
+      let interleaves = kind.interleavesUnexpectedChildren
+      assert(
+        !interleaves || count % 2 == 1,
+        "a kind that interleaves has an `unexpected` slot before each child and after the last"
+      )
+      // Real children are the odd slots when a kind interleaves, and all of them
+      // when it does not.
+      let childCount = interleaves ? (count - 1) / 2 : count
+
+      var hasUnexpected = false
+      if interleaves {
+        for i in stride(from: 0, to: count, by: 2) where logical[i] != nil {
+          hasUnexpected = true
+          break
+        }
+      }
+
+      let storage: RawSyntaxData.Layout.Storage =
+        !interleaves ? .flat : (hasUnexpected ? .layoutWithUnexpected : .layout)
+      return Self.makeLayout(
+        kind: kind,
+        childCount: childCount,
+        storage: storage,
+        isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow,
+        arena: arena
+      ) { slots in
+        // Real children first, so that reaching one is the same constant index
+        // whichever shape the node has, then the `unexpected` slots if the node kept
+        // room for them.
+        if interleaves {
+          for k in 0..<childCount {
+            slots.initializeElement(at: k, to: logical[2 &* k &+ 1])
+          }
+          if hasUnexpected {
+            for j in 0...childCount {
+              slots.initializeElement(at: childCount + j, to: logical[2 * j])
+            }
+          }
+        } else {
+          for i in 0..<count {
+            slots.initializeElement(at: i, to: logical[i])
+          }
+        }
+      }
+    }
   }
 
   static func makeLayout(
@@ -1294,7 +1503,7 @@ extension RawSyntax: CustomDebugStringConvertible {
       target.write(" byteLength=\(Int(asLayout.byteLength))")
       target.write(" nodeCount=\(Int(asLayout.nodeCount))")
       if withChildren {
-        for (num, child) in asLayout.layout.enumerated() {
+        for (num, child) in logicalChildren.enumerated() {
           target.write("\n")
           target.write(String(repeating: " ", count: childIndent))
           target.write("\(num): ")

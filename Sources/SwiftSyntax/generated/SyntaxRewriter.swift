@@ -4966,7 +4966,7 @@ open class SyntaxRewriter {
         if newLayout.baseAddress == nil {
           // We have not yet collected any previous rewritten nodes. Initialize
           // the new layout with the previous nodes of the parent.
-          newLayout = .allocate(capacity: node.raw.layoutView!.children.count)
+          newLayout = .allocate(capacity: Int(node.raw.layoutView!.logicalChildCount))
           _ = newLayout.initialize(fromContentsOf: node.raw.layoutView!.children)
         }
 

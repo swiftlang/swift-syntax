@@ -77,7 +77,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "Hello World",
       lexemes: [
-        LexemeSpec(.identifier, text: "Hello", trailing: " "),
+        LexemeSpec(.identifier, text: "Hello", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "World"),
       ]
     )
@@ -87,7 +87,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "`Hello` `World` `$` `with a space` `/not-an*operator+` `123`",
       lexemes: [
-        LexemeSpec(.identifier, text: "`Hello`", trailing: " "),
+        LexemeSpec(.identifier, text: "`Hello`", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "`World`", trailing: " "),
         LexemeSpec(.identifier, text: "`$`", trailing: " "),
         LexemeSpec(.identifier, text: "`with a space`", trailing: " "),
@@ -129,7 +129,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "x.1.0",
       lexemes: [
-        LexemeSpec(.identifier, text: "x"),
+        LexemeSpec(.identifier, text: "x", flags: [.isAtStartOfLine]),
         LexemeSpec(.period, text: "."),
         LexemeSpec(.integerLiteral, text: "1"),
         LexemeSpec(.period, text: "."),
@@ -144,7 +144,7 @@ class LexerTests: ParserTestCase {
       "\u{1234}"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\u{1234}"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -155,7 +155,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u{12341234}"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\u{12341234}"#, diagnostic: "invalid escape sequence in literal"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -166,69 +166,69 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "1234567890",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "1234567890")
+        LexemeSpec(.integerLiteral, text: "1234567890", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "0b1010101",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0b1010101")
+        LexemeSpec(.integerLiteral, text: "0b1010101", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "0xABC",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0xABC")
+        LexemeSpec(.integerLiteral, text: "0xABC", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "1.0",
       lexemes: [
-        LexemeSpec(.floatLiteral, text: "1.0")
+        LexemeSpec(.floatLiteral, text: "1.0", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "1.0e10",
       lexemes: [
-        LexemeSpec(.floatLiteral, text: "1.0e10")
+        LexemeSpec(.floatLiteral, text: "1.0e10", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "1.0E10",
       lexemes: [
-        LexemeSpec(.floatLiteral, text: "1.0E10")
+        LexemeSpec(.floatLiteral, text: "1.0E10", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "0xfeed_beef",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0xfeed_beef")
+        LexemeSpec(.integerLiteral, text: "0xfeed_beef", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "0xff.0p2",
       lexemes: [
-        LexemeSpec(.floatLiteral, text: "0xff.0p2")
+        LexemeSpec(.floatLiteral, text: "0xff.0p2", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "-0xff.0p2",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "-"),
+        LexemeSpec(.prefixOperator, text: "-", flags: [.isAtStartOfLine]),
         LexemeSpec(.floatLiteral, text: "0xff.0p2"),
       ]
     )
     assertLexemes(
       "+0xff.0p2",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "+"),
+        LexemeSpec(.prefixOperator, text: "+", flags: [.isAtStartOfLine]),
         LexemeSpec(.floatLiteral, text: "0xff.0p2"),
       ]
     )
     assertLexemes(
       "0x1.921fb4p1",
       lexemes: [
-        LexemeSpec(.floatLiteral, text: "0x1.921fb4p1")
+        LexemeSpec(.floatLiteral, text: "0x1.921fb4p1", flags: [.isAtStartOfLine])
       ]
     )
   }
@@ -239,7 +239,7 @@ class LexerTests: ParserTestCase {
       ###"this is a ##"raw"## string"###
       """,
       lexemes: [
-        LexemeSpec(.rawStringPoundDelimiter, text: "###"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "###", flags: [.isAtStartOfLine]),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: ###"this is a ##"raw"## string"###),
         LexemeSpec(.stringQuote, text: #"""#),
@@ -252,7 +252,7 @@ class LexerTests: ParserTestCase {
       #"#"abc"#
       """,
       lexemes: [
-        LexemeSpec(.rawStringPoundDelimiter, text: "#"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: #"#"abc"#),
         LexemeSpec(.stringQuote, text: #"""#),
@@ -265,7 +265,7 @@ class LexerTests: ParserTestCase {
       ###"##"abc"###
       """,
       lexemes: [
-        LexemeSpec(.rawStringPoundDelimiter, text: "###"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "###", flags: [.isAtStartOfLine]),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: #"##"abc"#),
         LexemeSpec(.stringQuote, text: #"""#),
@@ -278,7 +278,7 @@ class LexerTests: ParserTestCase {
       ##"""abc"####
       """#####,
       lexemes: [
-        LexemeSpec(.rawStringPoundDelimiter, text: "##"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "##", flags: [.isAtStartOfLine]),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: ###"""abc"###),
         LexemeSpec(.stringQuote, text: #"""#),
@@ -294,7 +294,7 @@ class LexerTests: ParserTestCase {
       let x = 42
       """,
       lexemes: [
-        LexemeSpec(.shebang, text: "#!/usr/bin/swiftc"),
+        LexemeSpec(.shebang, text: "#!/usr/bin/swiftc", flags: [.isAtStartOfLine]),
         LexemeSpec(.keyword, leading: "\n", text: "let", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "x", trailing: " "),
         LexemeSpec(.equal, text: "=", trailing: " "),
@@ -358,7 +358,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "/abc/",
       lexemes: [
-        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexSlash, text: "/", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
       ]
@@ -366,7 +366,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc/#",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -376,7 +376,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "###/abc/###",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "###"),
+        LexemeSpec(.regexPoundDelimiter, text: "###", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -391,7 +391,7 @@ class LexerTests: ParserTestCase {
       /#
       """,
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "\na\nb\n"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -401,7 +401,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/ \na\nb\n  /#",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: " \na\nb\n  "),
         LexemeSpec(.regexSlash, text: "/"),
@@ -411,7 +411,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "##/ \na\nb\n  /##",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "##"),
+        LexemeSpec(.regexPoundDelimiter, text: "##", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: " \na\nb\n  "),
         LexemeSpec(.regexSlash, text: "/"),
@@ -421,7 +421,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc/def/#",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc/def"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -431,7 +431,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc\\/#def/#",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc\\/#def"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -441,7 +441,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc|#def/#",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc|#def"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -451,7 +451,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc\n/#",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\n", text: "/", flags: [.isAtStartOfLine]),
@@ -461,7 +461,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc\r/#",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\r", text: "/", flags: [.isAtStartOfLine]),
@@ -471,7 +471,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "/a)/",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "/"),
+        LexemeSpec(.prefixOperator, text: "/", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "a"),
         LexemeSpec(.rightParen, text: ")"),
         LexemeSpec(.postfixOperator, text: "/"),
@@ -485,7 +485,7 @@ class LexerTests: ParserTestCase {
       abc
       """,
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: ""),
         LexemeSpec(.identifier, leading: "\n", text: "abc", flags: .isAtStartOfLine),
@@ -495,7 +495,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "!/abc/",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "!"),
+        LexemeSpec(.prefixOperator, text: "!", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -504,7 +504,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "!^/abc/",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "!^"),
+        LexemeSpec(.prefixOperator, text: "!^", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -513,7 +513,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "!#/abc/#",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "!"),
+        LexemeSpec(.prefixOperator, text: "!", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
@@ -527,7 +527,7 @@ class LexerTests: ParserTestCase {
       func /^ () { y/ }
       """,
       lexemes: [
-        LexemeSpec(.keyword, text: "func", trailing: " "),
+        LexemeSpec(.keyword, text: "func", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.binaryOperator, text: "/^", trailing: " "),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
@@ -540,7 +540,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "^^/!*/",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "^^"),
+        LexemeSpec(.prefixOperator, text: "^^", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "!*"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -549,7 +549,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "/!*/",
       lexemes: [
-        LexemeSpec(.regexSlash, text: "/"),
+        LexemeSpec(.regexSlash, text: "/", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexLiteralPattern, text: "!*"),
         LexemeSpec(.regexSlash, text: "/"),
       ]
@@ -559,7 +559,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "x /y/",
       lexemes: [
-        LexemeSpec(.identifier, text: "x", trailing: " "),
+        LexemeSpec(.identifier, text: "x", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "y"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -568,7 +568,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "x /.^ y/",
       lexemes: [
-        LexemeSpec(.identifier, text: "x", trailing: " "),
+        LexemeSpec(.identifier, text: "x", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: ".^ y"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -579,19 +579,25 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "^//",
       lexemes: [
-        LexemeSpec(.binaryOperator, text: "^", trailing: "//")
+        LexemeSpec(.binaryOperator, text: "^", trailing: "//", flags: [.isAtStartOfLine])
       ]
     )
     assertLexemes(
       "^1️⃣/*/",
       lexemes: [
-        LexemeSpec(.binaryOperator, text: "^", trailing: "/*/", diagnostic: "unterminated '/*' comment")
+        LexemeSpec(
+          .binaryOperator,
+          text: "^",
+          trailing: "/*/",
+          diagnostic: "unterminated '/*' comment",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
     assertLexemes(
       "(Foo::/)",
       lexemes: [
-        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.leftParen, text: "(", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "Foo"),
         LexemeSpec(.colonColon, text: "::"),
         LexemeSpec(.binaryOperator, text: "/"),
@@ -604,7 +610,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "static func 1️⃣�() {}",
       lexemes: [
-        LexemeSpec(.keyword, text: "static", trailing: " "),
+        LexemeSpec(.keyword, text: "static", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.keyword, text: "func", trailing: " �", diagnostic: "invalid character in source file"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
@@ -619,7 +625,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "\(bom)Hello",
       lexemes: [
-        LexemeSpec(.identifier, leading: "\u{feff}", text: "Hello")
+        LexemeSpec(.identifier, leading: "\u{feff}", text: "Hello", flags: [.isAtStartOfLine])
       ]
     )
   }
@@ -708,7 +714,7 @@ class LexerTests: ParserTestCase {
       "\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -719,7 +725,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "min(reduced.count / 2, chunkSize / 2)",
       lexemes: [
-        LexemeSpec(.identifier, text: "min"),
+        LexemeSpec(.identifier, text: "min", flags: [.isAtStartOfLine]),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.identifier, text: "reduced"),
         LexemeSpec(.period, text: "."),
@@ -743,7 +749,7 @@ class LexerTests: ParserTestCase {
       ///
       """,
       lexemes: [
-        LexemeSpec(.keyword, text: "var", trailing: " "),
+        LexemeSpec(.keyword, text: "var", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "x"),
         LexemeSpec(.colon, text: ":", trailing: " "),
         LexemeSpec(.identifier, text: "Int", trailing: " "),
@@ -760,7 +766,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "n /= 2 // foo",
       lexemes: [
-        LexemeSpec(.identifier, text: "n", trailing: " "),
+        LexemeSpec(.identifier, text: "n", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.binaryOperator, text: "/=", trailing: " "),
         LexemeSpec(.integerLiteral, text: "2", trailing: " // foo"),
       ]
@@ -769,7 +775,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "UIColor(white: 216.0/255.0, alpha: 44.0/255.0)",
       lexemes: [
-        LexemeSpec(.identifier, text: "UIColor"),
+        LexemeSpec(.identifier, text: "UIColor", flags: [.isAtStartOfLine]),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.identifier, text: "white"),
         LexemeSpec(.colon, text: ":", trailing: " "),
@@ -789,7 +795,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc|#def/",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc|#def"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -799,7 +805,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "#/abc|#def//",
       lexemes: [
-        LexemeSpec(.regexPoundDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#", flags: [.isAtStartOfLine]),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc|#def/"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -809,7 +815,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "lhs /==/ rhs",
       lexemes: [
-        LexemeSpec(.identifier, text: "lhs", trailing: " "),
+        LexemeSpec(.identifier, text: "lhs", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.binaryOperator, text: "/==/", trailing: " "),
         LexemeSpec(.identifier, text: "rhs"),
       ]
@@ -820,7 +826,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "() -> (\u{feff})",
       lexemes: [
-        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.leftParen, text: "(", flags: [.isAtStartOfLine]),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
         LexemeSpec(.arrow, text: "->", trailing: " "),
         LexemeSpec(.leftParen, text: "(", trailing: "\u{feff}"),
@@ -831,7 +837,13 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "y1️⃣\u{fffe} + z",
       lexemes: [
-        LexemeSpec(.identifier, text: "y", trailing: "\u{fffe} ", diagnostic: "invalid character in source file"),
+        LexemeSpec(
+          .identifier,
+          text: "y",
+          trailing: "\u{fffe} ",
+          diagnostic: "invalid character in source file",
+          flags: [.isAtStartOfLine]
+        ),
         LexemeSpec(.binaryOperator, text: "+", trailing: " "),
         LexemeSpec(.identifier, text: "z"),
       ]
@@ -844,7 +856,7 @@ class LexerTests: ParserTestCase {
       myString==""
       """,
       lexemes: [
-        LexemeSpec(.identifier, text: "myString"),
+        LexemeSpec(.identifier, text: "myString", flags: [.isAtStartOfLine]),
         LexemeSpec(.binaryOperator, text: "=="),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: ""),
@@ -857,7 +869,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "Foo::bar",
       lexemes: [
-        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.identifier, text: "Foo", flags: [.isAtStartOfLine]),
         LexemeSpec(.colonColon, text: "::"),
         LexemeSpec(.identifier, text: "bar"),
       ]
@@ -866,7 +878,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "Foo ::bar",
       lexemes: [
-        LexemeSpec(.identifier, text: "Foo", trailing: " "),
+        LexemeSpec(.identifier, text: "Foo", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.colonColon, text: "::"),
         LexemeSpec(.identifier, text: "bar"),
       ]
@@ -875,7 +887,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "Foo:: bar",
       lexemes: [
-        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.identifier, text: "Foo", flags: [.isAtStartOfLine]),
         LexemeSpec(.colonColon, text: "::", trailing: " "),
         LexemeSpec(.identifier, text: "bar"),
       ]
@@ -884,7 +896,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "Foo :: bar",
       lexemes: [
-        LexemeSpec(.identifier, text: "Foo", trailing: " "),
+        LexemeSpec(.identifier, text: "Foo", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.colonColon, text: "::", trailing: " "),
         LexemeSpec(.identifier, text: "bar"),
       ]
@@ -893,7 +905,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "Foo: :bar",
       lexemes: [
-        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.identifier, text: "Foo", flags: [.isAtStartOfLine]),
         LexemeSpec(.colon, text: ":", trailing: " "),
         LexemeSpec(.colon, text: ":"),
         LexemeSpec(.identifier, text: "bar"),
@@ -905,7 +917,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "!1️⃣<#b1#> && !2️⃣<#b2#>",
       lexemes: [
-        LexemeSpec(.prefixOperator, text: "!"),
+        LexemeSpec(.prefixOperator, text: "!", flags: [.isAtStartOfLine]),
         LexemeSpec(
           .identifier,
           text: "<#b1#>",
@@ -927,14 +939,20 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "1️⃣<##>",
       lexemes: [
-        LexemeSpec(.identifier, text: "<##>", trailing: "", diagnostic: "editor placeholder in source file")
+        LexemeSpec(
+          .identifier,
+          text: "<##>",
+          trailing: "",
+          diagnostic: "editor placeholder in source file",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
 
     assertLexemes(
       "let 1️⃣<#name#> = 2️⃣<#value#>",
       lexemes: [
-        LexemeSpec(.keyword, text: "let", trailing: " "),
+        LexemeSpec(.keyword, text: "let", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(
           .identifier,
           text: "<#name#>",
@@ -962,7 +980,7 @@ class LexerTests: ParserTestCase {
       }
       """,
       lexemes: [
-        LexemeSpec(.keyword, text: "func", trailing: " "),
+        LexemeSpec(.keyword, text: "func", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "foo"),
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.rightParen, text: ")", trailing: " "),
@@ -990,7 +1008,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "/*X_START*/x/*X_END*/ + /*Y_START*/y/*Y_END*/",
       lexemes: [
-        LexemeSpec(.identifier, leading: "/*X_START*/", text: "x", trailing: "/*X_END*/ "),
+        LexemeSpec(.identifier, leading: "/*X_START*/", text: "x", trailing: "/*X_END*/ ", flags: [.isAtStartOfLine]),
         LexemeSpec(.binaryOperator, text: "+", trailing: " /*Y_START*/"),
         LexemeSpec(.identifier, text: "y", trailing: "/*Y_END*/"),
       ]
@@ -1005,7 +1023,8 @@ class LexerTests: ParserTestCase {
           .integerLiteral,
           leading: " ",
           text: "0x1.0",
-          diagnostic: "hexadecimal floating point literal must end with an exponent"
+          diagnostic: "hexadecimal floating point literal must end with an exponent",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1016,13 +1035,21 @@ class LexerTests: ParserTestCase {
           .floatLiteral,
           leading: " ",
           text: "0x1p_",
-          diagnostic: "'_' is not a valid first character in floating point exponent"
+          diagnostic: "'_' is not a valid first character in floating point exponent",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
     assertLexemes(
       "01️⃣QWERTY",
-      lexemes: [LexemeSpec(.integerLiteral, text: "0QWERTY", diagnostic: "'Q' is not a valid digit in integer literal")]
+      lexemes: [
+        LexemeSpec(
+          .integerLiteral,
+          text: "0QWERTY",
+          diagnostic: "'Q' is not a valid digit in integer literal",
+          flags: [.isAtStartOfLine]
+        )
+      ]
     )
     assertLexemes(
       "0b1️⃣QWERTY",
@@ -1030,7 +1057,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .integerLiteral,
           text: "0bQWERTY",
-          diagnostic: "'Q' is not a valid binary digit (0 or 1) in integer literal"
+          diagnostic: "'Q' is not a valid binary digit (0 or 1) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1040,7 +1068,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .integerLiteral,
           text: "0xQWERTY",
-          diagnostic: "'Q' is not a valid hexadecimal digit (0-9, A-F) in integer literal"
+          diagnostic: "'Q' is not a valid hexadecimal digit (0-9, A-F) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1050,7 +1079,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .integerLiteral,
           text: "0oQWERTY",
-          diagnostic: "'Q' is not a valid octal digit (0-7) in integer literal"
+          diagnostic: "'Q' is not a valid octal digit (0-7) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1060,7 +1090,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .floatLiteral,
           text: "1.0e+QWERTY",
-          diagnostic: "'Q' is not a valid digit in floating point exponent"
+          diagnostic: "'Q' is not a valid digit in floating point exponent",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1070,7 +1101,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .floatLiteral,
           text: "0x1p+QWERTY",
-          diagnostic: "'Q' is not a valid digit in floating point exponent"
+          diagnostic: "'Q' is not a valid digit in floating point exponent",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1080,7 +1112,12 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "121️⃣😡",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "12😡", diagnostic: "'😡' is not a valid digit in integer literal")
+        LexemeSpec(
+          .integerLiteral,
+          text: "12😡",
+          diagnostic: "'😡' is not a valid digit in integer literal",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
   }
@@ -1089,13 +1126,23 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "01️⃣a1234567",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0a1234567", diagnostic: "'a' is not a valid digit in integer literal")
+        LexemeSpec(
+          .integerLiteral,
+          text: "0a1234567",
+          diagnostic: "'a' is not a valid digit in integer literal",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
     assertLexemes(
       "01231️⃣A5678",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0123A5678", diagnostic: "'A' is not a valid digit in integer literal")
+        LexemeSpec(
+          .integerLiteral,
+          text: "0123A5678",
+          diagnostic: "'A' is not a valid digit in integer literal",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
     assertLexemes(
@@ -1104,7 +1151,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .integerLiteral,
           text: "0b1020101",
-          diagnostic: "'2' is not a valid binary digit (0 or 1) in integer literal"
+          diagnostic: "'2' is not a valid binary digit (0 or 1) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1114,7 +1162,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .integerLiteral,
           text: "0o1357864",
-          diagnostic: "'8' is not a valid octal digit (0-7) in integer literal"
+          diagnostic: "'8' is not a valid octal digit (0-7) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1124,7 +1173,8 @@ class LexerTests: ParserTestCase {
         LexemeSpec(
           .integerLiteral,
           text: "0x147ADG0",
-          diagnostic: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal"
+          diagnostic: "'G' is not a valid hexadecimal digit (0-9, A-F) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1136,7 +1186,7 @@ class LexerTests: ParserTestCase {
       "/*"
       """,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: "/*"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -1319,7 +1369,7 @@ class LexerTests: ParserTestCase {
       "\("message")"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.backslash, text: "\\"),
         LexemeSpec(.leftParen, text: "("),
@@ -1339,7 +1389,7 @@ class LexerTests: ParserTestCase {
       "\"\(text)"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\""#),
         LexemeSpec(.backslash, text: "\\"),
         LexemeSpec(.leftParen, text: "("),
@@ -1358,7 +1408,7 @@ class LexerTests: ParserTestCase {
 
       """##,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: "bar"),
         LexemeSpec(.endOfFile, leading: "\n", text: "", flags: [.isAtStartOfLine]),
       ]
@@ -1372,7 +1422,7 @@ class LexerTests: ParserTestCase {
 
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.backslash, text: "\\"),
         LexemeSpec(.leftParen, text: "("),
@@ -1389,7 +1439,7 @@ class LexerTests: ParserTestCase {
       foo)"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: "test "),
         LexemeSpec(.backslash, text: "\\"),
         LexemeSpec(.leftParen, text: "("),
@@ -1412,7 +1462,7 @@ class LexerTests: ParserTestCase {
         """
       """#,
       lexemes: [
-        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n"),
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n", flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: "  line 1\n", flags: .isAtStartOfLine),
         LexemeSpec(.stringSegment, text: "  line 2\n", flags: .isAtStartOfLine),
         LexemeSpec(.stringSegment, text: "  ", flags: .isAtStartOfLine),
@@ -1428,7 +1478,7 @@ class LexerTests: ParserTestCase {
         """
       """#,
       lexemes: [
-        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n"),
+        LexemeSpec(.multilineStringQuote, leading: "  ", text: #"""""#, trailing: "\n", flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: "  line 1 ", trailing: "\\\n", flags: .isAtStartOfLine),
         LexemeSpec(.stringSegment, text: "  line 2\n", flags: .isAtStartOfLine),
         LexemeSpec(.stringSegment, text: "  ", flags: .isAtStartOfLine),
@@ -1441,7 +1491,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "x.13.1",
       lexemes: [
-        LexemeSpec(.identifier, text: "x"),
+        LexemeSpec(.identifier, text: "x", flags: [.isAtStartOfLine]),
         LexemeSpec(.period, text: "."),
         LexemeSpec(.integerLiteral, text: "13"),
         LexemeSpec(.period, text: "."),
@@ -1454,7 +1504,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "0.1...0.2",
       lexemes: [
-        LexemeSpec(.floatLiteral, text: "0.1"),
+        LexemeSpec(.floatLiteral, text: "0.1", flags: [.isAtStartOfLine]),
         LexemeSpec(.binaryOperator, text: "..."),
         LexemeSpec(.floatLiteral, text: "0.2"),
       ]
@@ -1465,7 +1515,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "0.",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0"),
+        LexemeSpec(.integerLiteral, text: "0", flags: [.isAtStartOfLine]),
         LexemeSpec(.period, text: "."),
       ]
     )
@@ -1475,7 +1525,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "var x = 11️⃣\0\nvar y = 2",
       lexemes: [
-        LexemeSpec(.keyword, text: "var", trailing: " "),
+        LexemeSpec(.keyword, text: "var", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "x", trailing: " "),
         LexemeSpec(.equal, text: "=", trailing: " "),
         LexemeSpec(.integerLiteral, text: "1", trailing: "\0", diagnostic: "nul character embedded in middle of file"),
@@ -1494,7 +1544,13 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "11️⃣\0#!a",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "1", trailing: "\0", diagnostic: "nul character embedded in middle of file"),
+        LexemeSpec(
+          .integerLiteral,
+          text: "1",
+          trailing: "\0",
+          diagnostic: "nul character embedded in middle of file",
+          flags: .isAtStartOfLine
+        ),
         LexemeSpec(.pound, text: "#"),
         LexemeSpec(.exclamationMark, text: "!"),
         LexemeSpec(.identifier, text: "a"),
@@ -1508,7 +1564,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\0"
       """,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: "\0", diagnostic: "nul character embedded in middle of file"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -1536,7 +1592,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\u"#, diagnostic: #"expected hexadecimal code in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -1547,7 +1603,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u{"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\u{"#, diagnostic: #"expected '}' in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -1558,7 +1614,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u{12"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\u{12"#, diagnostic: #"expected '}' in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -1569,7 +1625,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u{}"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(
           .stringSegment,
           text: #"\u{}"#,
@@ -1584,7 +1640,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u{hello}"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: #"\u{hello}"#, diagnostic: #"expected '}' in \u{...} escape sequence"#),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -1595,7 +1651,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u{fffffffff}"
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(
           .stringSegment,
           text: #"\u{fffffffff}"#,
@@ -1612,7 +1668,7 @@ class LexerTests: ParserTestCase {
       1️⃣*/
       """,
       lexemes: [
-        LexemeSpec(.unknown, text: "*/", diagnostic: "unexpected end of block comment")
+        LexemeSpec(.unknown, text: "*/", diagnostic: "unexpected end of block comment", flags: [.isAtStartOfLine])
       ]
     )
 
@@ -1621,7 +1677,13 @@ class LexerTests: ParserTestCase {
       /**/1️⃣*/
       """,
       lexemes: [
-        LexemeSpec(.unknown, leading: "/**/", text: "*/", diagnostic: "unexpected end of block comment")
+        LexemeSpec(
+          .unknown,
+          leading: "/**/",
+          text: "*/",
+          diagnostic: "unexpected end of block comment",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
 
@@ -1630,7 +1692,7 @@ class LexerTests: ParserTestCase {
       /**/a1️⃣*/
       """,
       lexemes: [
-        LexemeSpec(.identifier, leading: "/**/", text: "a"),
+        LexemeSpec(.identifier, leading: "/**/", text: "a", flags: [.isAtStartOfLine]),
         LexemeSpec(.unknown, text: "*/", diagnostic: "unexpected end of block comment"),
       ]
     )
@@ -1642,7 +1704,7 @@ class LexerTests: ParserTestCase {
       a 1️⃣“curly string” b
       """,
       lexemes: [
-        LexemeSpec(.identifier, text: "a", trailing: " "),
+        LexemeSpec(.identifier, text: "a", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(
           .identifier,
           text: "“curly string”",
@@ -1659,7 +1721,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "a\u{0330}",
       lexemes: [
-        LexemeSpec(.identifier, text: "a\u{0330}")
+        LexemeSpec(.identifier, text: "a\u{0330}", flags: [.isAtStartOfLine])
       ]
     )
 
@@ -1670,7 +1732,8 @@ class LexerTests: ParserTestCase {
           .identifier,
           text: "\u{0330}",
           errorLocationMarker: "START",
-          diagnostic: "an identifier cannot begin with this character"
+          diagnostic: "an identifier cannot begin with this character",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1684,7 +1747,8 @@ class LexerTests: ParserTestCase {
           .identifier,
           text: "a",
           trailing: " \u{a0} ",
-          diagnostic: "non-breaking space (U+00A0) used instead of regular space"
+          diagnostic: "non-breaking space (U+00A0) used instead of regular space",
+          flags: [.isAtStartOfLine]
         ),
         LexemeSpec(.identifier, text: "b"),
       ]
@@ -1695,7 +1759,12 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "0x1️⃣",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "0x", diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal")
+        LexemeSpec(
+          .integerLiteral,
+          text: "0x",
+          diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
 
@@ -1706,7 +1775,8 @@ class LexerTests: ParserTestCase {
           .integerLiteral,
           text: "0x",
           trailing: " ",
-          diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal"
+          diagnostic: "expected hexadecimal digit (0-9, A-F) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1718,7 +1788,7 @@ class LexerTests: ParserTestCase {
       "1️⃣\u{7}"
       """,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: "\u{7}", diagnostic: "unprintable ASCII character found in source file"),
         LexemeSpec(.stringQuote, text: #"""#),
       ]
@@ -1735,7 +1805,8 @@ class LexerTests: ParserTestCase {
           .integerLiteral,
           leading: "\u{a0}",
           text: "0xr",
-          diagnostic: "'r' is not a valid hexadecimal digit (0-9, A-F) in integer literal"
+          diagnostic: "'r' is not a valid hexadecimal digit (0-9, A-F) in integer literal",
+          flags: [.isAtStartOfLine]
         )
       ]
     )
@@ -1745,7 +1816,13 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "1️⃣/*",
       lexemes: [
-        LexemeSpec(.endOfFile, leading: "/*", text: "", diagnostic: "unterminated '/*' comment")
+        LexemeSpec(
+          .endOfFile,
+          leading: "/*",
+          text: "",
+          diagnostic: "unterminated '/*' comment",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
   }
@@ -1754,7 +1831,13 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "1️⃣/*/",
       lexemes: [
-        LexemeSpec(.endOfFile, leading: "/*/", text: "", diagnostic: "unterminated '/*' comment")
+        LexemeSpec(
+          .endOfFile,
+          leading: "/*/",
+          text: "",
+          diagnostic: "unterminated '/*' comment",
+          flags: [.isAtStartOfLine]
+        )
       ]
     )
   }
@@ -1777,7 +1860,7 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "À 㗀 🀀 ÿ 俿 𐐿",
       lexemes: [
-        LexemeSpec(.identifier, text: "À", trailing: " "),
+        LexemeSpec(.identifier, text: "À", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "㗀", trailing: " "),
         LexemeSpec(.identifier, text: "🀀", trailing: " "),
         LexemeSpec(.identifier, text: "ÿ", trailing: " "),
@@ -1794,7 +1877,7 @@ class LexerTests: ParserTestCase {
 
       """#,
       lexemes: [
-        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringQuote, text: #"""#, flags: [.isAtStartOfLine]),
         LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.backslash, text: #"\"#),
         LexemeSpec(.leftParen, text: "("),
@@ -1815,7 +1898,13 @@ class LexerTests: ParserTestCase {
     assertLexemes(
       "11️⃣\0<<<<<<< a\n=======\n>>>>>>> a",
       lexemes: [
-        LexemeSpec(.integerLiteral, text: "1", trailing: "\0", diagnostic: "nul character embedded in middle of file"),
+        LexemeSpec(
+          .integerLiteral,
+          text: "1",
+          trailing: "\0",
+          diagnostic: "nul character embedded in middle of file",
+          flags: .isAtStartOfLine
+        ),
         LexemeSpec(.binaryOperator, text: "<<<<<<<", trailing: " "),
         LexemeSpec(.identifier, text: "a"),
         LexemeSpec(.binaryOperator, leading: "\n", text: "=======", flags: [.isAtStartOfLine]),
@@ -1832,7 +1921,7 @@ class LexerTests: ParserTestCase {
        >>>>>>> a
       """#,
       lexemes: [
-        LexemeSpec(.binaryOperator, text: "<<<<<<<", trailing: " "),
+        LexemeSpec(.binaryOperator, text: "<<<<<<<", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "a"),
         LexemeSpec(.binaryOperator, leading: "\n ", text: ">>>>>>>", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "a"),

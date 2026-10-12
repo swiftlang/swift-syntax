@@ -383,8 +383,10 @@ extension Lexer {
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
 
-    /// If we have already lexed a token, stores whether the previous lexeme‘s ending contains a newline.
-    var previousLexemeTrailingNewlinePresence: NewlinePresence?
+    /// Whether the ending of the lexeme before the one being lexed contains a
+    /// newline. A cursor at the start of the input holds `.present`: the first
+    /// lexeme of a file begins a line.
+    var previousLexemeTrailingNewlinePresence: NewlinePresence
 
     /// If the `previousTokenKind` is `.keyword`, the keyword kind. Otherwise
     /// `nil`.
@@ -394,6 +396,7 @@ extension Lexer {
 
     init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool) {
       self.position = Position(input: input, isAtStartOfInput: isAtStartOfInput)
+      self.previousLexemeTrailingNewlinePresence = isAtStartOfInput ? .present : .absent
     }
 
     /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has
@@ -579,16 +582,14 @@ extension Lexer.Cursor {
     sourceBufferStart: UnsafePointer<UInt8>?,
     stateAllocator: Unmanaged<Lexer.StateAllocator>
   ) -> Lexer.Lexeme {
-    let cursor = self
-    // Leading trivia.
-    let leadingTriviaStart = self
+    let lexemeStart = self
     let newlineInLeadingTrivia: NewlinePresence
     var diagnostic: TokenDiagnostic? = nil
     if let leadingTriviaMode = self.currentState.leadingTriviaLexingMode() {
       let triviaResult = self.lexTrivia(mode: leadingTriviaMode)
       newlineInLeadingTrivia = triviaResult.newlinePresence
       if let error = triviaResult.error {
-        diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: cursor))
+        diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: lexemeStart))
       }
     } else {
       newlineInLeadingTrivia = .absent
@@ -626,10 +627,7 @@ extension Lexer.Cursor {
     }
 
     var flags = result.flags
-    if newlineInLeadingTrivia == .present {
-      flags.insert(.isAtStartOfLine)
-    }
-    if let previousLexemeTrailingNewlinePresence, previousLexemeTrailingNewlinePresence == .present {
+    if newlineInLeadingTrivia == .present || self.previousLexemeTrailingNewlinePresence == .present {
       flags.insert(.isAtStartOfLine)
     }
 
@@ -643,9 +641,11 @@ extension Lexer.Cursor {
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode() {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
-      self.previousLexemeTrailingNewlinePresence = triviaResult.newlinePresence
+      if triviaResult.newlinePresence == .present {
+        self.previousLexemeTrailingNewlinePresence = .present
+      }
       if let error = triviaResult.error {
-        diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: cursor))
+        diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: lexemeStart))
       }
     }
 
@@ -654,7 +654,7 @@ extension Lexer.Cursor {
     }
 
     if let error = result.error {
-      diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: cursor))
+      diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: lexemeStart))
     }
 
     let lexeme = Lexer.Lexeme(
@@ -662,10 +662,10 @@ extension Lexer.Cursor {
       flags: flags,
       diagnostic: diagnostic,
       keyword: result.keywordKind,
-      leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
+      leadingTriviaLength: lexemeStart.distance(to: textStart),
       textLength: textStart.distance(to: trailingTriviaStart),
-      wholeTextLength: leadingTriviaStart.distance(to: self),
-      cursor: cursor
+      wholeTextLength: lexemeStart.distance(to: self),
+      cursor: lexemeStart
     )
     self.previousTokenKind = result.tokenKind
     // `keywordKind` is also set for an identifier that spells a keyword, which

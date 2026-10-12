@@ -15,13 +15,15 @@
 /// Once all memory in a slab has been used, it allocates a new slab and no
 /// memory allocations are necessary until that slab is completely filled up.
 @_spi(BumpPtrAllocator) @_spi(Testing)
-public class BumpPtrAllocator {
+public final class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
   static private let GROWTH_DELAY: Int = 128
-  static private let SLAB_ALIGNMENT: Int = 8
+  @usableFromInline
+  static let SLAB_ALIGNMENT: Int = 8
 
-  private let initialSlabSize: Int
+  @usableFromInline
+  let initialSlabSize: Int
 
   private var slabs: [Slab]
   /// Pair of pointers in the current slab.
@@ -29,13 +31,21 @@ public class BumpPtrAllocator {
   /// - end: Points to the end address of `slabs.last`. This is equivalent to
   ///        `slabs.last!.baseAddress! + slabs.last!.count`
   /// 'nil' if `slabs` is empty.
-  private var current:
+  /// - Important: `@exclusivity(unchecked)` because the bump is inlined into
+  ///   other modules, where the compiler cannot see that no two accesses
+  ///   overlap and so falls back to checking at run time. A slab is bumped by
+  ///   one caller at a time; nothing hands the allocator to itself.
+  @exclusivity(unchecked)
+  @usableFromInline
+  var current:
     (
       pointer: UnsafeMutableRawPointer,
       end: UnsafeMutableRawPointer
     )?
   private var customSizeSlabs: [Slab]
-  private var _totalBytesAllocated: Int
+  @exclusivity(unchecked)
+  @usableFromInline
+  var _totalBytesAllocated: Int
 
   /// Construct a new ``BumpPtrAllocator``.
   public init(initialSlabSize: Int) {
@@ -74,7 +84,8 @@ public class BumpPtrAllocator {
   }
 
   /// Allocate 'byteCount' of memory from the current slab if available.
-  private func allocateFromCurrentSlab(
+  @inlinable
+  func allocateFromCurrentSlab(
     _ byteCount: Int,
     _ alignment: Int
   ) -> UnsafeMutableRawBufferPointer? {
@@ -96,6 +107,11 @@ public class BumpPtrAllocator {
   ///
   /// The returned buffer is not bound to any types, nor initialized.
   /// Clients should never call `deallocate()` on the returned buffer.
+  /// - Important: `@inlinable` because the bump — an align, a compare and an add
+  ///   — is called from other modules, where it would otherwise be a call that
+  ///   cannot fold the byte count and alignment its caller passes as constants.
+  ///   Only that path is inlined; needing a slab is left out of line.
+  @inlinable
   public func allocate(byteCount: Int, alignment: Int) -> UnsafeMutableRawBufferPointer {
 
     assert(alignment <= Self.SLAB_ALIGNMENT)
@@ -111,6 +127,12 @@ public class BumpPtrAllocator {
       return allocated
     }
 
+    return allocateFromNewSlab(byteCount: byteCount, alignment: alignment)
+  }
+
+  /// Allocate `byteCount` of memory when the current slab cannot satisfy it.
+  @usableFromInline
+  func allocateFromNewSlab(byteCount: Int, alignment: Int) -> UnsafeMutableRawBufferPointer {
     // If the size is too big, allocate a dedicated slab for it.
     if byteCount >= self.initialSlabSize {
       let customSlab = Slab.allocate(
@@ -136,6 +158,7 @@ public class BumpPtrAllocator {
   /// In general, using ``BumpPtrAllocator`` for placing non-trivial values (e.g.
   /// class instances, existentials, etc.) is strongly discouraged because they
   /// are not automatically deinitialized.
+  @inlinable
   public func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {
     let allocated = allocate(
       byteCount: MemoryLayout<T>.stride * count,

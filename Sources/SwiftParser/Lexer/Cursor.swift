@@ -383,8 +383,9 @@ extension Lexer {
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
 
-    /// If we have already lexed a token, stores whether the previous lexeme‘s ending contains a newline.
-    var previousLexemeTrailingNewlinePresence: NewlinePresence?
+    /// Whether the ending of the lexeme before the one being lexed contains a
+    /// newline. A cursor that has lexed nothing holds `.absent`.
+    var previousLexemeTrailingNewlinePresence: NewlinePresence = .absent
 
     /// If the `previousTokenKind` is `.keyword`, the keyword kind. Otherwise
     /// `nil`.
@@ -624,10 +625,7 @@ extension Lexer.Cursor {
     }
 
     var flags = result.flags
-    if newlineInLeadingTrivia == .present {
-      flags.insert(.isAtStartOfLine)
-    }
-    if let previousLexemeTrailingNewlinePresence, previousLexemeTrailingNewlinePresence == .present {
+    if newlineInLeadingTrivia == .present || self.previousLexemeTrailingNewlinePresence == .present {
       flags.insert(.isAtStartOfLine)
     }
 

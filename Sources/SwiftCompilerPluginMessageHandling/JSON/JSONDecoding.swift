@@ -957,7 +957,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     expectedType: T.Type,
     for codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws {
     guard !value.isNull else {
       throw DecodingError.valueNotFound(
@@ -975,7 +975,7 @@ extension JSONDecoding {
     _ result: T?,
     decoding value: JSONMapValue,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> T {
     if let result = result {
       return result
@@ -995,7 +995,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as _: Bool.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> Bool {
     try _unwrapOrThrow(value.asBool(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -1005,7 +1005,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as _: String.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> String {
     try _unwrapOrThrow(value.asString(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -1015,7 +1015,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as type: Integer.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> Integer {
     try _unwrapOrThrow(value.asInteger(type), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -1025,7 +1025,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as type: Floating.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> Floating {
     try _unwrapOrThrow(value.asFloatingPoint(type), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -1034,7 +1034,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as type: T.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> T {
     let decoder = Self(value: value, codingPathNode: codingPathNode.appending(additionalKey))
     return try T.init(from: decoder)

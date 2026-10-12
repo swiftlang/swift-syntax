@@ -384,8 +384,9 @@ extension Lexer {
     var previousTokenKind: RawTokenKind?
 
     /// Whether the ending of the lexeme before the one being lexed contains a
-    /// newline. A cursor that has lexed nothing holds `.absent`.
-    var previousLexemeTrailingNewlinePresence: NewlinePresence = .absent
+    /// newline. A cursor at the start of the input holds `.present`: the first
+    /// lexeme of a file begins a line.
+    var previousLexemeTrailingNewlinePresence: NewlinePresence
 
     /// If the `previousTokenKind` is `.keyword`, the keyword kind. Otherwise
     /// `nil`.
@@ -395,6 +396,7 @@ extension Lexer {
 
     init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool) {
       self.position = Position(input: input, isAtStartOfInput: isAtStartOfInput)
+      self.previousLexemeTrailingNewlinePresence = isAtStartOfInput ? .present : .absent
     }
 
     /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has

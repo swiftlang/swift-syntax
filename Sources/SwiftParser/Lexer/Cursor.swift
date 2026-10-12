@@ -639,7 +639,9 @@ extension Lexer.Cursor {
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode() {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
-      self.previousLexemeTrailingNewlinePresence = triviaResult.newlinePresence
+      if triviaResult.newlinePresence == .present {
+        self.previousLexemeTrailingNewlinePresence = .present
+      }
       if let error = triviaResult.error {
         diagnostic = TokenDiagnostic(combining: diagnostic, error.tokenDiagnostic(tokenStart: lexemeStart))
       }

@@ -117,6 +117,41 @@ final class AttributeTests: ParserTestCase {
       func foo(_ t: T) {}
       """
     )
+    assertParse(
+      """
+      @specialized(exported: true, where T == Int)
+      func foo(_ t: T) {}
+      """,
+      languageFeatures: [.extendedSpecializedAttribute]
+    )
+    // Only the 'exported' label is accepted before the 'where' clause.
+    assertParse(
+      """
+      @specialized(1️⃣kind: full, 2️⃣where T == Int)
+      func foo(_ t: T) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'where' in 'where' clause",
+          fixIts: ["insert 'where'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected left-hand type, '==', and right-hand type in same type requirement",
+          fixIts: ["insert left-hand type, '==', and right-hand type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code 'where T == Int' in attribute"
+        ),
+      ],
+      fixedSource: """
+        @specialized(where kind: full, <#type#> == <#type#>where T == Int)
+        func foo(_ t: T) {}
+        """,
+      languageFeatures: [.extendedSpecializedAttribute]
+    )
   }
 
   func testMissingClosingParenToAttribute() {

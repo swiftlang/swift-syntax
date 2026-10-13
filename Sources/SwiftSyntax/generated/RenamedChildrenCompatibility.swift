@@ -7400,6 +7400,35 @@ extension SpecializeTargetFunctionArgumentSyntax {
   }
 }
 
+extension SpecializedAttributeArgumentSyntax {
+  public var unexpectedBeforeGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeExportedArgument
+    }
+    set {
+      unexpectedBeforeExportedArgument = newValue
+    }
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeGenericWhereClause,
+      exportedArgument: nil,
+      nil,
+      genericWhereClause: genericWhereClause,
+      unexpectedAfterGenericWhereClause,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension StringLiteralExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeOpeningPounds")
   public var unexpectedBeforeOpenDelimiter: UnexpectedNodesSyntax? {

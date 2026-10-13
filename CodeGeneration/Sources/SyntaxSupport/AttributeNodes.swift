@@ -769,12 +769,21 @@ public let ATTRIBUTE_NODES: [Node] = [
     kind: .specializedAttributeArgument,
     base: .syntax,
     nameForDiagnostics: "argument to '@specialized",
-    documentation: "The generic where clause for the `@specialized` attribute",
+    documentation: "The arguments for the `@specialized` attribute",
     children: [
+      // Reuses '@_specialize''s labeled argument node, but the parser only
+      // accepts the 'exported' label here.
+      Child(
+        name: "exportedArgument",
+        kind: .node(kind: .labeledSpecializeArgument),
+        experimentalFeature: .extendedSpecializedAttribute,
+        documentation: "The optional `exported:` argument.",
+        isOptional: true
+      ),
       Child(
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause)
-      )
+      ),
     ]
   ),
 

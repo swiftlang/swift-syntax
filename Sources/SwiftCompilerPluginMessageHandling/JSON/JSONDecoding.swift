@@ -495,11 +495,8 @@ private enum _JSONStringParser {
         // Found an escape sequence. Flush the skipped source into the buffer.
         flush()
 
-        let hadError = decodeEscapeSequence(cursor: &cursor, end: end) {
-          dest.initialize(to: $0)
-          dest += 1
-        }
-        guard !hadError else { return 0 }
+        guard let count = decodeEscapeSequence(cursor: &cursor, end: end, into: dest) else { return 0 }
+        dest += count
 
         // Mark the position of the end of the escape sequence.
         mark = cursor
@@ -516,39 +513,40 @@ private enum _JSONStringParser {
   }
 
   /// Decode a JSON escape sequence, advance 'cursor' to end of the escape
-  /// sequence, and call 'processCodeUnit' with the decoded value.
-  /// Returns 'true' on error.
+  /// sequence, and write the decoded bytes to 'destination'.
+  /// Returns the number of bytes written, or 'nil' on error.
   ///
   ///  - Note: We don't report detailed errors for now because we only care
   ///          well-formed payloads from the compiler.
   private static func decodeEscapeSequence(
     cursor: inout UnsafePointer<UInt8>,
     end: UnsafePointer<UInt8>,
-    into processCodeUnit: (UInt8) -> Void
-  ) -> Bool {
+    into destination: UnsafeMutablePointer<UInt8>
+  ) -> Int? {
     assert(cursor.pointee == UInt8(ascii: "\\"))
-    guard cursor.distance(to: end) >= 2 else { return true }
+    guard cursor.distance(to: end) >= 2 else { return nil }
 
     // Eat backslash and the next character.
     cursor += 2
+    let byte: UInt8
     switch cursor[-1] {
-    case UInt8(ascii: "\""): processCodeUnit(UInt8(ascii: "\""))
-    case UInt8(ascii: "'"): processCodeUnit(UInt8(ascii: "'"))
-    case UInt8(ascii: "\\"): processCodeUnit(UInt8(ascii: "\\"))
-    case UInt8(ascii: "/"): processCodeUnit(UInt8(ascii: "/"))
-    case UInt8(ascii: "b"): processCodeUnit(0x08)
-    case UInt8(ascii: "f"): processCodeUnit(0x0C)
-    case UInt8(ascii: "n"): processCodeUnit(0x0A)
-    case UInt8(ascii: "r"): processCodeUnit(0x0D)
-    case UInt8(ascii: "t"): processCodeUnit(0x09)
+    case UInt8(ascii: "\""): byte = UInt8(ascii: "\"")
+    case UInt8(ascii: "'"): byte = UInt8(ascii: "'")
+    case UInt8(ascii: "\\"): byte = UInt8(ascii: "\\")
+    case UInt8(ascii: "/"): byte = UInt8(ascii: "/")
+    case UInt8(ascii: "b"): byte = 0x08
+    case UInt8(ascii: "f"): byte = 0x0C
+    case UInt8(ascii: "n"): byte = 0x0A
+    case UInt8(ascii: "r"): byte = 0x0D
+    case UInt8(ascii: "t"): byte = 0x09
     case UInt8(ascii: "u"):
-      guard cursor.distance(to: end) >= 4 else { return true }
+      guard cursor.distance(to: end) >= 4 else { return nil }
 
       // Parse 4 hex digits into a UTF-16 code unit.
       let result: UInt16? = _JSONNumberParser.parseHexIntegerDigits(
         source: UnsafeBufferPointer(start: cursor, count: 4)
       )
-      guard let result else { return true }
+      guard let result else { return nil }
       cursor += 4
 
       if UTF16.isLeadSurrogate(result) {
@@ -556,40 +554,51 @@ private enum _JSONStringParser {
         guard cursor.distance(to: end) >= 6,
           cursor[0] == UInt8(ascii: "\\"),
           cursor[1] == UInt8(ascii: "u")
-        else { return true }
+        else { return nil }
 
         let trail: UInt16? = _JSONNumberParser.parseHexIntegerDigits(
           source: UnsafeBufferPointer(start: cursor + 2, count: 4)
         )
-        guard let trail, UTF16.isTrailSurrogate(trail) else { return true }
+        guard let trail, UTF16.isTrailSurrogate(trail) else { return nil }
         cursor += 6
 
+        var count = 0
         let hadError = transcode(
           [result, trail].makeIterator(),
           from: UTF16.self,
           to: UTF8.self,
           stoppingOnError: true,
-          into: processCodeUnit
+          into: {
+            destination.advanced(by: count).initialize(to: $0)
+            count += 1
+          }
         )
-        guard !hadError else { return true }
+        guard !hadError else { return nil }
+        return count
       } else if UTF16.isTrailSurrogate(result) {
-        return true
+        return nil
       } else {
         // Transcode UTF-16 code unit to UTF-8.
+        var count = 0
         let hadError = transcode(
           CollectionOfOne(result).makeIterator(),
           from: UTF16.self,
           to: UTF8.self,
           stoppingOnError: true,
-          into: processCodeUnit
+          into: {
+            destination.advanced(by: count).initialize(to: $0)
+            count += 1
+          }
         )
-        guard !hadError else { return true }
+        guard !hadError else { return nil }
+        return count
       }
     default:
       // invalid escape sequence.
-      return true
+      return nil
     }
-    return false
+    destination.initialize(to: byte)
+    return 1
   }
 
   /// SwiftStdlib 5.3 compatibility shim for

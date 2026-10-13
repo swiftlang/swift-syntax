@@ -17,6 +17,15 @@ import SyntaxSupport
 enum ImportAccessLevel {
   case `public`
   case `internal`
+
+  var modifier: DeclModifierSyntax {
+    switch self {
+    case .internal:
+      return DeclModifierSyntax(name: .keyword(.internal))
+    case .public:
+      return DeclModifierSyntax(name: .keyword(.public))
+    }
+  }
 }
 
 func importSwiftSyntax(accessLevel: ImportAccessLevel = .internal) -> DeclSyntax {
@@ -31,18 +40,11 @@ func importSwiftSyntax(accessLevel: ImportAccessLevel = .internal) -> DeclSyntax
       }
     }
   }
-  let visibilityKeyword: TokenSyntax
-  switch accessLevel {
-  case .internal:
-    visibilityKeyword = "internal"
-  case .public:
-    visibilityKeyword = "public"
-  }
 
   return DeclSyntax(
     """
     #if compiler(>=6)
-    \(importingAttrs)\(visibilityKeyword) import SwiftSyntax
+    \(importingAttrs)\(accessLevel.modifier) import SwiftSyntax
     #else
     \(importingAttrs)import SwiftSyntax
     #endif

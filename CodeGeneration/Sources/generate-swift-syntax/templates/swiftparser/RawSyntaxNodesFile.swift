@@ -17,6 +17,8 @@ import Utils
 
 func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
   return SourceFileSyntax(leadingTrivia: copyrightHeader) {
+    importSwiftSyntax(accessLevel: .internal)
+
     for node in SYNTAX_NODES
     where node.kind.isBase
       && nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!)
@@ -24,8 +26,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
     {
       DeclSyntax(
         """
-        \(node.apiAttributes(forRaw: true))\
-        public protocol \(node.kind.raw.protocolType): \(node.base.raw.protocolType) {}
+        protocol \(node.kind.raw.protocolType): \(node.base.raw.protocolType) {}
         """
       )
     }
@@ -34,8 +35,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
     where nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!) {
       try! StructDeclSyntax(
         """
-        \(node.apiAttributes(forRaw: true))\
-        public struct \(node.kind.raw.syntaxType): \(node.kind.isBase ? node.kind.raw.protocolType : node.base.raw.protocolType)
+        struct \(node.kind.raw.syntaxType): \(node.kind.isBase ? node.kind.raw.protocolType : node.base.raw.protocolType)
         """
       ) {
         for childNodeChoices in node.childrenNodeChoices(forRaw: true) {
@@ -44,14 +44,13 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          @_spi(RawSyntax)
-          public var layoutView: RawSyntaxLayoutView {
+          var layoutView: RawSyntaxLayoutView {
             return raw.layoutView!
           }
           """
         )
 
-        try FunctionDeclSyntax("public static func isKindOf(_ raw: RawSyntax) -> Bool") {
+        try FunctionDeclSyntax("static func isKindOf(_ raw: RawSyntax) -> Bool") {
           if node.kind.isBase {
 
             let cases = SwitchCaseItemListSyntax {
@@ -77,7 +76,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
           }
         }
 
-        DeclSyntax("public var raw: RawSyntax")
+        DeclSyntax("var raw: RawSyntax")
 
         DeclSyntax(
           """
@@ -98,7 +97,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          public init?(_ other: some RawSyntaxNodeProtocol) {
+          init?(_ other: some RawSyntaxNodeProtocol) {
             guard Self.isKindOf(other.raw) else { return nil }
             self.init(unchecked: other.raw)
           }
@@ -108,7 +107,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
         if node.kind.isBase {
           DeclSyntax(
             """
-            public init(_ other: some \(node.kind.raw.protocolType)) {
+            init(_ other: some \(node.kind.raw.protocolType)) {
               self.init(unchecked: other.raw)
             }
             """
@@ -119,14 +118,11 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
           let element = node.elementChoices.only != nil ? node.elementChoices.only!.raw.syntaxType : "Element"
           DeclSyntax(
             """
-            public init(elements: RawSyntaxNodeList<\(element)>, arena: __shared RawSyntaxArena) {
-              let raw = RawSyntax.makeLayout(
-                kind: .\(node.memberCallName), childCount: elements.count, storage: .flat, arena: arena) { layout in
-                  guard var ptr = layout.baseAddress else { return }
-                  for elem in elements.buffer {
-                    ptr.initialize(to: elem.raw)
-                    ptr += 1
-                  }
+            init(elements: RawSyntaxNodeList<\(element)>, arena: __shared RawSyntaxArena) {
+              let raw = RawSyntax.makeCollection(kind: .\(node.memberCallName), count: elements.count, arena: arena) { layout in
+                for (index, element) in elements.buffer.enumerated() {
+                  layout.initializeElement(at: index, to: element.raw)
+                }
               }
               self.init(unchecked: raw)
             }
@@ -135,7 +131,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
           DeclSyntax(
             """
-            public var elements: [Raw\(node.collectionElementType.syntaxBaseName)] {
+            var elements: [Raw\(node.collectionElementType.syntaxBaseName)] {
               layoutView.elements.map { Raw\(node.collectionElementType.syntaxBaseName)(raw: $0) }
             }
             """
@@ -156,53 +152,20 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
             FunctionParameterSyntax("arena: __shared RawSyntaxArena")
           }
-          try InitializerDeclSyntax("public init(\(params))") {
-            // A node that interleaves keeps its real children and its
-            // `unexpected` slots in separate regions, real ones first, so that
-            // the slots can be left out of a node that has nothing to put in
-            // them. A node that does not interleave has only real children.
-            let interleaves = node.interleavesUnexpectedChildren
-            let realChildren = interleaves ? node.children.filter { !$0.isUnexpectedNodes } : node.children
-            let unexpectedChildren = interleaves ? node.children.filter { $0.isUnexpectedNodes } : []
-
-            let list = try CodeBlockItemListSyntax {
-              for (index, child) in realChildren.enumerated() {
-                let optionalMark = child.isOptional ? "?" : ""
-                ExprSyntax(
-                  "layout.initializeElement(at: \(raw: index), to: \(child.baseCallName)\(raw: optionalMark).raw)"
-                )
-              }
-              if !unexpectedChildren.isEmpty {
-                try IfExprSyntax("if hasUnexpected") {
-                  for (offset, child) in unexpectedChildren.enumerated() {
-                    ExprSyntax(
-                      "layout.initializeElement(at: \(raw: realChildren.count + offset), to: \(child.baseCallName)?.raw)"
-                    )
-                  }
-                }
-              }
+          // The node is built by its factory in SwiftSyntax, where building it
+          // can be inlined; this only unwraps the typed children.
+          let arguments = LabeledExprListSyntax {
+            for child in node.children {
+              LabeledExprSyntax(
+                label: child.isUnexpectedNodes ? nil : child.labelDeclName,
+                colon: child.isUnexpectedNodes ? nil : .colonToken(),
+                expression: ExprSyntax("\(child.baseCallName)\(raw: child.isOptional ? "?" : "").raw")
+              )
             }
-
-            // A kind interleaves `unexpected` slots exactly when its layout has any,
-            // which is known here; whether one of them is occupied is not, so only an
-            // interleaving node works that out.
-            if !unexpectedChildren.isEmpty {
-              let occupied = unexpectedChildren.map { "\($0.baseCallName) != nil" }.joined(separator: " || ")
-              DeclSyntax("let hasUnexpected = \(raw: occupied)")
-            }
-            let storage =
-              unexpectedChildren.isEmpty
-              ? ".flat"
-              : "hasUnexpected ? .layoutWithUnexpected : .layout"
-            DeclSyntax(
-              """
-              let raw = RawSyntax.makeLayout(
-                kind: .\(node.memberCallName), childCount: \(raw: realChildren.count), storage: \(raw: storage), arena: arena) { layout in
-                \(list)
-              }
-              """
-            )
-            ExprSyntax("self.init(unchecked: raw)")
+            LabeledExprSyntax(label: "arena", expression: ExprSyntax("arena"))
+          }
+          try InitializerDeclSyntax("init(\(params))") {
+            ExprSyntax("self.init(unchecked: RawSyntax.\(node.kind.rawFactoryName)(\(arguments)))")
           }
 
           // Reach a child by where it sits rather than by its index in the
@@ -227,7 +190,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
           for (child, accessor) in zip(node.children, childAccessors) {
             try VariableDeclSyntax(
-              "public var \(child.varDeclName): Raw\(child.buildableType.buildable)"
+              "var \(child.varDeclName): Raw\(child.buildableType.buildable)"
             ) {
               let exclamationMark = child.isOptional ? "" : "!"
 
@@ -248,19 +211,19 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
 private extension ChildNodeChoices {
   var rawEnumDecl: EnumDeclSyntax {
-    try! EnumDeclSyntax("public enum \(self.name): RawSyntaxNodeProtocol") {
+    try! EnumDeclSyntax("enum \(self.name): RawSyntaxNodeProtocol") {
       for choice in self.choices {
-        choice.enumCaseDecl
+        choice.enumCaseDecl(internal: true)
       }
 
-      self.isKindOfFuncDecl(parameterName: "raw", parameterType: "RawSyntax")
+      self.isKindOfFuncDecl(parameterName: "raw", parameterType: "RawSyntax", accessLevel: nil)
 
-      self.syntaxGetter(propertyName: "raw", propertyType: "RawSyntax")
+      self.syntaxGetter(propertyName: "raw", propertyType: "RawSyntax", accessLevel: nil)
 
-      self.syntaxInitDecl(inputType: "__shared some RawSyntaxNodeProtocol")
+      self.syntaxInitDecl(inputType: "__shared some RawSyntaxNodeProtocol", accessLevel: nil)
 
       for choice in self.choices {
-        if let baseTypeInitDecl = choice.baseTypeInitDecl(hasArgumentName: true) {
+        if let baseTypeInitDecl = choice.baseTypeInitDecl(hasArgumentName: true, accessLevel: nil) {
           baseTypeInitDecl
         }
       }

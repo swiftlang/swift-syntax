@@ -954,7 +954,7 @@ extension RawSyntax {
   ///   - presence: Whether the token appeared in the source or was synthesized.
   ///   - tokenDiagnostic: The diagnostic to carry, if the token has one.
   ///   - arena: RawSyntaxArena in which the node is allocated.
-  internal static func parsedToken(
+  public static func parsedToken(
     kind: RawTokenKind,
     sourceBuffer: UnsafeBufferPointer<UInt8>,
     leadingTriviaByteLength: Int,
@@ -1581,3 +1581,43 @@ let RawSyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "RawSyntaxData.Layout": .init(RawSyntaxData.Layout.self),
   "RawSyntax?": .init(RawSyntax?.self),
 ]
+
+extension RawSyntax {
+  /// Whether the tree contained by this node has any
+  ///  - missing nodes or
+  ///  - unexpected nodes or
+  ///  - tokens with a ``TokenDiagnostic`` of severity `error`
+  public var hasError: Bool {
+    return recursiveFlags.contains(.hasError)
+  }
+
+  /// Creates a syntax collection of `kind` with `count` elements.
+  ///
+  /// A collection's children are all elements, so its storage is flat and the
+  /// count is known up front; `initializer` writes each element into its slot
+  /// directly, with nothing gathered into a temporary first.
+  ///
+  /// - Parameters:
+  ///   - kind: The collection's syntax kind.
+  ///   - count: The number of elements.
+  ///   - isMaximumNestingLevelOverflow: Whether the node marks where the parser
+  ///     reached its maximum nesting level and stopped parsing.
+  ///   - arena: RawSyntaxArena in which the node is allocated.
+  ///   - initializer: A closure that initializes every slot.
+  public static func makeCollection(
+    kind: SyntaxKind,
+    count: Int,
+    isMaximumNestingLevelOverflow: Bool = false,
+    arena: __shared RawSyntaxArena,
+    initializingWith initializer: (UnsafeMutableBufferPointer<RawSyntax?>) -> Void
+  ) -> RawSyntax {
+    return Self.makeLayout(
+      kind: kind,
+      childCount: count,
+      storage: .flat,
+      isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow,
+      arena: arena,
+      initializingWith: initializer
+    )
+  }
+}

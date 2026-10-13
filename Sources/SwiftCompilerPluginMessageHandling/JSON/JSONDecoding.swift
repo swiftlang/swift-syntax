@@ -290,6 +290,25 @@ private struct JSONScanner {
     while hasData && ptr.pointee != UInt8(ascii: "\"") {
       // FIXME: Error for non-escaped control characters.
       // FIXME: Error for invalid UTF8 sequences.
+      if ptr.distance(to: endPtr) >= MemoryLayout<UInt64>.size {
+        let word = UInt64(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: UInt64.self))
+        let special =
+          Self.zeroByteMask(word ^ 0x2222_2222_2222_2222)
+          | Self.zeroByteMask(word ^ 0x5C5C_5C5C_5C5C_5C5C)
+        let matchOffset = special.trailingZeroBitCount / 8
+        let mask: UInt64 = matchOffset == MemoryLayout<UInt64>.size ? ~0 : (UInt64(1) &<< (matchOffset &* 8)) &- 1
+        if !hasNonASCII && (word & mask) & 0x8080_8080_8080_8080 != 0 {
+          hasNonASCII = true
+        }
+        ptr += matchOffset
+        if matchOffset == MemoryLayout<UInt64>.size {
+          continue
+        }
+        if ptr == endPtr || ptr.pointee == UInt8(ascii: "\"") {
+          break
+        }
+      }
+
       if ptr.pointee == UInt8(ascii: "\\") {
         hasEscape = true
         // eat '\'. Rest of the escape sequence are all ASCII. We just skip them
@@ -312,6 +331,12 @@ private struct JSONScanner {
       kind = .asciiSimpleString
     }
     map.record(kind, range: (start + 1)..<(ptr - 1))
+  }
+
+  /// Mark zero bytes with their high bit.
+  @inline(__always)
+  private static func zeroByteMask(_ word: UInt64) -> UInt64 {
+    (word &- 0x0101_0101_0101_0101) & ~word & 0x8080_8080_8080_8080
   }
 
   mutating func scanNumber(start: Cursor) throws {

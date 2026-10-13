@@ -176,6 +176,18 @@ final class JSONTests: XCTestCase {
     }
   }
 
+  func testStringScanWordBoundaries() throws {
+    for offset in 0..<8 {
+      let prefix = String(repeating: "a", count: 8 + offset)
+      for suffix in ["end", "é", "中文", "😀", "\n", "\"", "\\", ""] {
+        let value = prefix + suffix
+        let json = try JSON.encode(value)
+        let decoded = try json.withUnsafeBufferPointer { try JSON.decode(String.self, from: $0) }
+        XCTAssertEqual(decoded, value)
+      }
+    }
+  }
+
   func testStringSurrogatePairDecoding() throws {
     // Decode \uD801\uDC37 directly
     var json = #""\uD801\uDC37""#

@@ -3165,6 +3165,7 @@ public struct AttributeClauseFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 /// ### Contained in
 /// 
 ///  - ``AttributeListSyntax``
+///  - ``FileDefaultDeclSyntax``.``FileDefaultDeclSyntax/specifier``
 ///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/attribute``
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Arguments: SyntaxChildChoices, SyntaxHashable {

@@ -413,7 +413,6 @@ public class WarningGroupControlTests: XCTestCase {
       default @diagnose(GroupID, as: error)
       3️⃣let k = 1
       """,
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: [
         "0️⃣": .error,
@@ -440,7 +439,6 @@ public class WarningGroupControlTests: XCTestCase {
       }
 
       """,
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: [
         "0️⃣": .none,
@@ -462,7 +460,6 @@ public class WarningGroupControlTests: XCTestCase {
       1️⃣let k = 1
       """,
       customConditions: ["STRICT"],
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: [
         "0️⃣": .error,
@@ -481,7 +478,6 @@ public class WarningGroupControlTests: XCTestCase {
       #endif
       1️⃣let k = 1
       """,
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: [
         "0️⃣": .none,
@@ -505,14 +501,12 @@ public class WarningGroupControlTests: XCTestCase {
     try assertWarningGroupControl(
       source,
       customConditions: ["STRICT"],
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: ["0️⃣": .error]
     )
 
     try assertWarningGroupControl(
       source,
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: ["0️⃣": .ignored]
     )
@@ -534,7 +528,6 @@ public class WarningGroupControlTests: XCTestCase {
     try assertWarningGroupControl(
       source,
       customConditions: ["OUTER", "INNER"],
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: ["0️⃣": .error]
     )
@@ -542,7 +535,6 @@ public class WarningGroupControlTests: XCTestCase {
     try assertWarningGroupControl(
       source,
       customConditions: ["INNER"],
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: ["0️⃣": .none]
     )
@@ -564,7 +556,6 @@ public class WarningGroupControlTests: XCTestCase {
       }
       """,
       customConditions: ["STRICT"],
-      languageFeatures: [.defaultIsolationPerFile],
       diagnosticGroupID: "GroupID",
       states: [
         "0️⃣": .none,

@@ -21,7 +21,6 @@ public enum ExperimentalFeature: String, CaseIterable {
   case coroutineAccessors
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
-  case defaultIsolationPerFile
   case borrowAndMutateAccessors
   case literalExpressions
   case calledAttribute
@@ -47,8 +46,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "KeypathWithMethodMembers"
     case .oldOwnershipOperatorSpellings:
       return "OldOwnershipOperatorSpellings"
-    case .defaultIsolationPerFile:
-      return "DefaultIsolationPerFile"
     case .borrowAndMutateAccessors:
       return "BorrowAndMutateAccessors"
     case .literalExpressions:
@@ -81,8 +78,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "keypaths with method members"
     case .oldOwnershipOperatorSpellings:
       return "`_move` and `_borrow` as ownership operators"
-    case .defaultIsolationPerFile:
-      return "set default actor isolation for a file"
     case .borrowAndMutateAccessors:
       return "borrow and mutate accessors"
     case .literalExpressions:

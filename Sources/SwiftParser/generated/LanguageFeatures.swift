@@ -60,29 +60,25 @@ extension Parser.LanguageFeatures {
   @_spi(ExperimentalLanguageFeatures)
   public static let oldOwnershipOperatorSpellings = Self (rawValue: 1 << 7)
 
-  /// Whether to enable the parsing of set default actor isolation for a file.
-  @_spi(ExperimentalLanguageFeatures)
-  public static let defaultIsolationPerFile = Self (rawValue: 1 << 8)
-
   /// Whether to enable the parsing of borrow and mutate accessors.
   @_spi(ExperimentalLanguageFeatures)
-  public static let borrowAndMutateAccessors = Self (rawValue: 1 << 9)
+  public static let borrowAndMutateAccessors = Self (rawValue: 1 << 8)
 
   /// Whether to enable the parsing of constant-foldable literal expressions.
   @_spi(ExperimentalLanguageFeatures)
-  public static let literalExpressions = Self (rawValue: 1 << 10)
+  public static let literalExpressions = Self (rawValue: 1 << 9)
 
   /// Whether to enable the parsing of `@called(...)` attribute on function types.
   @_spi(ExperimentalLanguageFeatures)
-  public static let calledAttribute = Self (rawValue: 1 << 11)
+  public static let calledAttribute = Self (rawValue: 1 << 10)
 
   /// Whether to enable the parsing of a test feature that parses everything as unexpected.
   @_spi(ExperimentalLanguageFeatures)
-  public static let _test_EverythingUnexpected = Self (rawValue: 1 << 12)
+  public static let _test_EverythingUnexpected = Self (rawValue: 1 << 11)
 
   /// Whether to enable the parsing of functions as coroutines.
   @_spi(ExperimentalLanguageFeatures)
-  public static let coroutineFunctions = Self (rawValue: 1 << 13)
+  public static let coroutineFunctions = Self (rawValue: 1 << 12)
 
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
@@ -105,8 +101,6 @@ extension Parser.LanguageFeatures {
       self = .keypathWithMethodMembers
     case "OldOwnershipOperatorSpellings":
       self = .oldOwnershipOperatorSpellings
-    case "DefaultIsolationPerFile":
-      self = .defaultIsolationPerFile
     case "BorrowAndMutateAccessors":
       self = .borrowAndMutateAccessors
     case "LiteralExpressions":

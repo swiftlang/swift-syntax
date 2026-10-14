@@ -860,10 +860,9 @@ open class SyntaxRewriter {
     return StmtSyntax(FallThroughStmtSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
-  /// Visit a `FileDefaultDeclSyntax`.
+  /// Visit a ``FileDefaultDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FileDefaultDeclSyntax) -> DeclSyntax {
     return DeclSyntax(FileDefaultDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }

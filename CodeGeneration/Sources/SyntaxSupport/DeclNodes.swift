@@ -958,7 +958,6 @@ public let DECL_NODES: [Node] = [
   Node(
     kind: .fileDefaultDecl,
     base: .decl,
-    experimentalFeature: .defaultIsolationPerFile,
     nameForDiagnostics: "file-level default",
     documentation: """
       A file-level default isolation (`@MainActor`, `nonisolated`) or attribute (`@available`, `@diagnose`).

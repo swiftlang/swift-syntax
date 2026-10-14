@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
 public import SwiftSyntaxMacros
-#else
-import SwiftSyntax
-import SwiftSyntaxMacros
-#endif
 
 /// The information of a macro declaration, to be used with `assertMacroExpansion`.
 ///

@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) public import SwiftSyntax
-#else
-@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
-#endif
 
 // MARK: - TokenSpecSet
 

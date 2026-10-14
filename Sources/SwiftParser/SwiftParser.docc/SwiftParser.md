@@ -12,11 +12,7 @@ The easiest way to parse Swift source code is to call the `Parser.parse` method,
 
 ```swift
 import SwiftParser
-#if compiler(>=6)
-internal import SwiftSyntax
-#else
 import SwiftSyntax
-#endif
 
 let sourceText =
 """

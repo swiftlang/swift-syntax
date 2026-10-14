@@ -13,11 +13,7 @@
 // This file provides compatibility aliases to keep dependents of SwiftSyntaxBuilder building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 @available(*, deprecated, renamed: "ImportPathComponentListBuilder")
 public typealias AccessPathBuilder = ImportPathComponentListBuilder

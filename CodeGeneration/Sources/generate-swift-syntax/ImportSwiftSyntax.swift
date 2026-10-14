@@ -39,13 +39,5 @@ func importSwiftSyntax(accessLevel: ImportAccessLevel = .internal) -> DeclSyntax
     visibilityKeyword = "public"
   }
 
-  return DeclSyntax(
-    """
-    #if compiler(>=6)
-    \(importingAttrs)\(visibilityKeyword) import SwiftSyntax
-    #else
-    \(importingAttrs)import SwiftSyntax
-    #endif
-    """
-  )
+  return DeclSyntax("\(importingAttrs)\(visibilityKeyword) import SwiftSyntax")
 }

@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
 import SwiftSyntaxBuilder
-#else
-import SwiftSyntax
-import SwiftSyntaxBuilder
-#endif
 
 extension SyntaxProtocol {
   /// If this syntax node acts as a lexical context from the perspective

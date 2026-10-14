@@ -10,19 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftDiagnostics
 public import SwiftIfConfig
 internal import SwiftOperators
 public import SwiftSyntax
 public import SwiftSyntaxMacros
-#else
-import SwiftDiagnostics
-import SwiftIfConfig
-import SwiftOperators
-import SwiftSyntax
-import SwiftSyntaxMacros
-#endif
 
 /// An implementation of the `MacroExpansionContext` protocol that is
 /// suitable for testing purposes.

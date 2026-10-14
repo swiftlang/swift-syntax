@@ -10,17 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 import SwiftBasicFormat
 import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
 import SwiftSyntaxBuilder
-#else
-import SwiftBasicFormat
-import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
-import SwiftSyntaxBuilder
-#endif
 
 /// Expands an editor placeholder, taking into accounts its provided type
 /// information (if any).

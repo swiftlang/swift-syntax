@@ -13,11 +13,7 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
-#endif
 
 private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {

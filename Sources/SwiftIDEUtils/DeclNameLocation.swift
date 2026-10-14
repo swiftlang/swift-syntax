@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 /// The location of a declaration name, resolved by ``NameMatcher`` and that can
 /// be used to rename the declaration name and, if it is a function, its

@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 fileprivate extension SyntaxProtocol {
   var contextualClassification: (SyntaxClassification, Bool)? {

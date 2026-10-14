@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.2
 
 import Foundation
 import PackageDescription
@@ -444,7 +444,7 @@ let package = Package(
       exclude: ["Inputs"]
     ),
   ],
-  swiftLanguageVersions: [.v5, .version("6")]
+  swiftLanguageModes: [.v5, .v6]
 )
 
 // This is a fake target that depends on all targets in the package.

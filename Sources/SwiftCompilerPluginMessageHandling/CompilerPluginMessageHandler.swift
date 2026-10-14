@@ -10,22 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6) && RESILIENT_LIBRARIES
-@_implementationOnly private import _SwiftSyntaxCShims
-#elseif compiler(>=6) && !RESILIENT_LIBRARIES
-private import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && RESILIENT_LIBRARIES
-@_implementationOnly import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
-import _SwiftSyntaxCShims
-#endif
-
-#if compiler(>=6)
 internal import SwiftIfConfig
 public import SwiftSyntaxMacros
+
+#if RESILIENT_LIBRARIES
+@_implementationOnly private import _SwiftSyntaxCShims
 #else
-import SwiftIfConfig
-import SwiftSyntaxMacros
+private import _SwiftSyntaxCShims
 #endif
 
 /// Optional features.
@@ -304,7 +295,7 @@ extension PluginProvider {
   }
 }
 
-#if compiler(>=6) && os(WASI)
+#if os(WASI)
 
 /// A callback invoked by the Wasm Host when new data is available on `stdin`.
 ///
@@ -322,12 +313,5 @@ nonisolated(unsafe) private var readabilityHandler: () -> Void = {
 func wasmPump() {
   readabilityHandler()
 }
-
-// we can't nest the whole #if-#else in '#if os(WASI)' due to a bug where
-// '#if compiler' directives have to be the top-level #if, otherwise
-// the compiler doesn't skip unknown syntax.
-#elseif os(WASI)
-
-#error("Building swift-syntax for WebAssembly requires compiler version 6.0 or higher.")
 
 #endif

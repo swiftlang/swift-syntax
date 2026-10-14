@@ -10,14 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6) && RESILIENT_LIBRARIES
+#if RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
-#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+#else
 private import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && RESILIENT_LIBRARIES
-@_implementationOnly import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
-import _SwiftSyntaxCShims
 #endif
 
 func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T {
@@ -1342,40 +1338,3 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
     self._currMapIdx = array.startIndex
   }
 }
-
-// Compatibility shim for SE-0370
-#if swift(<5.8)
-extension UnsafeMutableBufferPointer {
-  fileprivate func initialize(
-    fromContentsOf source: some Collection<Element>
-  ) -> Index {
-    let count = source.withContiguousStorageIfAvailable {
-      guard let sourceAddress = $0.baseAddress, !$0.isEmpty else {
-        return 0
-      }
-      precondition(
-        $0.count <= self.count,
-        "buffer cannot contain every element from source."
-      )
-      baseAddress?.initialize(from: sourceAddress, count: $0.count)
-      return $0.count
-    }
-    if let count {
-      return startIndex.advanced(by: count)
-    }
-
-    var (iterator, copied) = self.initialize(from: source)
-    precondition(
-      iterator.next() == nil,
-      "buffer cannot contain every element from source."
-    )
-    return startIndex.advanced(by: copied)
-  }
-
-  fileprivate func initializeElement(at index: Index, to value: Element) {
-    precondition(startIndex <= index && index < endIndex)
-    let p = baseAddress!.advanced(by: index)
-    p.initialize(to: value)
-  }
-}
-#endif

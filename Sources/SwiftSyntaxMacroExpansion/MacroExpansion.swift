@@ -10,19 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftIfConfig
 public import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntaxMacros
-#else
-import SwiftBasicFormat
-import SwiftDiagnostics
-import SwiftIfConfig
-import SwiftSyntax
-@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) import SwiftSyntaxMacros
-#endif
 
 public enum MacroRole: Sendable {
   case expression

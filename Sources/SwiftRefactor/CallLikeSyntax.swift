@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 // TODO: We ought to consider exposing this as a public syntax protocol.
 @_spi(Testing) public protocol CallLikeSyntax: SyntaxProtocol {

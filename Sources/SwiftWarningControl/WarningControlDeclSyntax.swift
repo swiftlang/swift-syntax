@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftIfConfig
-@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftSyntax
 
 extension AttributeSyntax {
   var warningGroupControl: (DiagnosticGroupIdentifier, WarningGroupControl)? {

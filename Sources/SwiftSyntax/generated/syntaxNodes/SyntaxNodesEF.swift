@@ -2442,13 +2442,10 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
 /// default @MainActor
 /// ```
 ///
-/// - Note: Requires experimental feature `defaultIsolationPerFile`.
-///
 /// ### Children
 /// 
 ///  - `defaultKeyword`: `default`
 ///  - `specifier`: (``AttributeSyntax`` | `<identifier>`)
-@_spi(ExperimentalLanguageFeatures)
 public struct FileDefaultDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public enum Specifier: SyntaxChildChoices, SyntaxHashable {
     case attribute(AttributeSyntax)

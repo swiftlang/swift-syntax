@@ -1341,17 +1341,15 @@ open class SyntaxVisitor {
   open func visitPost(_ node: FallThroughStmtSyntax) {
   }
 
-  /// Visiting `FileDefaultDeclSyntax` specifically.
+  /// Visiting ``FileDefaultDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: FileDefaultDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `FileDefaultDeclSyntax` and its descendants.
+  /// The function called after visiting ``FileDefaultDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: FileDefaultDeclSyntax) {
   }
 

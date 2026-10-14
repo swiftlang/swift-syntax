@@ -66,6 +66,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/EnumCaseDeclSyntax>
 - <doc:SwiftSyntax/EnumDeclSyntax>
 - <doc:SwiftSyntax/ExtensionDeclSyntax>
+- <doc:SwiftSyntax/FileDefaultDeclSyntax>
 - <doc:SwiftSyntax/FunctionDeclSyntax>
 - <doc:SwiftSyntax/IfConfigDeclSyntax>
 - <doc:SwiftSyntax/ImportDeclSyntax>

@@ -129,7 +129,6 @@ public enum SyntaxKind: Sendable {
   case expressionStmt
   case extensionDecl
   case fallThroughStmt
-  @_spi(ExperimentalLanguageFeatures)
   case fileDefaultDecl
   case floatLiteralExpr
   case forStmt

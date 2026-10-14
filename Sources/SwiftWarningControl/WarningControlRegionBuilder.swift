@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftIfConfig
-@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftSyntax
 
 /// Compute the full set of warning control regions in this syntax node
 extension SyntaxProtocol {

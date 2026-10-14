@@ -165,6 +165,7 @@ extension Syntax {
 /// - ``EnumCaseDeclSyntax``
 /// - ``EnumDeclSyntax``
 /// - ``ExtensionDeclSyntax``
+/// - ``FileDefaultDeclSyntax``
 /// - ``FunctionDeclSyntax``
 /// - ``IfConfigDeclSyntax``
 /// - ``ImportDeclSyntax``

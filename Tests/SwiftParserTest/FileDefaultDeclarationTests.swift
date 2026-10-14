@@ -10,15 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(ExperimentalLanguageFeatures) import SwiftParser
-@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftParser
+import SwiftSyntax
 import XCTest
 
 final class FileDefaultDeclarationTests: ParserTestCase {
-  override var languageFeatures: Parser.LanguageFeatures {
-    [.defaultIsolationPerFile]
-  }
-
   func testSpecifiers() {
     assertParse(
       "default @MainActor",
@@ -560,31 +556,6 @@ final class FileDefaultDeclarationTests: ParserTestCase {
         1️⃣default: nonisolated
       }
       """,
-      diagnostics: [
-        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
-      ]
-    )
-  }
-}
-
-final class FileDefaultDeclarationWithoutFeatureTests: ParserTestCase {
-  func testDefaultIsOnlyASwitchLabel() {
-    assertParse(
-      "1️⃣default @MainActor",
-      diagnostics: [
-        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
-      ]
-    )
-
-    assertParse(
-      "1️⃣default nonisolated",
-      diagnostics: [
-        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
-      ]
-    )
-
-    assertParse(
-      "1️⃣default: nonisolated",
       diagnostics: [
         DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
       ]

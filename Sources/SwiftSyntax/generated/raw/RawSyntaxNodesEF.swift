@@ -1435,7 +1435,6 @@ public struct RawFallThroughStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 }
 
-@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawFileDefaultDeclSyntax: RawDeclSyntaxNodeProtocol {
   public enum Specifier: RawSyntaxNodeProtocol {

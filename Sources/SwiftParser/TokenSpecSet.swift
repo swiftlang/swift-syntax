@@ -329,7 +329,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
       case .struct: .struct
       case .subscript: .subscript
       case .typealias: .typealias
-      case .default where languageFeatures.contains(.defaultIsolationPerFile): .default
+      case .default: .default
       default: nil
       }
     }

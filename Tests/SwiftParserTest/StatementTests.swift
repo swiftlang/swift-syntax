@@ -484,10 +484,11 @@ final class StatementTests: ParserTestCase {
 
   func testTopLevelCaseRecovery() {
     assertParse(
-      "/*#-editable-code Swift Platground editable area*/1️⃣default/*#-end-editable-code*/",
+      "/*#-editable-code Swift Platground editable area*/default/*#-end-editable-code*/1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
-      ]
+        DiagnosticSpec(message: "expected identifier in file-level default", fixIts: ["insert identifier"])
+      ],
+      fixedSource: "/*#-editable-code Swift Platground editable area*/default/*#-end-editable-code*/ <#identifier#>"
     )
 
     assertParse(

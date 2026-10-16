@@ -3056,8 +3056,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \SpecializeTargetFunctionArgumentSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \SpecializedAttributeArgumentSyntax.unexpectedBeforeGenericWhereClause:
-    return "unexpectedBeforeGenericWhereClause"
+  case \SpecializedAttributeArgumentSyntax.unexpectedBeforeExportedArgument:
+    return "unexpectedBeforeExportedArgument"
+  case \SpecializedAttributeArgumentSyntax.exportedArgument:
+    return "exportedArgument"
+  case \SpecializedAttributeArgumentSyntax.unexpectedBetweenExportedArgumentAndGenericWhereClause:
+    return "unexpectedBetweenExportedArgumentAndGenericWhereClause"
   case \SpecializedAttributeArgumentSyntax.genericWhereClause:
     return "genericWhereClause"
   case \SpecializedAttributeArgumentSyntax.unexpectedAfterGenericWhereClause:

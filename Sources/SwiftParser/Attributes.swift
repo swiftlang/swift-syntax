@@ -731,8 +731,30 @@ extension Parser {
 
 extension Parser {
   mutating func parseSpecializedAttributeArgument() -> RawSpecializedAttributeArgumentSyntax {
+    var exportedArgument: RawLabeledSpecializeArgumentSyntax? = nil
+    if self.languageFeatures.contains(.extendedSpecializedAttribute),
+      let label = self.consume(if: .keyword(.exported))
+    {
+      let (unexpectedBeforeColon, colon) = self.expect(.colon)
+      let (unexpectedBeforeValue, value) = self.expect(.keyword(.true), .keyword(.false), default: .keyword(.false))
+      let (unexpectedBeforeComma, comma) = self.expect(.comma)
+      exportedArgument = RawLabeledSpecializeArgumentSyntax(
+        label: label,
+        unexpectedBeforeColon,
+        colon: colon,
+        unexpectedBeforeValue,
+        value: value,
+        unexpectedBeforeComma,
+        trailingComma: comma,
+        arena: self.arena
+      )
+    }
     let whereClause = self.parseGenericWhereClause()
-    return RawSpecializedAttributeArgumentSyntax(genericWhereClause: whereClause, arena: self.arena)
+    return RawSpecializedAttributeArgumentSyntax(
+      exportedArgument: exportedArgument,
+      genericWhereClause: whereClause,
+      arena: self.arena
+    )
   }
 
   mutating func parseSpecializeAttributeArgumentList() -> RawSpecializeAttributeArgumentListSyntax {

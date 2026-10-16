@@ -876,11 +876,22 @@ extension Parser {
       return nil
     }
 
-    let args = self.parseArgumentListElements(
-      pattern: pattern,
-      flavor: flavor.callArgumentFlavor,
-      allowTrailingComma: true
-    )
+    let args: RawSyntaxNodeList<RawLabeledExprSyntax>
+    if flavor == .poundIfDirective,
+      let reference = leadingExpr.as(RawDeclReferenceExprSyntax.self),
+      reference.baseName.tokenText == "deploymentTargetAtLeast"
+    {
+      args = self.parseDeploymentTargetArgumentListElements(
+        pattern: pattern,
+        flavor: flavor.callArgumentFlavor
+      )
+    } else {
+      args = self.parseArgumentListElements(
+        pattern: pattern,
+        flavor: flavor.callArgumentFlavor,
+        allowTrailingComma: true
+      )
+    }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
     // If we can parse trailing closures, do so.
@@ -905,6 +916,53 @@ extension Parser {
         arena: self.arena
       )
     )
+  }
+
+  /// Parse the availability-style argument list of
+  /// `deploymentTargetAtLeast`, e.g. `macOS 15, iOS 18, *`.
+  private mutating func parseDeploymentTargetArgumentListElements(
+    pattern: PatternContext,
+    flavor: ExprFlavor
+  ) -> RawSyntaxNodeList<RawLabeledExprSyntax> {
+    guard !self.at(.rightParen) else {
+      return .init()
+    }
+
+    var result = RawSyntaxNodeListBuilder<RawLabeledExprSyntax>()
+    var loopProgress = LoopProgressCondition()
+    repeat {
+      let label: RawTokenSyntax?
+      let expression: RawExprSyntax
+      if self.at(.identifier) {
+        label = self.consumeAnyToken()
+        expression = self.parseExpression(flavor: flavor, pattern: pattern)
+      } else {
+        label = nil
+        if self.atBinaryOperatorArgument() {
+          expression = RawExprSyntax(self.parseDeclReferenceExpr(.operators))
+        } else {
+          expression = self.parseExpression(flavor: flavor, pattern: pattern)
+        }
+      }
+
+      let trailingComma = self.consume(if: .comma)
+      result.append(
+        RawLabeledExprSyntax(
+          label: label,
+          colon: nil,
+          expression: expression,
+          trailingComma: trailingComma,
+          arena: self.arena
+        ),
+        allocator: self.nodeListAllocator
+      )
+
+      if trailingComma == nil || self.at(.rightParen) {
+        break
+      }
+    } while self.hasProgressed(&loopProgress)
+
+    return result.build()
   }
 
   private mutating func parsePostfixExpressionSubscriptSuffixIfPresent(

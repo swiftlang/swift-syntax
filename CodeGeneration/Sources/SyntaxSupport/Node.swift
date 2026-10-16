@@ -175,6 +175,10 @@ public class Node: NodeChoiceConvertible {
       }
       if let layout = node.layoutNode {
         for child in layout.children {
+          // An experimental child isn't in the documentation of a visible node.
+          if !self.hiddenInDocumentation && child.isExperimental {
+            continue
+          }
           if child.kinds.contains(self.kind) {
             childIn.append((node.kind, child))
           }

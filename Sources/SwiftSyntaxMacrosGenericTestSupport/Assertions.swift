@@ -10,29 +10,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 import SwiftBasicFormat
 public import SwiftDiagnostics
-public import SwiftIfConfig
 @_spi(FixItApplier) import SwiftIDEUtils
+public import SwiftIfConfig
 import SwiftParser
 import SwiftParserDiagnostics
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 private import SwiftSyntaxMacros
 private import _SwiftSyntaxGenericTestSupport
-#else
-import SwiftBasicFormat
-import SwiftDiagnostics
-@_spi(FixItApplier) import SwiftIDEUtils
-import SwiftIfConfig
-import SwiftParser
-import SwiftParserDiagnostics
-import SwiftSyntax
-import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacros
-import _SwiftSyntaxGenericTestSupport
-#endif
 
 /// Defines the location at which the a test failure should be anchored. This is typically the location where the
 /// assertion function is called.

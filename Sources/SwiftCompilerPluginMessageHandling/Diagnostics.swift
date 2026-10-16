@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftDiagnostics
 internal import SwiftSyntax
-#else
-import SwiftDiagnostics
-import SwiftSyntax
-#endif
 
 /// Errors in macro handing.
 enum MacroExpansionError {

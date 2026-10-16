@@ -10,21 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftDiagnostics
 internal import SwiftOperators
 @_spi(MacroExpansion) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
 internal import SwiftSyntaxBuilder
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntaxMacros
-#else
-import SwiftDiagnostics
-import SwiftOperators
-@_spi(MacroExpansion) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
-import SwiftSyntaxBuilder
-@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) import SwiftSyntaxMacros
-#endif
 
 // MARK: - Public entry function
 

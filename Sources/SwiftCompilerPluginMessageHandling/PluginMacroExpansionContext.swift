@@ -10,21 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftDiagnostics
 internal import SwiftIfConfig
 internal import SwiftOperators
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftParser
 internal import SwiftSyntax
 internal import SwiftSyntaxMacros
-#else
-import SwiftDiagnostics
-import SwiftIfConfig
-import SwiftOperators
-@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftParser
-import SwiftSyntax
-import SwiftSyntaxMacros
-#endif
 
 /// Caching parser for PluginMessage.Syntax
 class ParsedSyntaxRegistry {

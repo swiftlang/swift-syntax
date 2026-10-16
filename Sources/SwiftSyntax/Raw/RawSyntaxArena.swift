@@ -10,14 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6) && RESILIENT_LIBRARIES
+#if RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
-#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+#else
 private import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && RESILIENT_LIBRARIES
-@_implementationOnly import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
-import _SwiftSyntaxCShims
 #endif
 
 /// A syntax arena owns the memory for all syntax nodes within it.

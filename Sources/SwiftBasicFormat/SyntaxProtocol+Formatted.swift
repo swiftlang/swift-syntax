@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 extension SyntaxProtocol {
   /// Build a syntax node from this `Buildable` and format it with the given format.

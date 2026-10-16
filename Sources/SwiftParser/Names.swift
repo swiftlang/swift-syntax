@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension Parser {
   mutating func parseAnyIdentifier() -> RawTokenSyntax {

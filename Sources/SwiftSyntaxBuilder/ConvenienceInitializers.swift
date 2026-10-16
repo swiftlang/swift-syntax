@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 // MARK: - ArrayElementListSyntax
 
@@ -82,11 +77,7 @@ extension BooleanLiteralExprSyntax {
     self.init(value)
   }
 }
-#if compiler(>=6)
 extension BooleanLiteralExprSyntax: Swift.ExpressibleByBooleanLiteral {}
-#else
-extension BooleanLiteralExprSyntax: ExpressibleByBooleanLiteral {}
-#endif
 
 // MARK: - CatchClauseSyntax
 
@@ -183,11 +174,7 @@ extension FloatLiteralExprSyntax {
   }
 }
 
-#if compiler(>=6)
 extension FloatLiteralExprSyntax: Swift.ExpressibleByFloatLiteral {}
-#else
-extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {}
-#endif
 
 // MARK: - FunctionCallExprSyntax
 
@@ -226,11 +213,7 @@ extension IntegerLiteralExprSyntax {
   }
 }
 
-#if compiler(>=6)
 extension IntegerLiteralExprSyntax: Swift.ExpressibleByIntegerLiteral {}
-#else
-extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {}
-#endif
 
 // MARK: - LabeledExprSyntax
 

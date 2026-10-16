@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
-public import SwiftSyntax
 internal import SwiftParser
-#else
-import SwiftSyntax
-import SwiftParser
-#endif
+public import SwiftSyntax
 
 // MARK: - PartialSyntaxNode
 

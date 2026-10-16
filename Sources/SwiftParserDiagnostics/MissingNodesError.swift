@@ -10,15 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftBasicFormat
 internal import SwiftDiagnostics
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-import SwiftBasicFormat
-import SwiftDiagnostics
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 // MARK: - Shared code
 

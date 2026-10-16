@@ -12,7 +12,6 @@
 
 #if !os(WASI)
 
-#if compiler(>=6)
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) public import SwiftCompilerPluginMessageHandling
 private import _SwiftLibraryPluginProviderCShims
@@ -28,37 +27,6 @@ private import Musl
 #elseif canImport(Android)
 private import Android
 #endif  // canImport
-
-#else  // compiler(>=6)
-
-import SwiftSyntaxMacros
-@_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
-
-#if RESILIENT_LIBRARIES
-
-@_implementationOnly import _SwiftLibraryPluginProviderCShims
-#if canImport(Darwin)
-@_implementationOnly import Darwin
-#elseif canImport(Glibc)
-@_implementationOnly import Glibc
-#elseif canImport(Musl)
-@_implementationOnly import Musl
-#endif  // canImport
-
-#else  // RESILIENT_LIBRARIES
-
-import _SwiftLibraryPluginProviderCShims
-#if canImport(Darwin)
-import Darwin
-#elseif canImport(Glibc)
-import Glibc
-#elseif canImport(Musl)
-import Musl
-#endif  // canImport
-
-#endif  // RESILIENT_LIBRARIES
-
-#endif  // compiler(>=6)
 
 /// Singleton 'PluginProvider' that can serve shared library plugins.
 @_spi(PluginMessage)
@@ -188,40 +156,5 @@ private struct LibraryPluginError: Error, CustomStringConvertible {
     self.description = message
   }
 }
-
-// Compatibility shim for SE-0370
-#if swift(<5.8)
-extension UnsafeMutableBufferPointer {
-  private func initialize(fromContentsOf source: some Collection<Element>) -> Index {
-    let count = source.withContiguousStorageIfAvailable {
-      guard let sourceAddress = $0.baseAddress, !$0.isEmpty else {
-        return 0
-      }
-      precondition(
-        $0.count <= self.count,
-        "buffer cannot contain every element from source."
-      )
-      baseAddress?.initialize(from: sourceAddress, count: $0.count)
-      return $0.count
-    }
-    if let count {
-      return startIndex.advanced(by: count)
-    }
-
-    var (iterator, copied) = self.initialize(from: source)
-    precondition(
-      iterator.next() == nil,
-      "buffer cannot contain every element from source."
-    )
-    return startIndex.advanced(by: copied)
-  }
-
-  private func initializeElement(at index: Index, to value: Element) {
-    precondition(startIndex <= index && index < endIndex)
-    let p = baseAddress!.advanced(by: index)
-    p.initialize(to: value)
-  }
-}
-#endif
 
 #endif  // !os(WASI)

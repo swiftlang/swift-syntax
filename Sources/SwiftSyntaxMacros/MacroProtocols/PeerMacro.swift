@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 public protocol PeerMacro: AttachedMacro {
   /// Expand a macro described by the given custom attribute and

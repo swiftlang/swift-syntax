@@ -78,3 +78,4 @@ Some scopes share common behavior and can be further generalized as follows:
 - **Function Declaration Scope** (`FunctionDeclSyntax`): With generic parameters scope. Introduces names from its parameters.
 - **Subscript Declaration Syntax** (`SubscriptDeclSyntax`): With generic parameters scope. Introduces names from its parameters.
 - **Type Alias Declaration Scope** (`TypeAliasDeclSyntax`): With generic parameters scope. Does not introduce any names.
+- **Enum Case Declaration Scope** (`EnumCaseDeclSyntax`): Introduces names from each case element's associated-value parameters. A parameter name is only visible inside default-value expressions of **subsequent** parameters in the same case declaration (position-based availability). No names are introduced to any outer scope.

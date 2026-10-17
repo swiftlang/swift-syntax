@@ -179,8 +179,36 @@ final class ModuleSelectorTests: ParserTestCase {
       )
     )
 
-    // FIXME: Add tests with autodiff @_differentiable(jvp:vjp:) and
-    // @_derivative(of:)
+    assertParse(
+      """
+      @derivative(of: ModuleSelectorTestingKit::negate)
+      func negateDerivative() {}
+      """,
+      substructure: FunctionDeclSyntax(
+        attributes: [
+          .attribute(
+            AttributeSyntax(
+              attributeName: makeType(name: "derivative"),
+              leftParen: .leftParenToken(),
+              arguments: .derivativeRegistrationArguments(
+                DerivativeAttributeArgumentsSyntax(
+                  originalDeclName: makeDeclRef(
+                    moduleSelector: "ModuleSelectorTestingKit",
+                    baseName: "negate"
+                  )
+                )
+              ),
+              rightParen: .rightParenToken()
+            )
+          )
+        ],
+        name: .identifier("negateDerivative"),
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax {}
+        ),
+        body: CodeBlockSyntax {}
+      )
+    )
 
     assertParse(
       """

@@ -280,3 +280,9 @@ extension MemberBlockItemListSyntax: Swift.ExpressibleByStringInterpolation {}
 extension MemberBlockItemListSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
+extension FunctionParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension FunctionParameterClauseSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+

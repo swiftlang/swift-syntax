@@ -35,6 +35,9 @@ extension Parser {
   /// been allocated by this parser, so an incremental parse can decide whether
   /// to reuse it.
   mutating func registerNodeForIncrementalParse(node: RawSyntax, startToken: Lexer.Lexeme) {
+    guard collectsLookaheadRanges else {
+      return
+    }
     arena.lookaheadLengths[node.id] =
       lexemes.lookaheadTracker.pointee.furthestOffset - self.lexemes.offsetToStart(startToken)
   }

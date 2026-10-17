@@ -85,6 +85,43 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
   }
 
+  func testAttachedNotesAreRendered() {
+    var group = GroupedDiagnostics()
+
+    _ = group.addTestFile(
+      """
+      let 1️⃣value = 2️⃣undefined
+      """,
+      displayName: "test.swift",
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(
+          locationMarker: "2️⃣",
+          message: "cannot find 'undefined' in scope",
+          severity: .error,
+          noteDescriptors: [
+            NoteDescriptor(
+              locationMarker: "1️⃣",
+              id: MessageID(domain: "test", id: "note"),
+              message: "'value' declared here"
+            )
+          ]
+        )
+      ]
+    )
+
+    let annotated = DiagnosticsFormatter.annotateSources(in: group)
+    assertStringsEqualWithDiff(
+      annotated,
+      """
+      test.swift:1:13: error: cannot find 'undefined' in scope
+      1 | let value = undefined
+        |     |       `- error: cannot find 'undefined' in scope
+        |     `- note: 'value' declared here
+
+      """
+    )
+  }
+
   func testGroupingForMacroExpansion() {
     var group = GroupedDiagnostics()
 
@@ -147,7 +184,8 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
         |5 | }
         +---------------------------------------------------------------------
       6 | print("hello"
-        |              `- error: expected ')' to end function call
+        |      |       `- error: expected ')' to end function call
+        |      `- note: to match this opening '('
 
       """
     )

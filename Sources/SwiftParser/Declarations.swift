@@ -900,6 +900,10 @@ extension Parser {
               )
             )
           }
+        #if RESILIENT_LIBRARIES
+        @unknown default:
+          fatalError()
+        #endif
         }
 
         keepGoing = self.consume(if: .comma)

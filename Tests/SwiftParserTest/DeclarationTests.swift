@@ -38,6 +38,84 @@ final class DeclarationTests: ParserTestCase {
 
     assertParse(
       """
+      protocol P {
+        associatedtype Element
+      }
+
+      func misplaced<C: P>(_ value: C) 1️⃣where C.Element == 2️⃣Int 3️⃣-> String {}
+      func multipleRequirements<C: P>(_ value: C) 4️⃣where C: P, C.Element == 5️⃣Int 6️⃣-> String {}
+      func functionTypeRequirement<C: P>(_ value: C) where C.Element == (Int) -> String {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'where' clause must follow the function's return type",
+          fixIts: ["move 'where' clause after return type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '(' to start function type",
+          fixIts: ["insert '('"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' in function type",
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "'where' clause must follow the function's return type",
+          fixIts: ["move 'where' clause after return type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '(' to start function type",
+          fixIts: ["insert '('"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "expected ')' in function type",
+          fixIts: ["insert ')'"]
+        ),
+      ],
+      applyFixIts: ["move 'where' clause after return type"],
+      fixedSource: """
+        protocol P {
+          associatedtype Element
+        }
+
+        func misplaced<C: P>(_ value: C) -> String where C.Element == Int {}
+        func multipleRequirements<C: P>(_ value: C) -> String where C: P, C.Element == Int {}
+        func functionTypeRequirement<C: P>(_ value: C) where C.Element == (Int) -> String {}
+        """
+    )
+
+    assertParse(
+      "func functionTypeRequirement<C: P>(_ value: C) 1️⃣where C.Element == 2️⃣Int 3️⃣-> String {}",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'where' clause must follow the function's return type",
+          fixIts: ["move 'where' clause after return type"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+      ],
+      applyFixIts: ["insert '('", "insert ')'"],
+      fixedSource: "func functionTypeRequirement<C: P>(_ value: C) where C.Element == (Int) -> String {}"
+    )
+
+    assertParse(
+      "func existingReturn<C: P>(_ value: C) -> Void where C.Element == 1️⃣Int 2️⃣-> String {}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+      ],
+      fixedSource: "func existingReturn<C: P>(_ value: C) -> Void where C.Element == (Int) -> String {}"
+    )
+
+    assertParse(
+      """
       func onEscapingAutoclosure(_ fn: @Sendable @autoclosure @escaping () -> Int) { }
       func onEscapingAutoclosure2(_ fn: @escaping @autoclosure @Sendable () -> Int) { }
       func bar(_ : String) async -> [[String]: Array<String>] {}

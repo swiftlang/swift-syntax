@@ -1037,6 +1037,64 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    guard node.signature.returnClause == nil,
+      let whereClause = node.genericWhereClause,
+      let lastRequirement = whereClause.requirements.last,
+      lastRequirement.trailingComma == nil,
+      case .sameTypeRequirement(let sameTypeRequirement) = lastRequirement.requirement,
+      let functionType = sameTypeRequirement.rightType.as(FunctionTypeSyntax.self),
+      functionType.leftParen.isMissing,
+      functionType.rightParen.isMissing,
+      functionType.effectSpecifiers == nil,
+      functionType.yieldClause == nil,
+      let parameter = functionType.parameters.only,
+      parameter.inoutKeyword == nil,
+      parameter.firstName == nil,
+      parameter.secondName == nil,
+      parameter.colon == nil,
+      parameter.ellipsis == nil,
+      parameter.trailingComma == nil
+    else {
+      return .visitChildren
+    }
+
+    var fixedSameTypeRequirement = sameTypeRequirement
+    fixedSameTypeRequirement.rightType = .type(parameter.type)
+
+    var fixedLastRequirement = lastRequirement
+    fixedLastRequirement.requirement = .sameTypeRequirement(fixedSameTypeRequirement)
+
+    var fixedWhereClause = whereClause
+    let lastRequirementIndex = fixedWhereClause.requirements.index(before: fixedWhereClause.requirements.endIndex)
+    fixedWhereClause.requirements[lastRequirementIndex] = fixedLastRequirement
+
+    var fixedSignature = node.signature
+    fixedSignature.returnClause = functionType.returnClause
+
+    var fixedFunction = node
+    fixedFunction.signature = fixedSignature
+    fixedFunction.genericWhereClause = fixedWhereClause
+
+    addDiagnostic(
+      whereClause.whereKeyword,
+      .whereClauseMustFollowFunctionReturnType,
+      fixIts: [
+        FixIt(
+          message: .moveWhereClauseAfterReturnType,
+          changes: [
+            .replace(oldNode: Syntax(node), newNode: Syntax(fixedFunction))
+          ]
+        )
+      ]
+    )
+    return .visitChildren
+  }
+
   public override func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

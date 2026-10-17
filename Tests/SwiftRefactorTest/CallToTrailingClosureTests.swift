@@ -79,12 +79,10 @@ final class CallToTrailingClosuresTest: XCTestCase {
       })
       """
 
-    // TODO: The ident here is not great.
-    // https://github.com/swiftlang/swift-syntax/issues/1473
     let expected: ExprSyntax = """
       foo({ label in
           return 1
-          }, 1) { label2 in
+      }, 1) { label2 in
           return 2
       } _: { label3 in
           return 3
@@ -109,13 +107,12 @@ final class CallToTrailingClosuresTest: XCTestCase {
       })
       """
 
-    // TODO: BasicFormat is pretty messed up here
     let expected: ExprSyntax = """
       foo({ label in
           return 1
-          }, 1, { label2 in
+      }, 1, { label2 in
           return 2
-          }) { label3 in
+      }) { label3 in
           return 3
       } named: { label4 in
           return 4

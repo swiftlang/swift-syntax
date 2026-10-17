@@ -39,7 +39,8 @@ public struct StaticBuildConfiguration: Codable {
     targetAtomicBitWidths: [Int] = [],
     endianness: Endianness = .little,
     languageVersion: VersionTuple,
-    compilerVersion: VersionTuple
+    compilerVersion: VersionTuple,
+    deploymentTargetVersions: [String: VersionTuple]? = nil
   ) {
     self.customConditions = customConditions
     self.features = features
@@ -55,6 +56,7 @@ public struct StaticBuildConfiguration: Codable {
     self.endianness = endianness
     self.languageMode = languageVersion
     self.compilerVersion = compilerVersion
+    self.deploymentTargetVersions = deploymentTargetVersions
   }
 
   /// The set of custom conditions that are present and can be used with `#if`.
@@ -229,6 +231,16 @@ public struct StaticBuildConfiguration: Codable {
   /// // Hooray, we can implicitly open existentials!
   /// #endif
   public var compilerVersion: VersionTuple
+
+  /// The minimum deployment version keyed by target operating system name.
+  ///
+  /// Keys are operating system names as used by `os(...)` (e.g., `macOS`,
+  /// `iOS`), including the aliases the compiler accepts for those names. This is
+  /// optional, and is distinct from an empty dictionary: a `nil` value means the
+  /// mapping is unknown (e.g., because the configuration was produced by a
+  /// toolchain that predates this information), whereas an empty dictionary means
+  /// no operating system has a known deployment version.
+  public var deploymentTargetVersions: [String: VersionTuple]?
 }
 
 extension StaticBuildConfiguration: BuildConfiguration {
@@ -416,6 +428,17 @@ extension StaticBuildConfiguration: BuildConfiguration {
   /// - Returns: Whether the target object file format matches the given name.
   public func isActiveTargetObjectFormat(name: String) -> Bool {
     targetObjectFileFormats.contains(name)
+  }
+
+  /// The deployment target version for the given target operating system.
+  ///
+  /// - Parameters:
+  ///   - targetOS: The name of the operating system being queried, as used by
+  ///     `os(...)`, such as `macOS`, `iOS`, or `Linux`.
+  /// - Returns: The minimum deployment version for the given operating system,
+  ///   if any.
+  public func minimumDeploymentVersion(forTargetOS targetOS: String) -> VersionTuple? {
+    deploymentTargetVersions?[targetOS]
   }
 
   /// Equivalent to `languageMode`, but required for conformance to the

@@ -360,7 +360,8 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "conditions",
         kind: .collection(kind: .conditionElementList, collectionElementName: "Condition"),
-        nameForDiagnostics: "condition"
+        nameForDiagnostics: "condition",
+        documentation: "The comma-separated conditions of the guard statement."
       ),
       Child(
         name: "elseKeyword",
@@ -369,7 +370,8 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "body",
         kind: .node(kind: .codeBlock),
-        nameForDiagnostics: "body"
+        nameForDiagnostics: "body",
+        documentation: "The code block executed if any of the conditions is not satisfied."
       ),
     ]
   ),

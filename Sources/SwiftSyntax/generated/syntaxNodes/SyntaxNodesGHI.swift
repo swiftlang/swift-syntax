@@ -1435,6 +1435,8 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - conditions: The comma-separated conditions of the guard statement.
+  ///   - body: The code block executed if any of the conditions is not satisfied.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1514,6 +1516,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
 
+  /// The comma-separated conditions of the guard statement.
   public var conditions: ConditionElementListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(ConditionElementListSyntax.self)
@@ -1580,6 +1583,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
 
+  /// The code block executed if any of the conditions is not satisfied.
   public var body: CodeBlockSyntax {
     get {
       return Syntax(self).child(at: 7)!.cast(CodeBlockSyntax.self)

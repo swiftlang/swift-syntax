@@ -264,10 +264,24 @@ final class JSONTests: XCTestCase {
     }
   }
 
+  func testBufferEndingInBackslash() {
+    // Cover each position of the backslash within a word.
+    for count in 0..<16 {
+      let json = [UInt8(0x22)] + Array(repeating: UInt8(ascii: "a"), count: count) + Array(#"\""#.utf8)
+      json.withUnsafeBufferPointer { buffer in
+        // The closing quote exists in storage, but is outside the supplied buffer.
+        assertParseError(
+          UnsafeBufferPointer(rebasing: buffer[..<(buffer.count - 1)]),
+          message: "unexpected end of file"
+        )
+      }
+    }
+  }
+
   func testStringScanWordBoundaries() throws {
     for offset in 0..<8 {
       let prefix = String(repeating: "a", count: 8 + offset)
-      for suffix in ["end", "é", "中文", "😀", "\"\\\n"] {
+      for suffix in ["end", "é", "中文", "😀", "\"\\\n", "\n", "\"", "\\", ""] {
         let value = prefix + suffix
         let json = try JSON.encode(value)
         let decoded = try json.withUnsafeBufferPointer { try JSON.decode(String.self, from: $0) }

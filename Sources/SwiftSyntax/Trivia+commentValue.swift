@@ -18,6 +18,11 @@ extension Trivia {
   public struct DocCommentLine {
     /// The normalized text of this line — identical to the corresponding
     /// line `docCommentValue` would produce.
+    ///
+    /// This is always a contiguous slice of the original source buffer: for valid UTF-8 source,
+    /// it covers exactly `position ..< position + text.utf8.count`. Normalization only ever
+    /// removes characters from the start or end of a line (comment markers, indentation,
+    /// padding spaces); it never inserts, removes or replaces characters in the middle.
     public let text: Substring
     /// The absolute position of `text`'s first character.
     public let position: AbsolutePosition
@@ -46,8 +51,8 @@ extension Trivia {
   ///   in this `Trivia` (e.g. a token's `position` for leading trivia, or its
   ///   `endPositionBeforeTrailingTrivia` for trailing trivia).
   @_spi(SourceKitLSP)
-  public func docCommentLines(startingAt tokenStart: AbsolutePosition) -> [DocCommentLine]? {
-    extractDocCommentLines(tokenStart: tokenStart)
+  public func docCommentLines(startingAt position: AbsolutePosition) -> [DocCommentLine]? {
+    extractDocCommentLines(tokenStart: position)
   }
 
   /// One doc-comment "entry" as encountered while walking trivia pieces: either a single
@@ -65,7 +70,7 @@ extension Trivia {
   }
 
   /// Shared implementation behind `docCommentValue` and `docCommentLines(startingAt:)`.
-  /// Positions are computed unconditionally
+  /// Positions are computed unconditionally, relative to `tokenStart`.
   private func extractDocCommentLines(tokenStart: AbsolutePosition) -> [DocCommentLine]? {
     var comments: [CommentEntry] = []
     var currentLineComments: [CommentEntry] = []

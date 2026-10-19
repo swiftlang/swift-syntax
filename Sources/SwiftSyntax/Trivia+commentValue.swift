@@ -108,6 +108,9 @@ extension Trivia {
           processSectionBreak()
           consecutiveNewlines = 0
         }
+      case .spaces, .tabs:
+        // Indentation between doc comment lines doesn't break the section.
+        break
       default:
         processSectionBreak()
         consecutiveNewlines = 0

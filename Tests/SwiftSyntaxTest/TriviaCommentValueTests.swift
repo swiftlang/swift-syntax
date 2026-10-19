@@ -107,6 +107,36 @@ class TriviaCommentValueTests: XCTestCase {
         also included
         """
     )
+    assertCommentValue(
+      "  /// first\n  /// second",
+      docCommentValue: "first\nsecond"
+    )
+    
+    assertCommentValue(
+      "\t/// first\n\t/// second",
+      docCommentValue: "first\nsecond"
+    )
+
+    assertCommentValue(
+      "/// first\n  /// second\n\t/// third",
+      docCommentValue: "first\nsecond\nthird"
+    )
+
+    assertCommentValue(
+      "  /// not included\n  \n  /// included",
+      docCommentValue: "included"
+    )
+
+    assertCommentValue(
+      """
+      struct S {
+        /// Foo ``Bar``
+        /// indented
+        func f() {}
+      }
+      """,
+      docCommentValue: "Foo ``Bar``\nindented"
+    )
   }
 
   func testDocBlockCommentValues() {
@@ -336,6 +366,16 @@ class TriviaCommentValueTests: XCTestCase {
        */
       """,
       docCommentLines: ["*  Some doc block comment", "*  with a line comment"]
+    )
+
+    assertCommentLines(
+      "  /// first\n  /// second",
+      docCommentLines: ["first", "second"]
+    )
+
+    assertCommentLines(
+      "\t/// first\n\t/// second",
+      docCommentLines: ["first", "second"]
     )
   }
 }

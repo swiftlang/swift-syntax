@@ -15,7 +15,7 @@ extension Trivia {
   /// together with the absolute position of that line's first character in
   /// the original source.
   @_spi(SourceKitLSP)
-  public struct DocCommentLine {
+  public struct DocCommentLine: Sendable, Equatable {
     /// The normalized text of this line — identical to the corresponding
     /// line `docCommentValue` would produce.
     ///
@@ -60,13 +60,17 @@ extension Trivia {
   /// A block comment is stripped as a single unit, only ever affecting its
   /// first line, never lines inside it.
   private struct CommentEntry {
-    /// This entry's full text, exactly as `docCommentValue` would see it before the
-    /// final prefix strip (used only to decide/apply that strip).
-    var wholeText: Substring
     /// The individual output lines that make up `wholeText`, with their absolute positions.
     /// For a `///` line this has exactly one element (identical to `wholeText`); for a
     /// `/**...*/` block this has one element per line inside the block.
     var lines: [DocCommentLine]
+
+    /// Whether the first line of this entry starts with `prefix`. `prefix` must not contain
+    /// a newline, so only the first line can matter.
+    func hasPrefix(_ prefix: String) -> Bool {
+      precondition(!prefix.contains(where: { $0 == "\r" || $0 == "\n" }))
+      return lines.first?.text.hasPrefix(prefix) ?? false
+    }
   }
 
   /// Shared implementation behind `docCommentValue` and `docCommentLines(startingAt:)`.
@@ -90,7 +94,6 @@ extension Trivia {
         consecutiveNewlines = 0
       case .docLineComment(let text):
         let entry = CommentEntry(
-          wholeText: text[...],
           lines: [DocCommentLine(text: text[...], position: currentPiecePosition)]
         )
         if isInsideDocLineCommentSection {
@@ -167,11 +170,7 @@ extension Trivia {
         let lineOffset = text.utf8.distance(from: text.utf8.startIndex, to: line.startIndex)
         return DocCommentLine(text: line, position: AbsolutePosition(utf8Offset: pieceStart.utf8Offset + lineOffset))
       }
-
-      // We canonicalize the line endings to `\n` here. This matches how we concatenate the different line comment
-      // pieces using \n as well.
-      let joined = Substring(unindentedLines.joined(separator: "\n"))
-      return CommentEntry(wholeText: joined, lines: lineInfos)
+      return CommentEntry(lines: lineInfos)
     }
 
     /// Processes a section break, which is defined as a sequence of newlines or other trivia pieces that are not comments.
@@ -191,13 +190,13 @@ extension Trivia {
 
     if comments.isEmpty { return nil }
 
-    let prefix = comments.allSatisfy { $0.wholeText.hasPrefix("/// ") } ? "/// " : "///"
+    let prefix = comments.allSatisfy { $0.hasPrefix("/// ") } ? "/// " : "///"
 
     // Apply the prefix strip per entry, then flatten each entry's stored lines into the final output.
-    // For a multi-line block comment entry, the strip can only ever affect line 0, since it only ever touches the
-    // very start of `wholeText` — lines 1..n of a block are always passed through unchanged.
+    // For a multi-line block comment entry, the strip can only ever affect line 0, since `prefix` can't span a line
+    // break. The remaining lines of a block are always passed through unchanged.
     return comments.flatMap { entry -> [DocCommentLine] in
-      guard entry.wholeText.hasPrefix(prefix) else {
+      guard entry.hasPrefix(prefix) else {
         return entry.lines
       }
       var lines = entry.lines

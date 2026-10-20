@@ -78,7 +78,7 @@ final class ExpressionTests: ParserTestCase {
         return 0
       }
       """,
-      languageFeatures: [.calledAttribute]
+      languageFeatures: [.onceFunctions]
     )
   }
 

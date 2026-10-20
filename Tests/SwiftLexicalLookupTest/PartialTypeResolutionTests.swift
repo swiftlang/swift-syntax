@@ -37,11 +37,11 @@ func assertPartialResolutionResult(
   typeSyntaxPrefix: String = "let _: ",
   typeSyntax: String,
   result: Result<PartiallyResolvedType, PartialTypeResolutionFailure>,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   // Compute
-  let syntax = Attached<TypeSyntax>.parse(typeSyntax, prefix: typeSyntaxPrefix, file: file, line: line)
+  let syntax = Attached<TypeSyntax>.parse(typeSyntax, prefix: typeSyntaxPrefix)
   let actualResult = syntax.partiallyResolve()
   // Convert to strings to compare syntax
   let expectedDescription = result._debugDescription

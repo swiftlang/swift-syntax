@@ -111,22 +111,18 @@ class TriviaCommentValueTests: XCTestCase {
       "  /// first\n  /// second",
       docCommentValue: "first\nsecond"
     )
-    
     assertCommentValue(
       "\t/// first\n\t/// second",
       docCommentValue: "first\nsecond"
     )
-
     assertCommentValue(
       "/// first\n  /// second\n\t/// third",
       docCommentValue: "first\nsecond\nthird"
     )
-
     assertCommentValue(
       "  /// not included\n  \n  /// included",
       docCommentValue: "included"
     )
-
     assertCommentValue(
       """
       struct S {
@@ -317,7 +313,6 @@ class TriviaCommentValueTests: XCTestCase {
       "/// hi",
       docCommentLines: ["hi"]
     )
-
     assertCommentLines(
       """
       /// Some doc line comment
@@ -325,7 +320,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentLines: ["Some doc line comment", "Another"]
     )
-
     assertCommentLines(
       """
       /// - Task
@@ -334,7 +328,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentLines: ["- Task", "  - Subtask", "- Task 2"]
     )
-
     assertCommentLines(
       """
       ///- Task
@@ -342,12 +335,10 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentLines: ["- Task", "  - Subtask"]
     )
-
     assertCommentLines(
       "/** Some doc block comment */",
       docCommentLines: ["Some doc block comment"]
     )
-
     assertCommentLines(
       """
       /**
@@ -357,7 +348,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentLines: ["Some doc block comment", "spread on many lines"]
     )
-
     assertCommentLines(
       """
       /**
@@ -367,15 +357,41 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentLines: ["*  Some doc block comment", "*  with a line comment"]
     )
-
     assertCommentLines(
       "  /// first\n  /// second",
       docCommentLines: ["first", "second"]
     )
-
     assertCommentLines(
       "\t/// first\n\t/// second",
       docCommentLines: ["first", "second"]
+    )
+    assertCommentLines(
+      "/// first\r\n/// second",
+      docCommentLines: ["first", "second"]
+    )
+    assertCommentLines(
+      "/**\r\nfirst\r\nsecond\r\n*/",
+      docCommentLines: ["first", "second"]
+    )
+    assertCommentLines(
+      "/// 日本語 ``Foo``",
+      docCommentLines: ["日本語 ``Foo``"]
+    )
+    assertCommentLines(
+      "/// é\n/// second",
+      docCommentLines: ["é", "second"]
+    )
+    assertCommentLines(
+      "  /** abc */",
+      docCommentLines: ["abc"]
+    )
+    assertCommentLines(
+      "  /**\n  Some block\n  with another\n  */",
+      docCommentLines: ["Some block", "with another"]
+    )
+    assertCommentLines(
+      "let x = 1 /// doc",
+      docCommentLines: ["doc"]
     )
   }
 }
@@ -401,7 +417,11 @@ private func assertCommentLines(
     return
   }
 
-  guard let actualLines = commentToken.leadingTrivia.docCommentLines(startingAt: commentToken.position) else {
+  let hasLeadingComment = commentToken.leadingTrivia.contains(where: { $0.isComment })
+  let trivia = hasLeadingComment ? commentToken.leadingTrivia : commentToken.trailingTrivia
+  let start = hasLeadingComment ? commentToken.position : commentToken.endPositionBeforeTrailingTrivia
+
+  guard let actualLines = trivia.docCommentLines(startingAt: start) else {
     XCTFail("Expected doc comment lines but got nil", file: file, line: line)
     return
   }
@@ -412,18 +432,10 @@ private func assertCommentLines(
   for (actual, expectedText) in zip(actualLines, expectedTexts) {
     XCTAssertEqual(String(actual.text), expectedText, file: file, line: line)
 
-    guard let range = wrappedSource.range(of: expectedText) else {
-      XCTFail("Expected text '\(expectedText)' not found in wrapped source", file: file, line: line)
-      continue
-    }
-    let expectedOffset = wrappedSource.utf8.distance(from: wrappedSource.utf8.startIndex, to: range.lowerBound)
-    XCTAssertEqual(
-      actual.position.utf8Offset,
-      expectedOffset,
-      "position mismatch for line '\(expectedText)'",
-      file: file,
-      line: line
-    )
+    let utf8 = wrappedSource.utf8
+    let lower = utf8.index(utf8.startIndex, offsetBy: actual.position.utf8Offset)
+    let upper = utf8.index(lower, offsetBy: actual.text.utf8.count)
+    XCTAssertEqual(wrappedSource[lower..<upper], actual.text, file: file, line: line)
   }
 }
 
@@ -431,10 +443,11 @@ private func parseCommentToken(from input: String) -> TokenSyntax? {
   let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
   let sourceFile = Parser.parse(source: wrappedSource)
   return sourceFile.tokens(viewMode: .sourceAccurate).first(where: {
-    $0.leadingTrivia.contains(where: { $0.isComment })
+    $0.leadingTrivia.contains(where: { $0.isComment }) || $0.trailingTrivia.contains(where: { $0.isComment })
   })
 }
 
 private func parseTrivia(from input: String) -> Trivia {
-  parseCommentToken(from: input)?.leadingTrivia ?? []
+  guard let token = parseCommentToken(from: input) else { return [] }
+  return token.leadingTrivia.contains(where: { $0.isComment }) ? token.leadingTrivia : token.trailingTrivia
 }

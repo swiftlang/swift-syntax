@@ -47,7 +47,7 @@ extension Trivia {
   /// Same normalization as `docCommentValue`, but additionally returns the
   /// absolute source position of each resulting line.
   ///
-  /// - Parameter tokenStart: The absolute position of the first trivia piece
+  /// - Parameter position: The absolute position of the first trivia piece
   ///   in this `Trivia` (e.g. a token's `position` for leading trivia, or its
   ///   `endPositionBeforeTrailingTrivia` for trailing trivia).
   @_spi(SourceKitLSP)
@@ -60,9 +60,9 @@ extension Trivia {
   /// A block comment is stripped as a single unit, only ever affecting its
   /// first line, never lines inside it.
   private struct CommentEntry {
-    /// The individual output lines that make up `wholeText`, with their absolute positions.
-    /// For a `///` line this has exactly one element (identical to `wholeText`); for a
-    /// `/**...*/` block this has one element per line inside the block.
+    /// The individual output lines of this entry, with their absolute positions.
+    /// For a `///` line this has exactly one element; for a `/**...*/` block this
+    /// has one element per line inside the block.
     var lines: [DocCommentLine]
 
     /// Whether the first line of this entry starts with `prefix`. `prefix` must not contain

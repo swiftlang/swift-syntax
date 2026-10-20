@@ -141,14 +141,10 @@ public struct TypeGraph {
   @_spi(_QualifiedLookupTests)
   public private(set) var extensionsToState: [Attached<ExtensionDeclSyntax>: ExtensionState]
 
-  // TODO: Remove
-  var logPrefix: [String] = [String]()
-
   init() {
     namesToTypes = [:]
     extensionsToState = [:]
   }
-
 }
 
 // MARK: TypeGraph.NominalType

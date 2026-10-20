@@ -10,23 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftIfConfig
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 public import SwiftSyntaxMacros
 @_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosGenericTestSupport
 private import XCTest
+
 #if canImport(Testing)
 private import Testing
-#endif
-#else
-import SwiftIfConfig
-import SwiftSyntax
-import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacros
-@_spi(XCTestFailureLocation) import SwiftSyntaxMacrosGenericTestSupport
-import XCTest
 #endif
 
 // Re-export the spec types from `SwiftSyntaxMacrosGenericTestSupport`.

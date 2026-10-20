@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) public import SwiftParser
 public import SwiftSyntax
-#else
-@_spi(ExperimentalLanguageFeatures) import SwiftParser
-import SwiftSyntax
-#endif
 
 /// A statically-determined build configuration that can be used with any
 /// API that requires a build configuration. Static build configurations can

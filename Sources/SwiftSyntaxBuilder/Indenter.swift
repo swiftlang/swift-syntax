@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 extension Trivia {
   fileprivate func indented(indentation: Trivia) -> Trivia {

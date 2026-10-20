@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) import SwiftParser
 public import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftParser
-import SwiftSyntax
-#endif
 
 /// Given a set of positions in a source file, resolve the names of the
 /// declarations that are referenced at these locations and, if they refer to

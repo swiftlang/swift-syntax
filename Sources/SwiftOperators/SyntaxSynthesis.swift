@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 fileprivate extension OperatorKind {
   var keyword: Keyword {

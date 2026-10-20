@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftBasicFormat
 internal import SwiftDiagnostics
 @_spi(ExperimentalLanguageFeatures) internal import SwiftIfConfig
@@ -19,16 +18,6 @@ internal import SwiftOperators
 internal import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntaxMacroExpansion
 @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntaxMacros
-#else
-import SwiftBasicFormat
-import SwiftDiagnostics
-@_spi(ExperimentalLanguageFeatures) import SwiftIfConfig
-import SwiftOperators
-@_spi(ExperimentalLanguageFeatures) import SwiftParser
-import SwiftSyntax
-@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) import SwiftSyntaxMacroExpansion
-@_spi(ExperimentalLanguageFeatures) import SwiftSyntaxMacros
-#endif
 
 extension PluginProviderMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.

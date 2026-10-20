@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 /// Describes errors that can occur when working with user-defined operators.
 public enum OperatorError: Error, Sendable {

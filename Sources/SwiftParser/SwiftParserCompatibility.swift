@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 // This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.

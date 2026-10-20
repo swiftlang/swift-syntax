@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(Testing) public import SwiftSyntax
-#else
-@_spi(Testing) import SwiftSyntax
-#endif
 
 /// The memory layout of `T`, as a ``SyntaxMemoryLayout/Value``.
 ///

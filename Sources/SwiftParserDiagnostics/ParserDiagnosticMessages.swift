@@ -10,15 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftDiagnostics
 @_spi(Diagnostics) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-import SwiftDiagnostics
-@_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 private let diagnosticDomain: String = "SwiftParser"
 

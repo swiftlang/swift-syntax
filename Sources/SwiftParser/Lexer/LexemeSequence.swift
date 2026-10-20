@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(BumpPtrAllocator) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(BumpPtrAllocator) import SwiftSyntax
-#endif
 
 extension Lexer {
   /// Owns the memory that the lexer's state stack spills into.

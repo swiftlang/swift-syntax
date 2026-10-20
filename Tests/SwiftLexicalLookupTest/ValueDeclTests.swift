@@ -58,7 +58,7 @@ final class ValueDeclTests: XCTestCase {
     isStatic: Result<Bool, ValueDeclSyntax.StaticLookupFailure>,
     isTypeDecl: Bool,
     scopeKind: SyntaxKind?,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     // Cast to value declaration

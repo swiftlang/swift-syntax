@@ -147,7 +147,7 @@ final class CompactLayoutTests: XCTestCase {
       }
     }
 
-    var edited = parsed
+    let edited = parsed
     if var stmt = edited.statements.first?.item.as(FunctionDeclSyntax.self)?.body?.statements.first?.item
       .as(ReturnStmtSyntax.self)
     {

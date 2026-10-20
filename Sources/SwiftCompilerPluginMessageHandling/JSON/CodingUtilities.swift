@@ -34,7 +34,7 @@ internal enum _CodingPathNode {
   }
 
   @inline(__always)
-  func appending(_ key: __owned (some CodingKey)?) -> _CodingPathNode {
+  func appending(_ key: __owned (any CodingKey)?) -> _CodingPathNode {
     if let key {
       return .node(key, self)
     } else {
@@ -43,7 +43,7 @@ internal enum _CodingPathNode {
   }
 
   @inline(__always)
-  func path(byAppending key: __owned (some CodingKey)?) -> [CodingKey] {
+  func path(byAppending key: __owned (any CodingKey)?) -> [CodingKey] {
     if let key {
       return self.path + [key]
     }

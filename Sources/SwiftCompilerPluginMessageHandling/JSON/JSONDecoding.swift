@@ -175,6 +175,7 @@ private struct JSONMapBuilder {
 private enum JSONError: Error, CustomStringConvertible {
   case unexpectedEndOfFile
   case unexpectedCharacter(UInt8, context: String)
+  case invalidUTF8
 
   var description: String {
     switch self {
@@ -183,6 +184,8 @@ private enum JSONError: Error, CustomStringConvertible {
     case .unexpectedCharacter(let c, let ctxt):
       let char = c < 0x80 ? String(UnicodeScalar(c)) : "0x" + String(c, radix: 16, uppercase: true)
       return "unexpected character '\(char)'; \(ctxt)"
+    case .invalidUTF8:
+      return "invalid UTF-8 sequence in string"
     }
   }
 }
@@ -283,20 +286,58 @@ private struct JSONScanner {
 
     var hasEscape = false
     var hasNonASCII = false
-    while hasData && ptr.pointee != UInt8(ascii: "\"") {
-      // FIXME: Error for non-escaped control characters.
-      // FIXME: Error for invalid UTF8 sequences.
-      if ptr.pointee == UInt8(ascii: "\\") {
-        hasEscape = true
-        // eat '\'. Rest of the escape sequence are all ASCII. We just skip them
-        // ignoring how many bytes are actually for the escape sequence. For
-        // decoding, they are revisited in _JSONStingDecoder.decodeStringWithEscapes()
-        _ = try advance()
-      } else if ptr.pointee >= 0x80 {
-        hasNonASCII = true
-      }
-      _ = try advance()
+    var cursor = ptr
+    var remaining = cursor.distance(to: endPtr)
+    func advance(_ distance: Int) {
+      cursor += distance
+      remaining &-= distance
     }
+    SCAN: while remaining != 0 {
+      if remaining >= ByteWord.byteCount {
+        // Skip ordinary ASCII a word at a time. Loads stay within the input,
+        // and any non-ASCII byte falls back to the scalar scan below.
+        let word = ByteWord.load(cursor)
+        if _fastPath(ByteWord.nonASCIIMask(word) == 0) {
+          let (count, stopped) = Self.scanASCIIWord(word, hasEscape: &hasEscape)
+          advance(count)
+          if !stopped {
+            continue
+          }
+        }
+      }
+
+      switch cursor.pointee {
+      case UInt8(ascii: "\""):
+        break SCAN
+      case UInt8(ascii: "\\"):
+        hasEscape = true
+        // Skip the backslash. Escape sequences are validated when
+        // _JSONStringParser.decodeStringWithEscapes() decodes them, so skip the
+        // next character too if it's printable ASCII. Otherwise the next
+        // iteration validates it.
+        advance(1)
+        guard remaining != 0 else {
+          throw JSONError.unexpectedEndOfFile
+        }
+        if Self.isPrintableASCII(cursor.pointee) {
+          advance(1)
+        }
+        continue SCAN
+      case ..<0x80:
+        guard _fastPath(cursor.pointee >= 0x20) else {
+          throw JSONError.unexpectedCharacter(cursor.pointee, context: "unescaped control character in string")
+        }
+        // Printable ASCII.
+        advance(1)
+        continue SCAN
+      default:
+        hasNonASCII = true
+        repeat {
+          advance(try Self.scanNonASCIIScalar(at: cursor, remaining: remaining))
+        } while remaining != 0 && cursor.pointee >= 0x80
+      }
+    }
+    ptr = cursor
     try expect(ascii: "\"")
 
     let kind: JSONMap.Descriptor
@@ -308,6 +349,117 @@ private struct JSONScanner {
       kind = .asciiSimpleString
     }
     map.record(kind, range: (start + 1)..<(ptr - 1))
+  }
+
+  /// Scan the start of 'word', a word of ASCII string content, up to the first
+  /// byte the scalar scan needs to look at: a closing quote, a control
+  /// character, or an escaped backslash. Escape sequences are validated when
+  /// they're decoded, so a word with escapes only needs to know which quotes
+  /// are escaped.
+  ///
+  /// Returns the number of bytes scanned, and whether the scan stopped at a
+  /// byte that needs the scalar scan. Sets 'hasEscape' if the scanned bytes
+  /// contain an escape.
+  @inline(__always)
+  private static func scanASCIIWord(
+    _ word: ByteWord.Word,
+    hasEscape: inout Bool
+  ) -> (count: Int, stopped: Bool) {
+    let control = ByteWord.controlMask(word)
+    let quote = ByteWord.mask(word, equalTo: UInt8(ascii: "\""))
+    let backslash = ByteWord.mask(word, equalTo: UInt8(ascii: "\\"))
+    if _fastPath(control | quote | backslash == 0) {
+      return (ByteWord.byteCount, false)
+    }
+
+    let exactBackslash = ByteWord.exactMask(word, equalTo: UInt8(ascii: "\\"))
+    guard exactBackslash & (exactBackslash << 8) == 0 else {
+      // An escaped backslash. Stop at the first special byte, and let the
+      // scalar scan handle the escape sequences.
+      return (ByteWord.firstMarkedIndex(control | quote | backslash), true)
+    }
+    // No backslash is escaped, so each one escapes the byte after it.
+    let unescapedQuote = ByteWord.exactMask(word, equalTo: UInt8(ascii: "\"")) & ~(exactBackslash << 8)
+    let stop = unescapedQuote | control
+    if stop == 0 {
+      hasEscape = true
+      // A backslash in the last byte escapes the first byte of the next word,
+      // so leave it for the next word.
+      let lastIsBackslash = exactBackslash >> (ByteWord.Word.bitWidth - 8) != 0
+      return (lastIsBackslash ? ByteWord.byteCount - 1 : ByteWord.byteCount, false)
+    }
+    if exactBackslash & ByteWord.bitsBeforeFirstMarked(stop) != 0 {
+      hasEscape = true
+    }
+    return (ByteWord.firstMarkedIndex(stop), true)
+  }
+
+  /// Validate the non-ASCII scalar at 'cursor', and return its length in
+  /// bytes. Two ordinary three-byte scalars may be validated together,
+  /// returning 6. The byte at 'cursor' must be non-ASCII, and 'remaining' is
+  /// the number of bytes from 'cursor' to the end of the input.
+  ///
+  /// Strings are validated while they're scanned, which reads each byte once,
+  /// and covers object keys and ignored fields that are never decoded.
+  @inline(__always)
+  private static func scanNonASCIIScalar(at cursor: Cursor, remaining: Int) throws -> Int {
+    let first = cursor.pointee
+    switch first {
+    case ..<0xE0:
+      // Two-byte scalar '110xxxxx 10xxxxxx'. This also rejects a stray
+      // continuation byte (0x80...0xBF) and the overlong leads C0 and C1.
+      guard first >= 0xC2, remaining >= 2, cursor[1] & 0xC0 == 0x80 else {
+        throw JSONError.invalidUTF8
+      }
+      return 2
+    case ..<0xF0:
+      // Three-byte scalar '1110xxxx 10xxxxxx 10xxxxxx'.
+      //
+      // Validate two ordinary three-byte scalars together. E0 and ED need
+      // stricter second-byte bounds and use the scalar checks below.
+      if remaining >= MemoryLayout<UInt64>.size, first != 0xE0, first != 0xED {
+        let pair = UInt64(littleEndian: UnsafeRawPointer(cursor).loadUnaligned(as: UInt64.self))
+        let next = UInt8(truncatingIfNeeded: pair >> 24)
+        let twoScalars = UTF8Pattern.threeByteScalar | UTF8Pattern.threeByteScalar << 24
+        if twoScalars.matches(pair), next != 0xE0, next != 0xED {
+          return 6
+        }
+      }
+      guard remaining >= 3 else {
+        throw JSONError.invalidUTF8
+      }
+      let continuation = UInt16(littleEndian: UnsafeRawPointer(cursor + 1).loadUnaligned(as: UInt16.self))
+      let second = UInt8(truncatingIfNeeded: continuation)
+      guard UTF8Pattern.continuation.repeated(2).matches(continuation),
+        first != 0xE0 || second >= 0xA0,  // Exclude overlong encodings.
+        first != 0xED || second < 0xA0  // Exclude UTF-16 surrogates.
+      else {
+        throw JSONError.invalidUTF8
+      }
+      return 3
+    default:
+      // Four-byte scalar '11110xxx 10xxxxxx 10xxxxxx 10xxxxxx'. Leads above F4
+      // are invalid.
+      guard first <= 0xF4, remaining >= 4 else {
+        throw JSONError.invalidUTF8
+      }
+      let scalar = UInt32(littleEndian: UnsafeRawPointer(cursor).loadUnaligned(as: UInt32.self))
+      let second = UInt8(truncatingIfNeeded: scalar >> 8)
+      guard (UTF8Pattern.continuation.repeated(3) << 8).matches(scalar),
+        first != 0xF0 || second >= 0x90,  // Exclude overlong encodings.
+        first != 0xF4 || second < 0x90  // Exclude scalars above U+10FFFF.
+      else {
+        throw JSONError.invalidUTF8
+      }
+      return 4
+    }
+  }
+
+  /// Whether 'byte' is ASCII in 0x20...0x7F, i.e. not a control character
+  /// that JSON requires to be escaped in strings.
+  @inline(__always)
+  private static func isPrintableASCII(_ byte: UInt8) -> Bool {
+    byte &- 0x20 < 0x60
   }
 
   mutating func scanNumber(start: Cursor) throws {
@@ -463,7 +615,7 @@ private enum _JSONStringParser {
 
   /// Decode a string value that includes escape sequences.
   static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String? {
-    // JSON string with escape sequences must be== 0 2 bytes or longer.
+    // JSON string with escape sequences must be 2 bytes or longer.
     assert(!source.isEmpty)
 
     // Decode 'source' UTF-8 JSON string literal into the uninitialized
@@ -472,37 +624,18 @@ private enum _JSONStringParser {
 
       var cursor = source.baseAddress!
       let end = cursor + source.count
-      var mark = cursor
-
       var dest = buffer.baseAddress!
 
-      @inline(__always) func flush() {
-        let count = mark.distance(to: cursor)
-        dest.initialize(from: mark, count: count)
+      while true {
+        // Copy the non-escaped characters up to the next escape sequence.
+        copyUntilBackslash(cursor: &cursor, end: end, dest: &dest)
+        if cursor == end {
+          break
+        }
+
+        guard let count = decodeEscapeSequence(cursor: &cursor, end: end, into: dest) else { return 0 }
         dest += count
       }
-
-      while cursor != end {
-        if cursor.pointee != UInt8(ascii: "\\") {
-          cursor += 1
-          continue
-        }
-
-        // Found an escape sequence. Flush the skipped source into the buffer.
-        flush()
-
-        let hadError = decodeEscapeSequence(cursor: &cursor, end: end) {
-          dest.initialize(to: $0)
-          dest += 1
-        }
-        guard !hadError else { return 0 }
-
-        // Mark the position of the end of the escape sequence.
-        mark = cursor
-      }
-
-      // Flush the remaining non-escaped characters.
-      flush()
 
       return buffer.baseAddress!.distance(to: dest)
     }
@@ -511,81 +644,122 @@ private enum _JSONStringParser {
     return decoded.isEmpty ? nil : decoded
   }
 
+  /// Copy bytes from 'cursor' to 'dest' up to the first backslash or 'end',
+  /// and advance both by the number of bytes copied. 'dest' must have room for
+  /// all bytes in 'cursor..<end'.
+  @inline(__always)
+  private static func copyUntilBackslash(
+    cursor: inout UnsafePointer<UInt8>,
+    end: UnsafePointer<UInt8>,
+    dest: inout UnsafeMutablePointer<UInt8>
+  ) {
+    while cursor.distance(to: end) >= ByteWord.byteCount {
+      // Store the whole word even if it contains a backslash. The bytes from
+      // the backslash on are overwritten by the rest of the decoding.
+      let word = ByteWord.load(cursor)
+      ByteWord.store(word, to: dest)
+      let backslash = ByteWord.mask(word, equalTo: UInt8(ascii: "\\"))
+      if backslash != 0 {
+        let count = ByteWord.firstMarkedIndex(backslash)
+        cursor += count
+        dest += count
+        return
+      }
+      cursor += ByteWord.byteCount
+      dest += ByteWord.byteCount
+    }
+    while cursor != end && cursor.pointee != UInt8(ascii: "\\") {
+      dest.initialize(to: cursor.pointee)
+      cursor += 1
+      dest += 1
+    }
+  }
+
   /// Decode a JSON escape sequence, advance 'cursor' to end of the escape
-  /// sequence, and call 'processCodeUnit' with the decoded value.
-  /// Returns 'true' on error.
+  /// sequence, and write the decoded bytes to 'destination'.
+  /// Returns the number of bytes written, or 'nil' on error.
   ///
   ///  - Note: We don't report detailed errors for now because we only care
   ///          well-formed payloads from the compiler.
   private static func decodeEscapeSequence(
     cursor: inout UnsafePointer<UInt8>,
     end: UnsafePointer<UInt8>,
-    into processCodeUnit: (UInt8) -> Void
-  ) -> Bool {
+    into destination: UnsafeMutablePointer<UInt8>
+  ) -> Int? {
     assert(cursor.pointee == UInt8(ascii: "\\"))
-    guard cursor.distance(to: end) >= 2 else { return true }
+    guard cursor.distance(to: end) >= 2 else { return nil }
 
     // Eat backslash and the next character.
     cursor += 2
+    let byte: UInt8
     switch cursor[-1] {
-    case UInt8(ascii: "\""): processCodeUnit(UInt8(ascii: "\""))
-    case UInt8(ascii: "'"): processCodeUnit(UInt8(ascii: "'"))
-    case UInt8(ascii: "\\"): processCodeUnit(UInt8(ascii: "\\"))
-    case UInt8(ascii: "/"): processCodeUnit(UInt8(ascii: "/"))
-    case UInt8(ascii: "b"): processCodeUnit(0x08)
-    case UInt8(ascii: "f"): processCodeUnit(0x0C)
-    case UInt8(ascii: "n"): processCodeUnit(0x0A)
-    case UInt8(ascii: "r"): processCodeUnit(0x0D)
-    case UInt8(ascii: "t"): processCodeUnit(0x09)
+    case UInt8(ascii: "\""): byte = UInt8(ascii: "\"")
+    case UInt8(ascii: "'"): byte = UInt8(ascii: "'")
+    case UInt8(ascii: "\\"): byte = UInt8(ascii: "\\")
+    case UInt8(ascii: "/"): byte = UInt8(ascii: "/")
+    case UInt8(ascii: "b"): byte = 0x08
+    case UInt8(ascii: "f"): byte = 0x0C
+    case UInt8(ascii: "n"): byte = 0x0A
+    case UInt8(ascii: "r"): byte = 0x0D
+    case UInt8(ascii: "t"): byte = 0x09
     case UInt8(ascii: "u"):
-      guard cursor.distance(to: end) >= 4 else { return true }
+      guard cursor.distance(to: end) >= 4 else { return nil }
 
       // Parse 4 hex digits into a UTF-16 code unit.
       let result: UInt16? = _JSONNumberParser.parseHexIntegerDigits(
         source: UnsafeBufferPointer(start: cursor, count: 4)
       )
-      guard let result else { return true }
+      guard let result else { return nil }
       cursor += 4
 
+      // Transcode UTF-16 code units to UTF-8.
+      var count = 0
+      let hadError: Bool
       if UTF16.isLeadSurrogate(result) {
         // Expect a trail surrogate.
         guard cursor.distance(to: end) >= 6,
           cursor[0] == UInt8(ascii: "\\"),
           cursor[1] == UInt8(ascii: "u")
-        else { return true }
+        else { return nil }
 
         let trail: UInt16? = _JSONNumberParser.parseHexIntegerDigits(
           source: UnsafeBufferPointer(start: cursor + 2, count: 4)
         )
-        guard let trail, UTF16.isTrailSurrogate(trail) else { return true }
+        guard let trail, UTF16.isTrailSurrogate(trail) else { return nil }
         cursor += 6
 
-        let hadError = transcode(
+        hadError = transcode(
           [result, trail].makeIterator(),
           from: UTF16.self,
           to: UTF8.self,
           stoppingOnError: true,
-          into: processCodeUnit
+          into: {
+            destination.advanced(by: count).initialize(to: $0)
+            count += 1
+          }
         )
-        guard !hadError else { return true }
       } else if UTF16.isTrailSurrogate(result) {
-        return true
+        return nil
       } else {
-        // Transcode UTF-16 code unit to UTF-8.
-        let hadError = transcode(
+        hadError = transcode(
           CollectionOfOne(result).makeIterator(),
           from: UTF16.self,
           to: UTF8.self,
           stoppingOnError: true,
-          into: processCodeUnit
+          into: {
+            destination.advanced(by: count).initialize(to: $0)
+            count += 1
+          }
         )
-        guard !hadError else { return true }
       }
+      guard !hadError else { return nil }
+      return count
     default:
       // invalid escape sequence.
-      return true
+      return nil
     }
-    return false
+    destination.initialize(to: byte)
+    return 1
   }
 
   /// SwiftStdlib 5.3 compatibility shim for
@@ -848,7 +1022,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     expectedType: T.Type,
     for codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws {
     guard !value.isNull else {
       throw DecodingError.valueNotFound(
@@ -866,7 +1040,7 @@ extension JSONDecoding {
     _ result: T?,
     decoding value: JSONMapValue,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> T {
     if let result = result {
       return result
@@ -886,7 +1060,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as _: Bool.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> Bool {
     try _unwrapOrThrow(value.asBool(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -896,7 +1070,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as _: String.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> String {
     try _unwrapOrThrow(value.asString(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -906,7 +1080,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as type: Integer.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> Integer {
     try _unwrapOrThrow(value.asInteger(type), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -916,7 +1090,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as type: Floating.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> Floating {
     try _unwrapOrThrow(value.asFloatingPoint(type), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
@@ -925,7 +1099,7 @@ extension JSONDecoding {
     _ value: JSONMapValue,
     as type: T.Type,
     codingPathNode: _CodingPathNode,
-    _ additionalKey: (some CodingKey)?
+    _ additionalKey: (any CodingKey)?
   ) throws -> T {
     let decoder = Self(value: value, codingPathNode: codingPathNode.appending(additionalKey))
     return try T.init(from: decoder)
@@ -1336,5 +1510,121 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
     self.currentIndex = 0
     self.array = array
     self._currMapIdx = array.startIndex
+  }
+}
+
+/// Bytes packed in a machine word in little-endian order, so they can be
+/// checked together. A "mask" has the high bit set in each byte that matches.
+private enum ByteWord {
+  typealias Word = UInt
+
+  static let byteCount = MemoryLayout<Word>.size
+
+  @inline(__always)
+  static func load(_ ptr: UnsafePointer<UInt8>) -> Word {
+    Word(littleEndian: UnsafeRawPointer(ptr).loadUnaligned(as: Word.self))
+  }
+
+  /// Store 'word' loaded by 'load(_:)' to 'ptr'.
+  @inline(__always)
+  static func store(_ word: Word, to ptr: UnsafeMutablePointer<UInt8>) {
+    UnsafeMutableRawPointer(ptr).storeBytes(of: word.littleEndian, as: Word.self)
+  }
+
+  /// A word with every byte set to 'byte'.
+  @inline(__always)
+  static func repeating(_ byte: UInt8) -> Word {
+    // 'Word.max / 0xFF' has 0x01 in every byte.
+    Word(byte) &* (Word.max / 0xFF)
+  }
+
+  /// Bytes that are zero. The subtraction may also mark bytes after a zero
+  /// byte, so only the first marked byte is exact.
+  @inline(__always)
+  static func zeroMask(_ word: Word) -> Word {
+    (word &- repeating(0x01)) & ~word & repeating(0x80)
+  }
+
+  /// Bytes that are zero. Unlike 'zeroMask(_:)', every marked byte is exact.
+  @inline(__always)
+  static func exactZeroMask(_ word: Word) -> Word {
+    let low7 = repeating(0x7F)
+    return ~(((word & low7) &+ low7) | word) & repeating(0x80)
+  }
+
+  /// Bytes equal to 'byte'. Every marked byte is exact.
+  @inline(__always)
+  static func exactMask(_ word: Word, equalTo byte: UInt8) -> Word {
+    exactZeroMask(word ^ repeating(byte))
+  }
+
+  /// All bits of the bytes before the first marked byte in 'mask', or all
+  /// bits if none is marked.
+  @inline(__always)
+  static func bitsBeforeFirstMarked(_ mask: Word) -> Word {
+    (mask & (0 &- mask)) &- 1
+  }
+
+  /// Bytes that are not ASCII (>= 0x80).
+  @inline(__always)
+  static func nonASCIIMask(_ word: Word) -> Word {
+    word & repeating(0x80)
+  }
+
+  /// Bytes that are control characters (< 0x20), i.e. the top 3 bits are zero.
+  @inline(__always)
+  static func controlMask(_ word: Word) -> Word {
+    zeroMask(word & repeating(0b1110_0000))
+  }
+
+  /// Bytes equal to 'byte'.
+  @inline(__always)
+  static func mask(_ word: Word, equalTo byte: UInt8) -> Word {
+    zeroMask(word ^ repeating(byte))
+  }
+
+  /// Index of the first marked byte in 'mask', or 'byteCount' if none.
+  @inline(__always)
+  static func firstMarkedIndex(_ mask: Word) -> Int {
+    mask.trailingZeroBitCount / 8
+  }
+}
+
+/// Bit patterns of UTF-8 code units, packed in little-endian order. A value
+/// matches if 'value & mask == bits'.
+private struct UTF8Pattern {
+  var mask: UInt64
+  var bits: UInt64
+
+  /// '10xxxxxx'
+  static let continuation = UTF8Pattern(mask: 0b1100_0000, bits: 0b1000_0000)
+  /// '1110xxxx'
+  static let threeByteLead = UTF8Pattern(mask: 0b1111_0000, bits: 0b1110_0000)
+  /// '1110xxxx 10xxxxxx 10xxxxxx'
+  static let threeByteScalar = threeByteLead | continuation.repeated(2) << 8
+
+  /// This pattern repeated in 'count' consecutive bytes.
+  @inline(__always)
+  func repeated(_ count: Int) -> UTF8Pattern {
+    var result = self
+    for i in 1..<count {
+      result = result | self << (8 * i)
+    }
+    return result
+  }
+
+  @inline(__always)
+  static func << (pattern: UTF8Pattern, shift: Int) -> UTF8Pattern {
+    UTF8Pattern(mask: pattern.mask << shift, bits: pattern.bits << shift)
+  }
+
+  @inline(__always)
+  static func | (lhs: UTF8Pattern, rhs: UTF8Pattern) -> UTF8Pattern {
+    UTF8Pattern(mask: lhs.mask | rhs.mask, bits: lhs.bits | rhs.bits)
+  }
+
+  @inline(__always)
+  func matches(_ value: some FixedWidthInteger) -> Bool {
+    UInt64(truncatingIfNeeded: value) & mask == bits
   }
 }

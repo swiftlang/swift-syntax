@@ -44,6 +44,9 @@ struct SwiftPMBuilder {
   /// Enable verbose logging.
   let verbose: Bool
 
+  /// Additional flags to pass to every `swift build` / `swift test` invocation.
+  let extraSwiftPMFlags: [String]
+
   init(
     toolchain: URL,
     buildDir: URL? = nil,
@@ -52,7 +55,8 @@ struct SwiftPMBuilder {
     enableRawSyntaxValidation: Bool = false,
     enableTestFuzzing: Bool = false,
     useLocalDeps: Bool = true,
-    verbose: Bool = false
+    verbose: Bool = false,
+    extraSwiftPMFlags: [String] = []
   ) {
     self.toolchain = toolchain
     self.buildDir = buildDir
@@ -62,6 +66,7 @@ struct SwiftPMBuilder {
     self.enableTestFuzzing = enableTestFuzzing
     self.useLocalDeps = useLocalDeps
     self.verbose = verbose
+    self.extraSwiftPMFlags = extraSwiftPMFlags
   }
 
   func buildTarget(packageDir: URL, targetName: String, warningsAsErrors: Bool = false) throws {
@@ -104,6 +109,8 @@ struct SwiftPMBuilder {
     if verbose {
       args += ["--verbose"]
     }
+
+    args += extraSwiftPMFlags
 
     args += additionalArguments
 

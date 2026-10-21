@@ -80,6 +80,10 @@ extension Parser.LanguageFeatures {
   @_spi(ExperimentalLanguageFeatures)
   public static let coroutineFunctions = Self (rawValue: 1 << 12)
 
+  /// Whether to enable the parsing of `exported:` argument of the `@specialized` attribute.
+  @_spi(ExperimentalLanguageFeatures)
+  public static let extendedSpecializedAttribute = Self (rawValue: 1 << 13)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   @_spi(ExperimentalLanguageFeatures)
@@ -111,6 +115,8 @@ extension Parser.LanguageFeatures {
       self = ._test_EverythingUnexpected
     case "CoroutineFunctions":
       self = .coroutineFunctions
+    case "ExtendedSpecializedAttribute":
+      self = .extendedSpecializedAttribute
     default:
       return nil
     }

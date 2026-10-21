@@ -1402,37 +1402,49 @@ public struct RawSpecializedAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ unexpectedBeforeGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeExportedArgument: RawUnexpectedNodesSyntax? = nil,
+    exportedArgument: RawLabeledSpecializeArgumentSyntax?,
+    _ unexpectedBetweenExportedArgumentAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax,
     _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
-    let hasUnexpected = unexpectedBeforeGenericWhereClause != nil || unexpectedAfterGenericWhereClause != nil
+    let hasUnexpected = unexpectedBeforeExportedArgument != nil || unexpectedBetweenExportedArgumentAndGenericWhereClause != nil || unexpectedAfterGenericWhereClause != nil
     let raw = RawSyntax.makeLayout(
       kind: .specializedAttributeArgument,
-      childCount: 1,
+      childCount: 2,
       storage: hasUnexpected ? .layoutWithUnexpected : .layout,
       arena: arena
     ) { layout in
-      layout.initializeElement(at: 0, to: genericWhereClause.raw)
+      layout.initializeElement(at: 0, to: exportedArgument?.raw)
+      layout.initializeElement(at: 1, to: genericWhereClause.raw)
       if hasUnexpected {
-        layout.initializeElement(at: 1, to: unexpectedBeforeGenericWhereClause?.raw)
-        layout.initializeElement(at: 2, to: unexpectedAfterGenericWhereClause?.raw)
+        layout.initializeElement(at: 2, to: unexpectedBeforeExportedArgument?.raw)
+        layout.initializeElement(at: 3, to: unexpectedBetweenExportedArgumentAndGenericWhereClause?.raw)
+        layout.initializeElement(at: 4, to: unexpectedAfterGenericWhereClause?.raw)
       }
     }
     self.init(unchecked: raw)
   }
 
-  public var unexpectedBeforeGenericWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeExportedArgument: RawUnexpectedNodesSyntax? {
     layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var exportedArgument: RawLabeledSpecializeArgumentSyntax? {
+    layoutView.realChild(at: 0).map(RawLabeledSpecializeArgumentSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenExportedArgumentAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var genericWhereClause: RawGenericWhereClauseSyntax {
-    layoutView.realChild(at: 0).map(RawGenericWhereClauseSyntax.init(raw:))!
+    layoutView.realChild(at: 1).map(RawGenericWhereClauseSyntax.init(raw:))!
   }
 
   public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
-    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

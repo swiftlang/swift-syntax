@@ -2139,7 +2139,7 @@ extension Parser {
           arena: self.arena
         )
       }
-    } else if self.languageFeatures.contains(.calledAttribute),
+    } else if self.languageFeatures.contains(.onceFunctions),
       self.at(.keyword(.sending)),
       self.peek(isAt: .identifier, .keyword(.`self`))
     {

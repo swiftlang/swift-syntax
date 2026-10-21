@@ -68,9 +68,9 @@ extension Parser.LanguageFeatures {
   @_spi(ExperimentalLanguageFeatures)
   public static let literalExpressions = Self (rawValue: 1 << 9)
 
-  /// Whether to enable the parsing of `@called(...)` attribute on function types.
+  /// Whether to enable the parsing of `@once` and `@callable(once)` function types.
   @_spi(ExperimentalLanguageFeatures)
-  public static let calledAttribute = Self (rawValue: 1 << 10)
+  public static let onceFunctions = Self (rawValue: 1 << 10)
 
   /// Whether to enable the parsing of a test feature that parses everything as unexpected.
   @_spi(ExperimentalLanguageFeatures)
@@ -105,8 +105,8 @@ extension Parser.LanguageFeatures {
       self = .borrowAndMutateAccessors
     case "LiteralExpressions":
       self = .literalExpressions
-    case "CalledAttribute":
-      self = .calledAttribute
+    case "OnceFunctions":
+      self = .onceFunctions
     case "_test_EverythingUnexpected":
       self = ._test_EverythingUnexpected
     case "CoroutineFunctions":

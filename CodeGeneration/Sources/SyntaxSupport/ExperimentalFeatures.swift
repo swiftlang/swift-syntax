@@ -23,7 +23,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case oldOwnershipOperatorSpellings
   case borrowAndMutateAccessors
   case literalExpressions
-  case calledAttribute
+  case onceFunctions
   case _test_EverythingUnexpected
   case coroutineFunctions
 
@@ -50,8 +50,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "BorrowAndMutateAccessors"
     case .literalExpressions:
       return "LiteralExpressions"
-    case .calledAttribute:
-      return "CalledAttribute"
+    case .onceFunctions:
+      return "OnceFunctions"
     case ._test_EverythingUnexpected:
       return "_test_EverythingUnexpected"
     case .coroutineFunctions:
@@ -82,8 +82,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "borrow and mutate accessors"
     case .literalExpressions:
       return "constant-foldable literal expressions"
-    case .calledAttribute:
-      return "`@called(...)` attribute on function types"
+    case .onceFunctions:
+      return "`@once` and `@callable(once)` function types"
     case ._test_EverythingUnexpected:
       return "a test feature that parses everything as unexpected"
     case .coroutineFunctions:

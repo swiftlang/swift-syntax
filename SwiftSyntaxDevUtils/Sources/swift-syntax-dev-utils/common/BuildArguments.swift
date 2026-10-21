@@ -49,6 +49,12 @@ struct BuildArguments: ParsableArguments {
   )
   var multirootDataFile: URL?
 
+  @Option(
+    parsing: .unconditionalSingleValue,
+    help: "Additional flag to pass to SwiftPM."
+  )
+  var extraSwiftpmFlag: [String] = []
+
   @Flag(help: "Build in release mode.")
   var release: Bool = false
 

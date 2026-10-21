@@ -1517,7 +1517,22 @@ extension Parser {
     }
 
     // Parse the optional parenthesized argument list.
-    let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
+    // Built-in '#selector', '#keyPath', and object literal ('#colorLiteral',
+    // '#imageLiteral', '#fileLiteral') expressions always require a
+    // parenthesized argument list, and the C++ parser permits a newline before
+    // the opening '(' for them.
+    let allowAtStartOfLine: Bool
+    if moduleSelector == nil && generics == nil {
+      switch macroName.tokenText {
+      case "selector", "keyPath", "colorLiteral", "imageLiteral", "fileLiteral":
+        allowAtStartOfLine = true
+      default:
+        allowAtStartOfLine = false
+      }
+    } else {
+      allowAtStartOfLine = false
+    }
+    let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: allowAtStartOfLine))
     let args: RawSyntaxNodeList<RawLabeledExprSyntax>
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?

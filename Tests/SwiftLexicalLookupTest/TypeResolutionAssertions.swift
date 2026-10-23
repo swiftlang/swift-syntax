@@ -13,7 +13,7 @@
 import SwiftIfConfig
 @_spi(_QualifiedLookup) @_spi(_QualifiedLookupTests) import SwiftLexicalLookup
 import SwiftParser
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
 /// Asserts the given annotated `TypeSyntax` resolves to the right `NominalTypeDeclSyntax`
@@ -66,12 +66,14 @@ struct TypeSyntaxOrExtension: SyntaxProtocol, SyntaxHashable {
     guard node.is(TypeSyntax.self) || node.is(ExtensionDeclSyntax.self) else { return nil }
     _syntaxNode = Syntax(node)
   }
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   static var structure: SyntaxNodeStructure {
     SyntaxNodeStructure.choices([
       .node(TypeSyntax.self),
       .node(ExtensionDeclSyntax.self),
     ])
   }
+  #endif
 
   // Always succeeding inits
   init(_ node: __shared some TypeSyntaxProtocol) {

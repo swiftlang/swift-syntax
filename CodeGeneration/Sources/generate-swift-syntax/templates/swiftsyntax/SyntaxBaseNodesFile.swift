@@ -180,6 +180,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     ) {
       DeclSyntax("public let _syntaxNode: Syntax")
 
+      syntaxDataRefDecl
+
       DeclSyntax(
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized syntax node.
@@ -271,18 +273,22 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       )
 
-      try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-        let choices = ArrayExprSyntax {
-          for childNode in SYNTAX_NODES where childNode.base == node.kind {
-            ArrayElementSyntax(
-              leadingTrivia: .newline,
-              expression: ExprSyntax(".node(\(childNode.kind.syntaxType).self)")
-            )
-          }
-        }
+      ifStructureReflectionEnabled(
+        DeclSyntax(
+          try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
+            let choices = ArrayExprSyntax {
+              for childNode in SYNTAX_NODES where childNode.base == node.kind {
+                ArrayElementSyntax(
+                  leadingTrivia: .newline,
+                  expression: ExprSyntax(".node(\(childNode.kind.syntaxType).self)")
+                )
+              }
+            }
 
-        StmtSyntax("return .choices(\(choices))")
-      }
+            StmtSyntax("return .choices(\(choices))")
+          }
+        )
+      )
     }
 
     leafProtocolDecl(type: node.kind.leafProtocolType, inheritedType: node.kind.protocolType)
@@ -296,23 +302,27 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     extension Syntax
     """
   ) {
-    try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-      let choices = ArrayExprSyntax {
-        ArrayElementSyntax(
-          leadingTrivia: .newline,
-          expression: ExprSyntax(".node(TokenSyntax.self)")
-        )
+    ifStructureReflectionEnabled(
+      DeclSyntax(
+        try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
+          let choices = ArrayExprSyntax {
+            ArrayElementSyntax(
+              leadingTrivia: .newline,
+              expression: ExprSyntax(".node(TokenSyntax.self)")
+            )
 
-        for node in NON_BASE_SYNTAX_NODES {
-          ArrayElementSyntax(
-            leadingTrivia: .newline,
-            expression: ExprSyntax(".node(\(node.kind.syntaxType).self)")
-          )
+            for node in NON_BASE_SYNTAX_NODES {
+              ArrayElementSyntax(
+                leadingTrivia: .newline,
+                expression: ExprSyntax(".node(\(node.kind.syntaxType).self)")
+              )
+            }
+          }
+
+          StmtSyntax("return .choices(\(choices))")
         }
-      }
-
-      StmtSyntax("return .choices(\(choices))")
-    }
+      )
+    )
   }
 
   leafProtocolDecl(type: "_LeafSyntaxNodeProtocol", inheritedType: "SyntaxProtocol")

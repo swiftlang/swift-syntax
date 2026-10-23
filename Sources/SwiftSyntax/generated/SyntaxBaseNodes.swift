@@ -185,6 +185,11 @@ extension Syntax {
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``DeclSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some DeclSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -239,6 +244,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(AccessorDeclSyntax.self),
@@ -269,6 +275,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(VariableDeclSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -513,6 +520,11 @@ extension Syntax {
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``ExprSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some ExprSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -567,6 +579,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(ArrayExprSyntax.self),
@@ -625,6 +638,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       .node(UnsafeExprSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -825,6 +839,11 @@ extension Syntax {
 public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``PatternSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some PatternSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -879,6 +898,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(ExpressionPatternSyntax.self),
@@ -890,6 +910,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       .node(WildcardPatternSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -1099,6 +1120,11 @@ extension Syntax {
 public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``StmtSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some StmtSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -1153,6 +1179,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(BreakStmtSyntax.self),
@@ -1174,6 +1201,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       .node(YieldStmtSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -1386,6 +1414,11 @@ extension Syntax {
 public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// Create a ``TypeSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some TypeSyntaxProtocol) {
     // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
@@ -1440,6 +1473,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(ArrayTypeSyntax.self),
@@ -1463,6 +1497,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       .node(TupleTypeSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -1513,6 +1548,7 @@ extension _LeafTypeSyntaxNodeProtocol {
 // MARK: - Syntax
 
 extension Syntax {
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(TokenSyntax.self),
@@ -1814,6 +1850,7 @@ extension Syntax {
       .node(YieldedExpressionsClauseSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.

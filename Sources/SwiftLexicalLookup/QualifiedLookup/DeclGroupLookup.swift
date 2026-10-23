@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftIfConfig
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 @_spi(_QualifiedLookup) public struct DeclGroupSyntaxType: SyntaxProtocol, SyntaxHashable {
   public internal(set) var _syntaxNode: Syntax
@@ -25,9 +25,11 @@ import SwiftSyntax
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SwiftSyntax.SyntaxNodeStructure = .choices([
     .node(NominalTypeDeclSyntax.self), .node(ExtensionDeclSyntax.self),
   ])
+  #endif
 }
 
 @_spi(_QualifiedLookup) extension DeclGroupSyntaxType: DeclGroupSyntax {

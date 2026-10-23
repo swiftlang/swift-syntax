@@ -64,6 +64,23 @@ let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
+  try! VariableDeclSyntax(
+    """
+    /// Every layout node that conforms to ``SyntaxParseable``.
+    ///
+    /// ``syntaxParseableTypes`` combines this with the collection nodes that conform to
+    /// ``SyntaxParseable``.
+    @_spi(Testing)
+    public var layoutNodeSyntaxParseableTypes: [SyntaxParseable.Type]
+    """
+  ) {
+    ArrayExprSyntax {
+      for node in SYNTAX_NODES where node.parserFunction != nil {
+        ArrayElementSyntax(expression: ExprSyntax("\(node.kind.syntaxType).self"))
+      }
+    }
+  }
+
   try! ExtensionDeclSyntax("fileprivate extension Parser") {
     DeclSyntax(
       """

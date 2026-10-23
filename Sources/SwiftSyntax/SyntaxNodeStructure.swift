@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
+
 /// Describes the statically allowed structure of a syntax tree node.
 public enum SyntaxNodeStructure: Sendable {
   public enum SyntaxChoice: Sendable {
@@ -50,3 +52,5 @@ public enum SyntaxNodeStructure: Sendable {
     }
   }
 }
+
+#endif

@@ -32,6 +32,11 @@
 public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .genericArgumentClause else {
       return nil
@@ -185,6 +190,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftAngle,
     \Self.leftAngle,
@@ -194,6 +200,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     \Self.rightAngle,
     \Self.unexpectedAfterRightAngle
   ])
+  #endif
 }
 
 // MARK: - GenericArgumentSyntax
@@ -222,6 +229,16 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       }
     }
 
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .type(let node):
+        return node._syntaxDataRef
+      case .expr(let node):
+        return node._syntaxDataRef
+      }
+    }
+
     public init(_ node: some TypeSyntaxProtocol) {
       self = .type(TypeSyntax(node))
     }
@@ -240,9 +257,11 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(TypeSyntax.self), .node(ExprSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to the type conforming to the ``TypeSyntaxProtocol`` protocol.
     ///
@@ -290,6 +309,11 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
   }
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .genericArgument else {
@@ -392,6 +416,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeArgument,
     \Self.argument,
@@ -399,6 +424,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     \Self.trailingComma,
     \Self.unexpectedAfterTrailingComma
   ])
+  #endif
 }
 
 // MARK: - GenericParameterClauseSyntax
@@ -426,6 +452,11 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/genericParameterClause``
 public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .genericParameterClause else {
@@ -614,6 +645,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftAngle,
     \Self.leftAngle,
@@ -625,6 +657,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
     \Self.rightAngle,
     \Self.unexpectedAfterRightAngle
   ])
+  #endif
 }
 
 // MARK: - GenericParameterSyntax
@@ -643,6 +676,11 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
 ///  - ``GenericParameterListSyntax``
 public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .genericParameter else {
@@ -877,6 +915,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
@@ -892,6 +931,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     \Self.trailingComma,
     \Self.unexpectedAfterTrailingComma
   ])
+  #endif
 }
 
 // MARK: - GenericRequirementSyntax
@@ -921,6 +961,18 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
       }
     }
 
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .sameTypeRequirement(let node):
+        return node._syntaxDataRef
+      case .conformanceRequirement(let node):
+        return node._syntaxDataRef
+      case .layoutRequirement(let node):
+        return node._syntaxDataRef
+      }
+    }
+
     public init(_ node: SameTypeRequirementSyntax) {
       self = .sameTypeRequirement(node)
     }
@@ -945,9 +997,11 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(SameTypeRequirementSyntax.self), .node(ConformanceRequirementSyntax.self), .node(LayoutRequirementSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``SameTypeRequirementSyntax``.
     ///
@@ -1017,6 +1071,11 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
   }
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .genericRequirement else {
@@ -1117,6 +1176,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeRequirement,
     \Self.requirement,
@@ -1124,6 +1184,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     \Self.trailingComma,
     \Self.unexpectedAfterTrailingComma
   ])
+  #endif
 }
 
 // MARK: - GenericSpecializationExprSyntax
@@ -1134,6 +1195,11 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``
 public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .genericSpecializationExpr else {
@@ -1231,6 +1297,7 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeExpression,
     \Self.expression,
@@ -1238,6 +1305,7 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
     \Self.genericArgumentClause,
     \Self.unexpectedAfterGenericArgumentClause
   ])
+  #endif
 }
 
 // MARK: - GenericWhereClauseSyntax
@@ -1269,6 +1337,11 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/genericWhereClause``
 public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .genericWhereClause else {
@@ -1401,6 +1474,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeWhereKeyword,
     \Self.whereKeyword,
@@ -1408,6 +1482,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     \Self.requirements,
     \Self.unexpectedAfterRequirements
   ])
+  #endif
 }
 
 // MARK: - GuardStmtSyntax
@@ -1420,6 +1495,11 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 ///  - `body`: ``CodeBlockSyntax``
 public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .guardStmt else {
@@ -1602,6 +1682,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeGuardKeyword,
     \Self.guardKeyword,
@@ -1613,6 +1694,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     \Self.body,
     \Self.unexpectedAfterBody
   ])
+  #endif
 }
 
 // MARK: - IdentifierPatternSyntax
@@ -1633,6 +1715,11 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 ///  - `identifier`: (`<identifier>` | `self` | `init` | `deinit` | `subscript`)
 public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .identifierPattern else {
@@ -1706,7 +1793,9 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeIdentifier, \Self.identifier, \Self.unexpectedAfterIdentifier])
+  #endif
 }
 
 // MARK: - IdentifierTypeSyntax
@@ -1718,6 +1807,11 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .identifierType else {
@@ -1846,6 +1940,7 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeModuleSelector,
     \Self.moduleSelector,
@@ -1855,6 +1950,7 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     \Self.genericArgumentClause,
     \Self.unexpectedAfterGenericArgumentClause
   ])
+  #endif
 }
 
 // MARK: - IfConfigClauseSyntax
@@ -1888,6 +1984,22 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
         return node._syntaxNode
       case .attributes(let node):
         return node._syntaxNode
+      }
+    }
+
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .statements(let node):
+        return node._syntaxDataRef
+      case .switchCases(let node):
+        return node._syntaxDataRef
+      case .decls(let node):
+        return node._syntaxDataRef
+      case .postfixExpression(let node):
+        return node._syntaxDataRef
+      case .attributes(let node):
+        return node._syntaxDataRef
       }
     }
 
@@ -1927,6 +2039,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([
         .node(CodeBlockItemListSyntax.self),
@@ -1936,6 +2049,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
         .node(AttributeListSyntax.self)
       ])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``CodeBlockItemListSyntax``.
     ///
@@ -2049,6 +2163,11 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
   }
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .ifConfigClause else {
@@ -2176,6 +2295,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforePoundKeyword,
     \Self.poundKeyword,
@@ -2185,6 +2305,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     \Self.elements,
     \Self.unexpectedAfterElements
   ])
+  #endif
 }
 
 // MARK: - IfConfigDeclSyntax
@@ -2201,6 +2322,11 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 ///  - ``SwitchCaseListSyntax``
 public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .ifConfigDecl else {
@@ -2328,6 +2454,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeClauses,
     \Self.clauses,
@@ -2335,6 +2462,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     \Self.poundEndif,
     \Self.unexpectedAfterPoundEndif
   ])
+  #endif
 }
 
 // MARK: - IfExprSyntax
@@ -2364,6 +2492,16 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
       }
     }
 
+    @_spi(RawSyntax)
+    public var _syntaxDataRef: SyntaxDataRef {
+      switch self {
+      case .ifExpr(let node):
+        return node._syntaxDataRef
+      case .codeBlock(let node):
+        return node._syntaxDataRef
+      }
+    }
+
     public init(_ node: IfExprSyntax) {
       self = .ifExpr(node)
     }
@@ -2382,9 +2520,11 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(IfExprSyntax.self), .node(CodeBlockSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``IfExprSyntax``.
     ///
@@ -2432,6 +2572,11 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
   }
 
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .ifExpr else {
@@ -2634,6 +2779,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeIfKeyword,
     \Self.ifKeyword,
@@ -2647,6 +2793,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     \Self.elseBody,
     \Self.unexpectedAfterElseBody
   ])
+  #endif
 }
 
 // MARK: - ImplementsAttributeArgumentsSyntax
@@ -2664,6 +2811,11 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .implementsAttributeArguments else {
@@ -2795,6 +2947,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeType,
     \Self.type,
@@ -2804,6 +2957,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     \Self.declName,
     \Self.unexpectedAfterDeclName
   ])
+  #endif
 }
 
 // MARK: - ImplicitlyUnwrappedOptionalTypeSyntax
@@ -2814,6 +2968,11 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 ///  - `exclamationMark`: `!`
 public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .implicitlyUnwrappedOptionalType else {
@@ -2914,6 +3073,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeWrappedType,
     \Self.wrappedType,
@@ -2921,6 +3081,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     \Self.exclamationMark,
     \Self.unexpectedAfterExclamationMark
   ])
+  #endif
 }
 
 // MARK: - ImportDeclSyntax
@@ -2942,6 +3103,11 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
 ///  - `path`: ``ImportPathComponentListSyntax``
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .importDecl else {
@@ -3221,6 +3387,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
@@ -3234,6 +3401,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     \Self.path,
     \Self.unexpectedAfterPath
   ])
+  #endif
 }
 
 // MARK: - ImportPathComponentSyntax
@@ -3248,6 +3416,11 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
 ///  - ``ImportPathComponentListSyntax``
 public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .importPathComponent else {
@@ -3357,6 +3530,7 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeName,
     \Self.name,
@@ -3364,6 +3538,7 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     \Self.trailingPeriod,
     \Self.unexpectedAfterTrailingPeriod
   ])
+  #endif
 }
 
 // MARK: - InOutExprSyntax
@@ -3376,6 +3551,11 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 ///  - `expression`: ``ExprSyntax``
 public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .inOutExpr else {
@@ -3476,6 +3656,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAmpersand,
     \Self.ampersand,
@@ -3483,6 +3664,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     \Self.expression,
     \Self.unexpectedAfterExpression
   ])
+  #endif
 }
 
 // MARK: - InfixOperatorExprSyntax
@@ -3500,6 +3682,11 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 ///  - `rightOperand`: ``ExprSyntax``
 public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .infixOperatorExpr else {
@@ -3621,6 +3808,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftOperand,
     \Self.leftOperand,
@@ -3630,6 +3818,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     \Self.rightOperand,
     \Self.unexpectedAfterRightOperand
   ])
+  #endif
 }
 
 // MARK: - InheritanceClauseSyntax
@@ -3650,6 +3839,11 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 ///  - ``StructDeclSyntax``.``StructDeclSyntax/inheritanceClause``
 public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .inheritanceClause else {
@@ -3777,6 +3971,7 @@ public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeColon,
     \Self.colon,
@@ -3784,6 +3979,7 @@ public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     \Self.inheritedTypes,
     \Self.unexpectedAfterInheritedTypes
   ])
+  #endif
 }
 
 // MARK: - InheritedTypeSyntax
@@ -3798,6 +3994,11 @@ public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - ``InheritedTypeListSyntax``
 public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .inheritedType else {
@@ -3898,6 +4099,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeType,
     \Self.type,
@@ -3905,6 +4107,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     \Self.trailingComma,
     \Self.unexpectedAfterTrailingComma
   ])
+  #endif
 }
 
 // MARK: - InitializerClauseSyntax
@@ -3926,6 +4129,11 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 ///  - ``PatternBindingSyntax``.``PatternBindingSyntax/initializer``
 public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .initializerClause else {
@@ -4026,6 +4234,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeEqual,
     \Self.equal,
@@ -4033,6 +4242,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     \Self.value,
     \Self.unexpectedAfterValue
   ])
+  #endif
 }
 
 // MARK: - InitializerDeclSyntax
@@ -4064,6 +4274,11 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - ``ABIAttributeArgumentsSyntax``.``ABIAttributeArgumentsSyntax/provider``
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .initializerDecl else {
@@ -4385,6 +4600,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
@@ -4404,6 +4620,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
     \Self.body,
     \Self.unexpectedAfterBody
   ])
+  #endif
 }
 
 // MARK: - InlineArrayTypeSyntax
@@ -4419,6 +4636,11 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
 ///  - `rightSquare`: `]`
 public struct InlineArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .inlineArrayType else {
@@ -4605,6 +4827,7 @@ public struct InlineArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftSquare,
     \Self.leftSquare,
@@ -4618,6 +4841,7 @@ public struct InlineArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
     \Self.rightSquare,
     \Self.unexpectedAfterRightSquare
   ])
+  #endif
 }
 
 // MARK: - IntegerLiteralExprSyntax
@@ -4627,6 +4851,11 @@ public struct InlineArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
 ///  - `literal`: `<integerLiteral>`
 public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .integerLiteralExpr else {
@@ -4695,7 +4924,9 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeLiteral, \Self.literal, \Self.unexpectedAfterLiteral])
+  #endif
 }
 
 // MARK: - IsExprSyntax
@@ -4718,6 +4949,11 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
 ///  - `type`: ``TypeSyntax``
 public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .isExpr else {
@@ -4849,6 +5085,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeExpression,
     \Self.expression,
@@ -4858,6 +5095,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     \Self.type,
     \Self.unexpectedAfterType
   ])
+  #endif
 }
 
 // MARK: - IsTypePatternSyntax
@@ -4868,6 +5106,11 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
 ///  - `type`: ``TypeSyntax``
 public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
+
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
 
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .isTypePattern else {
@@ -4968,6 +5211,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafP
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeIsKeyword,
     \Self.isKeyword,
@@ -4975,4 +5219,5 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafP
     \Self.type,
     \Self.unexpectedAfterType
   ])
+  #endif
 }

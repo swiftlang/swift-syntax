@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// A protocol for ``TypeLikeSyntax`` nodes.
 @_spi(_QualifiedLookup) public protocol TypeLikeSyntaxProtocol: SyntaxProtocol {}
@@ -44,11 +44,13 @@ import SwiftSyntax
     self._syntaxNode = typeLikeSyntax._syntaxNode
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   // TODO: Are we allowed to have non-primitive node types??
   public static let structure = SyntaxNodeStructure.choices([
     SyntaxNodeStructure.SyntaxChoice.node(TypeSyntax.self),
     SyntaxNodeStructure.SyntaxChoice.node(NominalTypeDeclSyntax.self),
   ])
+  #endif
 }
 
 extension Attached where Node == TypeLikeSyntax {

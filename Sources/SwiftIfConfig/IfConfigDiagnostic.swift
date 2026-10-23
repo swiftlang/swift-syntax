@@ -24,6 +24,14 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
   case requiresUnlabeledArgument(name: String, role: String, syntax: ExprSyntax)
   case unsupportedVersionOperator(name: String, operator: TokenSyntax)
   case invalidVersionOperand(name: String, syntax: ExprSyntax)
+  case deploymentTargetConditionDisabled(syntax: ExprSyntax)
+  case deploymentTargetExpectedPlatformVersion(syntax: ExprSyntax)
+  case deploymentTargetMissingWildcard(syntax: ExprSyntax)
+  case deploymentTargetWildcardMustBeLast(syntax: ExprSyntax)
+  case deploymentTargetDuplicatePlatform(platform: String, syntax: TokenSyntax)
+  case deploymentTargetUnknownPlatform(platform: String, syntax: TokenSyntax)
+  case deploymentTargetInvalidAnyAppleOSVersion(version: VersionTuple, syntax: ExprSyntax)
+  case deploymentTargetUnavailable(platform: String, syntax: TokenSyntax)
   case emptyVersionComponent(syntax: ExprSyntax)
   case compilerVersionOutOfRange(value: Int, upperLimit: Int, syntax: ExprSyntax)
   case compilerVersionSecondComponentNotWildcard(syntax: ExprSyntax)
@@ -57,6 +65,30 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
 
     case .invalidVersionOperand(let name, syntax: let version):
       return "'\(name)' version check has invalid version '\(version.trimmedDescription)'"
+
+    case .deploymentTargetConditionDisabled:
+      return "'deploymentTargetAtLeast' is an experimental feature that is currently disabled"
+
+    case .deploymentTargetExpectedPlatformVersion:
+      return "'deploymentTargetAtLeast' expects platform-version pairs followed by '*'"
+
+    case .deploymentTargetMissingWildcard:
+      return "'deploymentTargetAtLeast' must handle potential future platforms with '*'"
+
+    case .deploymentTargetWildcardMustBeLast:
+      return "'*' must be the last argument to 'deploymentTargetAtLeast'"
+
+    case .deploymentTargetDuplicatePlatform(let platform, syntax: _):
+      return "deployment target for platform '\(platform)' was already specified"
+
+    case .deploymentTargetUnknownPlatform(let platform, syntax: _):
+      return "unknown deployment target platform '\(platform)'"
+
+    case .deploymentTargetInvalidAnyAppleOSVersion(let version, syntax: _):
+      return "'\(version)' is not a valid version number for any Apple OS"
+
+    case .deploymentTargetUnavailable(let platform, syntax: _):
+      return "deployment target version is unavailable for platform '\(platform)'"
 
     case .emptyVersionComponent(syntax: _):
       return "found empty version component"
@@ -120,6 +152,11 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
       .unhandledFunction(name: _, let syntax),
       .requiresUnlabeledArgument(name: _, role: _, let syntax),
       .invalidVersionOperand(name: _, let syntax),
+      .deploymentTargetConditionDisabled(let syntax),
+      .deploymentTargetExpectedPlatformVersion(let syntax),
+      .deploymentTargetMissingWildcard(let syntax),
+      .deploymentTargetWildcardMustBeLast(let syntax),
+      .deploymentTargetInvalidAnyAppleOSVersion(version: _, let syntax),
       .emptyVersionComponent(let syntax),
       .compilerVersionOutOfRange(value: _, upperLimit: _, let syntax),
       .compilerVersionSecondComponentNotWildcard(let syntax),
@@ -138,7 +175,10 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
       .unexpectedDefined(let syntax, argument: _):
       return Syntax(syntax)
 
-    case .unsupportedVersionOperator(name: _, operator: let op):
+    case .unsupportedVersionOperator(name: _, operator: let op),
+      .deploymentTargetDuplicatePlatform(platform: _, syntax: let op),
+      .deploymentTargetUnknownPlatform(platform: _, syntax: let op),
+      .deploymentTargetUnavailable(platform: _, syntax: let op):
       return Syntax(op)
     }
   }
@@ -155,6 +195,8 @@ extension IfConfigDiagnostic: DiagnosticMessage {
     switch self {
     case .compilerVersionSecondComponentNotWildcard,
       .ignoredTrailingComponents,
+      .deploymentTargetUnknownPlatform,
+      .deploymentTargetInvalidAnyAppleOSVersion,
       .likelySimulatorPlatform, .likelyTargetOS, .endiannessDoesNotMatch,
       .macabiIsMacCatalyst:
       return .warning

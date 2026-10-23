@@ -16,6 +16,7 @@ add_swift_syntax_library(SwiftParser
   Directives.swift
   ExpressionInterpretedAsVersionTuple.swift
   Expressions.swift
+  IfConfig+Parsable.swift
   IncrementalParseTransition.swift
   IsValidIdentifier.swift
   Lookahead.swift

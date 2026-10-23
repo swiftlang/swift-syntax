@@ -180,6 +180,27 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     ) {
       DeclSyntax("public let _syntaxNode: Syntax")
 
+      try FunctionDeclSyntax("static func isKindOf(_ kind: SyntaxKind) -> Bool") {
+        let cases = SwitchCaseItemListSyntax {
+          for n in SYNTAX_NODES where n.base == node.kind {
+            SwitchCaseItemSyntax(
+              pattern: ExpressionPatternSyntax(
+                expression: ExprSyntax(".\(n.memberCallName)")
+              )
+            )
+          }
+        }
+
+        ExprSyntax(
+          """
+          switch kind {
+          case \(cases): return true
+          default: return false
+          }
+          """
+        )
+      }
+
       DeclSyntax(
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized syntax node.
@@ -221,31 +242,16 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       )
 
-      try InitializerDeclSyntax("public init?(_ node: __shared some SyntaxProtocol)") {
-        try SwitchExprSyntax("switch node.raw.kind") {
-          SwitchCaseListSyntax {
-            SwitchCaseSyntax(
-              label: .case(
-                SwitchCaseLabelSyntax {
-                  for childNode in SYNTAX_NODES where childNode.base == node.kind {
-                    SwitchCaseItemSyntax(
-                      pattern: ExpressionPatternSyntax(
-                        expression: ExprSyntax(".\(childNode.memberCallName)")
-                      )
-                    )
-                  }
-                }
-              )
-            ) {
-              ExprSyntax("self._syntaxNode = node._syntaxNode")
-            }
-
-            SwitchCaseSyntax("default:") {
-              StmtSyntax("return nil")
-            }
+      DeclSyntax(
+        """
+        public init?(_ node: __shared some SyntaxProtocol) {
+          guard Self.isKindOf(node.raw.kind) else {
+            return nil
           }
+          self._syntaxNode = node._syntaxNode
         }
-      }
+        """
+      )
 
       DeclSyntax(
         """

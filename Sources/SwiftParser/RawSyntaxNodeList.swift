@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+@_spi(RawSyntax) internal import SwiftSyntax
+
 /// The elements to build a syntax collection from, held contiguously in memory
 /// the caller owns.
 ///
@@ -21,24 +23,23 @@
 ///
 /// Trivially copyable, and owns nothing: whoever gathered the elements owns them
 /// and must keep them alive until the collection is built.
-@_spi(RawSyntax)
-public struct RawSyntaxNodeList<Element: RawSyntaxNodeProtocol> {
-  public let buffer: UnsafeBufferPointer<Element>
+struct RawSyntaxNodeList<Element: RawSyntaxNodeProtocol> {
+  let buffer: UnsafeBufferPointer<Element>
 
   /// No elements, which needs no memory from anywhere.
-  public init() {
+  init() {
     self.buffer = UnsafeBufferPointer(start: nil, count: 0)
   }
 
-  public init(buffer: UnsafeBufferPointer<Element>) {
+  init(buffer: UnsafeBufferPointer<Element>) {
     self.buffer = buffer
   }
 
-  public var count: Int {
+  var count: Int {
     return self.buffer.count
   }
 
-  public var isEmpty: Bool {
+  var isEmpty: Bool {
     return self.buffer.isEmpty
   }
 }

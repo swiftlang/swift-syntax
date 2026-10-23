@@ -153,7 +153,7 @@ private func assertTokens(
         tokenDiagnostic: actualLexeme.diagnostic,
         arena: arena
       )
-      let token = Syntax(raw: RawSyntax(rawToken), rawNodeArena: arena).cast(TokenSyntax.self)
+      let token = Syntax(raw: rawToken.raw, rawNodeArena: arena).cast(TokenSyntax.self)
       assertStringsEqualWithDiff(
         actualError.diagnosticMessage(in: token).message,
         expectedError,

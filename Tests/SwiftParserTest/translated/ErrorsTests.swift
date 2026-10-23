@@ -13,6 +13,7 @@
 // This test file has been translated from swift/test/Parse/errors.swift
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class ErrorsTests: ParserTestCase {

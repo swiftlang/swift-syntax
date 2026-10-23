@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Syntactic wrapper type that describes a target for refactoring
 /// purposes but does not interpret its contents.

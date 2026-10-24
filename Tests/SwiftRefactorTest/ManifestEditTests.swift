@@ -642,6 +642,56 @@ final class ManifestEditTests: XCTestCase {
     )
   }
 
+  func testAddTargetDependencyToTargetReferencedByAnotherTarget() throws {
+    // Regression test for swiftlang/swift-package-manager#10122: the target to
+    // modify must be found among the top-level `targets` elements, not a
+    // `.target(name:)` reference nested in another target's dependencies.
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages",
+          targets: [
+              .target(
+                  name: "MyLib",
+                  dependencies: [
+                      .target(name: "TargetOne"),
+                  ]
+              ),
+              .target(
+                  name: "TargetOne"
+              ),
+          ]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            targets: [
+                .target(
+                    name: "MyLib",
+                    dependencies: [
+                        .target(name: "TargetOne"),
+                    ]
+                ),
+                .target(
+                    name: "TargetOne",
+                    dependencies: [
+                        .target(name: "TargetTwo"),
+                    ]
+                ),
+            ]
+        )
+        """,
+      provider: AddTargetDependency.self,
+      context: .init(
+        dependency: .target(name: "TargetTwo"),
+        targetName: "TargetOne"
+      )
+    )
+  }
+
   func testAddJava2SwiftPlugin() throws {
     try assertManifestRefactor(
       """

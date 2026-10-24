@@ -112,4 +112,10 @@ struct TestingBuildConfiguration: BuildConfiguration {
   var languageVersion: VersionTuple { VersionTuple(5, 5) }
 
   var compilerVersion: VersionTuple { VersionTuple(5, 9, 1) }
+
+  var deploymentTargetVersions: [String: VersionTuple]? = nil
+
+  func minimumDeploymentVersion(forTargetOS targetOS: String) -> VersionTuple? {
+    deploymentTargetVersions?[targetOS]
+  }
 }

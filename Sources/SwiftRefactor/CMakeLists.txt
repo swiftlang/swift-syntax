@@ -9,6 +9,7 @@
 add_swift_syntax_library(SwiftRefactor
   CallLikeSyntax.swift
   CallToTrailingClosures.swift
+  ConvertZeroParameterFunctionToComputedProperty.swift
   ExpandEditorPlaceholder.swift
   RefactoringProvider.swift
   SyntaxUtils.swift

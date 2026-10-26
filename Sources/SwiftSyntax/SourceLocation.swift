@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Represents a source location in a Swift file.
-public struct SourceLocation: Hashable, Codable, Sendable {
+public struct SourceLocation: Hashable, Sendable {
 
   /// The line in the file where this location resides. 1-based.
   ///
@@ -82,7 +82,7 @@ public struct SourceLocation: Hashable, Codable, Sendable {
 }
 
 /// Represents a half-open range in a Swift file.
-public struct SourceRange: Hashable, Codable, Sendable {
+public struct SourceRange: Hashable, Sendable {
 
   /// The beginning location of the source range.
   ///
@@ -181,7 +181,7 @@ public final class SourceLocationConverter: Sendable {
   ///   - tree: The root of the syntax tree to convert positions to line/columns for.
   @available(*, deprecated, message: "Use init(fileName:tree:) instead")
   public convenience init(file: String, tree: SyntaxProtocol) {
-    self.init(fileName: file, tree: tree)
+    self.init(fileName: file, tree: Syntax(fromProtocol: tree))
   }
 
   /// - Important: This initializer does not take `#sourceLocation` directives
@@ -845,3 +845,8 @@ fileprivate extension RawSyntax {
     return position
   }
 }
+
+#if !hasFeature(Embedded)
+extension SourceLocation: Codable {}
+extension SourceRange: Codable {}
+#endif

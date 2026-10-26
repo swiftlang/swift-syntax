@@ -235,7 +235,7 @@ let package = Package(
         "SwiftSyntax603", "SwiftSyntax604", "SwiftSyntax605",
       ],
       exclude: ["CMakeLists.txt"],
-      swiftSettings: swiftSyntaxSwiftSettings
+      swiftSettings: swiftSyntaxSwiftSettings + [.treatWarning("EmbeddedRestrictions", as: .error)]
     ),
 
     .testTarget(

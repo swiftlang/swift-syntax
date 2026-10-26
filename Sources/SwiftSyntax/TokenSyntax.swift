@@ -208,6 +208,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   }
 }
 
+#if !hasFeature(Embedded)
 extension TokenSyntax: CustomReflectable {
   /// A custom mirror that shows the token properties in a simpler form, making
   /// the debug output of the token easier to read.
@@ -223,3 +224,4 @@ extension TokenSyntax: CustomReflectable {
     )
   }
 }
+#endif

@@ -10,12 +10,18 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if hasFeature(Embedded)
+public typealias _CustomReflectableIfAvailable = Sendable
+#else
+public typealias _CustomReflectableIfAvailable = CustomReflectable
+#endif
+
 /// Provide common functionality for specialized syntax nodes. Extend this
 /// protocol to provide common functionality for all syntax nodes.
 ///
 /// - Important: Do not conform to this protocol yourself.
 public protocol SyntaxProtocol: CustomStringConvertible,
-  CustomDebugStringConvertible, TextOutputStreamable, CustomReflectable, Sendable
+  CustomDebugStringConvertible, TextOutputStreamable, _CustomReflectableIfAvailable, Sendable
 {
 
   /// Retrieve the generic syntax node that is represented by this node.
@@ -610,11 +616,13 @@ extension SyntaxProtocol {
     debugDescription()
   }
 
+  #if !hasFeature(Embedded)
   public var customMirror: Mirror {
     // Suppress printing of children when doing `po node` in the debugger.
     // `debugDescription` already prints them in a nicer way.
     return Mirror(self, children: [:])
   }
+  #endif
 
   /// Returns a summarized dump of this node.
   /// - Parameters:
@@ -650,7 +658,7 @@ extension SyntaxProtocol {
     mark: SyntaxProtocol? = nil,
     indentString: String
   ) {
-    if let mark, self.id == mark.id {
+    if let mark, self.id == Syntax(fromProtocol: mark).id {
       target.write("*** ")
     }
 
@@ -679,7 +687,7 @@ extension SyntaxProtocol {
       target.write(" MISSING")
     }
 
-    if let mark, self.id == mark.id {
+    if let mark, self.id == Syntax(fromProtocol: mark).id {
       target.write(" ***")
     }
 

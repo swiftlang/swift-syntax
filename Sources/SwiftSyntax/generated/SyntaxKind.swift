@@ -2157,7 +2157,7 @@ public enum SyntaxKind: Sendable {
   }
 
   /// The name of this case, without using reflection.
-  var _debugDescription: String {
+  var debugDescription: String {
     switch self {
     case .token:
       return "token"

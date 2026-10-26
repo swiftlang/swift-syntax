@@ -739,7 +739,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   }
 
   /// The name of this case, without using reflection.
-  var _debugDescription: String {
+  var debugDescription: String {
     switch self {
     case .arrow:
       return "arrow"
@@ -849,7 +849,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
 
 extension TokenKind {
   /// A description like `String(describing:)` that doesn't use reflection.
-  var _debugDescription: String {
+  var debugDescription: String {
     // There are three kinds of payloads...
     switch decomposeToRaw() {
     case (.keyword, let text?):
@@ -857,10 +857,10 @@ extension TokenKind {
       return "keyword(SwiftSyntax.Keyword.\(text))"
     case (let rawKind, let text?):
       // 2. A `String` payload, e.g., `.identifier("x")`
-      return "\(rawKind._debugDescription)(\(text.debugDescription))"
+      return "\(rawKind.debugDescription)(\(text.debugDescription))"
     case (let rawKind, nil):
       // 3. No payload, e.g., `.arrow`
-      return rawKind._debugDescription
+      return rawKind.debugDescription
     }
   }
 

@@ -655,7 +655,7 @@ extension SyntaxProtocol {
     }
 
     if let token = Syntax(self).as(TokenSyntax.self) {
-      target.write(token.tokenKind._debugDescription)
+      target.write(token.tokenKind.debugDescription)
       if includeTrivia {
         if !leadingTrivia.isEmpty {
           target.write(" leadingTrivia=\(leadingTrivia.debugDescription)")

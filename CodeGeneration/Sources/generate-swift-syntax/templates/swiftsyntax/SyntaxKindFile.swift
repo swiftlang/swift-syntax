@@ -121,7 +121,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try VariableDeclSyntax(
       """
       /// The name of this case, without using reflection.
-      var _debugDescription: String
+      var debugDescription: String
       """
     ) {
       try SwitchExprSyntax("switch self") {

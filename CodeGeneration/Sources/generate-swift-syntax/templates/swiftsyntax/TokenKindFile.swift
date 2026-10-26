@@ -208,7 +208,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try! VariableDeclSyntax(
       """
       /// The name of this case, without using reflection.
-      var _debugDescription: String
+      var debugDescription: String
       """
     ) {
       try! SwitchExprSyntax("switch self") {
@@ -225,7 +225,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       /// A description like `String(describing:)` that doesn't use reflection.
-      var _debugDescription: String {
+      var debugDescription: String {
         // There are three kinds of payloads...
         switch decomposeToRaw() {
         case (.keyword, let text?):
@@ -233,10 +233,10 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           return "keyword(SwiftSyntax.Keyword.\\(text))"
         case (let rawKind, let text?):
           // 2. A `String` payload, e.g., `.identifier("x")`
-          return "\\(rawKind._debugDescription)(\\(text.debugDescription))"
+          return "\\(rawKind.debugDescription)(\\(text.debugDescription))"
         case (let rawKind, nil):
           // 3. No payload, e.g., `.arrow`
-          return rawKind._debugDescription
+          return rawKind.debugDescription
         }
       }
       """

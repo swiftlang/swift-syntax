@@ -848,8 +848,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
 }
 
 extension TokenKind {
-  /// A description like `String(describing:)` that doesn't use
-  /// reflection.
+  /// A description like `String(describing:)` that doesn't use reflection.
   var _debugDescription: String {
     // There are three kinds of payloads...
     switch decomposeToRaw() {

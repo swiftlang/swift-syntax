@@ -67,6 +67,10 @@ public struct Identifier: Equatable, Hashable, Sendable {
     lhs.name == rhs.name
   }
 
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(name)
+  }
+
   /// Returns `true` if `staticString` is a canonical identifier i.e. doesn't
   /// use backticks and is not a dollar identifier with leading zeros.
   private static func isCanonicalRepresentation(_ staticString: StaticString) -> Bool {

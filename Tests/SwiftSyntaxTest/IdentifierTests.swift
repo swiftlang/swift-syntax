@@ -36,6 +36,23 @@ class IdentifierTests: XCTestCase {
     XCTAssertEqual(Identifier(unicodeNormalizedToken)?.name, "\u{61}\u{300}")  // "à"
   }
 
+  public func testHashable() throws {
+    let canonical = Identifier(canonicalName: "\u{e0}")
+    // Use separate arenas, backticks, and canonically equivalent Unicode spellings.
+    let tokens: [TokenSyntax] = [
+      .identifier("\u{e0}"),
+      .identifier("`\u{e0}`"),
+      .identifier("\u{61}\u{300}"),
+    ]
+    try withExtendedLifetime(tokens) {
+      for token in tokens {
+        let identifier = try XCTUnwrap(token.identifier)
+        XCTAssertEqual(identifier, canonical)
+        XCTAssertEqual(identifier.hashValue, canonical.hashValue)
+      }
+    }
+  }
+
   public func testIdentifier() {
     let token = TokenSyntax(stringLiteral: "sometoken")
     withExtendedLifetime(token) { token in

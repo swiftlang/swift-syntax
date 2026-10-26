@@ -655,7 +655,7 @@ extension SyntaxProtocol {
     }
 
     if let token = Syntax(self).as(TokenSyntax.self) {
-      target.write(String(describing: token.tokenKind))
+      target.write(token.tokenKind._debugDescription)
       if includeTrivia {
         if !leadingTrivia.isEmpty {
           target.write(" leadingTrivia=\(leadingTrivia.debugDescription)")
@@ -665,7 +665,7 @@ extension SyntaxProtocol {
         }
       }
     } else {
-      target.write(String(describing: syntaxNodeType))
+      target.write(raw.kind.syntaxNodeTypeName)
     }
 
     let allChildren = children(viewMode: .all)

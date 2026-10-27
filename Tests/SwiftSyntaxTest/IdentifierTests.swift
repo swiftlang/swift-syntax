@@ -37,12 +37,12 @@ class IdentifierTests: XCTestCase {
   }
 
   public func testHashable() throws {
-    let canonical = Identifier(canonicalName: "\u{e0}")
+    let canonical = Identifier(canonicalName: "\u{e0}")  // à, LATIN SMALL LETTER A WITH GRAVE
     // Use separate arenas, backticks, and canonically equivalent Unicode spellings.
     let tokens: [TokenSyntax] = [
-      .identifier("\u{e0}"),
-      .identifier("`\u{e0}`"),
-      .identifier("\u{61}\u{300}"),
+      .identifier("\u{e0}"),  // à, LATIN SMALL LETTER A WITH GRAVE
+      .identifier("`\u{e0}`"),  // à, LATIN SMALL LETTER A WITH GRAVE with backticks
+      .identifier("\u{61}\u{300}"),  // à, decomposed a + COMBINING GRAVE ACCENT
     ]
     try withExtendedLifetime(tokens) {
       for token in tokens {

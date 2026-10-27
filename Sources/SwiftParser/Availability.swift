@@ -175,7 +175,11 @@ extension Parser {
           entry = self.parseAvailabilitySpec()
         }
       case nil:
-        break LOOP
+        // An empty argument list or a trailing comma is missing an argument.
+        guard (elements.isEmpty || keepGoing != nil) && self.at(.rightParen, .semicolon) else {
+          break LOOP
+        }
+        entry = self.parseAvailabilitySpec()
       }
 
       keepGoing = self.consume(if: .comma)

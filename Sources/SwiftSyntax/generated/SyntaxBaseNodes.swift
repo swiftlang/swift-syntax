@@ -194,8 +194,8 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``DeclSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some DeclSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -208,8 +208,11 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared DeclSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
     self = syntax._syntaxNode.cast(Self.self)
   }
 
@@ -535,8 +538,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``ExprSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some ExprSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -549,8 +552,11 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared ExprSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
     self = syntax._syntaxNode.cast(Self.self)
   }
 
@@ -860,8 +866,8 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``PatternSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some PatternSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -874,8 +880,11 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared PatternSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
     self = syntax._syntaxNode.cast(Self.self)
   }
 
@@ -1147,8 +1156,8 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``StmtSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some StmtSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -1161,8 +1170,11 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared StmtSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
     self = syntax._syntaxNode.cast(Self.self)
   }
 
@@ -1447,8 +1459,8 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``TypeSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some TypeSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -1461,8 +1473,11 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared TypeSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
     self = syntax._syntaxNode.cast(Self.self)
   }
 

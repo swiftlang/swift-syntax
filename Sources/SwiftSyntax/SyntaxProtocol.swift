@@ -645,7 +645,7 @@ extension SyntaxProtocol {
       to: &str,
       includeTrivia: includeTrivia,
       converter: converter,
-      mark: mark,
+      mark: Syntax(fromProtocol: mark),
       indentString: indentString
     )
     return str
@@ -655,10 +655,10 @@ extension SyntaxProtocol {
     to target: inout Target,
     includeTrivia: Bool,
     converter: SourceLocationConverter? = nil,
-    mark: SyntaxProtocol? = nil,
+    mark: Syntax? = nil,
     indentString: String
   ) {
-    if let mark, self.id == Syntax(fromProtocol: mark).id {
+    if let mark, self.id == mark.id {
       target.write("*** ")
     }
 
@@ -687,7 +687,7 @@ extension SyntaxProtocol {
       target.write(" MISSING")
     }
 
-    if let mark, self.id == Syntax(fromProtocol: mark).id {
+    if let mark, self.id == mark.id {
       target.write(" ***")
     }
 

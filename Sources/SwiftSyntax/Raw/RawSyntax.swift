@@ -1480,24 +1480,24 @@ extension RawSyntax: CustomDebugStringConvertible {
     switch header {
     case .smolParsedToken:
       target.write(".parsedToken(")
-      target.write(String(describing: asSmolParsedToken.tokenKind))
+      target.write(asSmolParsedToken.tokenKind.debugDescription)
       target.write(" wholeText=\(asSmolParsedToken.wholeText.debugDescription)")
-      target.write(" textRange=\(asSmolParsedToken.textRange.description)")
+      target.write(" textRange=\(asSmolParsedToken.textRange.lowerBound)..<\(asSmolParsedToken.textRange.upperBound)")
     case .parsedToken:
       target.write(".parsedToken(")
-      target.write(String(describing: asParsedToken.tokenKind))
+      target.write(asParsedToken.tokenKind.debugDescription)
       target.write(" wholeText=\(asParsedToken.wholeText.debugDescription)")
-      target.write(" textRange=\(asParsedToken.textRange.description)")
+      target.write(" textRange=\(asParsedToken.textRange.lowerBound)..<\(asParsedToken.textRange.upperBound)")
     case .materializedToken:
       target.write(".materializedToken(")
-      target.write(String(describing: asMaterializedToken.tokenKind))
+      target.write(asMaterializedToken.tokenKind.debugDescription)
       target.write(" text=\(asMaterializedToken.tokenText.debugDescription)")
       target.write(" numLeadingTrivia=\(asMaterializedToken.numLeadingTrivia)")
       target.write(" byteLength=\(asMaterializedToken.byteLength)")
       break
     case .layout:
       target.write(".layout(")
-      target.write(String(describing: kind))
+      target.write(kind.debugDescription)
       target.write(" byteLength=\(Int(asLayout.byteLength))")
       target.write(" nodeCount=\(Int(asLayout.nodeCount))")
       if withChildren {

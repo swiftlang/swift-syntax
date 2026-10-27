@@ -98,5 +98,43 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
       }
     }
+
+    try VariableDeclSyntax(
+      """
+      /// The name of ``syntaxNodeType``, without using reflection.
+      var syntaxNodeTypeName: String
+      """
+    ) {
+      try SwitchExprSyntax("switch self") {
+        SwitchCaseSyntax("case .token:") {
+          StmtSyntax(#"return "TokenSyntax""#)
+        }
+
+        for node in NON_BASE_SYNTAX_NODES {
+          SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+            StmtSyntax("return \(literal: node.kind.syntaxType.description)")
+          }
+        }
+      }
+    }
+
+    try VariableDeclSyntax(
+      """
+      /// The name of this case, without using reflection.
+      var debugDescription: String
+      """
+    ) {
+      try SwitchExprSyntax("switch self") {
+        SwitchCaseSyntax("case .token:") {
+          StmtSyntax(#"return "token""#)
+        }
+
+        for node in NON_BASE_SYNTAX_NODES {
+          SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+            StmtSyntax("return \(literal: node.identifier.text)")
+          }
+        }
+      }
+    }
   }
 }

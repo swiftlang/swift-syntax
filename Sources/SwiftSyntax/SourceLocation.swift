@@ -846,7 +846,30 @@ fileprivate extension RawSyntax {
   }
 }
 
-#if !hasFeature(Embedded)
-extension SourceLocation: Codable {}
-extension SourceRange: Codable {}
-#endif
+@_unavailableInEmbedded
+extension SourceLocation: Codable {
+  // TODO: Fix when compiler can synthesize `Codable` conformance in `Embedded` mode (#93688)
+  #if hasFeature(Embedded)
+  @_unavailableInEmbedded
+  public func encode(to encoder: any Encoder) throws {}
+
+  @_unavailableInEmbedded
+  public init(from decoder: any Decoder) throws {
+    fatalError()
+  }
+  #endif
+}
+
+@_unavailableInEmbedded
+extension SourceRange: Codable {
+  // TODO: Fix when compiler can synthesize `Codable` conformance in `Embedded` mode (#93688)
+  #if hasFeature(Embedded)
+  @_unavailableInEmbedded
+  public func encode(to encoder: any Encoder) throws {}
+
+  @_unavailableInEmbedded
+  public init(from decoder: any Decoder) throws {
+    fatalError()
+  }
+  #endif
+}

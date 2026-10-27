@@ -511,7 +511,7 @@ var swiftSyntaxSwiftSettings: [SwiftSetting] {
 /// Swift 6.3 doesn't support generic methods in non-final classes (e.g. `SyntaxVisitor.walk`) in Embedded mode, so
 /// only enable Embedded diagnostics on newer compilers.
 var embeddedRestrictionsSwiftSettings: [SwiftSetting] {
-  #if compiler(>=6.4)
+  #if compiler(>=6.5)
   return [.treatWarning("EmbeddedRestrictions", as: .error)]
   #else
   return []

@@ -272,9 +272,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         ///    with a specific syntax type instead.
         @_unavailableInEmbedded
         public func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType) {
-          #if !hasFeature(Embedded)
           return Syntax(self).asProtocol(\(node.kind.protocolType).self)!
-          #endif
         }
         """
       )

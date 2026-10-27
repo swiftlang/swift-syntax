@@ -250,9 +250,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///    with a specific syntax type instead.
 @_unavailableInEmbedded
 public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
-  #if !hasFeature(Embedded)
   return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
-  #endif
 }
 
   public static var structure: SyntaxNodeStructure {
@@ -594,9 +592,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///    with a specific syntax type instead.
 @_unavailableInEmbedded
 public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
-  #if !hasFeature(Embedded)
   return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
-  #endif
 }
 
   public static var structure: SyntaxNodeStructure {
@@ -922,9 +918,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 ///    with a specific syntax type instead.
 @_unavailableInEmbedded
 public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol {
-  #if !hasFeature(Embedded)
   return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
-  #endif
 }
 
   public static var structure: SyntaxNodeStructure {
@@ -1212,9 +1206,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 ///    with a specific syntax type instead.
 @_unavailableInEmbedded
 public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
-  #if !hasFeature(Embedded)
   return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
-  #endif
 }
 
   public static var structure: SyntaxNodeStructure {
@@ -1515,9 +1507,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 ///    with a specific syntax type instead.
 @_unavailableInEmbedded
 public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
-  #if !hasFeature(Embedded)
   return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
-  #endif
 }
 
   public static var structure: SyntaxNodeStructure {

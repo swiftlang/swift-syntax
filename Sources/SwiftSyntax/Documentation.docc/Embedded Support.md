@@ -6,7 +6,7 @@
 
 ## Testing
 
-The package manifest tells the compiler to emit `EmbeddedRestrictions` errors, which helps contributors identify unsupported features. However, it doesn't currently catch all Embedded errors. To actually compile in `Embedded` mode, run:
+The package manifest tells the compiler to emit `EmbeddedRestrictions` errors on the compilers >=6.4, which helps contributors identify unsupported features. However, it doesn't currently catch all Embedded errors. To actually compile in `Embedded` mode, run:
 
 ```bash
 # Build the `SwiftSyntax` target with the `Embedded` experimental feature

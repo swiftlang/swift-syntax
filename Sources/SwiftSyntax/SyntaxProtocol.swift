@@ -22,17 +22,34 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Do not retrieve this property directly. Use `Syntax(self)` instead.
   var _syntaxNode: Syntax { get }
 
+  /// Retrieve a reference to the storage of this node.
+  ///
+  /// Reading this instead of ``_syntaxNode`` avoids retaining and releasing the arena,
+  /// because ``SyntaxDataRef`` is trivial while ``Syntax`` is not. Do not retrieve this
+  /// property directly.
+  @_spi(RawSyntax)
+  var _syntaxDataRef: SyntaxDataRef { get }
+
   /// Converts the given specialized node to this type. Returns `nil` if the
   /// conversion is not possible.
   init?(_ node: __shared some SyntaxProtocol)
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }
+  #endif
 }
 
 // MARK: Access underlying data
 
 extension SyntaxProtocol {
+  /// A conformance that doesn't provide ``_syntaxDataRef`` itself falls back to going
+  /// through ``_syntaxNode``, which costs a retain and a release of the arena.
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(Syntax(self).dataRef)
+  }
+
   @_spi(RawSyntax)
   public var raw: RawSyntax {
     return _syntaxNode.raw
@@ -223,6 +240,7 @@ extension SyntaxProtocol {
     return Syntax(self).hasParent
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public var keyPathInParent: AnyKeyPath? {
     guard let parent = self.parent else {
       return nil
@@ -232,6 +250,7 @@ extension SyntaxProtocol {
     }
     return childrenKeyPaths[Syntax(self).layoutIndexInParent]
   }
+  #endif
 
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
   public var previousToken: TokenSyntax? {
@@ -688,7 +707,7 @@ extension SyntaxProtocol {
       target.write("\n")
       target.write(indentString)
       target.write(isLastChild ? "╰─" : "├─")
-      if let keyPath = child.keyPathInParent, let name = childName(keyPath) {
+      if let property = child.propertyInParent, let name = property.name {
         target.write("\(name): ")
       } else if self.kind.isSyntaxCollection {
         target.write("[\(num)]: ")

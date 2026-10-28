@@ -26,6 +26,7 @@ private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
 private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
 private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
+private let swiftSyntaxTestSupportGeneratedDir = ["_SwiftSyntaxTestSupport", generatedDirName]
 private let BASE_KIND_FILES: [SyntaxNodeKind: String] = [
   .decl: "SyntaxDeclNodes.swift",
   .expr: "SyntaxExprNodes.swift",
@@ -115,7 +116,7 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       ),
 
       // SwiftSyntax
-      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["ChildNameForKeyPath.swift"], childNameForKeyPathFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["ConcreteSyntaxProperty.swift"], concreteSyntaxPropertyFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Keyword.swift"], keywordFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxValidation.swift"], rawSyntaxValidationFile),
       GeneratedFileSpec(
@@ -128,6 +129,7 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxCollections.swift"], syntaxCollectionsFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxEnum.swift"], syntaxEnumFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxKind.swift"], syntaxKindFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxLayoutNodes.swift"], syntaxLayoutNodesFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxRewriter.swift"], syntaxRewriterFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTraits.swift"], syntaxTraitsFile),
       GeneratedFileSpec(
@@ -151,6 +153,9 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
         swiftSyntaxBuilderGeneratedDir + ["RenamedChildrenBuilderCompatibility.swift"],
         renamedChildrenBuilderCompatibilityFile
       ),
+
+      // _SwiftSyntaxTestSupport
+      GeneratedFileSpec(swiftSyntaxTestSupportGeneratedDir + ["ChildChoicesTypeName.swift"], childChoicesTypeNameFile),
     ]
     // This split of letters produces files for the syntax nodes that have about equal size, which improves compile time
 

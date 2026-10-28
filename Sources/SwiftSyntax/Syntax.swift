@@ -285,6 +285,11 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(dataRef)
+  }
+
+  @_spi(RawSyntax)
   public init(raw: RawSyntax, rawNodeArena: __shared RetainedRawSyntaxArena) {
     self = .forRoot(raw, rawNodeArena: rawNodeArena)
   }
@@ -356,6 +361,20 @@ extension Syntax {
 
 typealias SyntaxDataReference = ArenaAllocatedPointer<SyntaxData>
 typealias SyntaxDataReferenceBuffer = ArenaAllocatedBufferPointer<SyntaxDataReference?>
+
+/// An opaque reference to the storage of a syntax node.
+///
+/// This type is trivial, so passing it around implies no ARC traffic, unlike ``Syntax``.
+/// In exchange it keeps nothing alive: a value is only valid while the node it was
+/// obtained from is alive.
+@_spi(RawSyntax)
+public struct SyntaxDataRef: Sendable {
+  let dataRef: SyntaxDataReference
+
+  init(_ dataRef: SyntaxDataReference) {
+    self.dataRef = dataRef
+  }
+}
 
 /// Node data for a `Syntax`, allocated and managed by `SyntaxDataArena`.
 ///

@@ -26,6 +26,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// Don’t access this. Use `Syntax(token)` instead.
   public let _syntaxNode: Syntax
 
+  @_spi(RawSyntax)
+  public var _syntaxDataRef: SyntaxDataRef {
+    return SyntaxDataRef(_syntaxNode.dataRef)
+  }
+
   /// The ``RawSyntaxTokenView`` of this token that allows accessing raw
   /// properties of the token.
   @_spi(RawSyntax)
@@ -158,6 +163,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   /// A token by itself has no structure, so we represent its structure by an
   /// empty layout node.
   ///
@@ -167,6 +173,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .layout([])
   }
+  #endif
 
   /// If the token has a lexical error, the type of the error.
   public var tokenDiagnostic: TokenDiagnostic? {

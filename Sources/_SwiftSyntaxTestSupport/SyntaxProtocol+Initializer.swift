@@ -143,21 +143,8 @@ extension SyntaxProtocol {
       )
     }
 
-    if case .collection(let collectionElementType) = self.syntaxNodeType.structure {
-      let typeName = String(describing: type(of: self))
-      return ExprSyntax(
-        FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(typeName))) {
-          LabeledExprSyntax(
-            expression: ArrayExprSyntax {
-              for child in self.children(viewMode: .all) {
-                ArrayElementSyntax(
-                  expression: child.as(collectionElementType)!.debugInitCallExpr(includeTrivia: includeTrivia)
-                )
-              }
-            }
-          )
-        }
-      )
+    if let collection = Syntax(self).asProtocol(SyntaxProtocol.self) as? any SyntaxCollection {
+      return collection.debugInitCallExprForCollection(includeTrivia: includeTrivia)
     } else if let token = Syntax(self).as(TokenSyntax.self) {
       let tokenKind = token.tokenKind
       let tokenInitializerName: String
@@ -204,26 +191,53 @@ extension SyntaxProtocol {
           }
         }
       )
-    } else if case .layout(let layout) = self.syntaxNodeType.structure {
+    } else {
       let typeName = String(describing: type(of: self))
+      let arguments = children(viewMode: .all).compactMap { child -> (label: String, expression: ExprSyntax)? in
+        guard let property = child.propertyInParent, let label = property.name else {
+          return nil
+        }
+        var expression = child.asProtocol(SyntaxProtocol.self).debugInitCallExpr(includeTrivia: includeTrivia)
+        // A child declared as a `SyntaxChildChoices` type needs to be wrapped in that type.
+        // Children declared as a base type don't, because the initializer takes those as
+        // `some XSyntaxProtocol`.
+        if let choicesTypeName = childChoicesTypeName(property) {
+          expression = ExprSyntax(
+            FunctionCallExprSyntax(callee: ExprSyntax("\(raw: choicesTypeName)")) {
+              LabeledExprSyntax(expression: expression)
+            }
+          )
+        }
+        return (label, expression)
+      }
       return ExprSyntax(
         FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(typeName))) {
-          for keyPath in layout {
-            let label = childName(keyPath) ?? ""
-            let value = self[keyPath: keyPath as! PartialKeyPath<Self>] as! SyntaxProtocol?
-            let isUnexpected = label.hasPrefix("unexpected")
-            if value != nil {
-              LabeledExprSyntax(
-                label: isUnexpected ? nil : .identifier(label),
-                colon: isUnexpected ? nil : .colonToken(),
-                expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExprSyntax())
-              )
-            }
+          for argument in arguments {
+            let isUnexpected = argument.label.hasPrefix("unexpected")
+            LabeledExprSyntax(
+              label: isUnexpected ? nil : .identifier(argument.label),
+              colon: isUnexpected ? nil : .colonToken(),
+              expression: argument.expression
+            )
           }
         }
       )
-    } else {
-      fatalError()
     }
+  }
+
+  fileprivate func debugInitCallExprForCollection(includeTrivia: Bool) -> ExprSyntax
+  where Self: SyntaxCollection {
+    let typeName = String(describing: type(of: self))
+    return ExprSyntax(
+      FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(typeName))) {
+        LabeledExprSyntax(
+          expression: ArrayExprSyntax {
+            for element in self {
+              ArrayElementSyntax(expression: element.debugInitCallExpr(includeTrivia: includeTrivia))
+            }
+          }
+        )
+      }
+    )
   }
 }

@@ -56,8 +56,14 @@ struct ChildNodeChoices {
     }
   }
 
-  func syntaxGetter(propertyName: TokenSyntax, propertyType: TypeSyntax) -> VariableDeclSyntax {
-    try! VariableDeclSyntax("public var \(propertyName.declNameOrVarCallName): \(propertyType)") {
+  func syntaxGetter(
+    propertyName: TokenSyntax,
+    propertyType: TypeSyntax,
+    attributes: String = ""
+  ) -> VariableDeclSyntax {
+    try! VariableDeclSyntax(
+      "\(raw: attributes)public var \(propertyName.declNameOrVarCallName): \(propertyType)"
+    ) {
       try! SwitchExprSyntax("switch self") {
         for choice in self.choices {
           SwitchCaseSyntax("case .\(choice.enumCaseCallName)(let node):") {

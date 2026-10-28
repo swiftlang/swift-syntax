@@ -41,6 +41,8 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax("public let _syntaxNode: Syntax")
 
+      syntaxDataRefDecl
+
       DeclSyntax(
         """
         public init?(_ node: some SyntaxProtocol) {

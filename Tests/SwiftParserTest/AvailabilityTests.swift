@@ -233,4 +233,76 @@ final class AvailabilityTests: ParserTestCase {
         """
     )
   }
+
+  func testAvailableEmptyArguments() {
+    assertParse(
+      """
+      @available(1️⃣)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected argument for '@available' attribute",
+          fixIts: ["insert attribute argument"]
+        )
+      ],
+      fixedSource: """
+        @available(<#identifier#>)
+        func test() {}
+        """
+    )
+  }
+
+  func testAvailableTrailingComma() {
+    assertParse(
+      """
+      @available(macOS 10.15, *,1️⃣)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected version restriction in availability argument",
+          fixIts: ["insert version restriction"]
+        )
+      ],
+      fixedSource: """
+        @available(macOS 10.15, *, <#identifier#>)
+        func test() {}
+        """
+    )
+
+    assertParse(
+      """
+      @available(*, deprecated, message: "Use foo()",1️⃣)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected version restriction in availability argument",
+          fixIts: ["insert version restriction"]
+        )
+      ],
+      fixedSource: """
+        @available(*, deprecated, message: "Use foo()", <#identifier#>)
+        func test() {}
+        """
+    )
+
+    assertParse(
+      """
+      @_specialize(exported: true, availability: macOS 10.15,1️⃣; where T == Int)
+      func test<T>(_ t: T) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected version restriction in availability argument",
+          fixIts: ["insert version restriction"]
+        )
+      ],
+      fixedSource: """
+        @_specialize(exported: true, availability: macOS 10.15, <#identifier#>; where T == Int)
+        func test<T>(_ t: T) {}
+        """
+    )
+  }
 }

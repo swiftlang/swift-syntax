@@ -1295,7 +1295,11 @@ extension Parser {
     /// Only allow recovery to the arrow with exprKeyword precedence so we only
     /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
     if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
-      let output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
+      let output = self.parseFunctionReturnClause(
+        effectSpecifiers: &effectSpecifiers,
+        allowNamedOpaqueResultType: true,
+        allowYieldType: false
+      )
       unexpectedAfterAsync.append(RawSyntax(output))
     }
 
@@ -1316,15 +1320,20 @@ extension Parser {
 
 extension Parser {
   /// If a `throws` keyword appears right behind of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
+  ///
+  /// `allowYieldType` permits `-> yield T`
   mutating func parseFunctionReturnClause(
     effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?,
-    allowNamedOpaqueResultType: Bool
+    allowNamedOpaqueResultType: Bool,
+    allowYieldType: Bool
   ) -> RawReturnClauseSyntax {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
 
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let type: RawTypeSyntax
-    if allowNamedOpaqueResultType {
+    if allowYieldType && self.atYieldType() {
+      type = RawTypeSyntax(self.parseYieldType())
+    } else if allowNamedOpaqueResultType {
       type = self.parseResultType()
     } else {
       type = self.parseType()
@@ -1420,7 +1429,8 @@ extension Parser {
     if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
       returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
-        allowNamedOpaqueResultType: true
+        allowNamedOpaqueResultType: true,
+        allowYieldType: true
       )
     } else {
       returnClause = nil
@@ -1464,7 +1474,8 @@ extension Parser {
     var misplacedEffectSpecifiers: RawFunctionEffectSpecifiersSyntax?
     let returnClause = self.parseFunctionReturnClause(
       effectSpecifiers: &misplacedEffectSpecifiers,
-      allowNamedOpaqueResultType: true
+      allowNamedOpaqueResultType: true,
+      allowYieldType: false
     )
 
     // Parse a 'where' clause if present.

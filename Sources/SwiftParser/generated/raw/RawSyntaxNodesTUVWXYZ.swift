@@ -1416,7 +1416,7 @@ struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType, .yieldType:
       return true
     default:
       return false
@@ -2413,6 +2413,84 @@ struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
 
   var unexpectedAfterYieldedExpressions: RawUnexpectedNodesSyntax? {
     layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+struct RawYieldTypeSyntax: RawTypeSyntaxNodeProtocol {
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .yieldType
+  }
+
+  var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  init(
+    _ unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? = nil,
+    yieldKeyword: RawTokenSyntax,
+    _ unexpectedBetweenYieldKeywordAndSpecifier: RawUnexpectedNodesSyntax? = nil,
+    specifier: RawTokenSyntax?,
+    _ unexpectedBetweenSpecifierAndType: RawUnexpectedNodesSyntax? = nil,
+    type: some RawTypeSyntaxNodeProtocol,
+    _ unexpectedAfterType: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    self.init(unchecked: RawSyntax.makeYieldType(
+      unexpectedBeforeYieldKeyword?.raw,
+      yieldKeyword: yieldKeyword.raw,
+      unexpectedBetweenYieldKeywordAndSpecifier?.raw,
+      specifier: specifier?.raw,
+      unexpectedBetweenSpecifierAndType?.raw,
+      type: type.raw,
+      unexpectedAfterType?.raw,
+      arena: arena
+    ))
+  }
+
+  var unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  var yieldKeyword: RawTokenSyntax {
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
+  }
+
+  var unexpectedBetweenYieldKeywordAndSpecifier: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  var specifier: RawTokenSyntax? {
+    layoutView.realChild(at: 1).map(RawTokenSyntax.init(raw:))
+  }
+
+  var unexpectedBetweenSpecifierAndType: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  var type: RawTypeSyntax {
+    layoutView.realChild(at: 2).map(RawTypeSyntax.init(raw:))!
+  }
+
+  var unexpectedAfterType: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 3).map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

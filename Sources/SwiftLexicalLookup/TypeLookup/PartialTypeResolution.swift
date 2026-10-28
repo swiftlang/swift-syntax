@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 // MARK: Result Types
 
@@ -376,6 +376,8 @@ extension Attached where Node: TypeSyntaxProtocol {
       return _castChild(packElementType.pack).partiallyResolve()
     case .packExpansionType(let packExpansionType):
       return _castChild(packExpansionType.repetitionPattern).partiallyResolve()
+    case .yieldType(let yieldType):
+      return _castChild(yieldType.type).partiallyResolve()
     case .compositionType(let compositionType):
       return Result.success(
         PartiallyResolvedType.composition(

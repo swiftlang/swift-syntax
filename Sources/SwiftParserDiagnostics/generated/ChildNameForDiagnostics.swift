@@ -379,6 +379,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "attributes"
   case \VariableDeclSyntax.modifiers:
     return "modifiers"
+  case \YieldTypeSyntax.type:
+    return "yielded type"
   default:
     return nil
   }

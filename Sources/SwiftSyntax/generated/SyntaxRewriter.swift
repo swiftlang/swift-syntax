@@ -2164,6 +2164,14 @@ open class SyntaxRewriter {
     return StmtSyntax(YieldStmtSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a `YieldTypeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: YieldTypeSyntax) -> TypeSyntax {
+    return TypeSyntax(YieldTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
   /// Visit a ``YieldedExpressionListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3691,6 +3699,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitYieldTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(YieldTypeSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitYieldedExpressionListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(YieldedExpressionListSyntax(unsafeCasting: node)))
   }
@@ -4319,6 +4332,8 @@ open class SyntaxRewriter {
       return self.visitWildcardPatternSyntaxImpl(_:)
     case .yieldStmt:
       return self.visitYieldStmtSyntaxImpl(_:)
+    case .yieldType:
+      return self.visitYieldTypeSyntaxImpl(_:)
     case .yieldedExpressionList:
       return self.visitYieldedExpressionListSyntaxImpl(_:)
     case .yieldedExpression:
@@ -4921,6 +4936,8 @@ open class SyntaxRewriter {
       return visitWildcardPatternSyntaxImpl(node)
     case .yieldStmt:
       return visitYieldStmtSyntaxImpl(node)
+    case .yieldType:
+      return visitYieldTypeSyntaxImpl(node)
     case .yieldedExpressionList:
       return visitYieldedExpressionListSyntaxImpl(node)
     case .yieldedExpression:

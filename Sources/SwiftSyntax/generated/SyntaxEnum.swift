@@ -323,6 +323,8 @@ public enum SyntaxEnum: Sendable {
   case whileStmt(WhileStmtSyntax)
   case wildcardPattern(WildcardPatternSyntax)
   case yieldStmt(YieldStmtSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case yieldType(YieldTypeSyntax)
   case yieldedExpressionList(YieldedExpressionListSyntax)
   case yieldedExpression(YieldedExpressionSyntax)
   case yieldedExpressionsClause(YieldedExpressionsClauseSyntax)
@@ -920,6 +922,8 @@ extension Syntax {
       return .wildcardPattern(WildcardPatternSyntax(self)!)
     case .yieldStmt:
       return .yieldStmt(YieldStmtSyntax(self)!)
+    case .yieldType:
+      return .yieldType(YieldTypeSyntax(self)!)
     case .yieldedExpressionList:
       return .yieldedExpressionList(YieldedExpressionListSyntax(self)!)
     case .yieldedExpression:
@@ -1321,6 +1325,8 @@ public enum TypeSyntaxEnum {
   case someOrAnyType(SomeOrAnyTypeSyntax)
   case suppressedType(SuppressedTypeSyntax)
   case tupleType(TupleTypeSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case yieldType(YieldTypeSyntax)
 }
 
 extension TypeSyntax {
@@ -1365,6 +1371,8 @@ extension TypeSyntax {
       return .suppressedType(SuppressedTypeSyntax(self)!)
     case .tupleType:
       return .tupleType(TupleTypeSyntax(self)!)
+    case .yieldType:
+      return .yieldType(YieldTypeSyntax(self)!)
     default:
       preconditionFailure("unknown Type syntax kind")
     }

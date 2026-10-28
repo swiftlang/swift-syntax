@@ -3137,6 +3137,16 @@ func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind) {
     assertNoError(kind, 3, verify(layout[3], as: YieldStmtSyntax.YieldedExpressions.self, isKindOf: YieldStmtSyntax.YieldedExpressions.isKindOf))
     assertNoError(kind, 4, verify(layout[4], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
   }
+  func validateYieldTypeSyntax(kind: SyntaxKind, layout: RawLayoutChildren) {
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
+    assertNoError(kind, 1, verify(layout[1], as: TokenSyntax.self, tokenChoices: [.keyword("yield")]))
+    assertNoError(kind, 2, verify(layout[2], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
+    assertNoError(kind, 3, verify(layout[3], as: TokenSyntax?.self, tokenChoices: [.keyword("borrow"), .keyword("inout")]))
+    assertNoError(kind, 4, verify(layout[4], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
+    assertNoError(kind, 5, verify(layout[5], as: TypeSyntax.self, isKindOf: TypeSyntax.isKindOf))
+    assertNoError(kind, 6, verify(layout[6], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
+  }
   func validateYieldedExpressionListSyntax(kind: SyntaxKind, layout: RawLayoutChildren) {
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: YieldedExpressionListSyntax.Element.self, isKindOf: YieldedExpressionListSyntax.Element.isKindOf))
@@ -3749,6 +3759,8 @@ func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind) {
     validateWildcardPatternSyntax(kind: kind, layout: layout)
   case .yieldStmt:
     validateYieldStmtSyntax(kind: kind, layout: layout)
+  case .yieldType:
+    validateYieldTypeSyntax(kind: kind, layout: layout)
   case .yieldedExpressionList:
     validateYieldedExpressionListSyntax(kind: kind, layout: layout)
   case .yieldedExpression:

@@ -10,7 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 @_spi(FixItApplier) import SwiftIDEUtils
+import SwiftParser
 import SwiftSyntax
 import XCTest
 
@@ -236,6 +238,100 @@ class FixItApplierApplyEditsTests: XCTestCase {
         .init(oneOf: "_ = 1", "vaar x = 1")
       ]
     )
+  }
+
+  func testSubtreeEditInWholeFileCoordinates() {
+    let source = """
+    func test() {
+      var x = 1
+      let y = 2
+    }
+    """
+    let file = Parser.parse(source: source)
+    let fn = Array(file.statements)[0].item.as(FunctionDeclSyntax.self)!
+    let stmt = Array(fn.body!.statements)[1]
+    XCTAssertGreaterThan(stmt.position.utf8Offset, 0)
+
+    let yDecl = stmt.item.as(VariableDeclSyntax.self)!
+    let bindingSpec = yDecl.bindingSpecifier
+    let edit = SourceEdit(
+      range: bindingSpec.position..<bindingSpec.endPosition,
+      replacement: "  var "
+    )
+
+    let result = FixItApplier.apply(edits: [edit], to: stmt)
+    XCTAssertEqual(result, "  var y = 2")
+  }
+
+  func testSubtreeIgnoresExternalEdits() {
+    let source = """
+    func test() {
+      var x = 1
+      let y = 2
+    }
+    """
+    let file = Parser.parse(source: source)
+    let fn = Array(file.statements)[0].item.as(FunctionDeclSyntax.self)!
+    let firstStmt = Array(fn.body!.statements)[0]
+    let secondStmt = Array(fn.body!.statements)[1]
+
+    let xDecl = firstStmt.item.as(VariableDeclSyntax.self)!
+    let editOutside = SourceEdit(
+      range: xDecl.bindingSpecifier.position..<xDecl.bindingSpecifier.endPosition,
+      replacement: "  let "
+    )
+
+    let yDecl = secondStmt.item.as(VariableDeclSyntax.self)!
+    let editInside = SourceEdit(
+      range: yDecl.bindingSpecifier.position..<yDecl.bindingSpecifier.endPosition,
+      replacement: "  var "
+    )
+
+    // Apply both edits to secondStmt. editOutside must be safely ignored.
+    let result = FixItApplier.apply(edits: [editOutside, editInside], to: secondStmt)
+    XCTAssertEqual(result, "  var y = 2")
+  }
+
+  func testApplyFixesOnSubtree() {
+    struct TestFixItMessage: FixItMessage {
+      var message: String
+      var fixItID: MessageID { MessageID(domain: "test", id: message) }
+    }
+    struct TestDiagMessage: DiagnosticMessage {
+      var message: String
+      var diagnosticID: MessageID { MessageID(domain: "test", id: message) }
+      var severity: DiagnosticSeverity { .error }
+    }
+
+    let source = """
+    func test() {
+      var x = 1
+      let y = 2
+    }
+    """
+    let file = Parser.parse(source: source)
+    let fn = Array(file.statements)[0].item.as(FunctionDeclSyntax.self)!
+    let stmt = Array(fn.body!.statements)[1]
+    let yDecl = stmt.item.as(VariableDeclSyntax.self)!
+
+    let diag = Diagnostic(
+      node: Syntax(yDecl.bindingSpecifier),
+      message: TestDiagMessage(message: "change to var"),
+      fixIts: [
+        FixIt(
+          message: TestFixItMessage(message: "change to var"),
+          changes: [
+            .replace(
+              oldNode: Syntax(yDecl.bindingSpecifier),
+              newNode: Syntax(TokenSyntax.keyword(.var, leadingTrivia: .spaces(2), trailingTrivia: .space))
+            )
+          ]
+        )
+      ]
+    )
+
+    let result = FixItApplier.applyFixes(from: [diag], filterByMessages: nil, to: stmt)
+    XCTAssertEqual(result, "  var y = 2")
   }
 }
 

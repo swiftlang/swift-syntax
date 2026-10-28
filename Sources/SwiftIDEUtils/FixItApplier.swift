@@ -34,7 +34,6 @@ public enum FixItApplier {
   ) -> String {
     let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
-    // FIXME: This assumes every fix-it is applied to a node in the 'tree', which is not guaranteed.
     let edits =
       diagnostics
       .flatMap(\.fixIts)
@@ -58,8 +57,28 @@ public enum FixItApplier {
     to tree: some SyntaxProtocol,
     allowDuplicateInsertions: Bool = true
   ) -> String {
-    var edits = edits
     var source = tree.description
+    let treeStartOffset = tree.position.utf8Offset
+    let sourceByteCount = source.utf8.count
+
+    var edits = edits.compactMap { (edit) -> SourceEdit? in
+      guard !edit.isEmpty else {
+        return nil
+      }
+
+      let relativeStart = edit.startUtf8Offset - treeStartOffset
+      let relativeEnd = edit.endUtf8Offset - treeStartOffset
+
+      // Filter out edits that do not fall within the subtree.
+      guard relativeStart >= 0, relativeEnd <= sourceByteCount, relativeStart <= relativeEnd else {
+        return nil
+      }
+
+      return SourceEdit(
+        range: AbsolutePosition(utf8Offset: relativeStart)..<AbsolutePosition(utf8Offset: relativeEnd),
+        replacement: edit.replacement
+      )
+    }
 
     for var editIndex in edits.indices {
       let edit = edits[editIndex]

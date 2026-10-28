@@ -160,7 +160,7 @@ let package = Package(
 
     .testTarget(
       name: "SwiftIDEUtilsTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
     ),
 
     // MARK: SwiftIfConfig

@@ -243,6 +243,7 @@ public enum Keyword: CaseIterable {
   case scoped
   case section
   case `self`
+  case send
   case sending
   case `Self`
   case Sendable
@@ -659,6 +660,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("throw", isLexerClassified: true)
     case .throws:
       return KeywordSpec("throws", isLexerClassified: true)
+    case .send:
+      return KeywordSpec("send", experimentalFeature: .sendCalls)
     case .sending:
       return KeywordSpec("sending")
     case .transpose:

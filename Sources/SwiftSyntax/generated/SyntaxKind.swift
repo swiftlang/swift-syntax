@@ -264,6 +264,8 @@ public enum SyntaxKind: Sendable {
   case returnStmt
   case sameTypeRequirement
   case sectionAttributeArgument
+  @_spi(ExperimentalLanguageFeatures)
+  case sendExpr
   case sequenceExpr
   case simpleStringLiteralExpr
   case simpleStringLiteralSegmentList
@@ -834,6 +836,8 @@ public enum SyntaxKind: Sendable {
     case .sameTypeRequirement:
       return true
     case .sectionAttributeArgument:
+      return true
+    case .sendExpr:
       return true
     case .sequenceExpr:
       return true
@@ -1431,6 +1435,8 @@ public enum SyntaxKind: Sendable {
       return SameTypeRequirementSyntax.self
     case .sectionAttributeArgument:
       return SectionAttributeArgumentSyntax.self
+    case .sendExpr:
+      return SendExprSyntax.self
     case .sequenceExpr:
       return SequenceExprSyntax.self
     case .simpleStringLiteralExpr:
@@ -2031,6 +2037,8 @@ public enum SyntaxKind: Sendable {
       return "SameTypeRequirementSyntax"
     case .sectionAttributeArgument:
       return "SectionAttributeArgumentSyntax"
+    case .sendExpr:
+      return "SendExprSyntax"
     case .sequenceExpr:
       return "SequenceExprSyntax"
     case .simpleStringLiteralExpr:
@@ -2631,6 +2639,8 @@ public enum SyntaxKind: Sendable {
       return "sameTypeRequirement"
     case .sectionAttributeArgument:
       return "sectionAttributeArgument"
+    case .sendExpr:
+      return "sendExpr"
     case .sequenceExpr:
       return "sequenceExpr"
     case .simpleStringLiteralExpr:

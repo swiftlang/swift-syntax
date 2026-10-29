@@ -642,6 +642,83 @@ public struct RawSectionAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+@_spi(ExperimentalLanguageFeatures)
+@_spi(RawSyntax)
+public struct RawSendExprSyntax: RawExprSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .sendExpr
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeSendKeyword: RawUnexpectedNodesSyntax? = nil,
+    sendKeyword: RawTokenSyntax,
+    _ unexpectedBetweenSendKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
+    expression: some RawExprSyntaxNodeProtocol,
+    _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    let hasUnexpected = unexpectedBeforeSendKeyword != nil || unexpectedBetweenSendKeywordAndExpression != nil || unexpectedAfterExpression != nil
+    let raw = RawSyntax.makeLayout(
+      kind: .sendExpr,
+      childCount: 2,
+      storage: hasUnexpected ? .layoutWithUnexpected : .layout,
+      arena: arena
+    ) { layout in
+      layout.initializeElement(at: 0, to: sendKeyword.raw)
+      layout.initializeElement(at: 1, to: expression.raw)
+      if hasUnexpected {
+        layout.initializeElement(at: 2, to: unexpectedBeforeSendKeyword?.raw)
+        layout.initializeElement(at: 3, to: unexpectedBetweenSendKeywordAndExpression?.raw)
+        layout.initializeElement(at: 4, to: unexpectedAfterExpression?.raw)
+      }
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeSendKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var sendKeyword: RawTokenSyntax {
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenSendKeywordAndExpression: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var expression: RawExprSyntax {
+    layoutView.realChild(at: 1).map(RawExprSyntax.init(raw:))!
+  }
+
+  public var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
 @_spi(RawSyntax)
 public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)

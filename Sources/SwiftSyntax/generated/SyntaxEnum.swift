@@ -264,6 +264,8 @@ public enum SyntaxEnum: Sendable {
   case returnStmt(ReturnStmtSyntax)
   case sameTypeRequirement(SameTypeRequirementSyntax)
   case sectionAttributeArgument(SectionAttributeArgumentSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case sendExpr(SendExprSyntax)
   case sequenceExpr(SequenceExprSyntax)
   case simpleStringLiteralExpr(SimpleStringLiteralExprSyntax)
   case simpleStringLiteralSegmentList(SimpleStringLiteralSegmentListSyntax)
@@ -804,6 +806,8 @@ extension Syntax {
       return .sameTypeRequirement(SameTypeRequirementSyntax(self)!)
     case .sectionAttributeArgument:
       return .sectionAttributeArgument(SectionAttributeArgumentSyntax(self)!)
+    case .sendExpr:
+      return .sendExpr(SendExprSyntax(self)!)
     case .sequenceExpr:
       return .sequenceExpr(SequenceExprSyntax(self)!)
     case .simpleStringLiteralExpr:
@@ -1065,6 +1069,8 @@ public enum ExprSyntaxEnum {
   case postfixOperatorExpr(PostfixOperatorExprSyntax)
   case prefixOperatorExpr(PrefixOperatorExprSyntax)
   case regexLiteralExpr(RegexLiteralExprSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case sendExpr(SendExprSyntax)
   case sequenceExpr(SequenceExprSyntax)
   case simpleStringLiteralExpr(SimpleStringLiteralExprSyntax)
   case stringLiteralExpr(StringLiteralExprSyntax)
@@ -1165,6 +1171,8 @@ extension ExprSyntax {
       return .prefixOperatorExpr(PrefixOperatorExprSyntax(self)!)
     case .regexLiteralExpr:
       return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
+    case .sendExpr:
+      return .sendExpr(SendExprSyntax(self)!)
     case .sequenceExpr:
       return .sequenceExpr(SequenceExprSyntax(self)!)
     case .simpleStringLiteralExpr:

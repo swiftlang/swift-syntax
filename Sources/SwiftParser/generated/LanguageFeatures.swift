@@ -84,6 +84,10 @@ extension Parser.LanguageFeatures {
   @_spi(ExperimentalLanguageFeatures)
   public static let extendedSpecializedAttribute = Self (rawValue: 1 << 13)
 
+  /// Whether to enable the parsing of the `send` call expression.
+  @_spi(ExperimentalLanguageFeatures)
+  public static let sendCalls = Self (rawValue: 1 << 14)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   @_spi(ExperimentalLanguageFeatures)
@@ -117,6 +121,8 @@ extension Parser.LanguageFeatures {
       self = .coroutineFunctions
     case "ExtendedSpecializedAttribute":
       self = .extendedSpecializedAttribute
+    case "SendCalls":
+      self = .sendCalls
     default:
       return nil
     }

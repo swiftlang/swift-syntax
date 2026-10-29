@@ -189,6 +189,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case scoped
   case section
   case `self`
+  @_spi(ExperimentalLanguageFeatures)
   case send
   case sending
   case `Self`

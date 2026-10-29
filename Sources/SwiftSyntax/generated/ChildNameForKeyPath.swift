@@ -2970,6 +2970,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "section"
   case \SectionAttributeArgumentSyntax.unexpectedAfterSection:
     return "unexpectedAfterSection"
+  case \SendExprSyntax.unexpectedBeforeSendKeyword:
+    return "unexpectedBeforeSendKeyword"
+  case \SendExprSyntax.sendKeyword:
+    return "sendKeyword"
+  case \SendExprSyntax.unexpectedBetweenSendKeywordAndExpression:
+    return "unexpectedBetweenSendKeywordAndExpression"
+  case \SendExprSyntax.expression:
+    return "expression"
+  case \SendExprSyntax.unexpectedAfterExpression:
+    return "unexpectedAfterExpression"
   case \SequenceExprSyntax.unexpectedBeforeElements:
     return "unexpectedBeforeElements"
   case \SequenceExprSyntax.elements:

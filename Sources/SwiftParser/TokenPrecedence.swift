@@ -194,7 +194,7 @@ enum TokenPrecedence: Comparable {
     // MARK: Expr keyword
     case  // Keywords
     .as, .is, .some, .try,
-      .await, .each, .copy,
+      .await, .each, .copy, .send,
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
       .rethrows, .throws, .reasync, .async, .yields,

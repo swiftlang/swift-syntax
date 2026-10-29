@@ -2583,6 +2583,14 @@ func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind) {
     assertNoError(kind, 1, verify(layout[1], as: SectionAttributeArgumentSyntax.Section.self, isKindOf: SectionAttributeArgumentSyntax.Section.isKindOf))
     assertNoError(kind, 2, verify(layout[2], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
   }
+  func validateSendExprSyntax(kind: SyntaxKind, layout: RawLayoutChildren) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
+    assertNoError(kind, 1, verify(layout[1], as: TokenSyntax.self, tokenChoices: [.keyword("send")]))
+    assertNoError(kind, 2, verify(layout[2], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
+    assertNoError(kind, 3, verify(layout[3], as: ExprSyntax.self, isKindOf: ExprSyntax.isKindOf))
+    assertNoError(kind, 4, verify(layout[4], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
+  }
   func validateSequenceExprSyntax(kind: SyntaxKind, layout: RawLayoutChildren) {
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
@@ -3633,6 +3641,8 @@ func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind) {
     validateSameTypeRequirementSyntax(kind: kind, layout: layout)
   case .sectionAttributeArgument:
     validateSectionAttributeArgumentSyntax(kind: kind, layout: layout)
+  case .sendExpr:
+    validateSendExprSyntax(kind: kind, layout: layout)
   case .sequenceExpr:
     validateSequenceExprSyntax(kind: kind, layout: layout)
   case .simpleStringLiteralExpr:

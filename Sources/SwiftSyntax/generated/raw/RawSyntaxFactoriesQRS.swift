@@ -190,6 +190,33 @@ extension RawSyntax {
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  @_spi(RawSyntax)
+  public static func makeSendExpr(
+    _ unexpectedBeforeSendKeyword: RawSyntax?,
+    sendKeyword: RawSyntax,
+    _ unexpectedBetweenSendKeywordAndExpression: RawSyntax?,
+    expression: RawSyntax,
+    _ unexpectedAfterExpression: RawSyntax?,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let hasUnexpected = unexpectedBeforeSendKeyword != nil || unexpectedBetweenSendKeywordAndExpression != nil || unexpectedAfterExpression != nil
+    return RawSyntax.makeLayout(
+      kind: .sendExpr,
+      childCount: 2,
+      storage: hasUnexpected ? .layoutWithUnexpected : .layout,
+      arena: arena
+    ) { layout in
+      layout.initializeElement(at: 0, to: sendKeyword)
+      layout.initializeElement(at: 1, to: expression)
+      if hasUnexpected {
+        layout.initializeElement(at: 2, to: unexpectedBeforeSendKeyword)
+        layout.initializeElement(at: 3, to: unexpectedBetweenSendKeywordAndExpression)
+        layout.initializeElement(at: 4, to: unexpectedAfterExpression)
+      }
+    }
+  }
+
   @_spi(RawSyntax)
   public static func makeSequenceExpr(
     _ unexpectedBeforeElements: RawSyntax?,

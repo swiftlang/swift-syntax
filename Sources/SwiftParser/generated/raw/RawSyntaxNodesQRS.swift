@@ -577,6 +577,72 @@ struct RawSectionAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+struct RawSendExprSyntax: RawExprSyntaxNodeProtocol {
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .sendExpr
+  }
+
+  var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  init(
+    _ unexpectedBeforeSendKeyword: RawUnexpectedNodesSyntax? = nil,
+    sendKeyword: RawTokenSyntax,
+    _ unexpectedBetweenSendKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
+    expression: some RawExprSyntaxNodeProtocol,
+    _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    self.init(unchecked: RawSyntax.makeSendExpr(
+      unexpectedBeforeSendKeyword?.raw,
+      sendKeyword: sendKeyword.raw,
+      unexpectedBetweenSendKeywordAndExpression?.raw,
+      expression: expression.raw,
+      unexpectedAfterExpression?.raw,
+      arena: arena
+    ))
+  }
+
+  var unexpectedBeforeSendKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 0).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  var sendKeyword: RawTokenSyntax {
+    layoutView.realChild(at: 0).map(RawTokenSyntax.init(raw:))!
+  }
+
+  var unexpectedBetweenSendKeywordAndExpression: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 1).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  var expression: RawExprSyntax {
+    layoutView.realChild(at: 1).map(RawExprSyntax.init(raw:))!
+  }
+
+  var unexpectedAfterExpression: RawUnexpectedNodesSyntax? {
+    layoutView.unexpectedSlot(at: 2).map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
 struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
   var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!

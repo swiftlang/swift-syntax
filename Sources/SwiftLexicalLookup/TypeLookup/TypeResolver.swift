@@ -36,7 +36,13 @@ public struct TypeResolver {
   func extractFileInfo<S: SyntaxProtocol>(syntax: Attached<S>) -> FileInfo {
     guard let fileInfo = symbolTable.getFileInfo(syntax.fileRoot) else {
       // Should be checked upon entrance in `resolveSyntax`
-      fatalError("[SwiftLexicalLookup] Internal error: Unexpectedly found unregistered file: ```\(syntax.fileRoot)```")
+      fatalError(
+        """
+        [SwiftLexicalLookup] Internal error: Unexpectedly found unregistered file:
+        ```
+        \(syntax.fileRoot)\n```
+        """  // NOTE: The ^ `\n` here is spelled explicitly to avoid a crash in 6.2 compilers.
+      )
     }
     return fileInfo
   }

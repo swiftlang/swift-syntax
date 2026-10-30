@@ -14,6 +14,7 @@ import SwiftIfConfig
 @_spi(_QualifiedLookup) @_spi(_QualifiedLookupTests) import SwiftLexicalLookup
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 // Convenience `String` initializer for `TypeDeclSyntax`; will

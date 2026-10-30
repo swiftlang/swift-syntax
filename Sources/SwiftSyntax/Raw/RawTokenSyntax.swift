@@ -10,78 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// All typed raw syntax nodes conform to this protocol.
-/// `RawXXXSyntax` is a typed wrappeer of ``RawSyntax``.
 @_spi(RawSyntax)
-public protocol RawSyntaxNodeProtocol: CustomStringConvertible, TextOutputStreamable, Sendable {
-  /// Returns `true` if `raw` can be cast to this concrete raw syntax type.
-  static func isKindOf(_ raw: RawSyntax) -> Bool
-
-  /// Type erased raw syntax.
-  var raw: RawSyntax { get }
-
-  /// Create the typed raw syntax if `other` can be cast to `Self`
-  init?(_ other: some RawSyntaxNodeProtocol)
-}
-
-extension RawSyntaxNodeProtocol {
-  /// Cast to the specified raw syntax type if possible.
-  public func `as`<Node: RawSyntaxNodeProtocol>(_: Node.Type) -> Node? {
-    Node(self)
-  }
-
-  /// Check if this instance can be cast to the specified syntax type.
-  public func `is`<Node: RawSyntaxNodeProtocol>(_: Node.Type) -> Bool {
-    Node.isKindOf(self.raw)
-  }
-
-  public func cast<S: RawSyntaxNodeProtocol>(_ syntaxType: S.Type) -> S {
-    return self.as(S.self)!
-  }
-
-  public var description: String {
-    raw.description
-  }
-
-  public func write(to target: inout some TextOutputStream) {
-    raw.write(to: &target)
-  }
-
-  public var isEmpty: Bool {
-    return raw.byteLength == 0
-  }
-
-  /// Whether the tree contained by this layout has any
-  ///  - missing nodes or
-  ///  - unexpected nodes or
-  ///  - tokens with a ``TokenDiagnostic`` of severity `error`
-  public var hasError: Bool {
-    return raw.recursiveFlags.contains(.hasError)
-  }
-}
-
-/// ``RawSyntax`` itself conforms to `RawSyntaxNodeProtocol`.
-extension RawSyntax: RawSyntaxNodeProtocol {
-  @_spi(RawSyntax)
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return true
-  }
-
-  @_spi(RawSyntax)
-  public var raw: RawSyntax { self }
-
-  init(raw: RawSyntax) {
-    self = raw
-  }
-
-  @_spi(RawSyntax)
-  public init(_ other: some RawSyntaxNodeProtocol) {
-    self.init(raw: other.raw)
-  }
-}
-
-@_spi(RawSyntax)
-public struct RawTokenSyntax: RawSyntaxNodeProtocol {
+public struct RawTokenSyntax: Sendable {
   @_spi(RawSyntax)
   public typealias SyntaxType = TokenSyntax
 
@@ -98,19 +28,16 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var raw: RawSyntax
 
-  init(raw: RawSyntax) {
+  @_spi(RawSyntax)
+  public init(raw: RawSyntax) {
     precondition(Self.isKindOf(raw))
     self.raw = raw
   }
 
-  private init(unchecked raw: RawSyntax) {
-    self.raw = raw
-  }
-
+  /// Wraps `raw` without checking that it is a token. The caller must know it is.
   @_spi(RawSyntax)
-  public init?(_ other: some RawSyntaxNodeProtocol) {
-    guard Self.isKindOf(other.raw) else { return nil }
-    self.init(unchecked: other.raw)
+  public init(unchecked raw: RawSyntax) {
+    self.raw = raw
   }
 
   @_spi(RawSyntax)

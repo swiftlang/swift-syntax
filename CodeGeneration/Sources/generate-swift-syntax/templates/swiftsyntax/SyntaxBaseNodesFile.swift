@@ -151,21 +151,24 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// Check whether the non-type erased version of this syntax node conforms to
         /// \(node.kind.protocolType).
         ///
-        ///  - Note:  This will incur an existential conversion.
+        ///  - Note: This will incur an existential conversion. Hence,
+        ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+        ///    with a specific syntax type instead.
+        @_unavailableInEmbedded
         public func isProtocol(_: \(node.kind.protocolType).Protocol) -> Bool {
           return self.asProtocol(\(node.kind.protocolType).self) != nil
         }
-        """
-      )
-
-      DeclSyntax(
-        """
         /// Return the non-type erased version of this syntax node if it conforms to
         /// \(node.kind.protocolType). Otherwise return nil.
         ///
-        ///  - Note:  This will incur an existential conversion.
+        ///  - Note: This will incur an existential conversion. Hence,
+        ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+        ///    with a specific syntax type instead.
+        @_unavailableInEmbedded
         public func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType)? {
+          #if !hasFeature(Embedded)
           return self.asProtocol(SyntaxProtocol.self) as? \(node.kind.protocolType)
+          #endif
         }
         """
       )
@@ -184,8 +187,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized syntax node.
         public init(_ syntax: __shared some \(node.kind.protocolType)) {
-          // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-          // verify the kind matches in debug builds and get maximum performance in release builds.
+          // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+          // verify the kind matches.
           self = Syntax(syntax).cast(Self.self)
         }
         """
@@ -204,9 +207,12 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         public init(fromProtocol syntax: __shared \(node.kind.protocolType)) {
-          // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-          // verify the kind matches in debug builds and get maximum performance in release builds.
-          self = Syntax(syntax).cast(Self.self)
+          // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+          // just to double-check and verify the kind matches.
+          //
+          // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+          // opening the existential.
+          self = syntax._syntaxNode.cast(Self.self)
         }
         """
       )
@@ -252,19 +258,19 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// Syntax nodes always conform to `\(node.kind.protocolType)`. This API is just
         /// added for consistency.
         ///
-        ///  - Note:  This will incur an existential conversion.
+        ///  - Note: This will incur an existential conversion. Hence,
+        ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+        ///    with a specific syntax type instead.
         @available(*, deprecated, message: "Expression always evaluates to true")
         public func isProtocol(_: \(node.kind.protocolType).Protocol) -> Bool {
           return true
         }
-        """
-      )
-
-      DeclSyntax(
-        """
         /// Return the non-type erased version of this syntax node.
         ///
-        ///  - Note:  This will incur an existential conversion.
+        ///  - Note: This will incur an existential conversion. Hence,
+        ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+        ///    with a specific syntax type instead.
+        @_unavailableInEmbedded
         public func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType) {
           return Syntax(self).asProtocol(\(node.kind.protocolType).self)!
         }

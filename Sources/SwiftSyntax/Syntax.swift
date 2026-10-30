@@ -322,9 +322,15 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
+    #if !hasFeature(Embedded)
     return self.raw.kind.syntaxNodeType.init(self)!
+    #endif
   }
 
   /// Add the hash value of this node’s ID to `hasher`.

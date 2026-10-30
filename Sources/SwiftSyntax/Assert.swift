@@ -80,3 +80,25 @@ public func precondition(
   }
   #endif
 }
+
+// MARK: - Embedded
+
+#if hasFeature(Embedded)
+// Provide overloads without a message parameter to shadow the Embedded stdlib's
+// overloads accepting a `message: @autoclosure () -> StaticString = StaticString()`.
+
+@_transparent
+public func assert(_ condition: @autoclosure () -> Bool, file: StaticString = #fileID, line: UInt = #line) {
+  assert(condition(), String(), file: file, line: line)
+}
+
+@_transparent
+public func assertionFailure(file: StaticString = #fileID, line: UInt = #line) {
+  assertionFailure(String(), file: file, line: line)
+}
+
+@_transparent
+public func precondition(_ condition: @autoclosure () -> Bool, file: StaticString = #fileID, line: UInt = #line) {
+  precondition(condition(), String(), file: file, line: line)
+}
+#endif

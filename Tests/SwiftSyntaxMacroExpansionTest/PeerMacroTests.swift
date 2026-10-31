@@ -153,17 +153,18 @@ final class PeerMacroTests: XCTestCase {
     )
   }
 
-  func testPeerMacroOnVariableWithMultipleBindings() {
-    struct TestMacro: PeerMacro {
-      static func expansion(
-        of node: AttributeSyntax,
-        providingPeersOf declaration: some DeclSyntaxProtocol,
-        in context: some MacroExpansionContext
-      ) throws -> [DeclSyntax] {
-        return ["var baz: Int = 0"]
-      }
+  private struct BindingCountMacro: PeerMacro {
+    static func expansion(
+      of node: AttributeSyntax,
+      providingPeersOf declaration: some DeclSyntaxProtocol,
+      in context: some MacroExpansionContext
+    ) throws -> [DeclSyntax] {
+      let bindingCount = declaration.cast(VariableDeclSyntax.self).bindings.count
+      return ["var \(context.makeUniqueName("peer")) = \(literal: bindingCount)"]
     }
+  }
 
+  func testPeerMacroOnVariableWithMultipleBindings() {
     assertMacroExpansion(
       """
       @Test
@@ -171,11 +172,12 @@ final class PeerMacroTests: XCTestCase {
       """,
       expandedSource: """
         let a = 17, b = 12
+
+        var __macro_local_4peerfMu_ = 2
+
+        var __macro_local_4peerfMu0_ = 2
         """,
-      diagnostics: [
-        DiagnosticSpec(message: "peer macro can only be applied to a single variable", line: 1, column: 1)
-      ],
-      macros: ["Test": TestMacro.self]
+      macros: ["Test": BindingCountMacro.self]
     )
 
     assertMacroExpansion(
@@ -188,11 +190,145 @@ final class PeerMacroTests: XCTestCase {
       expandedSource: """
         struct Foo {
           let a = 17, b = 12
+
+          var __macro_local_4peerfMu_ = 2
+
+          var __macro_local_4peerfMu0_ = 2
+        }
+        """,
+      macros: ["Test": BindingCountMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      func example() {
+        @Test
+        var first = 17, second = 12, third = 9
+      }
+      """,
+      expandedSource: """
+        func example() {
+          var first = 17, second = 12, third = 9
+
+          var __macro_local_4peerfMu_ = 3
+
+          var __macro_local_4peerfMu0_ = 3
+
+          var __macro_local_4peerfMu1_ = 3
+        }
+        """,
+      macros: ["Test": BindingCountMacro.self]
+    )
+  }
+
+  func testPeerMacroOnTupleAndWildcardPatterns() {
+    assertMacroExpansion(
+      """
+      @Test
+      let (first, (second, _)) = (1, (2, 3))
+      """,
+      expandedSource: """
+        let (first, (second, _)) = (1, (2, 3))
+
+        var __macro_local_4peerfMu_ = 1
+
+        var __macro_local_4peerfMu0_ = 1
+        """,
+      macros: ["Test": BindingCountMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      let _ = 1, _ = 2
+      """,
+      expandedSource: """
+        let _ = 1, _ = 2
+        """,
+      macros: ["Test": BindingCountMacro.self]
+    )
+  }
+
+  func testPeerMacroDiagnosticsOnVariableWithMultipleBindings() {
+    struct TestMacro: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        throw SwiftSyntaxMacros.MacroExpansionErrorMessage("peer expansion failed")
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      let first = 17, second = 12
+      """,
+      expandedSource: """
+        let first = 17, second = 12
+        """,
+      diagnostics: [
+        DiagnosticSpec(message: "peer expansion failed", line: 1, column: 1),
+        DiagnosticSpec(message: "peer expansion failed", line: 1, column: 1),
+      ],
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @Test
+        let first = 17, second = 12
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          let first = 17, second = 12
         }
         """,
       diagnostics: [
-        DiagnosticSpec(message: "peer macro can only be applied to a single variable", line: 2, column: 3)
+        DiagnosticSpec(message: "peer expansion failed", line: 2, column: 3),
+        DiagnosticSpec(message: "peer expansion failed", line: 2, column: 3),
       ],
+      macros: ["Test": TestMacro.self]
+    )
+  }
+
+  func testEmptyOnVariableWithMultipleBindings() {
+    struct TestMacro: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      let first = 17, second = 12
+      """,
+      expandedSource: """
+        let first = 17, second = 12
+        """,
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @Test
+        var first: Int, second: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var first: Int, second: Int
+        }
+        """,
       macros: ["Test": TestMacro.self]
     )
   }

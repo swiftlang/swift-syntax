@@ -236,11 +236,7 @@ private func expandPeerMacroMember(
   attachedTo: DeclSyntax,
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
-) throws -> MemberBlockItemListSyntax? {
-  if let variable = attachedTo.as(VariableDeclSyntax.self), variable.bindings.count > 1 {
-    throw MacroApplicationError.peerMacroOnVariableWithMultipleBindings
-  }
-
+) -> MemberBlockItemListSyntax? {
   guard
     let expanded = expandAttachedMacro(
       definition: definition,
@@ -268,11 +264,7 @@ private func expandPeerMacroCodeItem(
   attachedTo: DeclSyntax,
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
-) throws -> CodeBlockItemListSyntax? {
-  if let variable = attachedTo.as(VariableDeclSyntax.self), variable.bindings.count > 1 {
-    throw MacroApplicationError.peerMacroOnVariableWithMultipleBindings
-  }
-
+) -> CodeBlockItemListSyntax? {
   guard
     let expanded = expandAttachedMacro(
       definition: definition,
@@ -619,7 +611,6 @@ let diagnosticDomain: String = "SwiftSyntaxMacroExpansion"
 
 private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
-  case peerMacroOnVariableWithMultipleBindings
   case malformedAccessor
 
   var diagnosticID: MessageID {
@@ -632,8 +623,6 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
     switch self {
     case .accessorMacroOnVariableWithMultipleBindings:
       return "accessor macro can only be applied to a single variable"
-    case .peerMacroOnVariableWithMultipleBindings:
-      return "peer macro can only be applied to a single variable"
     case .malformedAccessor:
       return """
         macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
@@ -1156,6 +1145,25 @@ extension MacroApplication {
     return result
   }
 
+  private func peerMacroExpansionCount(for decl: DeclSyntax) -> Int {
+    guard let variable = decl.as(VariableDeclSyntax.self) else {
+      return 1
+    }
+
+    func countVariables(in pattern: Syntax) -> Int {
+      if pattern.is(IdentifierPatternSyntax.self) {
+        return 1
+      }
+      return pattern.children(viewMode: .sourceAccurate).reduce(0) { count, child in
+        count + countVariables(in: child)
+      }
+    }
+
+    return variable.bindings.reduce(0) { count, binding in
+      count + countVariables(in: Syntax(binding.pattern))
+    }
+  }
+
   /// Expand all the 'peer' macros attached to `decl`.
   ///
   /// - Note: This overload returns the list of peers as `MemberDeclListItemSyntax`
@@ -1164,14 +1172,16 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized peers
   private func expandMemberDeclPeers(of decl: DeclSyntax) -> [MemberBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition, conformanceList in
-      return try expandPeerMacroMember(
-        definition: definition,
-        attributeNode: attributeNode,
-        attachedTo: decl,
-        in: contextGenerator(Syntax(decl)),
-        indentationWidth: indentationWidth
-      )
+    return (0..<peerMacroExpansionCount(for: decl)).flatMap { _ in
+      return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition, conformanceList in
+        return expandPeerMacroMember(
+          definition: definition,
+          attributeNode: attributeNode,
+          attachedTo: decl,
+          in: contextGenerator(Syntax(decl)),
+          indentationWidth: indentationWidth
+        )
+      }
     }
   }
 
@@ -1184,14 +1194,16 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized peers
   private func expandCodeBlockPeers(of decl: DeclSyntax) -> [CodeBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition, conformanceList in
-      return try expandPeerMacroCodeItem(
-        definition: definition,
-        attributeNode: attributeNode,
-        attachedTo: decl,
-        in: contextGenerator(Syntax(decl)),
-        indentationWidth: indentationWidth
-      )
+    return (0..<peerMacroExpansionCount(for: decl)).flatMap { _ in
+      return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition, conformanceList in
+        return expandPeerMacroCodeItem(
+          definition: definition,
+          attributeNode: attributeNode,
+          attachedTo: decl,
+          in: contextGenerator(Syntax(decl)),
+          indentationWidth: indentationWidth
+        )
+      }
     }
   }
 

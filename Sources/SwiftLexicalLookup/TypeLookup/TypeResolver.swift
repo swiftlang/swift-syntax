@@ -25,7 +25,7 @@ public struct TypeResolver {
   /// The set of type syntax we visited; only access through
   /// `insertVisitedTypeSyntax` and `removeVisitedTypeSyntax`.
   private var _visitedTypeSyntaxToIndex: [Attached<TypeSyntax>: Int] = [:]
-  private(set) var dependencyTracker: DependencyTracker = DependencyTracker()
+  private(set) var dependencyTracker: TypeGraph.DependencyTracker = TypeGraph.DependencyTracker()
 
   public init(symbolTable: SymbolTable) {
     self.symbolTable = symbolTable
@@ -649,27 +649,27 @@ extension TypeResolver {
         return .failure(Failure.ambiguousTypeDecl(scopeTypeDecls))
       }
 
-      // Register the type
+      // Admit the type
       let resolvedReferenceResult =
-        symbolTable.registerNominalType(
+        symbolTable.admitType(
           topScopeMainDecl: nominalDecl,
           declName: declName,
           declFileInfo: declFileInfo,
           isGlobal: isGlobal,
           originatingSyntax: originatingSyntax
-        ) as Result<ResolvedTypeSyntax, TypeGraph.NominalRegistrationFailure>
+        ) as Result<ResolvedTypeSyntax, TypeGraph.TypeAdmissionFailure>
 
       // Extract reference, or trap
       let resolvedReference: ResolvedTypeSyntax
       switch resolvedReferenceResult {
       case .success(let success):
         resolvedReference = success
-      case .failure(let registrationFailure):
-        switch registrationFailure {
+      case .failure(let admissionFailure):
+        switch admissionFailure {
         // Reasoning: We just checked for redeclarations
-        case .cannotRegisterRedeclaration:
+        case .cannotAdmitRedeclaration:
           fatalError(
-            "[SwiftLexicalLookup] Internal error: While registering top-scope `\(nominalDecl._memberlessDescription)`: \(registrationFailure)"
+            "[SwiftLexicalLookup] Internal error: While admitting top-scope `\(nominalDecl._memberlessDescription)`: \(admissionFailure)"
           )
         }
       }
@@ -721,30 +721,31 @@ extension TypeResolver {
         return .failure(failure)
       }
 
-      // Register the type
+      // Admit the type
       let resolvedReferenceResult =
-        symbolTable.registerNominalType(
+        symbolTable.admitType(
           nestedMainDecl: nominalDecl,
           declName: declName,
           declFileInfo: declFileInfo,
           baseDeclGroup: declGroupParent,
           baseType: resolvedBase,
           originatingSyntax: originatingSyntax
-        ) as Result<ResolvedTypeSyntax, TypeGraph.NestedNominalRegistrationFailure>
+        ) as Result<ResolvedTypeSyntax, TypeGraph.NestedTypeAdmissionFailure>
 
       // Extract the reference, or trap
       let resolvedReference: ResolvedTypeSyntax
       switch resolvedReferenceResult {
       case .success(let success):
         resolvedReference = success
-      case .failure(let registrationFailure):
-        switch registrationFailure {
+      case .failure(let admissionFailure):
+        switch admissionFailure {
         // Reasoning:
-        // .cannotRegisterRedeclaration -> We just checked for redeclarations
-        // .baseNotRegistered, .baseDeclGroupUnbound -> We should have a valid base from the recursive step
-        case .other(.cannotRegisterRedeclaration), .baseNotRegistered, .baseDeclGroupUnbound:
+        // .cannotAdmitRedeclaration -> We just checked for redeclarations
+        // .invalidBaseDeclGroup -> Qualified lookup found the decl under `declGroupParent`
+        // .invalidBaseType -> We should have a valid base from the recursive step
+        case .other(.cannotAdmitRedeclaration), .invalidBaseDeclGroup, .invalidBaseType:
           fatalError(
-            "[SwiftLexicalLookup] Internal error: While registering '\(resolvedBase.debugDescription)' > '\(nominalDecl._memberlessDescription)': \(registrationFailure)"
+            "[SwiftLexicalLookup] Internal error: While admitting '\(resolvedBase.debugDescription)' > '\(nominalDecl._memberlessDescription)': \(admissionFailure)"
           )
         }
       }

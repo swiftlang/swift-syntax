@@ -202,6 +202,17 @@ final class ExpressionTests: ParserTestCase {
       #imageLiteral(resourceName: "foo/bar/baz/quux.png")
       """
     )
+
+    assertParse(
+      """
+      #colorLiteral
+        (red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+      #imageLiteral
+        (resourceName: "foo.png")
+      #fileLiteral
+        (resourceName: "foo.png")
+      """
+    )
   }
 
   func testKeypathExpression() {
@@ -1807,6 +1818,164 @@ final class ExpressionTests: ParserTestCase {
         print("This is a test")
       }
       """
+    )
+
+    assertParse(
+      """
+      #selector
+        (foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("selector"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: DeclReferenceExprSyntax(baseName: .identifier("foo")))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #selector
+        (getter: foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("selector"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("getter"),
+            colon: .colonToken(),
+            expression: DeclReferenceExprSyntax(baseName: .identifier("foo"))
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #keyPath
+        (foo.bar)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("keyPath"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            expression: MemberAccessExprSyntax(
+              base: DeclReferenceExprSyntax(baseName: .identifier("foo")),
+              period: .periodToken(),
+              declName: DeclReferenceExprSyntax(baseName: .identifier("bar"))
+            )
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #colorLiteral
+        (red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("colorLiteral"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("red"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("1.0")),
+            trailingComma: .commaToken()
+          ),
+          LabeledExprSyntax(
+            label: .identifier("green"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("0.5")),
+            trailingComma: .commaToken()
+          ),
+          LabeledExprSyntax(
+            label: .identifier("blue"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("0.0")),
+            trailingComma: .commaToken()
+          ),
+          LabeledExprSyntax(
+            label: .identifier("alpha"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("1.0"))
+          ),
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #imageLiteral
+        (resourceName: foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("imageLiteral"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("resourceName"),
+            colon: .colonToken(),
+            expression: DeclReferenceExprSyntax(baseName: .identifier("foo"))
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #fileLiteral
+        (resourceName: foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("fileLiteral"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("resourceName"),
+            colon: .colonToken(),
+            expression: DeclReferenceExprSyntax(baseName: .identifier("foo"))
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      foo(
+        #selector
+          (bar)
+      )
+      """
+    )
+
+    assertParse(
+      """
+      1️⃣#myMacro
+        (foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("myMacro"),
+        arguments: LabeledExprListSyntax([])
+      ),
+      substructureAfterMarker: "1️⃣"
     )
   }
 

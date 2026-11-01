@@ -42,19 +42,18 @@ add_swift_syntax_library(SwiftSyntax
   Raw/RawSyntax.swift
   Raw/RawSyntaxArena.swift
   Raw/RawSyntaxLayoutView.swift
-  Raw/RawSyntaxNodeList.swift
-  Raw/RawSyntaxNodeProtocol.swift
   Raw/RawSyntaxTokenView.swift
+  Raw/RawTokenSyntax.swift
 
-  generated/raw/RawSyntaxNodesAB.swift
-  generated/raw/RawSyntaxNodesC.swift
-  generated/raw/RawSyntaxNodesD.swift
-  generated/raw/RawSyntaxNodesEF.swift
-  generated/raw/RawSyntaxNodesGHI.swift
-  generated/raw/RawSyntaxNodesJKLMN.swift
-  generated/raw/RawSyntaxNodesOP.swift
-  generated/raw/RawSyntaxNodesQRS.swift
-  generated/raw/RawSyntaxNodesTUVWXYZ.swift
+  generated/raw/RawSyntaxFactoriesAB.swift
+  generated/raw/RawSyntaxFactoriesC.swift
+  generated/raw/RawSyntaxFactoriesD.swift
+  generated/raw/RawSyntaxFactoriesEF.swift
+  generated/raw/RawSyntaxFactoriesGHI.swift
+  generated/raw/RawSyntaxFactoriesJKLMN.swift
+  generated/raw/RawSyntaxFactoriesOP.swift
+  generated/raw/RawSyntaxFactoriesQRS.swift
+  generated/raw/RawSyntaxFactoriesTUVWXYZ.swift
   generated/raw/RawSyntaxValidation.swift
 
   generated/ChildNameForKeyPath.swift

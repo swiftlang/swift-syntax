@@ -27,8 +27,12 @@
 public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .editorPlaceholderDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .editorPlaceholderDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -232,8 +236,12 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
 public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .editorPlaceholderExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .editorPlaceholderExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -319,8 +327,12 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -586,8 +598,12 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseElement
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseElement else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -773,8 +789,12 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseParameterClause
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseParameterClause else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -963,8 +983,12 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
 public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseParameter
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseParameter else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1268,8 +1292,12 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1629,8 +1657,12 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
 public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .expressionPattern
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .expressionPattern else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1716,8 +1748,12 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
 public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .expressionSegment
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .expressionSegment else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1946,8 +1982,12 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .expressionStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .expressionStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2039,8 +2079,12 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .extensionDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .extensionDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2362,8 +2406,12 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .fallThroughStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .fallThroughStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2463,6 +2511,10 @@ public struct FileDefaultDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
       }
     }
 
+    static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      AttributeSyntax.isKindOf(kind) || TokenSyntax.isKindOf(kind)
+    }
+
     public init(_ node: AttributeSyntax) {
       self = .attribute(node)
     }
@@ -2532,8 +2584,12 @@ public struct FileDefaultDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .fileDefaultDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .fileDefaultDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2653,8 +2709,12 @@ public struct FileDefaultDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
 public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .floatLiteralExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .floatLiteralExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2741,8 +2801,12 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .forStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .forStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3107,8 +3171,12 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
 public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .forceUnwrapExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .forceUnwrapExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3228,8 +3296,12 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionCallExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionCallExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3536,8 +3608,12 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3892,8 +3968,12 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionEffectSpecifiers
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionEffectSpecifiers else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4022,8 +4102,12 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
 public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionParameterClause
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionParameterClause else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4208,8 +4292,12 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
 public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionParameter
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionParameter else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4610,8 +4698,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionSignature
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionSignature else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4789,8 +4881,12 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionType
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionType else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -5056,8 +5152,12 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
 public struct FunctionYieldClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionYieldClause
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionYieldClause else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -5280,8 +5380,12 @@ public struct FunctionYieldClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 public struct FunctionYieldSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionYield
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionYield else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode

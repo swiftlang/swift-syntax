@@ -28,7 +28,10 @@ add_swift_syntax_library(SwiftParser
   Parser.swift
   ParseSourceFile.swift
   Patterns.swift
+  RawMissingNodeInitializers.swift
+  RawSyntaxNodeList.swift
   RawSyntaxNodeListBuilder.swift
+  RawSyntaxNodeProtocol.swift
   TokenSpec.swift
   TokenSpecSet.swift
   Recovery.swift
@@ -50,6 +53,16 @@ add_swift_syntax_library(SwiftParser
   generated/LayoutNodes+Parsable.swift
   generated/Parser+TokenSpecSet.swift
   generated/TokenSpecStaticMembers.swift
+
+  generated/raw/RawSyntaxNodesAB.swift
+  generated/raw/RawSyntaxNodesC.swift
+  generated/raw/RawSyntaxNodesD.swift
+  generated/raw/RawSyntaxNodesEF.swift
+  generated/raw/RawSyntaxNodesGHI.swift
+  generated/raw/RawSyntaxNodesJKLMN.swift
+  generated/raw/RawSyntaxNodesOP.swift
+  generated/raw/RawSyntaxNodesQRS.swift
+  generated/raw/RawSyntaxNodesTUVWXYZ.swift
 
   Lexer/Cursor.swift
   Lexer/Lexeme.swift

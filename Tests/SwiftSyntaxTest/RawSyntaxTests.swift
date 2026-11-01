@@ -13,7 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
-private func cannedStructDecl(arena: ParsingRawSyntaxArena) -> RawStructDeclSyntax {
+private func cannedStructDecl(arena: ParsingRawSyntaxArena) -> RawSyntax {
   let structKW = RawTokenSyntax(
     kind: .keyword,
     text: arena.intern("struct"),
@@ -46,21 +46,37 @@ private func cannedStructDecl(arena: ParsingRawSyntaxArena) -> RawStructDeclSynt
     presence: .present,
     arena: arena
   )
-  let memberBlock = RawMemberBlockSyntax(
-    leftBrace: lBrace,
-    members: RawMemberBlockItemListSyntax(elements: .init(), arena: arena),
-    rightBrace: rBrace,
+  func emptyCollection(_ kind: SyntaxKind) -> RawSyntax {
+    return RawSyntax.makeCollection(kind: kind, count: 0, arena: arena) { _ in }
+  }
+  let memberBlock = RawSyntax.makeMemberBlock(
+    nil,
+    leftBrace: lBrace.raw,
+    nil,
+    members: emptyCollection(.memberBlockItemList),
+    nil,
+    rightBrace: rBrace.raw,
+    nil,
     arena: arena
   )
-  return RawStructDeclSyntax(
-    attributes: RawAttributeListSyntax(elements: .init(), arena: arena),
-    modifiers: RawDeclModifierListSyntax(elements: .init(), arena: arena),
-    structKeyword: structKW,
-    name: fooID,
+  return RawSyntax.makeStructDecl(
+    nil,
+    attributes: emptyCollection(.attributeList),
+    nil,
+    modifiers: emptyCollection(.declModifierList),
+    nil,
+    structKeyword: structKW.raw,
+    nil,
+    name: fooID.raw,
+    nil,
     genericParameterClause: nil,
+    nil,
     inheritanceClause: nil,
+    nil,
     genericWhereClause: nil,
+    nil,
     memberBlock: memberBlock,
+    nil,
     arena: arena
   )
 }
@@ -71,7 +87,7 @@ final class RawSyntaxTests: XCTestCase {
     withExtendedLifetime(ParsingRawSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(
-        "\(structDecl.raw)",
+        "\(structDecl)",
         """
         struct Foo {
         }
@@ -82,16 +98,17 @@ final class RawSyntaxTests: XCTestCase {
 
   func testAccessor() {
     withExtendedLifetime(ParsingRawSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
-      let structDecl = cannedStructDecl(arena: arena)
-      XCTAssertEqual(structDecl.name.tokenKind, .identifier)
-      XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
-      XCTAssertEqual(structDecl.memberBlock.leftBrace.tokenText, "{")
-      XCTAssertEqual(structDecl.memberBlock.members.elements.count, 0)
+      let node = Syntax(raw: cannedStructDecl(arena: arena), rawNodeArena: arena)
+      let structDecl = node.cast(StructDeclSyntax.self)
+      XCTAssertEqual(structDecl.name.tokenKind, .identifier("Foo"))
+      XCTAssertEqual(structDecl.structKeyword.text, "struct")
+      XCTAssertEqual(structDecl.memberBlock.leftBrace.text, "{")
+      XCTAssertEqual(structDecl.memberBlock.members.count, 0)
 
-      XCTAssert(structDecl.is(RawDeclSyntax.self))
-      XCTAssertNotNil(structDecl.as(RawDeclSyntax.self))
-      XCTAssertNil(structDecl.as(RawClassDeclSyntax.self))
-      XCTAssertFalse(structDecl.is(RawTypeSyntax.self))
+      XCTAssert(node.is(DeclSyntax.self))
+      XCTAssertNotNil(node.as(DeclSyntax.self))
+      XCTAssertNil(node.as(ClassDeclSyntax.self))
+      XCTAssertFalse(node.is(TypeSyntax.self))
     }
   }
 
@@ -108,12 +125,12 @@ final class RawSyntaxTests: XCTestCase {
       XCTAssertEqual(ident.tokenKind, .identifier)
       XCTAssertEqual(ident.tokenText, "foo")
       XCTAssertEqual(ident.presence, .present)
-      XCTAssertEqual(ident.description, "foo")
+      XCTAssertEqual(ident.raw.description, "foo")
 
       let missingIdent = RawTokenSyntax(missing: .identifier, arena: arena)
       XCTAssertEqual(missingIdent.presence, .missing)
       XCTAssertEqual(missingIdent.tokenText, "")
-      XCTAssertEqual(missingIdent.description, "")
+      XCTAssertEqual(missingIdent.raw.description, "")
     }
   }
 
@@ -143,17 +160,17 @@ final class RawSyntaxTests: XCTestCase {
       XCTAssertEqual(ident.presence, .present)
       XCTAssertEqual(ident.leadingTriviaPieces, [.unexpectedText("\n")])
       XCTAssertEqual(ident.trailingTriviaPieces, [.unexpectedText(" ")])
-      XCTAssertEqual(ident.description, "\nfoo ")
+      XCTAssertEqual(ident.raw.description, "\nfoo ")
 
       let identSyntax = Syntax(raw: ident.raw, rawNodeArena: arena).as(TokenSyntax.self)!
       let barIdentSyntax = identSyntax.with(\.tokenKind, .keyword(.open))
-      let barIdent = barIdentSyntax.raw.as(RawTokenSyntax.self)!
+      let barIdent = RawTokenSyntax(raw: barIdentSyntax.raw)
 
       XCTAssertEqual(barIdent.tokenKind, .keyword)
       XCTAssertEqual(barIdent.tokenText, "open")
       XCTAssertEqual(barIdent.leadingTriviaPieces, [.unexpectedText("\n")])
       XCTAssertEqual(barIdent.trailingTriviaPieces, [.unexpectedText(" ")])
-      XCTAssertEqual(barIdent.description, "\nopen ")
+      XCTAssertEqual(barIdent.raw.description, "\nopen ")
     }
   }
 }

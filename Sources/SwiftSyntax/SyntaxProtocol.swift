@@ -592,7 +592,7 @@ extension SyntaxProtocol {
   /// underlying tokens, e.g. an empty CodeBlockItemList.
   @available(*, deprecated, message: "Check children(viewMode: .all).isEmpty instead")
   public var isImplicit: Bool {
-    return raw.isEmpty
+    return raw.byteLength == 0
   }
 
   /// Returns a value representing the unique identity of the node.

@@ -26,6 +26,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// Don’t access this. Use `Syntax(token)` instead.
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    kind == .token
+  }
+
   /// The ``RawSyntaxTokenView`` of this token that allows accessing raw
   /// properties of the token.
   @_spi(RawSyntax)

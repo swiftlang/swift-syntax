@@ -396,28 +396,32 @@ public struct RawSyntaxTokenView: Sendable {
     switch raw.header {
     case .smolParsedToken:
       let token = raw.asSmolParsedToken
-      return rebuiltParsedToken(
-        tokenKind: token.tokenKind,
-        wholeText: token.wholeText,
-        textRange: token.textRange,
-        presence: .present,
-        tokenDiagnostic: tokenDiagnostic,
-        arena: arena
-      ).cast(RawTokenSyntax.self)
+      return RawTokenSyntax(
+        raw: rebuiltParsedToken(
+          tokenKind: token.tokenKind,
+          wholeText: token.wholeText,
+          textRange: token.textRange,
+          presence: .present,
+          tokenDiagnostic: tokenDiagnostic,
+          arena: arena
+        )
+      )
     case .parsedToken:
       let token = raw.asParsedToken
-      return rebuiltParsedToken(
-        tokenKind: token.tokenKind,
-        wholeText: token.wholeText,
-        textRange: token.textRange,
-        presence: token.fields.presence,
-        tokenDiagnostic: tokenDiagnostic,
-        arena: arena
-      ).cast(RawTokenSyntax.self)
+      return RawTokenSyntax(
+        raw: rebuiltParsedToken(
+          tokenKind: token.tokenKind,
+          wholeText: token.wholeText,
+          textRange: token.textRange,
+          presence: token.fields.presence,
+          tokenDiagnostic: tokenDiagnostic,
+          arena: arena
+        )
+      )
     case .materializedToken:
       var dat = raw.asMaterializedToken.fields
       dat.tokenDiagnostic = tokenDiagnostic
-      return RawSyntax.allocateMaterializedToken(dat, arena: arena).cast(RawTokenSyntax.self)
+      return RawTokenSyntax(raw: RawSyntax.allocateMaterializedToken(dat, arena: arena))
     default:
       preconditionFailure("'withTokenDiagnostic' is not available for non-token node")
     }

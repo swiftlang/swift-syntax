@@ -310,7 +310,7 @@ extension Parser {
     precondition(self.at(.poundAvailable, .poundUnavailable))
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let arguments = self.parseAvailabilitySpecList()
+    let arguments = self.parseAvailabilitySpecList(allowTrailingComma: keyword.tokenKind == .poundUnavailable)
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     let unexpectedAfterRParen: RawUnexpectedNodesSyntax?
     if let (equalOperator, falseKeyword) = self.consume(

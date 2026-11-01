@@ -14,7 +14,10 @@
 
 extension Parser {
   /// Parse a list of availability arguments.
-  mutating func parseAvailabilitySpecList() -> RawAvailabilityArgumentListSyntax {
+  ///
+  /// If `allowTrailingComma` is `true`, a comma directly before the closing
+  /// parenthesis ends the list instead of starting another argument.
+  mutating func parseAvailabilitySpecList(allowTrailingComma: Bool = false) -> RawAvailabilityArgumentListSyntax {
     var elements = RawSyntaxNodeListBuilder<RawAvailabilityArgumentSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -45,6 +48,7 @@ extension Parser {
           allocator: self.nodeListAllocator
         )
       } while keepGoing != nil
+        && !(allowTrailingComma && self.at(.rightParen))
         && self.hasProgressed(&availabilityArgumentProgress)
     }
 

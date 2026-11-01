@@ -379,21 +379,12 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   }
 
   func testAvailabilityQueryUnavailability23() {
+    // A trailing comma is accepted in `#unavailable` (but not in `#available`).
     assertParse(
       """
-      if #unavailable(OSX 10.51,1️⃣) {
+      if #unavailable(OSX 10.51,) {
       }
-      """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "expected version restriction in availability argument",
-          fixIts: ["insert version restriction"]
-        )
-      ],
-      fixedSource: """
-        if #unavailable(OSX 10.51, <#identifier#>) {
-        }
-        """
+      """
     )
   }
 

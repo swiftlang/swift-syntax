@@ -205,7 +205,8 @@ extension Parser {
   /// Availability macros are not an official part of the Swift language.
   ///
   /// If `allowStarAsVersionNumber` is `true`, versions like `* 13.0` are accepted.
-  /// This is to match the behavior of `@_originallyDefinedIn` in the old parser that accepted such versions
+  /// This is to match the behavior of `@_originallyDefinedIn` and `@backDeployed` in the old parser that
+  /// accepted such versions
   mutating func parsePlatformVersion(allowStarAsVersionNumber: Bool = false) -> RawPlatformVersionSyntax {
     let unexpectedBeforePlatform: RawUnexpectedNodesSyntax?
     let platform: RawTokenSyntax

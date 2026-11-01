@@ -995,7 +995,9 @@ extension Parser {
     var elements = RawSyntaxNodeListBuilder<RawPlatformVersionItemSyntax>()
     var keepGoing: RawTokenSyntax? = nil
     repeat {
-      let versionRestriction = self.parsePlatformVersion()
+      // The compiler accepts `*` in place of a platform name, with a warning
+      // that it has no effect, so parse it the way `@_originallyDefinedIn` does.
+      let versionRestriction = self.parsePlatformVersion(allowStarAsVersionNumber: true)
       keepGoing = self.consume(if: .comma)
       elements.append(
         RawPlatformVersionItemSyntax(

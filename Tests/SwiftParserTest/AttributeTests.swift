@@ -565,10 +565,40 @@ final class AttributeTests: ParserTestCase {
       """
     )
 
+    // The compiler accepts '*' in place of a platform name, with or without a
+    // version, and warns that it has no effect.
+    assertParse(
+      """
+      @backDeployed(before: macOS 12.0, *)
+      struct Foo {}
+      """
+    )
+
+    assertParse(
+      """
+      @backDeployed(before: macOS 12.0, * 9.0)
+      struct Foo {}
+      """
+    )
+
+    assertParse(
+      """
+      @backDeployed(before: *, iOS 15.0)
+      struct Foo {}
+      """
+    )
+
     // Legacy spelling @_backDeploy(before:)
     assertParse(
       """
       @_backDeploy(before: macOS 12.0)
+      struct Foo {}
+      """
+    )
+
+    assertParse(
+      """
+      @_backDeploy(before: macOS 12.0, *)
       struct Foo {}
       """
     )

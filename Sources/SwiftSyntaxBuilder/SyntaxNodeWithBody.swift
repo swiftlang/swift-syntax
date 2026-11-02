@@ -366,6 +366,22 @@ extension SwitchExprSyntax {
   }
 }
 
+// MARK: - AccessorBlock helpers
+
+private func makeAccessorBlock(from items: CodeBlockItemListSyntax) -> AccessorBlockSyntax {
+  let accessors = items.compactMap { item -> AccessorDeclSyntax? in
+    if case .decl(let decl) = item.item {
+      return decl.as(AccessorDeclSyntax.self)
+    }
+    return nil
+  }
+  if !items.isEmpty && accessors.count == items.count {
+    return AccessorBlockSyntax(accessors: .accessors(AccessorDeclListSyntax(accessors)))
+  } else {
+    return AccessorBlockSyntax(accessors: .getter(items))
+  }
+}
+
 // MARK: - SubscriptDeclSyntax
 // SubscriptDeclSyntax is a special scenario as it don't have body or members
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
@@ -427,18 +443,7 @@ extension SubscriptDeclSyntax {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    let items = try accessor()
-    let accessors = items.compactMap { item -> AccessorDeclSyntax? in
-      if case .decl(let decl) = item.item {
-        return decl.as(AccessorDeclSyntax.self)
-      }
-      return nil
-    }
-    if !items.isEmpty && accessors.count == items.count {
-      self.accessorBlock = AccessorBlockSyntax(accessors: .accessors(AccessorDeclListSyntax(accessors)))
-    } else {
-      self.accessorBlock = AccessorBlockSyntax(accessors: .getter(items))
-    }
+    self.accessorBlock = makeAccessorBlock(from: try accessor())
   }
 }
 
@@ -503,18 +508,7 @@ extension VariableDeclSyntax {
     self = castedDecl
     precondition(self.bindings.count == 1)
     var binding: PatternBindingSyntax? = self.bindings.last
-    let items = try accessor()
-    let accessors = items.compactMap { item -> AccessorDeclSyntax? in
-      if case .decl(let decl) = item.item {
-        return decl.as(AccessorDeclSyntax.self)
-      }
-      return nil
-    }
-    if !items.isEmpty && accessors.count == items.count {
-      binding?.accessorBlock = AccessorBlockSyntax(accessors: .accessors(AccessorDeclListSyntax(accessors)))
-    } else {
-      binding?.accessorBlock = AccessorBlockSyntax(accessors: .getter(items))
-    }
+    binding?.accessorBlock = makeAccessorBlock(from: try accessor())
     bindings = PatternBindingListSyntax([binding].compactMap { $0 })
   }
 }

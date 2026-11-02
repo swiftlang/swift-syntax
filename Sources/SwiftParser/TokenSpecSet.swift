@@ -720,6 +720,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case `repeat`
   case each
   case any
+  case some
   case unsafe
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
@@ -735,6 +736,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case .repeat: self = .repeat
     case .each: self = .each
     case .any: self = .any
+    case .some: self = .some
     case .unsafe: self = .unsafe
     default: return nil
     }
@@ -752,6 +754,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case .repeat: return .keyword(.repeat)
     case .each: return .keyword(.each)
     case .any: return .keyword(.any)
+    case .some: return .keyword(.some)
     case .unsafe: return .keyword(.unsafe)
     }
   }

@@ -964,4 +964,45 @@ final class InlineArrayTypeTests: ParserTestCase {
       languageFeatures: .literalExpressions
     )
   }
+  func testParenthesizedOpaqueGenericArgument() {
+    // A parenthesized generic argument is parsed as a value expression when
+    // LiteralExpressions is enabled, so `some` must be accepted in an
+    // expression, as `any` is.
+    assertParse(
+      "func f(_ x: G<(some P)>) {}",
+      substructure: TypeExprSyntax(
+        type: SomeOrAnyTypeSyntax(
+          someOrAnySpecifier: .keyword(.some),
+          constraint: TypeSyntax(IdentifierTypeSyntax(name: .identifier("P")))
+        )
+      ),
+      languageFeatures: .literalExpressions
+    )
+
+    assertParse(
+      "func f(_ x: G<(any P)>) {}",
+      substructure: TypeExprSyntax(
+        type: SomeOrAnyTypeSyntax(
+          someOrAnySpecifier: .keyword(.any),
+          constraint: TypeSyntax(IdentifierTypeSyntax(name: .identifier("P")))
+        )
+      ),
+      languageFeatures: .literalExpressions
+    )
+
+    assertParse(
+      "var v: G<(some P)> { G<S>() }",
+      languageFeatures: .literalExpressions
+    )
+
+    // `some` is still an ordinary identifier when it can't start a type.
+    assertParse(
+      """
+      some = 1
+      some.foo()
+      some(1)
+      _ = some + 1
+      """
+    )
+  }
 }

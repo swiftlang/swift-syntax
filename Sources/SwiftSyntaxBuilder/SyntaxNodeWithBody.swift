@@ -371,8 +371,8 @@ extension SwitchExprSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 extension SubscriptDeclSyntax {
-  /// Construct a subscript with a single `get` accessor where `header` builds
-  /// the text before the opening `{` and `accessor` builds the accessor body.
+  /// Construct a subscript with a getter body or a list of accessors where `header` builds
+  /// the text before the opening `{` and `accessor` builds the body.
   ///
   /// For example, to construct
   ///
@@ -390,6 +390,32 @@ extension SubscriptDeclSyntax {
   /// }
   /// ```
   ///
+  /// Or to construct multiple accessors:
+  ///
+  /// ```swift
+  /// subscript(_ index: Int) -> Element {
+  ///   get {
+  ///     return storage[index]
+  ///   }
+  ///   set {
+  ///     storage[index] = newValue
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try SubscriptDeclSyntax("subscript(_ index: Int) -> Element") {
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+  ///     StmtSyntax("return storage[index]")
+  ///   }
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
+  ///     ExprSyntax("storage[index] = newValue")
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Throws an error if `header` does not start a subscript declaration.
   /// E.g. if calling `try SubscriptDeclSyntax("func foo") {}`
   public init(
@@ -401,7 +427,18 @@ extension SubscriptDeclSyntax {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.accessorBlock = AccessorBlockSyntax(accessors: .getter(try accessor()))
+    let items = try accessor()
+    let accessors = items.compactMap { item -> AccessorDeclSyntax? in
+      if case .decl(let decl) = item.item {
+        return decl.as(AccessorDeclSyntax.self)
+      }
+      return nil
+    }
+    if !items.isEmpty && accessors.count == items.count {
+      self.accessorBlock = AccessorBlockSyntax(accessors: .accessors(AccessorDeclListSyntax(accessors)))
+    } else {
+      self.accessorBlock = AccessorBlockSyntax(accessors: .getter(items))
+    }
   }
 }
 

@@ -205,6 +205,43 @@ final class AvailabilityTests: ParserTestCase {
     )
   }
 
+  func testUnavailableTrailingComma() {
+    // The compiler accepts a trailing comma in `#unavailable`...
+    assertParse(
+      """
+      if #unavailable(iOS 15, watchOS 9,) {}
+      """
+    )
+
+    assertParse(
+      """
+      if #unavailable(iOS 15,) {}
+      """
+    )
+
+    assertParse(
+      """
+      if #unavailable(iOS 15, *,) {}
+      """
+    )
+
+    // ... but not in `#available`.
+    assertParse(
+      """
+      if #available(iOS 15,1️⃣) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected version restriction in availability argument",
+          fixIts: ["insert version restriction"]
+        )
+      ],
+      fixedSource: """
+        if #available(iOS 15, <#identifier#>) {}
+        """
+    )
+  }
+
   func testAvailableNewlineParen() {
     assertParse(
       """

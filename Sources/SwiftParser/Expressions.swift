@@ -595,12 +595,12 @@ extension Parser {
         )
       )
 
-    case (.any, _)?:
+    case (.any, _)?, (.some, _)?:
       if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) && !self.peek().isContextualPunctuator("~") {
         break
       }
 
-      // 'any' is parsed as a part of 'type'.
+      // 'any' and 'some' are parsed as a part of 'type'.
       let type = self.parseType()
       return RawExprSyntax(RawTypeExprSyntax(type: type, arena: self.arena))
 

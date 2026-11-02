@@ -14,7 +14,10 @@
 
 extension Parser {
   /// Parse a list of availability arguments.
-  mutating func parseAvailabilitySpecList() -> RawAvailabilityArgumentListSyntax {
+  ///
+  /// If `allowTrailingComma` is `true`, a comma directly before the closing
+  /// parenthesis ends the list instead of starting another argument.
+  mutating func parseAvailabilitySpecList(allowTrailingComma: Bool = false) -> RawAvailabilityArgumentListSyntax {
     var elements = RawSyntaxNodeListBuilder<RawAvailabilityArgumentSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -45,6 +48,7 @@ extension Parser {
           allocator: self.nodeListAllocator
         )
       } while keepGoing != nil
+        && !(allowTrailingComma && self.at(.rightParen))
         && self.hasProgressed(&availabilityArgumentProgress)
     }
 
@@ -205,7 +209,8 @@ extension Parser {
   /// Availability macros are not an official part of the Swift language.
   ///
   /// If `allowStarAsVersionNumber` is `true`, versions like `* 13.0` are accepted.
-  /// This is to match the behavior of `@_originallyDefinedIn` in the old parser that accepted such versions
+  /// This is to match the behavior of `@_originallyDefinedIn` and `@backDeployed` in the old parser that
+  /// accepted such versions
   mutating func parsePlatformVersion(allowStarAsVersionNumber: Bool = false) -> RawPlatformVersionSyntax {
     let unexpectedBeforePlatform: RawUnexpectedNodesSyntax?
     let platform: RawTokenSyntax

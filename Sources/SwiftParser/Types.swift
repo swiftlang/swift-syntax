@@ -1218,7 +1218,36 @@ extension Parser.Lookahead {
     guard lookahead.consumeGenericArguments() else {
       return false
     }
-    return lookahead.currentToken.isGenericTypeDisambiguatingToken
+    return lookahead.atGenericTypeDisambiguatingToken()
+  }
+
+  /// Whether the current token, which follows a generic argument list that was
+  /// speculatively parsed, shows that the `<...>` is a generic argument list
+  /// rather than a comparison.
+  mutating func atGenericTypeDisambiguatingToken() -> Bool {
+    switch self.currentToken.rawTokenKind {
+    case .rightParen,
+      .rightSquare,
+      .leftBrace,
+      .rightBrace,
+      .period,
+      .comma,
+      .semicolon,
+      .endOfFile,
+      .exclamationMark,
+      .postfixQuestionMark,
+      .colon:
+      return true
+    case .binaryOperator:
+      return self.currentToken.tokenText == "&"
+    case .postfixOperator:
+      return false
+    case .leftParen, .leftSquare:
+      // These only apply to the generic type if they don't start a new line.
+      return !self.currentToken.isAtStartOfLine
+    default:
+      return self.atStartOfDeclaration() || self.atStartOfStatement(preferExpr: true)
+    }
   }
 
   mutating func canParseIntegerLiteral() -> Bool {
@@ -1634,33 +1663,5 @@ extension Parser {
         arena: self.arena
       )
     )
-  }
-}
-
-extension Lexer.Lexeme {
-  var isGenericTypeDisambiguatingToken: Bool {
-    switch self.rawTokenKind {
-    case .rightParen,
-      .rightSquare,
-      .leftBrace,
-      .rightBrace,
-      .period,
-      .comma,
-      .semicolon,
-      .endOfFile,
-      .exclamationMark,
-      .postfixQuestionMark,
-      .colon:
-      return true
-    case .binaryOperator:
-      return self.tokenText == "&"
-    case .postfixOperator:
-      return false
-    case .leftParen, .leftSquare:
-      // These only apply to the generic type if they don't start a new line.
-      return !self.isAtStartOfLine
-    default:
-      return false
-    }
   }
 }

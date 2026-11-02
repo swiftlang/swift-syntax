@@ -4174,4 +4174,57 @@ final class StatementExpressionTests: ParserTestCase {
         """
     )
   }
+  func testGenericSpecializationBeforeNewStatement() {
+    // When the token after `>` starts a new declaration or statement it can't
+    // continue the expression, so `<Int>` is a generic argument list rather
+    // than comparison operators.
+    let specialization = GenericSpecializationExprSyntax(
+      expression: MemberAccessExprSyntax(
+        base: DeclReferenceExprSyntax(baseName: .identifier("s")),
+        period: .periodToken(),
+        declName: DeclReferenceExprSyntax(baseName: .identifier("gen"))
+      ),
+      genericArgumentClause: GenericArgumentClauseSyntax(
+        leftAngle: .leftAngleToken(),
+        arguments: GenericArgumentListSyntax([
+          GenericArgumentSyntax(argument: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int")))))
+        ]),
+        rightAngle: .rightAngleToken()
+      )
+    )
+
+    for following in [
+      "let _ = 1",
+      "var x = 1",
+      "if true {}",
+      "return",
+      "func local() {}",
+      "@available(*, deprecated) func g() {}",
+    ] {
+      assertParse(
+        """
+        s.gen<Int>
+        \(following)
+        """,
+        substructure: specialization
+      )
+    }
+
+    // An identifier after `>` continues the expression: this is still a
+    // comparison.
+    assertParse(
+      """
+      a < b > c
+      """,
+      substructure: SequenceExprSyntax(
+        elements: ExprListSyntax([
+          ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("a"))),
+          ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator("<"))),
+          ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("b"))),
+          ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator(">"))),
+          ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("c"))),
+        ])
+      )
+    )
+  }
 }

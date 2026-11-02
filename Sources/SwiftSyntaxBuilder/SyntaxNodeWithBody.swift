@@ -410,7 +410,7 @@ extension SubscriptDeclSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 extension VariableDeclSyntax {
-  /// Construct a variable with a single `get` accessor where `header` builds the text before the opening `{` and `accessor` builds the accessor body.
+  /// Construct a variable with a getter body or a list of accessors where `header` builds the text before the opening `{` and `accessor` builds the body.
   ///
   /// For example, to construct
   ///
@@ -428,6 +428,32 @@ extension VariableDeclSyntax {
   /// }
   /// ```
   ///
+  /// Or to construct multiple accessors:
+  ///
+  /// ```swift
+  /// var x: Int {
+  ///   get {
+  ///     return origin.x
+  ///   }
+  ///   set {
+  ///     origin.x = newValue
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try VariableDeclSyntax("var x: Int") {
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+  ///     StmtSyntax("return origin.x")
+  ///   }
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
+  ///     ExprSyntax("origin.x = newValue")
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Throws an error if `header` does not start a variable declaration. E.g. if calling `try VariableDeclSyntax("func foo") {}`
   public init(
     _ header: SyntaxNodeString,
@@ -440,7 +466,18 @@ extension VariableDeclSyntax {
     self = castedDecl
     precondition(self.bindings.count == 1)
     var binding: PatternBindingSyntax? = self.bindings.last
-    binding?.accessorBlock = AccessorBlockSyntax(accessors: .getter(try accessor()))
+    let items = try accessor()
+    let accessors = items.compactMap { item -> AccessorDeclSyntax? in
+      if case .decl(let decl) = item.item {
+        return decl.as(AccessorDeclSyntax.self)
+      }
+      return nil
+    }
+    if !items.isEmpty && accessors.count == items.count {
+      binding?.accessorBlock = AccessorBlockSyntax(accessors: .accessors(AccessorDeclListSyntax(accessors)))
+    } else {
+      binding?.accessorBlock = AccessorBlockSyntax(accessors: .getter(items))
+    }
     bindings = PatternBindingListSyntax([binding].compactMap { $0 })
   }
 }

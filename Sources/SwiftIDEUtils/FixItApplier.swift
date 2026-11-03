@@ -17,6 +17,8 @@ public import SwiftSyntax
 public enum FixItApplier {
   /// Applies selected or all Fix-Its from the provided diagnostics to a given syntax tree.
   ///
+  /// Fix-Its that fall outside `tree` are ignored.
+  ///
   /// - Parameters:
   ///   - diagnostics: An array of `Diagnostic` objects, each containing one or more Fix-Its.
   ///   - filterByMessages: An optional array of message strings to filter which Fix-Its to apply.
@@ -44,6 +46,10 @@ public enum FixItApplier {
   }
 
   /// Applies the given edits to the given syntax tree.
+  ///
+  /// Edit offsets can be absolute positions from the syntax tree that contains `tree`.
+  /// The applier adjusts these offsets to the range of `tree` and ignores edits
+  /// that fall outside `tree`.
   ///
   /// - Parameters:
   ///   - edits: The edits to apply.

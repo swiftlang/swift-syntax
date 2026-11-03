@@ -366,13 +366,29 @@ extension SwitchExprSyntax {
   }
 }
 
+// MARK: - AccessorBlock helpers
+
+private func makeAccessorBlock(from items: CodeBlockItemListSyntax) -> AccessorBlockSyntax {
+  let accessors = items.compactMap { item -> AccessorDeclSyntax? in
+    if case .decl(let decl) = item.item {
+      return decl.as(AccessorDeclSyntax.self)
+    }
+    return nil
+  }
+  if !items.isEmpty && accessors.count == items.count {
+    return AccessorBlockSyntax(accessors: .accessors(AccessorDeclListSyntax(accessors)))
+  } else {
+    return AccessorBlockSyntax(accessors: .getter(items))
+  }
+}
+
 // MARK: - SubscriptDeclSyntax
 // SubscriptDeclSyntax is a special scenario as it don't have body or members
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 extension SubscriptDeclSyntax {
-  /// Construct a subscript with a single `get` accessor where `header` builds
-  /// the text before the opening `{` and `accessor` builds the accessor body.
+  /// Construct a subscript with a getter body or a list of accessors where `header` builds
+  /// the text before the opening `{` and `accessor` builds the body.
   ///
   /// For example, to construct
   ///
@@ -390,6 +406,32 @@ extension SubscriptDeclSyntax {
   /// }
   /// ```
   ///
+  /// Or to construct multiple accessors:
+  ///
+  /// ```swift
+  /// subscript(_ index: Int) -> Element {
+  ///   get {
+  ///     return storage[index]
+  ///   }
+  ///   set {
+  ///     storage[index] = newValue
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try SubscriptDeclSyntax("subscript(_ index: Int) -> Element") {
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+  ///     StmtSyntax("return storage[index]")
+  ///   }
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
+  ///     ExprSyntax("storage[index] = newValue")
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Throws an error if `header` does not start a subscript declaration.
   /// E.g. if calling `try SubscriptDeclSyntax("func foo") {}`
   public init(
@@ -401,7 +443,7 @@ extension SubscriptDeclSyntax {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.accessorBlock = AccessorBlockSyntax(accessors: .getter(try accessor()))
+    self.accessorBlock = makeAccessorBlock(from: try accessor())
   }
 }
 
@@ -410,7 +452,7 @@ extension SubscriptDeclSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 extension VariableDeclSyntax {
-  /// Construct a variable with a single `get` accessor where `header` builds the text before the opening `{` and `accessor` builds the accessor body.
+  /// Construct a variable with a getter body or a list of accessors where `header` builds the text before the opening `{` and `accessor` builds the body.
   ///
   /// For example, to construct
   ///
@@ -428,6 +470,32 @@ extension VariableDeclSyntax {
   /// }
   /// ```
   ///
+  /// Or to construct multiple accessors:
+  ///
+  /// ```swift
+  /// var x: Int {
+  ///   get {
+  ///     return origin.x
+  ///   }
+  ///   set {
+  ///     origin.x = newValue
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try VariableDeclSyntax("var x: Int") {
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+  ///     StmtSyntax("return origin.x")
+  ///   }
+  ///   AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
+  ///     ExprSyntax("origin.x = newValue")
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Throws an error if `header` does not start a variable declaration. E.g. if calling `try VariableDeclSyntax("func foo") {}`
   public init(
     _ header: SyntaxNodeString,
@@ -440,7 +508,7 @@ extension VariableDeclSyntax {
     self = castedDecl
     precondition(self.bindings.count == 1)
     var binding: PatternBindingSyntax? = self.bindings.last
-    binding?.accessorBlock = AccessorBlockSyntax(accessors: .getter(try accessor()))
+    binding?.accessorBlock = makeAccessorBlock(from: try accessor())
     bindings = PatternBindingListSyntax([binding].compactMap { $0 })
   }
 }

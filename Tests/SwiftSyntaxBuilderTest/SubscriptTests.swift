@@ -28,6 +28,11 @@ final class SubscriptTests: XCTestCase {
       }
       """
     )
+
+    guard case .getter = buildable.accessorBlock?.accessors else {
+      XCTFail("Expected .getter case in accessorBlock")
+      return
+    }
   }
 
   func testSubscriptAccessorList() throws {
@@ -54,6 +59,12 @@ final class SubscriptTests: XCTestCase {
       }
       """
     )
+
+    guard case .accessors(let accessors) = buildable.accessorBlock?.accessors else {
+      XCTFail("Expected .accessors case in accessorBlock")
+      return
+    }
+    XCTAssertEqual(accessors.count, 2)
   }
 
   func testSubscriptProtocolRequirement() throws {

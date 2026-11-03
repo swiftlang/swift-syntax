@@ -1,9 +1,9 @@
 # `TypeGraph`
 
-The `TypeGraph` keeps track of which declaration groups introduce which type members, and which type members each extension depends on. A graph is necessary because of two powerful Swift features:
+The `TypeGraph` keeps track of which declaration groups introduce which member types, and which member types each extension depends on. A graph is necessary because of two powerful Swift features:
 
-1. Type aliases make finding extensions a global problem. To resolve “A,” we can’t just find `extension A {}`; we also need, say, `extension AliasedA {}`. Instead, we have to bind all accessible extensions to determine which extensions actually resolve to `A`.
-2. We can extend a type declared in an extension, making extension binding incremental. In other words, one-by-one, we must resolve each extension, admit it into a dependency graph, and evict any dependent extensions.
+1. Type aliases make finding extensions a global problem. To resolve "A", we can't just find `extension A {}`; we also need, say, `extension AliasedA {}`. Instead, we have to bind all accessible extensions to determine which extensions actually resolve to `A`.
+2. We can extend a type declared in an extension, making extension binding incremental. In other words, one by one, we must resolve each extension, admit it into a dependency graph, and evict any dependent extensions.
 
 ## Design
 
@@ -11,10 +11,10 @@ The `TypeGraph` keeps track of which declaration groups introduce which type mem
 
 Conceptually, `TypeGraph` is a directed acyclic graph where:
 
-- **Nodes are type members**, written `Base > Name` (e.g. `MyModule.A > B`). Top-level types are members of the module (`MyModule > A`). A member may be a nominal type, a type alias, ambiguous (redeclared), or missing (looked up but never declared).
+- **Nodes are member types**, written `Base > Name` (e.g. `MyModule.A > B`). Top-level types are members of the module (`MyModule > A`). A member may be a nominal type, a type alias, ambiguous (redeclared), or missing (looked up but never declared).
 - **Edges are dependencies**, labeled with the declaration group that introduces the target member. A main declaration (`struct A {}`) leads from the member it declares (`MyModule > A`) to each of its own members. An extension leads from the members it looked up to resolve its extended type (its *dependencies*) to each member it introduces.
 
-So, an extension depends on type members, not on types. It fails to bind if a member it looks up has no declarations (e.g. `A > B` doesn't exist) or more than one (redeclaration), and its result changes whenever another declaration group adds or removes that member. Acyclicity means an extension never recursively depends on a member it introduces itself.
+So, an extension depends on the members it looks up (`Base > Name`), not on the types they resolve to. It fails to bind if a member it looks up has no declarations (e.g. `A > B` doesn't exist) or more than one (redeclaration), and its result changes whenever another declaration group adds or removes that member. Acyclicity means an extension never recursively depends on a member it introduces itself.
 
 ### Representation
 
@@ -39,7 +39,7 @@ In the conceptual graph, member nodes are boxes and each edge passes through a p
 ```mermaid
 flowchart TD
     root["MyModule"]
-    memberA["MyModule.A > A<br/>(admits MyModule::A)"]
+    memberA["MyModule > A<br/>(admits 'MyModule::A')"]
     file(["main.swift"])
 
     root --- file
@@ -57,7 +57,7 @@ struct A {}
 //     `- Type 'MyModule::A'
 extension A.B { struct A {} }
 //        |- Resolved type: failed (type 'A' has no member type 'B')
-//        `- Depends on type 'A' > member 'B"
+//        `- Depends on type 'A' > member 'B'
 extension A { typealias B = A }
 ```
 
@@ -66,7 +66,7 @@ Equivalently:
 ```mermaid
 flowchart TD
     root["MyModule"]
-    memberTopA["MyModule > A<br/>(admits MyModule::A)"]
+    memberTopA["MyModule > A<br/>(admits 'MyModule::A')"]
     memberB["MyModule.A > B<br/>(missing)"]
     file(["main.swift"])
     mainDecl(["struct A"])
@@ -78,13 +78,13 @@ flowchart TD
     mainDecl --> memberB
     memberB --- extAB
 
-    classDef cycle stroke:#d33,stroke-width:2px
-    class extAB cycle
+    classDef invalid stroke:#d33,stroke-width:2px
+    class extAB invalid
     linkStyle 4 stroke:#d33,stroke-width:2px
 
 ```
 
-Moving on to the second extension, `extension A {}` resolves successfully to `A`, but `extension A.B {}` depends on `A`. To maintain the graph’s invariant, we first evict `extension A.B {}`, and then admit `extension A {}` into the graph.
+Moving on to the second extension, `extension A {}` resolves successfully to `A`, but `extension A.B {}` depends on the member `A > B`, which `extension A {}` introduces. To maintain the graph's invariant, we first evict `extension A.B {}`, and then admit `extension A {}` into the graph.
 
 ```swift
 struct A {}
@@ -99,8 +99,8 @@ Or in graph form:
 ```mermaid
 flowchart TD
     root["MyModule"]
-    memberTopA["MyModule > A<br/>(admits MyModule::A)"]
-    memberB["MyModule.A > B<br/>"]
+    memberTopA["MyModule > A<br/>(admits 'MyModule::A')"]
+    memberB["MyModule.A > B<br/>(alias for 'MyModule::A')"]
     file(["main.swift"])
     extA(["extension A"])
 
@@ -110,14 +110,14 @@ flowchart TD
     extA --> memberB
 ```
 
-Finally, when we try to re-admit the evicted `extension A.B {}`, we run into a problem. If we bind `extension A.B {}` to “MyModule::A,” then the extension will depend on `struct A {}`, a type the extension itself introduces. Hence, we diagnose an extension-cycle error, which is more specific than the compiler’s current warning.
+Finally, when we try to re-admit the evicted `extension A.B {}`, we run into a problem. If we bind `extension A.B {}` to "MyModule::A", then the extension will depend on `struct A {}`, a type the extension itself introduces. Hence, we diagnose an extension-cycle error, which is more specific than the compiler's current warning.
 
 ```swift
 struct A {}
 //     `- Type 'MyModule::A'
 extension A.B { struct A {} }
 //        |- Resolved type: failed (extension depends on itself)
-//        `- Depends on type 'A' > member 'B"
+//        `- Depends on type 'A' > member 'B'
 extension A { typealias B = A }
 //        `- Resolved type: 'MyModule::A'
 ```
@@ -127,8 +127,8 @@ Visually:
 ```mermaid
 flowchart TD
     root["MyModule"]
-    memberTopA["MyModule > A<br/>(admits MyModule::A)"]
-    memberB["MyModule.A > B<br/>(alias for MyModule::A)"]
+    memberTopA["MyModule > A<br/>(admits 'MyModule::A')"]
+    memberB["MyModule.A > B<br/>(alias for 'MyModule::A')"]
     memberA["MyModule.A > A<br/>(missing)"]
     memberADupe["MyModule.A > A<br/>(conflicting member)"]
     file(["main.swift"])
@@ -159,20 +159,13 @@ flowchart TD
 
 Our graph is complex, so we need to maintain some core invariants:
 
-1. No readmission
-   Every nominal-type declaration is admitted under exactly one name.
-1. Bound extensions
-   Every admitted extension resolves to a type name iff that type is registered and references the extension as a bound extension.
-1. Extensions depend on type members
-   Extension dependencies (the set of type members used to resolve its type syntax) must match the type-member state in the graph. In practice, we admit an extension with valid dependencies, and evict it if the dependency type members change. An extension has at most one dependency per base type, which groups every member it looks up on that type.
-1. Dependencies and dependents match
-   An extension can have a dependency on a type's member iff the type also records the extension as a dependent. Both the extension and type must be admitted.
-1. No cycles
-   No extension's recursive dependencies should rely on a type member identifier that the extension introduces
-1. Registered file roots
-  Every admitted top-level nominal type and extension declaration must have its file root registered through `SymbolTable`. Ensures we can find the members' `TypeTable`.
-1. Nested types have parents
-   If a type is nested under a declaration group, it must be in the declaration group's type table (ensures we can find nested types). If the declaration group is a nominal type declaration, that nominal type must be admitted. If the declaration group is an extension, that extension must be admitted and bound to the parent type.
+1. **No readmission:** Every nominal-type declaration is admitted under exactly one name.
+1. **Bound extensions:** Every admitted extension resolves to a type name iff that type is registered and references the extension as a bound extension.
+1. **Extensions depend on member types:** Extension dependencies (the set of member types used to resolve its type syntax) must match the member-type state in the graph. In practice, we admit an extension with valid dependencies, and evict it if the dependency member types change. An extension has at most one dependency per base type, which groups every member it looks up on that type.
+1. **Dependencies and dependents match:** An extension can have a dependency on a type's member iff the type also records the extension as a dependent. Both the extension and type must be admitted.
+1. **No cycles:** No extension's recursive dependencies should rely on a member type identifier that the extension introduces.
+1. **Registered file roots:** Every admitted top-level nominal type and extension declaration must have its file root registered through `SymbolTable`. Ensures we can find the members' `TypeTable`.
+1. **Nested types have parents:** If a type is nested under a declaration group, it must be in the declaration group's type table (ensures we can find nested types). If the declaration group is a nominal type declaration, that nominal type must be admitted. If the declaration group is an extension, that extension must be admitted and bound to the parent type.
 
 To maintain these invariants, we carefully gate all mutations through a set of core operations: adding and removing types and extensions.
 
@@ -182,17 +175,17 @@ Only these operations should mutate the graph. Each core operation assumes the g
 
 #### Add Type
 
-`_addType` imposes the additional precondition that if the given type "Inner" is nested, it's parent "Outer" (resolved through a nominal type or extension) is admitted and without dependents on the member "Outer" > "Inner". `_addType` simply adds the given type node to the graph.
+`_addType` imposes the additional precondition that if the given type "Inner" is nested, its parent "Outer" (resolved through a nominal type or extension) is admitted and without dependents on the member `Outer > Inner`. `_addType` simply adds the given type node to the graph.
 
-> Note: We don't care about dependents on "Outer" > "Inner" when adding a type "Outer.Inner", because admitting "Inner" doesn't affect lookup of `Outer > Inner`, keeping dependents valid. Specifically, lookup results only change when `NominalType/boundExtensions` changes, hence why only `_addExtension` and `_removeExtension` check for dependents.
+> Note: We don't care about dependents on `Outer > Inner` when adding a type "Outer.Inner", because admitting "Inner" doesn't affect lookup of `Outer > Inner`, keeping dependents valid. Specifically, lookup results only change when `NominalType/boundExtensions` changes, hence why only `_addExtension` and `_removeExtension` check for dependents.
 
 #### Remove Type
 
-`_removeType` imposes the additional precondition that the given type declaration have no bound extensions, or any type members, and it's parent doesn't have dependents on its member. `_removeType` simply removes the given type node from the graph.
+`_removeType` imposes the additional precondition that the given type declaration have no bound extensions, or any member types, and its parent doesn't have dependents on its member. `_removeType` simply removes the given type node from the graph.
 
 #### Add Extension
 
-`_addExtension` imposes the additional precondition that the extension isn't already admitted, its dependencies match the current type members (and don't form a cycle), and, if it resolves to a type, that type is admitted and has no dependents on the members the extension introduces. `_addExtension` stores the extension's state, records it as a dependent of each dependency's base type, and, if resolved, binds it to its type.
+`_addExtension` imposes the additional precondition that the extension isn't already admitted, its dependencies match the current member types (and don't form a cycle), and, if it resolves to a type, that type is admitted and has no dependents on the members the extension introduces. `_addExtension` stores the extension's state, records it as a dependent of each dependency's base type, and, if resolved, binds it to its type.
 
 #### Remove Extension
 
@@ -200,13 +193,13 @@ Only these operations should mutate the graph. Each core operation assumes the g
 
 ### Lookup
 
-`findMemberType` looks up the member `Base > Name`. A local base type has no extensions, so we just search its main declaration. For an admitted base type, we collect the type tables of its main declaration and every bound extension, and order them for shadowing: declaration groups in the origin's file first, then the rest of the origin's module, then other modules. Then, we then gather every declaration of `Name` in that order. The result is recorded in the `DependencyTracker`, so repeating a lookup with the same tracker reuses it, and the recorded lookups become the extension's dependencies.
+`findMemberType` looks up the member `Base > Name`. A local base type has no extensions, so we just search its main declaration. For an admitted base type, we collect the type tables of its main declaration and every bound extension, and order them for shadowing: declaration groups in the origin's file first, then the rest of the origin's module, then other modules. Then, we gather every declaration of `Name` in that order. The result is recorded in the `DependencyTracker`, so repeating a lookup with the same tracker reuses it, and the recorded lookups become the extension's dependencies.
 
 Lookup is slow: it costs `O(E_T)` for the base type `T`, since it visits and buckets every bound extension of `T`, even ones that don't declare `Name`. That's because, for now, we want constant-time access to extensions when admitting and evicting them (`boundExtensions` is a dictionary keyed by extension), which a sorted or indexed structure wouldn't preserve. We could improve this inefficiency in the future.
 
 ### Admission & Eviction
 
-The following operations are mutually recursive. Each primitive (drawn rounded below) is called after we've taken all the rights steps to meet the preconditions.
+The following operations are mutually recursive. Each primitive (drawn rounded below) is called after we've taken all the right steps to meet the preconditions.
 
 #### Evict Extension
 
@@ -232,7 +225,7 @@ To remove a declaration group, we need to ensure the members it introduces don't
 ```mermaid
 flowchart LR
     evictDeps["_evictDependents(T, members)"]
-    whileDep{{"while there's a _dependent_ on some 'M' in 'members'"}}
+    whileDep{{"while there's a dependent on some 'M' in 'members'"}}
     evictExt["_evictExtension(dependent)"]
 
     evictDeps --> whileDep --> evictExt
@@ -265,7 +258,7 @@ flowchart LR
     hasExt -->|No| removeType
 ```
 
-#### `admitExtension`
+#### Admit Extension
 
 `admitExtension` uses the above. If binding the extension to `T` would create a cycle, we admit it unbound instead. Otherwise, its members change the result of any lookup of `T > M` for those members, so we evict `T`'s dependents on them before adding the extension.
 
@@ -288,7 +281,7 @@ The recursion `_evictDependents → _evictExtension → _evictMemberType → _ev
 
 #### Why not derive dependencies from the extended type?
 
-The first [example](#example) demonstrates that we can't derive dependencies from the extended type's name because of type aliases. Namely, `extension A.B` resolves to `MyModule::A` and depends on both `A > B` (the alias) and `A > A`: `typealias B = A` only resolves to the top-level `A` because `A` has no member `A`. Hence, `TypeResolver` records every qualified lookup it performs in a `DependencyTracker`, and the graph stores those exact dependencies.
+The [example](#example) demonstrates that we can't derive dependencies from the extended type's name because of type aliases. Namely, `extension A.B` would resolve to `MyModule::A` and depends on both `A > B` (the alias) and `A > A`: `typealias B = A` only resolves to the top-level `A` because `A` has no member `A`. Hence, `TypeResolver` records every qualified lookup it performs in a `DependencyTracker`, and the graph stores those exact dependencies.
 
 #### If nodes are member types, why do we store nominal types?
 

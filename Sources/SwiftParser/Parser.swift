@@ -114,6 +114,15 @@ public struct Parser {
   /// See comments in ``LookaheadRanges``
   public internal(set) var lookaheadRanges = LookaheadRanges()
 
+  /// Whether to record in the arena how far the parser looked ahead to parse each
+  /// node, for a later incremental reparse to consult.
+  ///
+  /// Recording costs a hash table insertion per node, and only an incremental
+  /// reparse reads it, so `Parser.parse(source:)` and its siblings opt out. A
+  /// caller holding a `Parser` of its own records by default, because that is how
+  /// the reparse after it decides what to reuse.
+  let collectsLookaheadRanges: Bool
+
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
   private let lookaheadTrackerOwner: LookaheadTrackerOwner
 
@@ -243,7 +252,8 @@ public struct Parser {
     arena: ParsingRawSyntaxArena?,
     copySource: Bool,
     swiftVersion: SwiftVersion?,
-    languageFeatures: LanguageFeatures
+    languageFeatures: LanguageFeatures,
+    collectsLookaheadRanges: Bool
   ) {
     // A full parse allocates in proportion to the source, so the arena can size
     // its slabs for it. An incremental reparse allocates for what it re-lexes,
@@ -254,6 +264,10 @@ public struct Parser {
         parseTriviaFunction: TriviaParser.parseTrivia,
         sourceByteCount: parseTransition == nil ? input.count : nil
       )
+
+    // An incremental parse records whatever the caller asked for: the reparse after
+    // it decides what to reuse from what this one records.
+    self.collectsLookaheadRanges = collectsLookaheadRanges || parseTransition != nil
 
     // Each token's text is copied into the token's own node, so nothing in the
     // tree points into the buffer being lexed and the whole source does not need
@@ -277,6 +291,12 @@ public struct Parser {
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
     self.lexerStateAllocator = Lexer.StateAllocator()
     self.nodeListAllocator = RawSyntaxNodeListAllocator()
+    // Only a full parse: an incremental one records only the nodes it re-parses.
+    // A node is registered roughly every 90 bytes of source; round that down so a
+    // file denser than average still does not have to grow the table.
+    if self.collectsLookaheadRanges, parseTransition == nil {
+      self.arena.lookaheadLengths.reserveCapacity(input.count / 80)
+    }
 
     self.lexemes = Lexer.tokenize(
       input,
@@ -309,7 +329,8 @@ public struct Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
-    languageFeatures: LanguageFeatures = []
+    languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = true
   ) {
     var input = input
     input.makeContiguousUTF8()
@@ -324,7 +345,8 @@ public struct Parser {
         // copied into a parser-owned buffer.
         copySource: true,
         swiftVersion: swiftVersion,
-        languageFeatures: languageFeatures
+        languageFeatures: languageFeatures,
+        collectsLookaheadRanges: collectsLookaheadRanges
       )
     }
   }
@@ -349,7 +371,8 @@ public struct Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
-    languageFeatures: LanguageFeatures = []
+    languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = true
   ) {
     // Copy the source so the caller may free `input` after this initializer
     // returns.
@@ -360,7 +383,8 @@ public struct Parser {
       arena: nil,
       copySource: true,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      collectsLookaheadRanges: collectsLookaheadRanges
     )
   }
 
@@ -373,7 +397,8 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     arena: ParsingRawSyntaxArena,
     swiftVersion: SwiftVersion? = nil,
-    languageFeatures: LanguageFeatures = []
+    languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = true
   ) {
     // Copy the source so the caller may free `input` after this initializer
     // returns, and so the resulting tree does not depend on `input` (its tokens
@@ -385,7 +410,8 @@ public struct Parser {
       arena: arena,
       copySource: true,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      collectsLookaheadRanges: collectsLookaheadRanges
     )
   }
 
@@ -409,6 +435,7 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
     languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = true,
     body: (inout Parser) -> T
   ) -> T {
     var parser = Parser(
@@ -418,7 +445,8 @@ public struct Parser {
       arena: nil,
       copySource: false,
       swiftVersion: swiftVersion,
-      languageFeatures: languageFeatures
+      languageFeatures: languageFeatures,
+      collectsLookaheadRanges: collectsLookaheadRanges
     )
     return body(&parser)
   }
@@ -437,6 +465,7 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil,
     languageFeatures: LanguageFeatures = [],
+    collectsLookaheadRanges: Bool = true,
     body: (inout Parser) -> T
   ) -> T {
     var input = input
@@ -448,6 +477,7 @@ public struct Parser {
         parseTransition: parseTransition,
         swiftVersion: swiftVersion,
         languageFeatures: languageFeatures,
+        collectsLookaheadRanges: collectsLookaheadRanges,
         body: body
       )
     }

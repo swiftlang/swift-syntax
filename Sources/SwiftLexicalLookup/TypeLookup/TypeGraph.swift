@@ -19,13 +19,18 @@ private import SwiftDiagnostics
 import SwiftDiagnostics
 #endif
 
-/// A directed acyclic graph where type members are nodes and extensions are edges.
+/// A directed acyclic graph where type members (`Base > Name`) are nodes and
+/// dependencies are edges, each labeled with the declaration group that
+/// introduces its target member (see `TypeGraph.md` > The conceptual graph).
 ///
-///
-/// Note: This graph is complex because extension binding depends on type members, e.g.
-///       ResolvedType>TypeMember because the resolved type might be invalid or on alias.
-///       However, we also keep track of nominal types because they might be introduced by
-///       extensions and we crucially resolve to them and need a unique reference to each.
+/// Note: The graph is stored compactly. We only store:
+///       1. Admitted nominal types (`namesToTypes`), because resolution must
+///          produce a unique reference to each nominal type.
+///       2. The state of each admitted extension (`extensionsToState`), because
+///          extension binding is incremental, so we must quickly admit and
+///          evict extensions.
+///       `TypeResolver` recovers the other members (type aliases, redeclarations,
+///       missing members) from the type tables on demand.
 ///
 /// Complexity
 /// ==========
@@ -538,8 +543,6 @@ extension TypeGraph {
 
     /// In `_removeExtension`, the extension isn't admitted.
     case invalidExtension
-    /// In `_removeExtension`, the given extension is already non-admitted.
-    case extensionReeviction
     /// In `_removeExtension`, the given extension's type members still have dependents.
     case remainingExtensionDependents
     /// In `_removeExtension`, the given extension still has admitted nominal member types.
@@ -554,8 +557,8 @@ extension TypeGraph {
     /// Explanation: Without advancing, we'll infinitely descend into the same decl.
     case cycleDetectorRedescent
 
-    // In `ExtensionDependency.init(dependencyTypeName:members:)`, the given
-    // `members` is empty.
+    /// In `ExtensionDependency.init(dependencyTypeName:members:)`, the given
+    /// `members` is empty.
     case emptyDependencyMembers
   }
 
@@ -685,7 +688,7 @@ extension TypeGraph.ExtensionState: CustomDebugStringConvertible {
         dependencies: [
           \(dependenciesDescriptions)
         ],
-        resolvedType: \(indentedTypeDescription))
+        resolvedType: \(indentedTypeDescription)
       )
       """
   }

@@ -76,7 +76,7 @@ public enum FixItApplier {
 
       return SourceEdit(
         range: AbsolutePosition(utf8Offset: relativeStart)..<AbsolutePosition(utf8Offset: relativeEnd),
-        replacement: edit.replacement
+        replacement: edit.replacementBytes
       )
     }
 

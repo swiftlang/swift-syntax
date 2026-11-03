@@ -931,7 +931,7 @@ extension Parser {
   }
 
   mutating func atWhereClauseListTerminator() -> Bool {
-    return self.at(.leftBrace)
+    return self.languageFeatures.contains(.trailingComma) && self.at(.leftBrace)
   }
 }
 

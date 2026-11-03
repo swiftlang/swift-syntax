@@ -82,7 +82,7 @@ function(add_swift_syntax_library name)
   set_target_properties(${target} PROPERTIES
     Swift_MODULE_NAME ${name}
     Swift_MODULE_DIRECTORY ${module_dir}
-    INTERFACE_INCLUDE_DIRECTORIES ${module_dir}
+    INTERFACE_INCLUDE_DIRECTORIES "$<BUILD_INTERFACE:${module_dir}>;$<INSTALL_INTERFACE:lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}>"
   )
 
   target_compile_options("${target}" PRIVATE
@@ -136,11 +136,26 @@ function(add_swift_syntax_library name)
       )
 
       # Install the module files.
-      install(
-        DIRECTORY ${module_base}
-        DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-        FILES_MATCHING PATTERN "*.swiftinterface"
-      )
+      if(SWIFTSYNTAX_EMIT_MODULE)
+        install(
+          DIRECTORY ${module_base}
+          DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+          FILES_MATCHING
+            PATTERN "*.swiftinterface"
+            PATTERN "*.swiftmodule"
+            PATTERN "*.swiftdoc"
+        )
+      else()
+        install(
+          FILES ${module_base}
+          DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+        )
+        install(
+          FILES "${module_dir}/${name}.swiftdoc"
+          DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+          OPTIONAL
+        )
+      endif()
     else()
       set_property(GLOBAL APPEND PROPERTY SWIFT_EXPORTS ${target})
     endif()

@@ -8,6 +8,10 @@
 
 cmake_minimum_required(VERSION 3.29)
 
+if(POLICY CMP0195)
+  cmake_policy(SET CMP0195 NEW)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 project(SwiftSyntax LANGUAGES C Swift)

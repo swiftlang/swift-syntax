@@ -60,6 +60,10 @@ enum IfConfigFunctions: String {
   /// via `_ptrauth(<name>)`.
   case _ptrauth
 
+  /// A check for a specific ISA/CPU feature in the module codegen target baseline (e.g., avx2) via
+  /// `_hasTargetFeature("<name>")`.
+  case _hasTargetFeature
+
   /// An unsupported function used by C preprocessor macros (e.g. `#if defined(FOO)`)
   case defined
 
@@ -72,7 +76,8 @@ enum IfConfigFunctions: String {
       return true
 
     case .hasAttribute, .hasFeature, .canImport, .os, .arch, .targetEnvironment,
-      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, .objectFormat, ._runtime, ._ptrauth, .defined:
+      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, .objectFormat, ._runtime, ._ptrauth,
+      ._hasTargetFeature, .defined:
       return false
     }
   }

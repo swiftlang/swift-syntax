@@ -47,16 +47,26 @@ extension BracedSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `BracedSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: BracedSyntax.Protocol) -> Bool {
     return self.asProtocol(BracedSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `BracedSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: BracedSyntax.Protocol) -> BracedSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? BracedSyntax
+    #endif
   }
 }
 
@@ -120,16 +130,26 @@ extension DeclGroupSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `DeclGroupSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: DeclGroupSyntax.Protocol) -> Bool {
     return self.asProtocol(DeclGroupSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `DeclGroupSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: DeclGroupSyntax.Protocol) -> DeclGroupSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? DeclGroupSyntax
+    #endif
   }
 }
 
@@ -181,16 +201,26 @@ extension EffectSpecifiersSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `EffectSpecifiersSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: EffectSpecifiersSyntax.Protocol) -> Bool {
     return self.asProtocol(EffectSpecifiersSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `EffectSpecifiersSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: EffectSpecifiersSyntax.Protocol) -> EffectSpecifiersSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? EffectSpecifiersSyntax
+    #endif
   }
 }
 
@@ -269,16 +299,26 @@ extension FreestandingMacroExpansionSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `FreestandingMacroExpansionSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> Bool {
     return self.asProtocol(FreestandingMacroExpansionSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `FreestandingMacroExpansionSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> FreestandingMacroExpansionSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? FreestandingMacroExpansionSyntax
+    #endif
   }
 }
 
@@ -308,16 +348,26 @@ extension NamedDeclSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `NamedDeclSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: NamedDeclSyntax.Protocol) -> Bool {
     return self.asProtocol(NamedDeclSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `NamedDeclSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: NamedDeclSyntax.Protocol) -> NamedDeclSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax
+    #endif
   }
 }
 
@@ -352,16 +402,26 @@ extension MissingNodeSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `MissingNodeSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: MissingNodeSyntax.Protocol) -> Bool {
     return self.asProtocol(MissingNodeSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `MissingNodeSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: MissingNodeSyntax.Protocol) -> MissingNodeSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? MissingNodeSyntax
+    #endif
   }
 }
 
@@ -399,16 +459,26 @@ extension ParenthesizedSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `ParenthesizedSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: ParenthesizedSyntax.Protocol) -> Bool {
     return self.asProtocol(ParenthesizedSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `ParenthesizedSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: ParenthesizedSyntax.Protocol) -> ParenthesizedSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? ParenthesizedSyntax
+    #endif
   }
 }
 
@@ -435,16 +505,26 @@ extension WithAttributesSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithAttributesSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: WithAttributesSyntax.Protocol) -> Bool {
     return self.asProtocol(WithAttributesSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithAttributesSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: WithAttributesSyntax.Protocol) -> WithAttributesSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithAttributesSyntax
+    #endif
   }
 }
 
@@ -471,16 +551,26 @@ extension WithCodeBlockSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithCodeBlockSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: WithCodeBlockSyntax.Protocol) -> Bool {
     return self.asProtocol(WithCodeBlockSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithCodeBlockSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: WithCodeBlockSyntax.Protocol) -> WithCodeBlockSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithCodeBlockSyntax
+    #endif
   }
 }
 
@@ -517,16 +607,26 @@ extension WithGenericParametersSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithGenericParametersSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: WithGenericParametersSyntax.Protocol) -> Bool {
     return self.asProtocol(WithGenericParametersSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithGenericParametersSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: WithGenericParametersSyntax.Protocol) -> WithGenericParametersSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithGenericParametersSyntax
+    #endif
   }
 }
 
@@ -553,16 +653,26 @@ extension WithModifiersSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithModifiersSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: WithModifiersSyntax.Protocol) -> Bool {
     return self.asProtocol(WithModifiersSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithModifiersSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: WithModifiersSyntax.Protocol) -> WithModifiersSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithModifiersSyntax
+    #endif
   }
 }
 
@@ -589,16 +699,26 @@ extension WithOptionalCodeBlockSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithOptionalCodeBlockSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> Bool {
     return self.asProtocol(WithOptionalCodeBlockSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithOptionalCodeBlockSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> WithOptionalCodeBlockSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithOptionalCodeBlockSyntax
+    #endif
   }
 }
 
@@ -625,16 +745,26 @@ extension WithStatementsSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithStatementsSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: WithStatementsSyntax.Protocol) -> Bool {
     return self.asProtocol(WithStatementsSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithStatementsSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: WithStatementsSyntax.Protocol) -> WithStatementsSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithStatementsSyntax
+    #endif
   }
 }
 
@@ -664,16 +794,26 @@ extension WithTrailingCommaSyntax {
 extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithTrailingCommaSyntax`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: WithTrailingCommaSyntax.Protocol) -> Bool {
     return self.asProtocol(WithTrailingCommaSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithTrailingCommaSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func asProtocol(_: WithTrailingCommaSyntax.Protocol) -> WithTrailingCommaSyntax? {
+    #if !hasFeature(Embedded)
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithTrailingCommaSyntax
+    #endif
   }
 }
 

@@ -128,12 +128,14 @@ public struct TokenSequence: Sequence, Sendable {
   }
 }
 
+#if !hasFeature(Embedded)
 extension TokenSequence: CustomReflectable {
   /// A custom mirror for ``TokenSequence`` that shows all elements in the sequence.
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { $0 })
   }
 }
+#endif
 
 /// Reverse sequence of tokens that are part of the provided Syntax node.
 public struct ReversedTokenSequence: Sequence, Sendable {
@@ -185,9 +187,11 @@ public struct ReversedTokenSequence: Sequence, Sendable {
   }
 }
 
+#if !hasFeature(Embedded)
 extension ReversedTokenSequence: CustomReflectable {
   /// A custom mirror for ``ReversedTokenSequence`` that shows all elements in the sequence.
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { $0 })
   }
 }
+#endif

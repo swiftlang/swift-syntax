@@ -1525,6 +1525,7 @@ extension RawSyntax: CustomDebugStringConvertible {
   }
 }
 
+#if !hasFeature(Embedded)
 extension RawSyntax: CustomReflectable {
   @_spi(RawSyntax)
   public var customMirror: Mirror {
@@ -1541,6 +1542,7 @@ extension RawSyntax: CustomReflectable {
     return Mirror(self, unlabeledChildren: mirrorChildren)
   }
 }
+#endif
 
 enum RawSyntaxView {
   case token(RawSyntaxTokenView)

@@ -59,7 +59,11 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Check whether the non-type erased version of this syntax node conforms to
         /// `\(trait.protocolName)`.
-        /// Note that this will incur an existential conversion.
+        ///
+        ///  - Note: This will incur an existential conversion. Hence,
+        ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+        ///    with a specific syntax type instead.
+        @_unavailableInEmbedded
         public func isProtocol(_: \(trait.protocolName).Protocol) -> Bool {
           return self.asProtocol(\(trait.protocolName).self) != nil
         }
@@ -70,9 +74,15 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Return the non-type erased version of this syntax node if it conforms to
         /// `\(trait.protocolName)`. Otherwise return `nil`.
-        /// Note that this will incur an existential conversion.
+        ///
+        ///  - Note: This will incur an existential conversion. Hence,
+        ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+        ///    with a specific syntax type instead.
+        @_unavailableInEmbedded
         public func asProtocol(_: \(trait.protocolName).Protocol) -> \(trait.protocolName)? {
+          #if !hasFeature(Embedded)
           return Syntax(self).asProtocol(SyntaxProtocol.self) as? \(trait.protocolName)
+          #endif
         }
         """
       )

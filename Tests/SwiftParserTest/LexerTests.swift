@@ -708,6 +708,33 @@ class LexerTests: ParserTestCase {
     )
   }
 
+  func testConflictLexingTokenAfterPerforceMarker() {
+    // The line after the terminator must still be lexed.
+    assertLexemes(
+      """
+      1️⃣>>>> ORIGINAL
+      var a = 1
+      <<<<
+      print
+      """,
+      lexemes: [
+        LexemeSpec(
+          .identifier,
+          leading:
+            """
+            >>>> ORIGINAL
+            var a = 1
+            <<<<
+
+            """,
+          text: "print",
+          diagnostic: "source control conflict marker in source file",
+          flags: [.isAtStartOfLine]
+        )
+      ]
+    )
+  }
+
   func testUnicodeStringLiteralLexing() {
     assertLexemes(
       #"""

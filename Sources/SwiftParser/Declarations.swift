@@ -161,7 +161,9 @@ extension Parser.Lookahead {
       {
         hasModifier = true
         self.eat(handle)
-        if modifierKind != .open && self.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
+        if modifierKind != .open && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
+          && modifierKind.canHaveParenthesizedArgument
+        {
           // When determining whether we are at a declaration, don't consume anything in parentheses after 'open'
           // so we don't consider a function call to open as a decl modifier. This matches the C++ parser.
           self.consumeAnyToken()

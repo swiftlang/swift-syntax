@@ -277,6 +277,18 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testNonisolatedFollowedByParenOnNextLine() {
+    // The '(' is not on the same line, so `nonisolated` is not a modifier.
+    assertParse(
+      """
+      func f() {
+        nonisolated
+        (42)
+      }
+      """
+    )
+  }
+
   func testNonisolatedNonSendingParsing() {
     assertParse(
       """

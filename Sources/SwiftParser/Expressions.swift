@@ -517,6 +517,27 @@ extension Parser {
         )
       )
 
+    case (.send, let handle)?:
+      // 'send' is a common identifier, so only treat it as a keyword when it
+      // is followed by an expression on the same line, e.g. 'send x.f()',
+      // but not 'send(x)' or 'send = 1'
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
+        break
+      }
+
+      let sendTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(
+        flavor: flavor,
+        pattern: pattern
+      )
+      return RawExprSyntax(
+        RawSendExprSyntax(
+          sendKeyword: sendTok,
+          expression: sub,
+          arena: self.arena
+        )
+      )
+
     case (._borrow, let handle)?:
       assert(self.languageFeatures.contains(.oldOwnershipOperatorSpellings))
       fallthrough

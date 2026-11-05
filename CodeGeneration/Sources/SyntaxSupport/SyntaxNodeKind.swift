@@ -259,6 +259,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case returnStmt
   case sameTypeRequirement
   case sectionAttributeArgument
+  case sendExpr
   case sequenceExpr
   case simpleTypeSpecifier
   case simpleStringLiteralExpr

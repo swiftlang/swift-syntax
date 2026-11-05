@@ -1963,6 +1963,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: SendExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: SendExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

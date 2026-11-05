@@ -248,22 +248,26 @@ final class SendExpressionTests: ParserTestCase {
     )
   }
 
-  func testSendNotAKeywordBeforeOtherKeywords() {
-    // Only an identifier, 'self' or a '$' identifier makes 'send' a keyword
+  func testSendBeforeTry() {
+    // 'send' uses the standard contextual keyword disambiguation, so it is a
+    // keyword before anything that can start an expression, e.g. 'try'
     assertParse(
       """
-      send1️⃣ try x.f()
+      send try x.f()
       """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
+      substructure: SendExprSyntax(
+        expression: TryExprSyntax(
+          expression: FunctionCallExprSyntax(
+            calledExpression: MemberAccessExprSyntax(
+              base: DeclReferenceExprSyntax(baseName: .identifier("x")),
+              declName: DeclReferenceExprSyntax(baseName: .identifier("f"))
+            ),
+            leftParen: .leftParenToken(),
+            arguments: [],
+            rightParen: .rightParenToken()
+          )
         )
-      ],
-      fixedSource: """
-        send
-        try x.f()
-        """
+      )
     )
   }
 

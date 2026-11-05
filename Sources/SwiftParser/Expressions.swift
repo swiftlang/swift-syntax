@@ -519,13 +519,9 @@ extension Parser {
 
     case (.send, let handle)?:
       // 'send' is a common identifier, so only treat it as a keyword when it
-      // is followed on the same line by an identifier, 'self' or a '$'
-      // identifier, e.g. 'send x.f()', but not 'send(x)' or 'send = 1'
-      if !self.peek(
-        isAt: TokenSpec(.identifier, allowAtStartOfLine: false),
-        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-        TokenSpec(.self, allowAtStartOfLine: false)
-      ) {
+      // is followed by an expression on the same line, e.g. 'send x.f()',
+      // but not 'send(x)' or 'send = 1'
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break
       }
 

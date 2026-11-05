@@ -366,7 +366,9 @@ extension Parser {
     }
 
     var base: RawTypeSyntax
-    switch self.isAtModuleSelector() ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec {
+    switch self.isAtModuleSelector() || self.atLegacyProtocolComposition()
+      ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec
+    {
     case .Self, .Any, .identifier:
       base = RawTypeSyntax(self.parseTypeIdentifier())
     case .leftParen:
@@ -524,6 +526,18 @@ extension Parser {
   }
 
   /// Parse a type identifier.
+  /// Whether this is the start of a `protocol<...>` composition, which was
+  /// removed from the language.
+  mutating func atLegacyProtocolComposition() -> Bool {
+    guard self.at(.keyword(.protocol)) else {
+      return false
+    }
+    return self.withLookahead {
+      $0.consumeAnyToken()
+      return $0.at(prefix: "<")
+    }
+  }
+
   mutating func parseTypeIdentifier() -> RawIdentifierTypeSyntax {
     let (moduleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
 
@@ -533,7 +547,13 @@ extension Parser {
 
     let unexpectedBeforeName: RawUnexpectedNodesSyntax?
     let name: RawTokenSyntax
-    if moduleSelector == nil {
+    if moduleSelector == nil && self.atLegacyProtocolComposition() {
+      // `protocol<A, B>` was removed. Parse it as a generic type with an
+      // unexpected `protocol` keyword so that it can be diagnosed without losing
+      // the rest of the file.
+      unexpectedBeforeName = RawUnexpectedNodesSyntax([RawSyntax(self.consumeAnyToken())], arena: self.arena)
+      name = missingToken(.identifier)
+    } else if moduleSelector == nil {
       (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
     } else {
       unexpectedBeforeName = nil

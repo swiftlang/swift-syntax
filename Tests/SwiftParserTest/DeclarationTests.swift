@@ -277,6 +277,20 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testNonisolatedFollowedByParenOnNextLine() {
+    // The '(' is not on the same line, so `nonisolated` is not a modifier, even
+    // though a declaration follows the parenthesized expression.
+    assertParse(
+      """
+      func f() {
+        nonisolated
+        (42)
+        nonisolated(nonsending) func g() async {}
+      }
+      """
+    )
+  }
+
   func testNonisolatedNonSendingParsing() {
     assertParse(
       """

@@ -2930,11 +2930,8 @@ extension Lexer.Cursor {
         continue
       }
 
-      let advanced = restOfBuffer.input.baseAddress?.advanced(by: terminator.count)
-      return Lexer.Cursor(
-        input: .init(start: advanced, count: restOfBuffer.input.count - terminator.count),
-        isAtStartOfInput: false
-      )
+      // Return the start of the terminator, so the caller skips just its line.
+      return restOfBuffer
     }
     return nil
   }

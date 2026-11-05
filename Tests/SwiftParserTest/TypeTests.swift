@@ -30,6 +30,53 @@ final class TypeTests: ParserTestCase {
     )
   }
 
+  func testLegacyProtocolComposition() {
+    // `protocol<A, B>` was removed from the language. It is parsed as a generic
+    // type so the declarations that follow are not lost.
+    assertParse(
+      """
+      let a: 1️⃣protocol<P1, P2>?
+      let b: 2️⃣protocol<>
+      func f(_: 3️⃣protocol<P1>) {}
+      typealias T = 4️⃣protocol< >
+      let c = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'protocol<...>' composition syntax has been removed; join the type constraints using '&'",
+          highlight: "protocol<P1, P2>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'protocol<>' syntax has been removed; use 'Any' instead",
+          highlight: "protocol<>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "'protocol<...>' composition syntax has been removed and is not needed here",
+          highlight: "protocol<P1>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "'protocol<>' syntax has been removed; use 'Any' instead",
+          highlight: "protocol< >",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+      ],
+      fixedSource: """
+        let a: (P1 & P2)?
+        let b: Any
+        func f(_: P1) {}
+        typealias T = Any
+        let c = 0
+        """
+    )
+  }
+
   func testClosureParsing() {
     assertParse("let a: (a, b) -> c")
 

@@ -1470,8 +1470,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         replacement = "Any"
       } else if components.count > 1,
         let next = node.lastToken(viewMode: .sourceAccurate)?.nextToken(viewMode: .sourceAccurate),
-        (next.tokenKind == .postfixQuestionMark || next.tokenKind == .exclamationMark
-          ? !next.leadingTrivia.contains(where: { $0.isNewline }) : next.tokenKind == .period)
+        next.tokenKind == .postfixQuestionMark || next.tokenKind == .exclamationMark
+          ? !next.leadingTrivia.contains(where: { $0.isNewline }) : next.tokenKind == .period
       {
         // A composition followed by a postfix type operator needs parentheses.
         replacement = "(" + replacement + ")"

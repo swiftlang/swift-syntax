@@ -366,7 +366,9 @@ extension Parser {
     }
 
     var base: RawTypeSyntax
-    switch self.isAtModuleSelector() || self.atLegacyProtocolComposition() ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec {
+    switch self.isAtModuleSelector() || self.atLegacyProtocolComposition()
+      ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec
+    {
     case .Self, .Any, .identifier:
       base = RawTypeSyntax(self.parseTypeIdentifier())
     case .leftParen:

@@ -966,6 +966,31 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testMacroRoleArgumentsTrailingComma() {
+    // SE-0439: trailing commas are allowed in argument lists, which includes
+    // the argument list of macro role attributes.
+    assertParse(
+      """
+      @attached(member, names: named(test),)
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @attached(member, names: named(test), conformances: P,)
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @freestanding(declaration, names: named(test),)
+      macro m()
+      """
+    )
+  }
+
   func testAttachedExtensionAttribute() {
     assertParse(
       """

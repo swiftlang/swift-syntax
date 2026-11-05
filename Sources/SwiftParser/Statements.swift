@@ -1108,6 +1108,27 @@ extension Parser.Lookahead {
     return lookahead.at(anyIn: SwitchCaseStart.self) != nil
   }
 
+  /// Whether the statements of a switch case end here: at the next case, at the
+  /// end of the `switch` or of an `#if` clause, or at an `#if` that encloses more
+  /// cases.
+  mutating func atEndOfSwitchCaseBody() -> Bool {
+    if self.at(.rightBrace, .keyword(.case), .keyword(.default)) || self.at(.poundElseif, .poundElse, .poundEndif) {
+      return true
+    }
+    return self.withLookahead { $0.atStartOfConditionalSwitchCases() }
+  }
+
+  /// Whether the statements of a switch case would end before the next `#if`.
+  mutating func endsSwitchCaseBodyBeforePoundIf() -> Bool {
+    while !self.at(.endOfFile, .poundIf) {
+      if self.atEndOfSwitchCaseBody() {
+        return true
+      }
+      _ = self.consumeAnyToken()
+    }
+    return false
+  }
+
   mutating func atStartOfConditionalSwitchCases() -> Bool {
     guard self.at(.poundIf) else {
       return self.atStartOfSwitchCase()

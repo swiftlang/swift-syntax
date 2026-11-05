@@ -2535,9 +2535,9 @@ extension Parser {
           ),
           allocator: self.nodeListAllocator
         )
-      } else if self.canRecoverTo(.poundIf) != nil {
+      } else if self.canRecoverTo(.poundIf) != nil && !self.withLookahead({ $0.endsSwitchCaseBodyBeforePoundIf() }) {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
-        // clauses.
+        // clauses. Recover to one further on only if no case is skipped.
         elements.append(
           .ifConfigDecl(
             self.parsePoundIfDirective({ parser in
@@ -2591,15 +2591,9 @@ extension Parser {
   }
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
-    parseCodeBlockItemList(until: {
-      if $0.at(.rightBrace, .keyword(.case), .keyword(.default)) || $0.atEndOfIfConfigClauseBody() {
-        return true
-      }
-      if $0.withLookahead({ $0.atStartOfConditionalSwitchCases() }) {
-        return true
-      }
-      return false
-    })
+    parseCodeBlockItemList {
+      $0.atEndOfIfConfigClauseBody() || $0.withLookahead({ $0.atEndOfSwitchCaseBody() })
+    }
   }
 
   /// Parse a single switch case clause.

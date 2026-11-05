@@ -560,6 +560,38 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testStatementInSwitchBeforeDistantPoundIf() {
+    // Recovering to a '#if' must not take the cases in between, and the rest of
+    // the file, as unexpected code before it.
+    assertParse(
+      """
+      switch x {
+        1️⃣x = 1
+      default:
+        x = 0
+      }
+      #if true
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          x = 1
+        default:
+          x = 0
+        }
+        #if true
+        #endif
+        """
+    )
+  }
+
   func testBogusSwitchStatement() {
     assertParse(
       """

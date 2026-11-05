@@ -430,6 +430,8 @@ extension SyntaxKind {
       return "wildcard pattern"
     case .yieldStmt:
       return "'yield' statement"
+    case .yieldType:
+      return "yield type"
     case .yieldedExpressionList:
       return "yield list"
     default:

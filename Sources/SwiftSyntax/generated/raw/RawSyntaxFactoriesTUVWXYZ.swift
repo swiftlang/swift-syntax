@@ -817,6 +817,37 @@ extension RawSyntax {
     }
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  @_spi(RawSyntax)
+  public static func makeYieldType(
+    _ unexpectedBeforeYieldKeyword: RawSyntax?,
+    yieldKeyword: RawSyntax,
+    _ unexpectedBetweenYieldKeywordAndSpecifier: RawSyntax?,
+    specifier: RawSyntax?,
+    _ unexpectedBetweenSpecifierAndType: RawSyntax?,
+    type: RawSyntax,
+    _ unexpectedAfterType: RawSyntax?,
+    arena: __shared RawSyntaxArena
+  ) -> RawSyntax {
+    let hasUnexpected = unexpectedBeforeYieldKeyword != nil || unexpectedBetweenYieldKeywordAndSpecifier != nil || unexpectedBetweenSpecifierAndType != nil || unexpectedAfterType != nil
+    return RawSyntax.makeLayout(
+      kind: .yieldType,
+      childCount: 3,
+      storage: hasUnexpected ? .layoutWithUnexpected : .layout,
+      arena: arena
+    ) { layout in
+      layout.initializeElement(at: 0, to: yieldKeyword)
+      layout.initializeElement(at: 1, to: specifier)
+      layout.initializeElement(at: 2, to: type)
+      if hasUnexpected {
+        layout.initializeElement(at: 3, to: unexpectedBeforeYieldKeyword)
+        layout.initializeElement(at: 4, to: unexpectedBetweenYieldKeywordAndSpecifier)
+        layout.initializeElement(at: 5, to: unexpectedBetweenSpecifierAndType)
+        layout.initializeElement(at: 6, to: unexpectedAfterType)
+      }
+    }
+  }
+
   @_spi(RawSyntax)
   public static func makeYieldedExpression(
     _ unexpectedBeforeExpression: RawSyntax?,

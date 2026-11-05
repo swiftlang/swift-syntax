@@ -3579,6 +3579,20 @@ open class SyntaxVisitor {
   open func visitPost(_ node: YieldStmtSyntax) {
   }
 
+  /// Visiting `YieldTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: YieldTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `YieldTypeSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: YieldTypeSyntax) {
+  }
+
   /// Visiting ``YieldedExpressionListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5979,6 +5993,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitYieldTypeSyntaxImpl(_ node: Syntax) {
+    if visit(YieldTypeSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(YieldTypeSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitYieldedExpressionListSyntaxImpl(_ node: Syntax) {
     if visit(YieldedExpressionListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6616,6 +6638,8 @@ open class SyntaxVisitor {
       return self.visitWildcardPatternSyntaxImpl(_:)
     case .yieldStmt:
       return self.visitYieldStmtSyntaxImpl(_:)
+    case .yieldType:
+      return self.visitYieldTypeSyntaxImpl(_:)
     case .yieldedExpressionList:
       return self.visitYieldedExpressionListSyntaxImpl(_:)
     case .yieldedExpression:
@@ -7218,6 +7242,8 @@ open class SyntaxVisitor {
       self.visitWildcardPatternSyntaxImpl(node)
     case .yieldStmt:
       self.visitYieldStmtSyntaxImpl(node)
+    case .yieldType:
+      self.visitYieldTypeSyntaxImpl(node)
     case .yieldedExpressionList:
       self.visitYieldedExpressionListSyntaxImpl(node)
     case .yieldedExpression:

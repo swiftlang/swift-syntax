@@ -37,7 +37,8 @@ extension Parser {
       var (effectSpecifiers, yields) = self.parseTypeEffectSpecifiers()
       let returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
-        allowNamedOpaqueResultType: false
+        allowNamedOpaqueResultType: false,
+        allowYieldType: true
       )
 
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
@@ -979,6 +980,10 @@ extension Parser.Lookahead {
     }
 
     if self.canParseFunctionTypeArrow() {
+      if self.atYieldType() {
+        self.consumeAnyToken()
+        self.consume(ifAnyIn: YieldTypeSyntax.SpecifierOptions.self)
+      }
       return self.canParseType()
     }
     return true
@@ -1624,6 +1629,39 @@ extension Parser {
 
       return result
     }
+  }
+}
+
+extension TokenConsumer {
+  /// Whether the parser is at the result of a single-yield function: `yield`,
+  /// an optional `borrow` or `inout`, and the start of a type.
+  mutating func atYieldType() -> Bool {
+    guard self.languageFeatures.contains(.singleYieldFunctions), self.at(.keyword(.yield)) else {
+      return false
+    }
+    return self.withLookahead { lookahead in
+      lookahead.consumeAnyToken()
+      lookahead.consume(ifAnyIn: YieldTypeSyntax.SpecifierOptions.self)
+      return lookahead.canParseType()
+    }
+  }
+}
+
+extension Parser {
+  /// Parse the result of a single-yield function.
+  ///
+  ///     yield-type → 'yield' ('borrow' | 'inout')? type
+  mutating func parseYieldType() -> RawYieldTypeSyntax {
+    let (unexpectedBeforeYieldKeyword, yieldKeyword) = self.expect(.keyword(.yield))
+    let specifier = self.consume(ifAnyIn: YieldTypeSyntax.SpecifierOptions.self)
+    let type = self.parseType()
+    return RawYieldTypeSyntax(
+      unexpectedBeforeYieldKeyword,
+      yieldKeyword: yieldKeyword,
+      specifier: specifier,
+      type: type,
+      arena: self.arena
+    )
   }
 }
 

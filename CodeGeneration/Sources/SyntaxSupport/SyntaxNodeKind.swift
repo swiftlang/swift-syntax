@@ -324,6 +324,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case yieldedExpressionList
   case yieldedExpressionsClause
   case yieldStmt
+  case yieldType
 
   // Nodes that have special handling throughout the codebase
 

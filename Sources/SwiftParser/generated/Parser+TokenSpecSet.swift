@@ -4895,3 +4895,64 @@ extension VariableDeclSyntax {
     }
   }
 }
+
+extension YieldTypeSyntax {
+  @_spi(Diagnostics)
+  public enum SpecifierOptions: TokenSpecSet {
+    case borrow
+    case `inout`
+
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .borrow:
+          .borrow
+        case .inout:
+          .inout
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
+        return nil
+      }
+      self = match
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.borrow):
+        self = .borrow
+      case TokenSpec(.inout):
+        self = .inout
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .borrow:
+        return .keyword(.borrow)
+      case .inout:
+        return .keyword(.inout)
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .borrow:
+        return .keyword(.borrow)
+      case .inout:
+        return .keyword(.inout)
+      }
+    }
+  }
+}

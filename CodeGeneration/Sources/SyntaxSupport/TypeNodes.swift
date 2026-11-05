@@ -789,4 +789,39 @@ public let TYPE_NODES: [Node] = [
     nameForDiagnostics: nil,
     elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier, .nonisolatedTypeSpecifier]
   ),
+
+  Node(
+    kind: .yieldType,
+    base: .type,
+    experimentalFeature: .singleYieldFunctions,
+    nameForDiagnostics: "yield type",
+    documentation: """
+      The type yielded by a single-yield function, written in its result position.
+
+      ### Examples
+
+      ```swift
+      func f() -> yield T
+      func f() -> yield borrow T
+      func f() -> yield inout T
+      ```
+      """,
+    children: [
+      Child(
+        name: "yieldKeyword",
+        kind: .token(choices: [.keyword(.yield)])
+      ),
+      Child(
+        name: "specifier",
+        kind: .token(choices: [.keyword(.borrow), .keyword(.inout)]),
+        documentation: "How the value is yielded. Without a specifier, the value is yielded owned.",
+        isOptional: true
+      ),
+      Child(
+        name: "type",
+        kind: .node(kind: .type),
+        nameForDiagnostics: "yielded type"
+      ),
+    ]
+  ),
 ]

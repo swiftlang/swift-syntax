@@ -2429,6 +2429,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: YieldTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: YieldTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: YieldedExpressionListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

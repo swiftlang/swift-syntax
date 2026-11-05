@@ -1479,7 +1479,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   static func isKindOf(_ kind: SyntaxKind) -> Bool {
     switch kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType, .yieldType:
       return true
     default:
       return false
@@ -1565,7 +1565,8 @@ public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
       .node(PackExpansionTypeSyntax.self),
       .node(SomeOrAnyTypeSyntax.self),
       .node(SuppressedTypeSyntax.self),
-      .node(TupleTypeSyntax.self)
+      .node(TupleTypeSyntax.self),
+      .node(YieldTypeSyntax.self)
     ])
   }
 }
@@ -1914,6 +1915,7 @@ extension Syntax {
       .node(WhileStmtSyntax.self),
       .node(WildcardPatternSyntax.self),
       .node(YieldStmtSyntax.self),
+      .node(YieldTypeSyntax.self),
       .node(YieldedExpressionListSyntax.self),
       .node(YieldedExpressionSyntax.self),
       .node(YieldedExpressionsClauseSyntax.self)

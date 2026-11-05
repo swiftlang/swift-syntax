@@ -12,6 +12,7 @@
 
 internal import SwiftDiagnostics
 internal import SwiftSyntax
+internal import SwiftSyntaxMacros
 
 /// Errors in macro handing.
 enum MacroExpansionError {

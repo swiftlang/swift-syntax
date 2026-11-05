@@ -13,6 +13,7 @@
 @_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
 import SwiftIfConfig
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import XCTest
 

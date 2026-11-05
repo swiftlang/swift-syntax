@@ -10,8 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class AttributeTests: ParserTestCase {

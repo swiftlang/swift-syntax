@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 public import SwiftSyntax
+internal import SwiftSyntaxBuilder
 public import SwiftSyntaxMacros
 
 /// The information of a macro declaration, to be used with `assertMacroExpansion`.

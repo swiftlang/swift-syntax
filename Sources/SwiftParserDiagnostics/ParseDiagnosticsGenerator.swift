@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+internal import SwiftBasicFormat
 public import SwiftDiagnostics
 @_spi(Diagnostics) internal import SwiftParser
 @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax

@@ -13,6 +13,7 @@
 import SwiftBasicFormat
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Default indent when we have to introduce indentation but have no context
 /// to get it right.

@@ -13,6 +13,7 @@
 @_spi(_QualifiedLookup) @_spi(_QualifiedLookupTests) import SwiftLexicalLookup
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 /// An annotation (used for ``LexicalMatcher`` definitions and expectations)

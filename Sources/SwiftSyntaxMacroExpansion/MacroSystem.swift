@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+internal import SwiftBasicFormat
 internal import SwiftDiagnostics
 internal import SwiftOperators
 @_spi(MacroExpansion) internal import SwiftParser

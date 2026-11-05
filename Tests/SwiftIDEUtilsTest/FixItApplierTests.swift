@@ -12,6 +12,7 @@
 
 @_spi(FixItApplier) import SwiftIDEUtils
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 private extension SourceEdit {

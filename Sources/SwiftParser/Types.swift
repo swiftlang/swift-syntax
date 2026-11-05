@@ -1054,6 +1054,21 @@ extension Parser.Lookahead {
       self.consumeAnyToken()
     case TokenSpec(.repeat):
       return true
+    case TokenSpec(.protocol):
+      // The removed `protocol<A, B>` composition, which is still parsed (as a
+      // generic type) so that it can be diagnosed.
+      guard
+        self.withLookahead({
+          $0.consumeAnyToken()
+          return $0.at(prefix: "<")
+        })
+      else {
+        return false
+      }
+      self.consumeAnyToken()
+      guard self.consumeGenericArguments() else {
+        return false
+      }
     default:
       return false
     }

@@ -1449,6 +1449,52 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
+  public override func visit(_ node: IdentifierTypeSyntax) -> SyntaxVisitorContinueKind {
+    // The parser reads the removed `protocol<A, B>` composition as a generic
+    // type with an unexpected `protocol` keyword.
+    if let unexpected = node.unexpectedBetweenModuleSelectorAndName,
+      unexpected.only?.as(TokenSyntax.self)?.tokenKind == .keyword(.protocol),
+      node.name.isMissing,
+      let generics = node.genericArgumentClause,
+      !handledNodes.contains(node.id)
+    {
+      let components = generics.arguments.compactMap { argument -> TypeSyntax? in
+        if case .type(let type) = argument.argument, !type.is(MissingTypeSyntax.self) {
+          return type
+        }
+        return nil
+      }
+
+      var replacement = components.map { $0.trimmedDescription }.joined(separator: " & ")
+      if components.isEmpty {
+        replacement = "Any"
+      } else if components.count > 1,
+        let next = node.lastToken(viewMode: .sourceAccurate)?.nextToken(viewMode: .sourceAccurate),
+        (next.tokenKind == .postfixQuestionMark || next.tokenKind == .exclamationMark
+          ? !next.leadingTrivia.contains(where: { $0.isNewline }) : next.tokenKind == .period)
+      {
+        // A composition followed by a postfix type operator needs parentheses.
+        replacement = "(" + replacement + ")"
+      }
+
+      addDiagnostic(
+        unexpected,
+        components.isEmpty
+          ? .legacyEmptyProtocolComposition
+          : components.count > 1 ? .legacyProtocolComposition : .legacyProtocolCompositionSingle,
+        highlights: [Syntax(node)],
+        fixIts: [
+          FixIt(
+            message: .replaceLegacyProtocolComposition,
+            changes: [.replaceText(range: node.trimmedRange, with: replacement, in: Syntax(node))]
+          )
+        ],
+        handledNodes: [unexpected.id, node.name.id] + unexpected.children(viewMode: .all).map(\.id)
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
     return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }

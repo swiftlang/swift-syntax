@@ -92,6 +92,15 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var allStatementsInSwitchMustBeCoveredByCase: Self {
     .init("all statements inside a switch must be covered by a 'case' or 'default' label")
   }
+  public static var legacyEmptyProtocolComposition: Self {
+    .init("'protocol<>' syntax has been removed; use 'Any' instead")
+  }
+  public static var legacyProtocolComposition: Self {
+    .init("'protocol<...>' composition syntax has been removed; join the type constraints using '&'")
+  }
+  public static var legacyProtocolCompositionSingle: Self {
+    .init("'protocol<...>' composition syntax has been removed and is not needed here")
+  }
   public static var ambiguousOptionalComposition: Self {
     .init("confusing use of optional after a 'some' or 'any' composition; use parentheses to clarify precedence")
   }
@@ -714,6 +723,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var insertExtraClosingPounds: Self {
     .init("insert additional closing '#' delimiters")
+  }
+  public static var replaceLegacyProtocolComposition: Self {
+    .init("replace 'protocol<...>' with a composition using '&'")
   }
   public static var parenthesizeComposition: Self {
     .init("parenthesize composition")

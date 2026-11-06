@@ -169,6 +169,8 @@ extension Parser {
     case customAttribute
     case optional
     case noArgument
+    /// Parse arguments only if the given lookahead check, evaluated at the '(', succeeds.
+    case conditional((inout Lookahead) -> Bool)
   }
 
   /// Parse the argument of an attribute, if it has one.
@@ -211,6 +213,8 @@ extension Parser {
       }
     case .noArgument:
       shouldParseArgument = false
+    case .conditional(let atArguments):
+      shouldParseArgument = self.withLookahead(atArguments)
     }
     if shouldParseArgument {
       var (unexpectedBeforeLeftParen, leftParen) = self.expect(TokenSpec(.leftParen, allowAtStartOfLine: false))
@@ -432,72 +436,9 @@ extension Parser {
 
 extension Parser {
   mutating func parseDifferentiableAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(
-      TokenSpec(.differentiable, remapping: .identifier)
-    )
-
-    // Like the C++ parser, only treat '(' as the attribute's arguments if it
-    // looks like '( id )' followed by a type, '( id (' or '( id ,'; otherwise
-    // it starts the function type of a bare '@differentiable'.
-    let hasArguments = self.withLookahead { lookahead -> Bool in
-      guard lookahead.at(.leftParen) else { return false }
-      lookahead.consumeAnyToken()
-      guard
-        lookahead.at(.identifier)
-          || lookahead.at(anyIn: DifferentiableAttributeArgumentsSyntax.KindSpecifierOptions.self) != nil
-      else {
-        return false
-      }
-      lookahead.consumeAnyToken()
-      if lookahead.at(.leftParen) || lookahead.at(.comma) {
-        return true
-      }
-      guard lookahead.consume(if: .rightParen) != nil else {
-        return false
-      }
-      return lookahead.at(.leftParen) || lookahead.at(.atSign) || lookahead.at(.identifier)
+    return parseAttribute(argumentMode: .conditional({ $0.atDifferentiableAttributeArguments() })) { parser in
+      return (nil, .differentiableArguments(parser.parseDifferentiableAttributeArguments()))
     }
-    if !hasArguments {
-      return RawAttributeSyntax(
-        unexpectedBeforeAtSign,
-        atSign: atSign,
-        unexpectedBeforeDifferentiable,
-        attributeName: RawIdentifierTypeSyntax(
-          moduleSelector: nil,
-          name: differentiable,
-          genericArgumentClause: nil,
-          arena: self.arena
-        ),
-        leftParen: nil,
-        arguments: nil,
-        rightParen: nil,
-        arena: self.arena
-      )
-    }
-
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-
-    let argument = self.parseDifferentiableAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSign: atSign,
-      unexpectedBeforeDifferentiable,
-      attributeName: RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        name: differentiable,
-        genericArgumentClause: nil,
-        arena: self.arena
-      ),
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      arguments: .differentiableArguments(argument),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
   }
 
   mutating func parseDifferentiableAttributeArguments() -> RawDifferentiableAttributeArgumentsSyntax {
@@ -1209,6 +1150,28 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
+  /// Like the C++ parser, only treat '(' as the arguments of '@differentiable' if
+  /// it looks like '( id )' followed by a type, '( id (' or '( id ,'; otherwise it
+  /// starts the function type of a bare '@differentiable'.
+  mutating func atDifferentiableAttributeArguments() -> Bool {
+    guard self.at(.leftParen) else { return false }
+    self.consumeAnyToken()
+    guard
+      self.at(.identifier)
+        || self.at(anyIn: DifferentiableAttributeArgumentsSyntax.KindSpecifierOptions.self) != nil
+    else {
+      return false
+    }
+    self.consumeAnyToken()
+    if self.at(.leftParen) || self.at(.comma) {
+      return true
+    }
+    guard self.consume(if: .rightParen) != nil else {
+      return false
+    }
+    return self.at(.leftParen) || self.at(.atSign) || self.at(.identifier)
+  }
+
   mutating func atAttributeOrSpecifierArgument(
     lastTokenHadSpace: Bool,
     forCustomAttribute: Bool = false

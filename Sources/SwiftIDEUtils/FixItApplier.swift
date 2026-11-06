@@ -17,6 +17,8 @@ public import SwiftSyntax
 public enum FixItApplier {
   /// Applies selected or all Fix-Its from the provided diagnostics to a given syntax tree.
   ///
+  /// Fix-Its that fall outside `tree` are ignored.
+  ///
   /// - Parameters:
   ///   - diagnostics: An array of `Diagnostic` objects, each containing one or more Fix-Its.
   ///   - filterByMessages: An optional array of message strings to filter which Fix-Its to apply.
@@ -34,7 +36,6 @@ public enum FixItApplier {
   ) -> String {
     let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
-    // FIXME: This assumes every fix-it is applied to a node in the 'tree', which is not guaranteed.
     let edits =
       diagnostics
       .flatMap(\.fixIts)
@@ -45,6 +46,10 @@ public enum FixItApplier {
   }
 
   /// Applies the given edits to the given syntax tree.
+  ///
+  /// Edit offsets can be absolute positions from the syntax tree that contains `tree`.
+  /// The applier adjusts these offsets to the range of `tree` and ignores edits
+  /// that fall outside `tree`.
   ///
   /// - Parameters:
   ///   - edits: The edits to apply.
@@ -58,8 +63,28 @@ public enum FixItApplier {
     to tree: some SyntaxProtocol,
     allowDuplicateInsertions: Bool = true
   ) -> String {
-    var edits = edits
     var source = tree.description
+    let treeStartOffset = tree.position.utf8Offset
+    let sourceByteCount = source.utf8.count
+
+    var edits = edits.compactMap { (edit) -> SourceEdit? in
+      guard !edit.isEmpty else {
+        return nil
+      }
+
+      let relativeStart = edit.startUtf8Offset - treeStartOffset
+      let relativeEnd = edit.endUtf8Offset - treeStartOffset
+
+      // Filter out edits that do not fall within the subtree.
+      guard relativeStart >= 0, relativeEnd <= sourceByteCount, relativeStart <= relativeEnd else {
+        return nil
+      }
+
+      return SourceEdit(
+        range: AbsolutePosition(utf8Offset: relativeStart)..<AbsolutePosition(utf8Offset: relativeEnd),
+        replacement: edit.replacementBytes
+      )
+    }
 
     for var editIndex in edits.indices {
       let edit = edits[editIndex]

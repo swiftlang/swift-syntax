@@ -282,6 +282,16 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testBareDifferentiableTypeAttribute() {
+    assertParse(
+      """
+      let a: @differentiable (Int) -> Int
+      func f(in: @differentiable (Int) -> Int) { }
+      let b: @differentiable(reverse) (Int) -> Int
+      """
+    )
+  }
+
   func testQualifiedAttribute() {
     assertParse(
       """

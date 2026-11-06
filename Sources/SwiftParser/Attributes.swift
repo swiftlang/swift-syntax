@@ -436,6 +436,46 @@ extension Parser {
     let (unexpectedBeforeDifferentiable, differentiable) = self.expect(
       TokenSpec(.differentiable, remapping: .identifier)
     )
+
+    // Like the C++ parser, only treat '(' as the attribute's arguments if it
+    // looks like '( id )' followed by a type, '( id (' or '( id ,'; otherwise
+    // it starts the function type of a bare '@differentiable'.
+    let hasArguments = self.withLookahead { lookahead -> Bool in
+      guard lookahead.at(.leftParen) else { return false }
+      lookahead.consumeAnyToken()
+      guard
+        lookahead.at(.identifier)
+          || lookahead.at(anyIn: DifferentiableAttributeArgumentsSyntax.KindSpecifierOptions.self) != nil
+      else {
+        return false
+      }
+      lookahead.consumeAnyToken()
+      if lookahead.at(.leftParen) || lookahead.at(.comma) {
+        return true
+      }
+      guard lookahead.consume(if: .rightParen) != nil else {
+        return false
+      }
+      return lookahead.at(.leftParen) || lookahead.at(.atSign) || lookahead.at(.identifier)
+    }
+    if !hasArguments {
+      return RawAttributeSyntax(
+        unexpectedBeforeAtSign,
+        atSign: atSign,
+        unexpectedBeforeDifferentiable,
+        attributeName: RawIdentifierTypeSyntax(
+          moduleSelector: nil,
+          name: differentiable,
+          genericArgumentClause: nil,
+          arena: self.arena
+        ),
+        leftParen: nil,
+        arguments: nil,
+        rightParen: nil,
+        arena: self.arena
+      )
+    }
+
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument = self.parseDifferentiableAttributeArguments()

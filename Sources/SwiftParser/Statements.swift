@@ -1119,12 +1119,13 @@ extension Parser.Lookahead {
   }
 
   /// Whether the statements of a switch case would end before the next `#if`.
+  /// Only tokens outside of any nested brackets are considered.
   mutating func endsSwitchCaseBodyBeforePoundIf() -> Bool {
     while !self.at(.endOfFile, .poundIf) {
       if self.atEndOfSwitchCaseBody() {
         return true
       }
-      _ = self.consumeAnyToken()
+      self.skipSingle()
     }
     return false
   }

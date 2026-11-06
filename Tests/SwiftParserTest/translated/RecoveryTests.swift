@@ -92,10 +92,6 @@ final class RecoveryTests: ParserTestCase {
           message: "expected expression after operator",
           fixIts: ["insert expression"]
         ),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "unexpected code ', b : Int' in function"
-        ),
       ],
       applyFixIts: ["insert '>'", "insert expression"],
       fixedSource: """

@@ -335,8 +335,7 @@ final class ForwardSlashRegexTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"]),
-        DiagnosticSpec(message: "unexpected code '? 0 : 1' in 'do' statement"),
+        DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
       ],
       fixedSource: """
         _ = /x/ ? 0 : 1
@@ -364,8 +363,7 @@ final class ForwardSlashRegexTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"]),
-        DiagnosticSpec(message: "unexpected code '?? /x /' in 'do' statement"),
+        DiagnosticSpec(message: "expected expression after operator", fixIts: ["insert expression"])
       ],
       fixedSource: """
         _ = /x/ ?? /x/

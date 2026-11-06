@@ -2592,7 +2592,7 @@ extension Parser {
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     parseCodeBlockItemList {
-      $0.atEndOfIfConfigClauseBody() || $0.withLookahead({ $0.atEndOfSwitchCaseBody() })
+      $0.atEndOfIfConfigClauseBody() || $0.withLookahead { $0.atEndOfSwitchCaseBody() }
     }
   }
 

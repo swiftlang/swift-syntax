@@ -375,6 +375,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: UnexpectedCodeDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
     // The rest of a line that follows an operator with a missing right operand
     // (e.g., `x / ? a : b`) is a consequence of the missing-operand error that
     // is already diagnosed, so don't diagnose it as unexpected code as well.

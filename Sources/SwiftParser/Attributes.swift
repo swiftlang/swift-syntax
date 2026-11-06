@@ -561,60 +561,6 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseDerivativeAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDerivative, derivative) = self.expect(TokenSpec(.derivative, remapping: .identifier))
-
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let argument = self.parseDerivativeAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSign: atSign,
-      attributeName: RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        unexpectedBeforeDerivative,
-        name: derivative,
-        genericArgumentClause: nil,
-        arena: self.arena
-      ),
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      arguments: .derivativeRegistrationArguments(argument),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
-  mutating func parseTransposeAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeTranspose, transpose) = self.expect(TokenSpec(.transpose, remapping: .identifier))
-
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let argument = self.parseDerivativeAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSign: atSign,
-      unexpectedBeforeTranspose,
-      attributeName: RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        name: transpose,
-        genericArgumentClause: nil,
-        arena: self.arena
-      ),
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      arguments: .derivativeRegistrationArguments(argument),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
   mutating func parseDerivativeAttributeArguments() -> RawDerivativeAttributeArgumentsSyntax {
     let (unexpectedBeforeOfLabel, ofLabel) = self.expect(.keyword(.of))
     let (unexpectedBetweenOfLabelAndColon, colon) = self.expect(.colon)

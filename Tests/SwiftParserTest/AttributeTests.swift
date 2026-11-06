@@ -277,7 +277,6 @@ final class AttributeTests: ParserTestCase {
     assertParse(
       """
       func f(in: @differentiable(reverse) (Int) -> Int) { }
-      func f(in: @differentiable(reverse, wrt: a) (Int) -> Int) { }
       """
     )
   }
@@ -288,7 +287,28 @@ final class AttributeTests: ParserTestCase {
       let a: @differentiable (Int) -> Int
       func f(in: @differentiable (Int) -> Int) { }
       let b: @differentiable(reverse) (Int) -> Int
+      let h: @differentiable (Float, Float) -> Float
       """
+    )
+  }
+
+  func testDifferentiableTypeAttributeWithWrt() {
+    // Like the C++ parser, '(reverse, wrt: a)' is not parsed as the arguments of
+    // a '@differentiable' type attribute; it is the parameter list of a function type.
+    assertParse(
+      """
+      func f3️⃣(in: @differentiable(reverse, wrt: a)1️⃣ 2️⃣(Int) -> Int) { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(Int) -> Int)' in function"),
+      ],
+      fixedSource: "func f(in: @differentiable(reverse, wrt: a)) (Int) -> Int) { }"
     )
   }
 

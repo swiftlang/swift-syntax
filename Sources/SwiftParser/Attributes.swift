@@ -1096,20 +1096,14 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  /// Like the C++ parser, only treat '(' as the arguments of '@differentiable' if
-  /// it looks like '( id )' followed by a type, '( id (' or '( id ,'; otherwise it
-  /// starts the function type of a bare '@differentiable'.
+  /// Whether '(' starts the arguments of '@differentiable' rather than the
+  /// function type's parameters. Like the C++ parser, this is '( id )' followed
+  /// by a type, or '( id ('.
   mutating func atDifferentiableAttributeArguments() -> Bool {
-    guard self.at(.leftParen) else { return false }
-    self.consumeAnyToken()
-    guard
-      self.at(.identifier)
-        || self.at(anyIn: DifferentiableAttributeArgumentsSyntax.KindSpecifierOptions.self) != nil
-    else {
-      return false
-    }
-    self.consumeAnyToken()
-    if self.at(.leftParen) || self.at(.comma) {
+    guard self.consume(if: .leftParen) != nil else { return false }
+
+    guard self.consume(if: .identifier) != nil else { return false }
+    if self.at(.leftParen) {
       return true
     }
     guard self.consume(if: .rightParen) != nil else {

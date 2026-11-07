@@ -84,8 +84,12 @@ extension Parser.LanguageFeatures {
   @_spi(ExperimentalLanguageFeatures)
   public static let extendedSpecializedAttribute = Self (rawValue: 1 << 13)
 
-  /// Creates a new value representing the experimental feature with the
-  /// given name, or returns nil if the name is not recognized.
+  /// Whether to disable the parsing of bare slash regex literals; `#/.../#` literals are still parsed.
+  @_spi(Compiler)
+  public static let disableBareSlashRegexLiterals = Self (rawValue: 1 << 14)
+
+  /// Creates a new value representing the feature with the given name, or
+  /// returns nil if the name is not recognized.
   @_spi(ExperimentalLanguageFeatures)
   public init?(name: String) {
     switch name {

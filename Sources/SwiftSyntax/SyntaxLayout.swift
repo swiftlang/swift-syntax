@@ -11,9 +11,13 @@
 //===----------------------------------------------------------------------===//
 
 /// The position of a child in the layout of a syntax node.
+@frozen
+@usableFromInline
 struct SyntaxLayoutIndex: Hashable, Comparable {
+  @usableFromInline
   let value: UInt32
 
+  @_alwaysEmitIntoClient
   init(_ value: UInt32) {
     self.value = value
   }
@@ -58,11 +62,17 @@ public struct SyntaxLayoutProperty: Hashable {
 }
 
 /// The layout of a syntax node type: the children it has, each at a fixed position.
+@frozen
 public struct SyntaxLayout<Base: SyntaxProtocol> {
+  @usableFromInline
   let syntaxKind: SyntaxKind
 
-  // A `SyntaxLayout` is only constructed by the `layout` property of each layout node type.
-  private init() { fatalError() }
+  /// Used by the `layout` property of each layout node type, which is the only way to
+  /// construct a `SyntaxLayout`.
+  @_alwaysEmitIntoClient
+  init(syntaxKind: SyntaxKind) {
+    self.syntaxKind = syntaxKind
+  }
 }
 
 /// A child of a syntax node type, typed by the node type and the child's type.
@@ -82,11 +92,18 @@ public struct SyntaxLayout<Base: SyntaxProtocol> {
 /// ```
 ///
 /// ``SyntaxLayout/subscript(_:)`` turns it into the ``SyntaxLayoutProperty`` it stands for.
+@frozen
 public struct ConcreteSyntaxProperty<Base: SyntaxProtocol, Value> {
+  @usableFromInline
   let index: SyntaxLayoutIndex
 
-  // ConcreteSyntaxProperty can only be constructed by `ConcreteSyntaxProperty<Base, Value>.${name}`
-  private init() { fatalError() }
+  /// Used by the static property of each child, such as
+  /// `ConcreteSyntaxProperty<ReturnStmtSyntax, ExprSyntax?>.expression`, which are the only way
+  /// to construct a `ConcreteSyntaxProperty`.
+  @_alwaysEmitIntoClient
+  init(index: UInt32) {
+    self.index = SyntaxLayoutIndex(index)
+  }
 }
 
 extension SyntaxLayout {

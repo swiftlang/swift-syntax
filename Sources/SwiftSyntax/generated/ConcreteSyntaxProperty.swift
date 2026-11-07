@@ -13,21 +13,18 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-extension ConcreteSyntaxProperty {
-  fileprivate init(index: UInt32) {
-    self.index = .init(index)
-  }
-}
-
 extension ConcreteSyntaxProperty where Base == ABIAttributeArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeProvider: ConcreteSyntaxProperty<ABIAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var provider: ConcreteSyntaxProperty<ABIAttributeArgumentsSyntax, ABIAttributeArgumentsSyntax.Provider> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterProvider: ConcreteSyntaxProperty<ABIAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
@@ -35,473 +32,584 @@ extension ConcreteSyntaxProperty where Base == ABIAttributeArgumentsSyntax {
 
 @_spi(Compiler)
 extension ConcreteSyntaxProperty where Base == AccessorBlockFileSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: ConcreteSyntaxProperty<AccessorBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: ConcreteSyntaxProperty<AccessorBlockFileSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndAccessors: ConcreteSyntaxProperty<AccessorBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var accessors: ConcreteSyntaxProperty<AccessorBlockFileSyntax, AccessorDeclListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorsAndRightBrace: ConcreteSyntaxProperty<AccessorBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: ConcreteSyntaxProperty<AccessorBlockFileSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightBraceAndEndOfFileToken: ConcreteSyntaxProperty<AccessorBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: ConcreteSyntaxProperty<AccessorBlockFileSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: ConcreteSyntaxProperty<AccessorBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AccessorBlockSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: ConcreteSyntaxProperty<AccessorBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: ConcreteSyntaxProperty<AccessorBlockSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndAccessors: ConcreteSyntaxProperty<AccessorBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var accessors: ConcreteSyntaxProperty<AccessorBlockSyntax, AccessorBlockSyntax.Accessors> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorsAndRightBrace: ConcreteSyntaxProperty<AccessorBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: ConcreteSyntaxProperty<AccessorBlockSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: ConcreteSyntaxProperty<AccessorBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AccessorDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<AccessorDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<AccessorDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndAccessorSpecifier: ConcreteSyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var accessorSpecifier: ConcreteSyntaxProperty<AccessorDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorSpecifierAndParameters: ConcreteSyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameters: ConcreteSyntaxProperty<AccessorDeclSyntax, AccessorParametersSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndEffectSpecifiers: ConcreteSyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: ConcreteSyntaxProperty<AccessorDeclSyntax, AccessorEffectSpecifiersSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndBody: ConcreteSyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<AccessorDeclSyntax, CodeBlockSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AccessorEffectSpecifiersSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: ConcreteSyntaxProperty<AccessorEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: ConcreteSyntaxProperty<AccessorEffectSpecifiersSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsyncSpecifierAndThrowsClause: ConcreteSyntaxProperty<AccessorEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var throwsClause: ConcreteSyntaxProperty<AccessorEffectSpecifiersSyntax, ThrowsClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterThrowsClause: ConcreteSyntaxProperty<AccessorEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AccessorParametersSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<AccessorParametersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<AccessorParametersSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndName: ConcreteSyntaxProperty<AccessorParametersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<AccessorParametersSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndRightParen: ConcreteSyntaxProperty<AccessorParametersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<AccessorParametersSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<AccessorParametersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ActorDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<ActorDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<ActorDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndActorKeyword: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var actorKeyword: ConcreteSyntaxProperty<ActorDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenActorKeywordAndName: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<ActorDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<ActorDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: ConcreteSyntaxProperty<ActorDeclSyntax, InheritanceClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<ActorDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var memberBlock: ConcreteSyntaxProperty<ActorDeclSyntax, MemberBlockSyntax> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: ConcreteSyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ArrayElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<ArrayElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ArrayElementSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndTrailingComma: ConcreteSyntaxProperty<ArrayElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<ArrayElementSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<ArrayElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ArrayExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: ConcreteSyntaxProperty<ArrayExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<ArrayExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndElements: ConcreteSyntaxProperty<ArrayExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<ArrayExprSyntax, ArrayElementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightSquare: ConcreteSyntaxProperty<ArrayExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<ArrayExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: ConcreteSyntaxProperty<ArrayExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ArrayTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: ConcreteSyntaxProperty<ArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<ArrayTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndElement: ConcreteSyntaxProperty<ArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var element: ConcreteSyntaxProperty<ArrayTypeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementAndRightSquare: ConcreteSyntaxProperty<ArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<ArrayTypeSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: ConcreteSyntaxProperty<ArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ArrowExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEffectSpecifiers: ConcreteSyntaxProperty<ArrowExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: ConcreteSyntaxProperty<ArrowExprSyntax, TypeEffectSpecifiersSyntax?> {
     .init(index: 1)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: ConcreteSyntaxProperty<ArrowExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var yieldClause: ConcreteSyntaxProperty<ArrowExprSyntax, FunctionYieldClauseSyntax?> {
     .init(index: 3)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndArrow: ConcreteSyntaxProperty<ArrowExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var arrow: ConcreteSyntaxProperty<ArrowExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArrow: ConcreteSyntaxProperty<ArrowExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AsExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<AsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<AsExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndAsKeyword: ConcreteSyntaxProperty<AsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var asKeyword: ConcreteSyntaxProperty<AsExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsKeywordAndQuestionOrExclamationMark: ConcreteSyntaxProperty<AsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: ConcreteSyntaxProperty<AsExprSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionOrExclamationMarkAndType: ConcreteSyntaxProperty<AsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<AsExprSyntax, TypeSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<AsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AssignmentExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEqual: ConcreteSyntaxProperty<AssignmentExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var equal: ConcreteSyntaxProperty<AssignmentExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEqual: ConcreteSyntaxProperty<AssignmentExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AssociatedTypeDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndAssociatedtypeKeyword: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var associatedtypeKeyword: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAssociatedtypeKeywordAndName: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndInheritanceClause: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, InheritanceClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndInitializer: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var initializer: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, TypeInitializerClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndGenericWhereClause: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: ConcreteSyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
@@ -509,204 +617,252 @@ extension ConcreteSyntaxProperty where Base == AssociatedTypeDeclSyntax {
 
 @_spi(Compiler)
 extension ConcreteSyntaxProperty where Base == AttributeClauseFileSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<AttributeClauseFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<AttributeClauseFileSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<AttributeClauseFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<AttributeClauseFileSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndEndOfFileToken: ConcreteSyntaxProperty<AttributeClauseFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: ConcreteSyntaxProperty<AttributeClauseFileSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: ConcreteSyntaxProperty<AttributeClauseFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AttributeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAtSign: ConcreteSyntaxProperty<AttributeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var atSign: ConcreteSyntaxProperty<AttributeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAtSignAndAttributeName: ConcreteSyntaxProperty<AttributeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributeName: ConcreteSyntaxProperty<AttributeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributeNameAndLeftParen: ConcreteSyntaxProperty<AttributeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<AttributeSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<AttributeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<AttributeSyntax, AttributeSyntax.Arguments?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<AttributeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<AttributeSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<AttributeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AttributedTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifiers: ConcreteSyntaxProperty<AttributedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var specifiers: ConcreteSyntaxProperty<AttributedTypeSyntax, TypeSpecifierListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifiersAndAttributes: ConcreteSyntaxProperty<AttributedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<AttributedTypeSyntax, AttributeListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndLateSpecifiers: ConcreteSyntaxProperty<AttributedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var lateSpecifiers: ConcreteSyntaxProperty<AttributedTypeSyntax, TypeSpecifierListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLateSpecifiersAndBaseType: ConcreteSyntaxProperty<AttributedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var baseType: ConcreteSyntaxProperty<AttributedTypeSyntax, TypeSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBaseType: ConcreteSyntaxProperty<AttributedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AvailabilityArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArgument: ConcreteSyntaxProperty<AvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var argument: ConcreteSyntaxProperty<AvailabilityArgumentSyntax, AvailabilityArgumentSyntax.Argument> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentAndTrailingComma: ConcreteSyntaxProperty<AvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<AvailabilityArgumentSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<AvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AvailabilityConditionSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAvailabilityKeyword: ConcreteSyntaxProperty<AvailabilityConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var availabilityKeyword: ConcreteSyntaxProperty<AvailabilityConditionSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityKeywordAndLeftParen: ConcreteSyntaxProperty<AvailabilityConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<AvailabilityConditionSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndAvailabilityArguments: ConcreteSyntaxProperty<AvailabilityConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var availabilityArguments: ConcreteSyntaxProperty<AvailabilityConditionSyntax, AvailabilityArgumentListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityArgumentsAndRightParen: ConcreteSyntaxProperty<AvailabilityConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<AvailabilityConditionSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<AvailabilityConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AvailabilityLabeledArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: ConcreteSyntaxProperty<AvailabilityLabeledArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<AvailabilityLabeledArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<AvailabilityLabeledArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<AvailabilityLabeledArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: ConcreteSyntaxProperty<AvailabilityLabeledArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<AvailabilityLabeledArgumentSyntax, AvailabilityLabeledArgumentSyntax.Value> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: ConcreteSyntaxProperty<AvailabilityLabeledArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
@@ -714,721 +870,890 @@ extension ConcreteSyntaxProperty where Base == AvailabilityLabeledArgumentSyntax
 
 @_spi(Compiler)
 extension ConcreteSyntaxProperty where Base == AvailabilityMacroDefinitionFileSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlatformVersion: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var platformVersion: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, PlatformVersionSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPlatformVersionAndColon: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndSpecs: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var specs: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, AvailabilityArgumentListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecsAndEndOfFileToken: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: ConcreteSyntaxProperty<AvailabilityMacroDefinitionFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == AwaitExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAwaitKeyword: ConcreteSyntaxProperty<AwaitExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var awaitKeyword: ConcreteSyntaxProperty<AwaitExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAwaitKeywordAndExpression: ConcreteSyntaxProperty<AwaitExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<AwaitExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<AwaitExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == BackDeployedAttributeArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBeforeLabel: ConcreteSyntaxProperty<BackDeployedAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var beforeLabel: ConcreteSyntaxProperty<BackDeployedAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBeforeLabelAndColon: ConcreteSyntaxProperty<BackDeployedAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<BackDeployedAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPlatforms: ConcreteSyntaxProperty<BackDeployedAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var platforms: ConcreteSyntaxProperty<BackDeployedAttributeArgumentsSyntax, PlatformVersionItemListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlatforms: ConcreteSyntaxProperty<BackDeployedAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == BinaryOperatorExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOperator: ConcreteSyntaxProperty<BinaryOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var `operator`: ConcreteSyntaxProperty<BinaryOperatorExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterOperator: ConcreteSyntaxProperty<BinaryOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == BooleanLiteralExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLiteral: ConcreteSyntaxProperty<BooleanLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var literal: ConcreteSyntaxProperty<BooleanLiteralExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLiteral: ConcreteSyntaxProperty<BooleanLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == BorrowExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBorrowKeyword: ConcreteSyntaxProperty<BorrowExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var borrowKeyword: ConcreteSyntaxProperty<BorrowExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBorrowKeywordAndExpression: ConcreteSyntaxProperty<BorrowExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<BorrowExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<BorrowExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == BreakStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBreakKeyword: ConcreteSyntaxProperty<BreakStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var breakKeyword: ConcreteSyntaxProperty<BreakStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBreakKeywordAndLabel: ConcreteSyntaxProperty<BreakStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<BreakStmtSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLabel: ConcreteSyntaxProperty<BreakStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == _CanImportExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCanImportKeyword: ConcreteSyntaxProperty<_CanImportExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var canImportKeyword: ConcreteSyntaxProperty<_CanImportExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCanImportKeywordAndLeftParen: ConcreteSyntaxProperty<_CanImportExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<_CanImportExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndImportPath: ConcreteSyntaxProperty<_CanImportExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var importPath: ConcreteSyntaxProperty<_CanImportExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenImportPathAndVersionInfo: ConcreteSyntaxProperty<_CanImportExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var versionInfo: ConcreteSyntaxProperty<_CanImportExprSyntax, _CanImportVersionInfoSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenVersionInfoAndRightParen: ConcreteSyntaxProperty<_CanImportExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<_CanImportExprSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<_CanImportExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == _CanImportVersionInfoSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeComma: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndLabel: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndVersion: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var version: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, VersionTupleSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterVersion: ConcreteSyntaxProperty<_CanImportVersionInfoSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == CatchClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCatchKeyword: ConcreteSyntaxProperty<CatchClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var catchKeyword: ConcreteSyntaxProperty<CatchClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCatchKeywordAndCatchItems: ConcreteSyntaxProperty<CatchClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var catchItems: ConcreteSyntaxProperty<CatchClauseSyntax, CatchItemListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCatchItemsAndBody: ConcreteSyntaxProperty<CatchClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<CatchClauseSyntax, CodeBlockSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<CatchClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == CatchItemSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: ConcreteSyntaxProperty<CatchItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<CatchItemSyntax, PatternSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndWhereClause: ConcreteSyntaxProperty<CatchItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var whereClause: ConcreteSyntaxProperty<CatchItemSyntax, WhereClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereClauseAndTrailingComma: ConcreteSyntaxProperty<CatchItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<CatchItemSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<CatchItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClassDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<ClassDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<ClassDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndClassKeyword: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var classKeyword: ConcreteSyntaxProperty<ClassDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClassKeywordAndName: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<ClassDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<ClassDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: ConcreteSyntaxProperty<ClassDeclSyntax, InheritanceClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<ClassDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var memberBlock: ConcreteSyntaxProperty<ClassDeclSyntax, MemberBlockSyntax> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: ConcreteSyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClassRestrictionTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeClassKeyword: ConcreteSyntaxProperty<ClassRestrictionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var classKeyword: ConcreteSyntaxProperty<ClassRestrictionTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClassKeyword: ConcreteSyntaxProperty<ClassRestrictionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureCaptureClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: ConcreteSyntaxProperty<ClosureCaptureClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<ClosureCaptureClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndItems: ConcreteSyntaxProperty<ClosureCaptureClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var items: ConcreteSyntaxProperty<ClosureCaptureClauseSyntax, ClosureCaptureListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenItemsAndRightSquare: ConcreteSyntaxProperty<ClosureCaptureClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<ClosureCaptureClauseSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: ConcreteSyntaxProperty<ClosureCaptureClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureCaptureSpecifierSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifier: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var specifier: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifierAndLeftParen: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndDetail: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var detail: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDetailAndRightParen: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<ClosureCaptureSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureCaptureSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifier: ConcreteSyntaxProperty<ClosureCaptureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var specifier: ConcreteSyntaxProperty<ClosureCaptureSyntax, ClosureCaptureSpecifierSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifierAndName: ConcreteSyntaxProperty<ClosureCaptureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<ClosureCaptureSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndInitializer: ConcreteSyntaxProperty<ClosureCaptureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var initializer: ConcreteSyntaxProperty<ClosureCaptureSyntax, InitializerClauseSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndTrailingComma: ConcreteSyntaxProperty<ClosureCaptureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<ClosureCaptureSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<ClosureCaptureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: ConcreteSyntaxProperty<ClosureExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: ConcreteSyntaxProperty<ClosureExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndSignature: ConcreteSyntaxProperty<ClosureExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var signature: ConcreteSyntaxProperty<ClosureExprSyntax, ClosureSignatureSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndStatements: ConcreteSyntaxProperty<ClosureExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var statements: ConcreteSyntaxProperty<ClosureExprSyntax, CodeBlockItemListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStatementsAndRightBrace: ConcreteSyntaxProperty<ClosureExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: ConcreteSyntaxProperty<ClosureExprSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: ConcreteSyntaxProperty<ClosureExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureParameterClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<ClosureParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<ClosureParameterClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: ConcreteSyntaxProperty<ClosureParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameters: ConcreteSyntaxProperty<ClosureParameterClauseSyntax, ClosureParameterListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: ConcreteSyntaxProperty<ClosureParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<ClosureParameterClauseSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<ClosureParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureParameterSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<ClosureParameterSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<ClosureParameterSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFirstName: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var firstName: ConcreteSyntaxProperty<ClosureParameterSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var secondName: ConcreteSyntaxProperty<ClosureParameterSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<ClosureParameterSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<ClosureParameterSyntax, TypeSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndEllipsis: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var ellipsis: ConcreteSyntaxProperty<ClosureParameterSyntax, TokenSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEllipsisAndTrailingComma: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<ClosureParameterSyntax, TokenSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureShorthandParameterSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<ClosureShorthandParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<ClosureShorthandParameterSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingComma: ConcreteSyntaxProperty<ClosureShorthandParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<ClosureShorthandParameterSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<ClosureShorthandParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ClosureSignatureSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<ClosureSignatureSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndCapture: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var capture: ConcreteSyntaxProperty<ClosureSignatureSyntax, ClosureCaptureClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaptureAndParameterClause: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameterClause: ConcreteSyntaxProperty<ClosureSignatureSyntax, ClosureSignatureSyntax.ParameterClause?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndEffectSpecifiers: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: ConcreteSyntaxProperty<ClosureSignatureSyntax, TypeEffectSpecifiersSyntax?> {
     .init(index: 7)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var yieldClause: ConcreteSyntaxProperty<ClosureSignatureSyntax, FunctionYieldClauseSyntax?> {
     .init(index: 9)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var returnClause: ConcreteSyntaxProperty<ClosureSignatureSyntax, ReturnClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenReturnClauseAndInKeyword: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var inKeyword: ConcreteSyntaxProperty<ClosureSignatureSyntax, TokenSyntax> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInKeyword: ConcreteSyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
@@ -1436,806 +1761,993 @@ extension ConcreteSyntaxProperty where Base == ClosureSignatureSyntax {
 
 @_spi(Compiler)
 extension ConcreteSyntaxProperty where Base == CodeBlockFileSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBody: ConcreteSyntaxProperty<CodeBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<CodeBlockFileSyntax, CodeBlockSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndEndOfFileToken: ConcreteSyntaxProperty<CodeBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: ConcreteSyntaxProperty<CodeBlockFileSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: ConcreteSyntaxProperty<CodeBlockFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == CodeBlockItemSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeItem: ConcreteSyntaxProperty<CodeBlockItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var item: ConcreteSyntaxProperty<CodeBlockItemSyntax, CodeBlockItemSyntax.Item> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenItemAndSemicolon: ConcreteSyntaxProperty<CodeBlockItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var semicolon: ConcreteSyntaxProperty<CodeBlockItemSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSemicolon: ConcreteSyntaxProperty<CodeBlockItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == CodeBlockSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: ConcreteSyntaxProperty<CodeBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: ConcreteSyntaxProperty<CodeBlockSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndStatements: ConcreteSyntaxProperty<CodeBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var statements: ConcreteSyntaxProperty<CodeBlockSyntax, CodeBlockItemListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStatementsAndRightBrace: ConcreteSyntaxProperty<CodeBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: ConcreteSyntaxProperty<CodeBlockSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: ConcreteSyntaxProperty<CodeBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == CompositionTypeElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: ConcreteSyntaxProperty<CompositionTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<CompositionTypeElementSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndAmpersand: ConcreteSyntaxProperty<CompositionTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var ampersand: ConcreteSyntaxProperty<CompositionTypeElementSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAmpersand: ConcreteSyntaxProperty<CompositionTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == CompositionTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeElements: ConcreteSyntaxProperty<CompositionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<CompositionTypeSyntax, CompositionTypeElementListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: ConcreteSyntaxProperty<CompositionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ConditionElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCondition: ConcreteSyntaxProperty<ConditionElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var condition: ConcreteSyntaxProperty<ConditionElementSyntax, ConditionElementSyntax.Condition> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionAndTrailingComma: ConcreteSyntaxProperty<ConditionElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<ConditionElementSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<ConditionElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ConformanceRequirementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftType: ConcreteSyntaxProperty<ConformanceRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftType: ConcreteSyntaxProperty<ConformanceRequirementSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftTypeAndColon: ConcreteSyntaxProperty<ConformanceRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<ConformanceRequirementSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndRightType: ConcreteSyntaxProperty<ConformanceRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightType: ConcreteSyntaxProperty<ConformanceRequirementSyntax, TypeSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightType: ConcreteSyntaxProperty<ConformanceRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ConsumeExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeConsumeKeyword: ConcreteSyntaxProperty<ConsumeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var consumeKeyword: ConcreteSyntaxProperty<ConsumeExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConsumeKeywordAndExpression: ConcreteSyntaxProperty<ConsumeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ConsumeExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<ConsumeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ContinueStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeContinueKeyword: ConcreteSyntaxProperty<ContinueStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var continueKeyword: ConcreteSyntaxProperty<ContinueStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenContinueKeywordAndLabel: ConcreteSyntaxProperty<ContinueStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<ContinueStmtSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLabel: ConcreteSyntaxProperty<ContinueStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == CopyExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCopyKeyword: ConcreteSyntaxProperty<CopyExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var copyKeyword: ConcreteSyntaxProperty<CopyExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCopyKeywordAndExpression: ConcreteSyntaxProperty<CopyExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<CopyExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<CopyExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeclModifierDetailSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<DeclModifierDetailSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<DeclModifierDetailSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndDetail: ConcreteSyntaxProperty<DeclModifierDetailSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var detail: ConcreteSyntaxProperty<DeclModifierDetailSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDetailAndRightParen: ConcreteSyntaxProperty<DeclModifierDetailSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<DeclModifierDetailSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<DeclModifierDetailSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeclModifierSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<DeclModifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<DeclModifierSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndDetail: ConcreteSyntaxProperty<DeclModifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var detail: ConcreteSyntaxProperty<DeclModifierSyntax, DeclModifierDetailSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDetail: ConcreteSyntaxProperty<DeclModifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeclNameArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<DeclNameArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<DeclNameArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndColon: ConcreteSyntaxProperty<DeclNameArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<DeclNameArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: ConcreteSyntaxProperty<DeclNameArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeclNameArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<DeclNameArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<DeclNameArgumentsSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<DeclNameArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<DeclNameArgumentsSyntax, DeclNameArgumentListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<DeclNameArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<DeclNameArgumentsSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<DeclNameArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeclReferenceExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleSelector: ConcreteSyntaxProperty<DeclReferenceExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleSelector: ConcreteSyntaxProperty<DeclReferenceExprSyntax, ModuleSelectorSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndBaseName: ConcreteSyntaxProperty<DeclReferenceExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var baseName: ConcreteSyntaxProperty<DeclReferenceExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseNameAndArgumentNames: ConcreteSyntaxProperty<DeclReferenceExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var argumentNames: ConcreteSyntaxProperty<DeclReferenceExprSyntax, DeclNameArgumentsSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArgumentNames: ConcreteSyntaxProperty<DeclReferenceExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeferStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDeferKeyword: ConcreteSyntaxProperty<DeferStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var deferKeyword: ConcreteSyntaxProperty<DeferStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeferKeywordAndBody: ConcreteSyntaxProperty<DeferStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<DeferStmtSyntax, CodeBlockSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<DeferStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeinitializerDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<DeinitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<DeinitializerDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<DeinitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<DeinitializerDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndDeinitKeyword: ConcreteSyntaxProperty<DeinitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var deinitKeyword: ConcreteSyntaxProperty<DeinitializerDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeinitKeywordAndEffectSpecifiers: ConcreteSyntaxProperty<DeinitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: ConcreteSyntaxProperty<DeinitializerDeclSyntax, DeinitializerEffectSpecifiersSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndBody: ConcreteSyntaxProperty<DeinitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<DeinitializerDeclSyntax, CodeBlockSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<DeinitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DeinitializerEffectSpecifiersSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: ConcreteSyntaxProperty<DeinitializerEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: ConcreteSyntaxProperty<DeinitializerEffectSpecifiersSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAsyncSpecifier: ConcreteSyntaxProperty<DeinitializerEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DerivativeAttributeArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOfLabel: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var ofLabel: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOfLabelAndColon: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndOriginalDeclName: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var originalDeclName: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, ExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOriginalDeclNameAndPeriod: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var period: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndAccessorSpecifier: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var accessorSpecifier: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorSpecifierAndComma: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, TokenSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndArguments: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, DifferentiabilityWithRespectToArgumentSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArguments: ConcreteSyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DesignatedTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeadingComma: ConcreteSyntaxProperty<DesignatedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leadingComma: ConcreteSyntaxProperty<DesignatedTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeadingCommaAndName: ConcreteSyntaxProperty<DesignatedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<DesignatedTypeSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterName: ConcreteSyntaxProperty<DesignatedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DictionaryElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeKey: ConcreteSyntaxProperty<DictionaryElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var key: ConcreteSyntaxProperty<DictionaryElementSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKeyAndColon: ConcreteSyntaxProperty<DictionaryElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<DictionaryElementSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: ConcreteSyntaxProperty<DictionaryElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<DictionaryElementSyntax, ExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndTrailingComma: ConcreteSyntaxProperty<DictionaryElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<DictionaryElementSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<DictionaryElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DictionaryExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: ConcreteSyntaxProperty<DictionaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<DictionaryExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndContent: ConcreteSyntaxProperty<DictionaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var content: ConcreteSyntaxProperty<DictionaryExprSyntax, DictionaryExprSyntax.Content> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenContentAndRightSquare: ConcreteSyntaxProperty<DictionaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<DictionaryExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: ConcreteSyntaxProperty<DictionaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DictionaryTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: ConcreteSyntaxProperty<DictionaryTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<DictionaryTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndKey: ConcreteSyntaxProperty<DictionaryTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var key: ConcreteSyntaxProperty<DictionaryTypeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKeyAndColon: ConcreteSyntaxProperty<DictionaryTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<DictionaryTypeSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: ConcreteSyntaxProperty<DictionaryTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<DictionaryTypeSyntax, TypeSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndRightSquare: ConcreteSyntaxProperty<DictionaryTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<DictionaryTypeSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: ConcreteSyntaxProperty<DictionaryTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DifferentiabilityArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArgument: ConcreteSyntaxProperty<DifferentiabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var argument: ConcreteSyntaxProperty<DifferentiabilityArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentAndTrailingComma: ConcreteSyntaxProperty<DifferentiabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<DifferentiabilityArgumentSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<DifferentiabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DifferentiabilityArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<DifferentiabilityArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<DifferentiabilityArgumentsSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<DifferentiabilityArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<DifferentiabilityArgumentsSyntax, DifferentiabilityArgumentListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<DifferentiabilityArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<DifferentiabilityArgumentsSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<DifferentiabilityArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DifferentiabilityWithRespectToArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWrtLabel: ConcreteSyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var wrtLabel: ConcreteSyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWrtLabelAndColon: ConcreteSyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndArguments: ConcreteSyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, DifferentiabilityWithRespectToArgumentSyntax.Arguments> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArguments: ConcreteSyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DifferentiableAttributeArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeKindSpecifier: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var kindSpecifier: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKindSpecifierAndKindSpecifierComma: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var kindSpecifierComma: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKindSpecifierCommaAndArguments: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, DifferentiabilityWithRespectToArgumentSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndArgumentsComma: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var argumentsComma: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsCommaAndGenericWhereClause: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, GenericWhereClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: ConcreteSyntaxProperty<DifferentiableAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DiscardAssignmentExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWildcard: ConcreteSyntaxProperty<DiscardAssignmentExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var wildcard: ConcreteSyntaxProperty<DiscardAssignmentExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterWildcard: ConcreteSyntaxProperty<DiscardAssignmentExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DiscardStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDiscardKeyword: ConcreteSyntaxProperty<DiscardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var discardKeyword: ConcreteSyntaxProperty<DiscardStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDiscardKeywordAndExpression: ConcreteSyntaxProperty<DiscardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<DiscardStmtSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<DiscardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
@@ -2243,1072 +2755,1325 @@ extension ConcreteSyntaxProperty where Base == DiscardStmtSyntax {
 
 @_spi(ExperimentalLanguageFeatures)
 extension ConcreteSyntaxProperty where Base == DoExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDoKeyword: ConcreteSyntaxProperty<DoExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var doKeyword: ConcreteSyntaxProperty<DoExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDoKeywordAndBody: ConcreteSyntaxProperty<DoExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<DoExprSyntax, CodeBlockSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndCatchClauses: ConcreteSyntaxProperty<DoExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var catchClauses: ConcreteSyntaxProperty<DoExprSyntax, CatchClauseListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCatchClauses: ConcreteSyntaxProperty<DoExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DoStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDoKeyword: ConcreteSyntaxProperty<DoStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var doKeyword: ConcreteSyntaxProperty<DoStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDoKeywordAndThrowsClause: ConcreteSyntaxProperty<DoStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var throwsClause: ConcreteSyntaxProperty<DoStmtSyntax, ThrowsClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThrowsClauseAndBody: ConcreteSyntaxProperty<DoStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<DoStmtSyntax, CodeBlockSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndCatchClauses: ConcreteSyntaxProperty<DoStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var catchClauses: ConcreteSyntaxProperty<DoStmtSyntax, CatchClauseListSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCatchClauses: ConcreteSyntaxProperty<DoStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DocumentationAttributeArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, DocumentationAttributeArgumentSyntax.Value> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndTrailingComma: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<DocumentationAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == DynamicReplacementAttributeArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeForLabel: ConcreteSyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var forLabel: ConcreteSyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenForLabelAndColon: ConcreteSyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndDeclName: ConcreteSyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var declName: ConcreteSyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, DeclReferenceExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDeclName: ConcreteSyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == EditorPlaceholderDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<EditorPlaceholderDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<EditorPlaceholderDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<EditorPlaceholderDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<EditorPlaceholderDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPlaceholder: ConcreteSyntaxProperty<EditorPlaceholderDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<EditorPlaceholderDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<EditorPlaceholderDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == EditorPlaceholderExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: ConcreteSyntaxProperty<EditorPlaceholderExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<EditorPlaceholderExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<EditorPlaceholderExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == EnumCaseDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<EnumCaseDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<EnumCaseDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<EnumCaseDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<EnumCaseDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndCaseKeyword: ConcreteSyntaxProperty<EnumCaseDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var caseKeyword: ConcreteSyntaxProperty<EnumCaseDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndElements: ConcreteSyntaxProperty<EnumCaseDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<EnumCaseDeclSyntax, EnumCaseElementListSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: ConcreteSyntaxProperty<EnumCaseDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == EnumCaseElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<EnumCaseElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<EnumCaseElementSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndParameterClause: ConcreteSyntaxProperty<EnumCaseElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameterClause: ConcreteSyntaxProperty<EnumCaseElementSyntax, EnumCaseParameterClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndRawValue: ConcreteSyntaxProperty<EnumCaseElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rawValue: ConcreteSyntaxProperty<EnumCaseElementSyntax, InitializerClauseSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRawValueAndTrailingComma: ConcreteSyntaxProperty<EnumCaseElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<EnumCaseElementSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<EnumCaseElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == EnumCaseParameterClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<EnumCaseParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<EnumCaseParameterClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: ConcreteSyntaxProperty<EnumCaseParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameters: ConcreteSyntaxProperty<EnumCaseParameterClauseSyntax, EnumCaseParameterListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: ConcreteSyntaxProperty<EnumCaseParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<EnumCaseParameterClauseSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<EnumCaseParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == EnumCaseParameterSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModifiers: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<EnumCaseParameterSyntax, DeclModifierListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFirstName: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var firstName: ConcreteSyntaxProperty<EnumCaseParameterSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var secondName: ConcreteSyntaxProperty<EnumCaseParameterSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<EnumCaseParameterSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<EnumCaseParameterSyntax, TypeSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndDefaultValue: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var defaultValue: ConcreteSyntaxProperty<EnumCaseParameterSyntax, InitializerClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultValueAndTrailingComma: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<EnumCaseParameterSyntax, TokenSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == EnumDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<EnumDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<EnumDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndEnumKeyword: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var enumKeyword: ConcreteSyntaxProperty<EnumDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEnumKeywordAndName: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<EnumDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<EnumDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: ConcreteSyntaxProperty<EnumDeclSyntax, InheritanceClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<EnumDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var memberBlock: ConcreteSyntaxProperty<EnumDeclSyntax, MemberBlockSyntax> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: ConcreteSyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ExpressionPatternSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<ExpressionPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ExpressionPatternSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<ExpressionPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ExpressionSegmentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBackslash: ConcreteSyntaxProperty<ExpressionSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var backslash: ConcreteSyntaxProperty<ExpressionSegmentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBackslashAndPounds: ConcreteSyntaxProperty<ExpressionSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var pounds: ConcreteSyntaxProperty<ExpressionSegmentSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundsAndLeftParen: ConcreteSyntaxProperty<ExpressionSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<ExpressionSegmentSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndExpressions: ConcreteSyntaxProperty<ExpressionSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var expressions: ConcreteSyntaxProperty<ExpressionSegmentSyntax, LabeledExprListSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionsAndRightParen: ConcreteSyntaxProperty<ExpressionSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<ExpressionSegmentSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<ExpressionSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ExpressionStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<ExpressionStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ExpressionStmtSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<ExpressionStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ExtensionDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<ExtensionDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<ExtensionDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndExtensionKeyword: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var extensionKeyword: ConcreteSyntaxProperty<ExtensionDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExtensionKeywordAndExtendedType: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var extendedType: ConcreteSyntaxProperty<ExtensionDeclSyntax, TypeSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExtendedTypeAndInheritanceClause: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: ConcreteSyntaxProperty<ExtensionDeclSyntax, InheritanceClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<ExtensionDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var memberBlock: ConcreteSyntaxProperty<ExtensionDeclSyntax, MemberBlockSyntax> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: ConcreteSyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FallThroughStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeFallthroughKeyword: ConcreteSyntaxProperty<FallThroughStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var fallthroughKeyword: ConcreteSyntaxProperty<FallThroughStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterFallthroughKeyword: ConcreteSyntaxProperty<FallThroughStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FileDefaultDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDefaultKeyword: ConcreteSyntaxProperty<FileDefaultDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var defaultKeyword: ConcreteSyntaxProperty<FileDefaultDeclSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultKeywordAndSpecifier: ConcreteSyntaxProperty<FileDefaultDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var specifier: ConcreteSyntaxProperty<FileDefaultDeclSyntax, FileDefaultDeclSyntax.Specifier> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSpecifier: ConcreteSyntaxProperty<FileDefaultDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FloatLiteralExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLiteral: ConcreteSyntaxProperty<FloatLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var literal: ConcreteSyntaxProperty<FloatLiteralExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLiteral: ConcreteSyntaxProperty<FloatLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ForStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeForKeyword: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var forKeyword: ConcreteSyntaxProperty<ForStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenForKeywordAndTryKeyword: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var tryKeyword: ConcreteSyntaxProperty<ForStmtSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTryKeywordAndAwaitKeyword: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var awaitKeyword: ConcreteSyntaxProperty<ForStmtSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAwaitKeywordAndUnsafeKeyword: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unsafeKeyword: ConcreteSyntaxProperty<ForStmtSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenUnsafeKeywordAndCaseKeyword: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var caseKeyword: ConcreteSyntaxProperty<ForStmtSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndPattern: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<ForStmtSyntax, PatternSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: ConcreteSyntaxProperty<ForStmtSyntax, TypeAnnotationSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInKeyword: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var inKeyword: ConcreteSyntaxProperty<ForStmtSyntax, TokenSyntax> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInKeywordAndSequence: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var sequence: ConcreteSyntaxProperty<ForStmtSyntax, ExprSyntax> {
     .init(index: 17)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSequenceAndWhereClause: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 18)
   }
 
+  @_alwaysEmitIntoClient
   public static var whereClause: ConcreteSyntaxProperty<ForStmtSyntax, WhereClauseSyntax?> {
     .init(index: 19)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereClauseAndBody: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 20)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<ForStmtSyntax, CodeBlockSyntax> {
     .init(index: 21)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 22)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ForceUnwrapExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<ForceUnwrapExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ForceUnwrapExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndExclamationMark: ConcreteSyntaxProperty<ForceUnwrapExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var exclamationMark: ConcreteSyntaxProperty<ForceUnwrapExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExclamationMark: ConcreteSyntaxProperty<ForceUnwrapExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FunctionCallExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCalledExpression: ConcreteSyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var calledExpression: ConcreteSyntaxProperty<FunctionCallExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCalledExpressionAndLeftParen: ConcreteSyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<FunctionCallExprSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<FunctionCallExprSyntax, LabeledExprListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<FunctionCallExprSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndTrailingClosure: ConcreteSyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingClosure: ConcreteSyntaxProperty<FunctionCallExprSyntax, ClosureExprSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ConcreteSyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: ConcreteSyntaxProperty<FunctionCallExprSyntax, MultipleTrailingClosureElementListSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: ConcreteSyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FunctionDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<FunctionDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<FunctionDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFuncKeyword: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var funcKeyword: ConcreteSyntaxProperty<FunctionDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFuncKeywordAndName: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<FunctionDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<FunctionDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndSignature: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var signature: ConcreteSyntaxProperty<FunctionDeclSyntax, FunctionSignatureSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndGenericWhereClause: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<FunctionDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndBody: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<FunctionDeclSyntax, CodeBlockSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FunctionEffectSpecifiersSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: ConcreteSyntaxProperty<FunctionEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: ConcreteSyntaxProperty<FunctionEffectSpecifiersSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsyncSpecifierAndThrowsClause: ConcreteSyntaxProperty<FunctionEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var throwsClause: ConcreteSyntaxProperty<FunctionEffectSpecifiersSyntax, ThrowsClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterThrowsClause: ConcreteSyntaxProperty<FunctionEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FunctionParameterClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<FunctionParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<FunctionParameterClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: ConcreteSyntaxProperty<FunctionParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameters: ConcreteSyntaxProperty<FunctionParameterClauseSyntax, FunctionParameterListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: ConcreteSyntaxProperty<FunctionParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<FunctionParameterClauseSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<FunctionParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FunctionParameterSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<FunctionParameterSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<FunctionParameterSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFirstName: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var firstName: ConcreteSyntaxProperty<FunctionParameterSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var secondName: ConcreteSyntaxProperty<FunctionParameterSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<FunctionParameterSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<FunctionParameterSyntax, TypeSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndEllipsis: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var ellipsis: ConcreteSyntaxProperty<FunctionParameterSyntax, TokenSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEllipsisAndDefaultValue: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var defaultValue: ConcreteSyntaxProperty<FunctionParameterSyntax, InitializerClauseSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultValueAndTrailingComma: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<FunctionParameterSyntax, TokenSyntax?> {
     .init(index: 17)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 18)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FunctionSignatureSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeParameterClause: ConcreteSyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameterClause: ConcreteSyntaxProperty<FunctionSignatureSyntax, FunctionParameterClauseSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndEffectSpecifiers: ConcreteSyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: ConcreteSyntaxProperty<FunctionSignatureSyntax, FunctionEffectSpecifiersSyntax?> {
     .init(index: 3)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: ConcreteSyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var yieldClause: ConcreteSyntaxProperty<FunctionSignatureSyntax, FunctionYieldClauseSyntax?> {
     .init(index: 5)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: ConcreteSyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var returnClause: ConcreteSyntaxProperty<FunctionSignatureSyntax, ReturnClauseSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterReturnClause: ConcreteSyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == FunctionTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<FunctionTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: ConcreteSyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameters: ConcreteSyntaxProperty<FunctionTypeSyntax, TupleTypeElementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: ConcreteSyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<FunctionTypeSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndEffectSpecifiers: ConcreteSyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: ConcreteSyntaxProperty<FunctionTypeSyntax, TypeEffectSpecifiersSyntax?> {
     .init(index: 7)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: ConcreteSyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var yieldClause: ConcreteSyntaxProperty<FunctionTypeSyntax, FunctionYieldClauseSyntax?> {
     .init(index: 9)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: ConcreteSyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var returnClause: ConcreteSyntaxProperty<FunctionTypeSyntax, ReturnClauseSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterReturnClause: ConcreteSyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
@@ -3316,38 +4081,47 @@ extension ConcreteSyntaxProperty where Base == FunctionTypeSyntax {
 
 @_spi(ExperimentalLanguageFeatures)
 extension ConcreteSyntaxProperty where Base == FunctionYieldClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeYieldsKeyword: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var yieldsKeyword: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldsKeywordAndLeftParen: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndYields: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var yields: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, FunctionYieldListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldsAndRightParen: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<FunctionYieldClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
@@ -3355,884 +4129,1090 @@ extension ConcreteSyntaxProperty where Base == FunctionYieldClauseSyntax {
 
 @_spi(ExperimentalLanguageFeatures)
 extension ConcreteSyntaxProperty where Base == FunctionYieldSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: ConcreteSyntaxProperty<FunctionYieldSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<FunctionYieldSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndTrailingComma: ConcreteSyntaxProperty<FunctionYieldSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<FunctionYieldSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<FunctionYieldSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GenericArgumentClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftAngle: ConcreteSyntaxProperty<GenericArgumentClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftAngle: ConcreteSyntaxProperty<GenericArgumentClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftAngleAndArguments: ConcreteSyntaxProperty<GenericArgumentClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<GenericArgumentClauseSyntax, GenericArgumentListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightAngle: ConcreteSyntaxProperty<GenericArgumentClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightAngle: ConcreteSyntaxProperty<GenericArgumentClauseSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightAngle: ConcreteSyntaxProperty<GenericArgumentClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GenericArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArgument: ConcreteSyntaxProperty<GenericArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var argument: ConcreteSyntaxProperty<GenericArgumentSyntax, GenericArgumentSyntax.Argument> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentAndTrailingComma: ConcreteSyntaxProperty<GenericArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<GenericArgumentSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<GenericArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GenericParameterClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftAngle: ConcreteSyntaxProperty<GenericParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftAngle: ConcreteSyntaxProperty<GenericParameterClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftAngleAndParameters: ConcreteSyntaxProperty<GenericParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameters: ConcreteSyntaxProperty<GenericParameterClauseSyntax, GenericParameterListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndGenericWhereClause: ConcreteSyntaxProperty<GenericParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<GenericParameterClauseSyntax, GenericWhereClauseSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndRightAngle: ConcreteSyntaxProperty<GenericParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightAngle: ConcreteSyntaxProperty<GenericParameterClauseSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightAngle: ConcreteSyntaxProperty<GenericParameterClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GenericParameterSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<GenericParameterSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndSpecifier: ConcreteSyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var specifier: ConcreteSyntaxProperty<GenericParameterSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifierAndName: ConcreteSyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<GenericParameterSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndColon: ConcreteSyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<GenericParameterSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndInheritedType: ConcreteSyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritedType: ConcreteSyntaxProperty<GenericParameterSyntax, TypeSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritedTypeAndTrailingComma: ConcreteSyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<GenericParameterSyntax, TokenSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GenericRequirementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRequirement: ConcreteSyntaxProperty<GenericRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var requirement: ConcreteSyntaxProperty<GenericRequirementSyntax, GenericRequirementSyntax.Requirement> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRequirementAndTrailingComma: ConcreteSyntaxProperty<GenericRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<GenericRequirementSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<GenericRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GenericSpecializationExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<GenericSpecializationExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<GenericSpecializationExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndGenericArgumentClause: ConcreteSyntaxProperty<GenericSpecializationExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: ConcreteSyntaxProperty<GenericSpecializationExprSyntax, GenericArgumentClauseSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: ConcreteSyntaxProperty<GenericSpecializationExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GenericWhereClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWhereKeyword: ConcreteSyntaxProperty<GenericWhereClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var whereKeyword: ConcreteSyntaxProperty<GenericWhereClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereKeywordAndRequirements: ConcreteSyntaxProperty<GenericWhereClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var requirements: ConcreteSyntaxProperty<GenericWhereClauseSyntax, GenericRequirementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRequirements: ConcreteSyntaxProperty<GenericWhereClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == GuardStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeGuardKeyword: ConcreteSyntaxProperty<GuardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var guardKeyword: ConcreteSyntaxProperty<GuardStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGuardKeywordAndConditions: ConcreteSyntaxProperty<GuardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var conditions: ConcreteSyntaxProperty<GuardStmtSyntax, ConditionElementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionsAndElseKeyword: ConcreteSyntaxProperty<GuardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var elseKeyword: ConcreteSyntaxProperty<GuardStmtSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElseKeywordAndBody: ConcreteSyntaxProperty<GuardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<GuardStmtSyntax, CodeBlockSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<GuardStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IdentifierPatternSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIdentifier: ConcreteSyntaxProperty<IdentifierPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var identifier: ConcreteSyntaxProperty<IdentifierPatternSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterIdentifier: ConcreteSyntaxProperty<IdentifierPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IdentifierTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleSelector: ConcreteSyntaxProperty<IdentifierTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleSelector: ConcreteSyntaxProperty<IdentifierTypeSyntax, ModuleSelectorSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndName: ConcreteSyntaxProperty<IdentifierTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<IdentifierTypeSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericArgumentClause: ConcreteSyntaxProperty<IdentifierTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: ConcreteSyntaxProperty<IdentifierTypeSyntax, GenericArgumentClauseSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: ConcreteSyntaxProperty<IdentifierTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IfConfigClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePoundKeyword: ConcreteSyntaxProperty<IfConfigClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var poundKeyword: ConcreteSyntaxProperty<IfConfigClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundKeywordAndCondition: ConcreteSyntaxProperty<IfConfigClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var condition: ConcreteSyntaxProperty<IfConfigClauseSyntax, ExprSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionAndElements: ConcreteSyntaxProperty<IfConfigClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<IfConfigClauseSyntax, IfConfigClauseSyntax.Elements?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: ConcreteSyntaxProperty<IfConfigClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IfConfigDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeClauses: ConcreteSyntaxProperty<IfConfigDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var clauses: ConcreteSyntaxProperty<IfConfigDeclSyntax, IfConfigClauseListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClausesAndPoundEndif: ConcreteSyntaxProperty<IfConfigDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var poundEndif: ConcreteSyntaxProperty<IfConfigDeclSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPoundEndif: ConcreteSyntaxProperty<IfConfigDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IfExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIfKeyword: ConcreteSyntaxProperty<IfExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var ifKeyword: ConcreteSyntaxProperty<IfExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenIfKeywordAndConditions: ConcreteSyntaxProperty<IfExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var conditions: ConcreteSyntaxProperty<IfExprSyntax, ConditionElementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionsAndBody: ConcreteSyntaxProperty<IfExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<IfExprSyntax, CodeBlockSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndElseKeyword: ConcreteSyntaxProperty<IfExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var elseKeyword: ConcreteSyntaxProperty<IfExprSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElseKeywordAndElseBody: ConcreteSyntaxProperty<IfExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var elseBody: ConcreteSyntaxProperty<IfExprSyntax, IfExprSyntax.ElseBody?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElseBody: ConcreteSyntaxProperty<IfExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ImplementsAttributeArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: ConcreteSyntaxProperty<ImplementsAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<ImplementsAttributeArgumentsSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndComma: ConcreteSyntaxProperty<ImplementsAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: ConcreteSyntaxProperty<ImplementsAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndDeclName: ConcreteSyntaxProperty<ImplementsAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var declName: ConcreteSyntaxProperty<ImplementsAttributeArgumentsSyntax, DeclReferenceExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDeclName: ConcreteSyntaxProperty<ImplementsAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ImplicitlyUnwrappedOptionalTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWrappedType: ConcreteSyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var wrappedType: ConcreteSyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWrappedTypeAndExclamationMark: ConcreteSyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var exclamationMark: ConcreteSyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExclamationMark: ConcreteSyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ImportDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<ImportDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<ImportDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<ImportDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<ImportDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndImportKeyword: ConcreteSyntaxProperty<ImportDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var importKeyword: ConcreteSyntaxProperty<ImportDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenImportKeywordAndImportKindSpecifier: ConcreteSyntaxProperty<ImportDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var importKindSpecifier: ConcreteSyntaxProperty<ImportDeclSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenImportKindSpecifierAndPath: ConcreteSyntaxProperty<ImportDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var path: ConcreteSyntaxProperty<ImportDeclSyntax, ImportPathComponentListSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPath: ConcreteSyntaxProperty<ImportDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ImportPathComponentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<ImportPathComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<ImportPathComponentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingPeriod: ConcreteSyntaxProperty<ImportPathComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingPeriod: ConcreteSyntaxProperty<ImportPathComponentSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingPeriod: ConcreteSyntaxProperty<ImportPathComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == InOutExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAmpersand: ConcreteSyntaxProperty<InOutExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var ampersand: ConcreteSyntaxProperty<InOutExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAmpersandAndExpression: ConcreteSyntaxProperty<InOutExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<InOutExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<InOutExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == InfixOperatorExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftOperand: ConcreteSyntaxProperty<InfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftOperand: ConcreteSyntaxProperty<InfixOperatorExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftOperandAndOperator: ConcreteSyntaxProperty<InfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var `operator`: ConcreteSyntaxProperty<InfixOperatorExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOperatorAndRightOperand: ConcreteSyntaxProperty<InfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightOperand: ConcreteSyntaxProperty<InfixOperatorExprSyntax, ExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightOperand: ConcreteSyntaxProperty<InfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == InheritanceClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeColon: ConcreteSyntaxProperty<InheritanceClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<InheritanceClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndInheritedTypes: ConcreteSyntaxProperty<InheritanceClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritedTypes: ConcreteSyntaxProperty<InheritanceClauseSyntax, InheritedTypeListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInheritedTypes: ConcreteSyntaxProperty<InheritanceClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == InheritedTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: ConcreteSyntaxProperty<InheritedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<InheritedTypeSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndTrailingComma: ConcreteSyntaxProperty<InheritedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<InheritedTypeSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<InheritedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == InitializerClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEqual: ConcreteSyntaxProperty<InitializerClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var equal: ConcreteSyntaxProperty<InitializerClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEqualAndValue: ConcreteSyntaxProperty<InitializerClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<InitializerClauseSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: ConcreteSyntaxProperty<InitializerClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == InitializerDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<InitializerDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<InitializerDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndInitKeyword: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var initKeyword: ConcreteSyntaxProperty<InitializerDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitKeywordAndOptionalMark: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var optionalMark: ConcreteSyntaxProperty<InitializerDeclSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOptionalMarkAndGenericParameterClause: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<InitializerDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndSignature: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var signature: ConcreteSyntaxProperty<InitializerDeclSyntax, FunctionSignatureSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndGenericWhereClause: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<InitializerDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndBody: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<InitializerDeclSyntax, CodeBlockSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == InlineArrayTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: ConcreteSyntaxProperty<InlineArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<InlineArrayTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndCount: ConcreteSyntaxProperty<InlineArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var count: ConcreteSyntaxProperty<InlineArrayTypeSyntax, GenericArgumentSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCountAndSeparator: ConcreteSyntaxProperty<InlineArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var separator: ConcreteSyntaxProperty<InlineArrayTypeSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSeparatorAndElement: ConcreteSyntaxProperty<InlineArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var element: ConcreteSyntaxProperty<InlineArrayTypeSyntax, GenericArgumentSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementAndRightSquare: ConcreteSyntaxProperty<InlineArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<InlineArrayTypeSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: ConcreteSyntaxProperty<InlineArrayTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IntegerLiteralExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLiteral: ConcreteSyntaxProperty<IntegerLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var literal: ConcreteSyntaxProperty<IntegerLiteralExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLiteral: ConcreteSyntaxProperty<IntegerLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IsExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<IsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<IsExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndIsKeyword: ConcreteSyntaxProperty<IsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var isKeyword: ConcreteSyntaxProperty<IsExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenIsKeywordAndType: ConcreteSyntaxProperty<IsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<IsExprSyntax, TypeSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<IsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == IsTypePatternSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIsKeyword: ConcreteSyntaxProperty<IsTypePatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var isKeyword: ConcreteSyntaxProperty<IsTypePatternSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenIsKeywordAndType: ConcreteSyntaxProperty<IsTypePatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<IsTypePatternSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<IsTypePatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == KeyPathComponentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePeriod: ConcreteSyntaxProperty<KeyPathComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var period: ConcreteSyntaxProperty<KeyPathComponentSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndComponent: ConcreteSyntaxProperty<KeyPathComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var component: ConcreteSyntaxProperty<KeyPathComponentSyntax, KeyPathComponentSyntax.Component> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComponent: ConcreteSyntaxProperty<KeyPathComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == KeyPathExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBackslash: ConcreteSyntaxProperty<KeyPathExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var backslash: ConcreteSyntaxProperty<KeyPathExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBackslashAndRoot: ConcreteSyntaxProperty<KeyPathExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var root: ConcreteSyntaxProperty<KeyPathExprSyntax, TypeSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRootAndComponents: ConcreteSyntaxProperty<KeyPathExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var components: ConcreteSyntaxProperty<KeyPathExprSyntax, KeyPathComponentListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComponents: ConcreteSyntaxProperty<KeyPathExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
@@ -4240,280 +5220,346 @@ extension ConcreteSyntaxProperty where Base == KeyPathExprSyntax {
 
 @_spi(ExperimentalLanguageFeatures)
 extension ConcreteSyntaxProperty where Base == KeyPathMethodComponentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDeclName: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var declName: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, DeclReferenceExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclNameAndLeftParen: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, LabeledExprListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<KeyPathMethodComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == KeyPathOptionalComponentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeQuestionOrExclamationMark: ConcreteSyntaxProperty<KeyPathOptionalComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: ConcreteSyntaxProperty<KeyPathOptionalComponentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionOrExclamationMark: ConcreteSyntaxProperty<KeyPathOptionalComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == KeyPathPropertyComponentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDeclName: ConcreteSyntaxProperty<KeyPathPropertyComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var declName: ConcreteSyntaxProperty<KeyPathPropertyComponentSyntax, DeclReferenceExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclNameAndGenericArgumentClause: ConcreteSyntaxProperty<KeyPathPropertyComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: ConcreteSyntaxProperty<KeyPathPropertyComponentSyntax, GenericArgumentClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: ConcreteSyntaxProperty<KeyPathPropertyComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == KeyPathSubscriptComponentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: ConcreteSyntaxProperty<KeyPathSubscriptComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<KeyPathSubscriptComponentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndArguments: ConcreteSyntaxProperty<KeyPathSubscriptComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<KeyPathSubscriptComponentSyntax, LabeledExprListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightSquare: ConcreteSyntaxProperty<KeyPathSubscriptComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<KeyPathSubscriptComponentSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: ConcreteSyntaxProperty<KeyPathSubscriptComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == LabeledExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: ConcreteSyntaxProperty<LabeledExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<LabeledExprSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<LabeledExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<LabeledExprSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndExpression: ConcreteSyntaxProperty<LabeledExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<LabeledExprSyntax, ExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndTrailingComma: ConcreteSyntaxProperty<LabeledExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<LabeledExprSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<LabeledExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == LabeledSpecializeArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndTrailingComma: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<LabeledSpecializeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == LabeledStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: ConcreteSyntaxProperty<LabeledStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<LabeledStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<LabeledStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<LabeledStmtSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndStatement: ConcreteSyntaxProperty<LabeledStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var statement: ConcreteSyntaxProperty<LabeledStmtSyntax, StmtSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterStatement: ConcreteSyntaxProperty<LabeledStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == LayoutRequirementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<LayoutRequirementSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndColon: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<LayoutRequirementSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndLayoutSpecifier: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var layoutSpecifier: ConcreteSyntaxProperty<LayoutRequirementSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLayoutSpecifierAndLeftParen: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<LayoutRequirementSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndSize: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var size: ConcreteSyntaxProperty<LayoutRequirementSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSizeAndComma: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: ConcreteSyntaxProperty<LayoutRequirementSyntax, TokenSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndAlignment: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var alignment: ConcreteSyntaxProperty<LayoutRequirementSyntax, TokenSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAlignmentAndRightParen: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<LayoutRequirementSyntax, TokenSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
@@ -4521,22 +5567,27 @@ extension ConcreteSyntaxProperty where Base == LayoutRequirementSyntax {
 
 @_spi(ExperimentalLanguageFeatures)
 extension ConcreteSyntaxProperty where Base == LifetimeSpecifierArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeParameter: ConcreteSyntaxProperty<LifetimeSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameter: ConcreteSyntaxProperty<LifetimeSpecifierArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterAndTrailingComma: ConcreteSyntaxProperty<LifetimeSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<LifetimeSpecifierArgumentSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<LifetimeSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
@@ -4544,356 +5595,442 @@ extension ConcreteSyntaxProperty where Base == LifetimeSpecifierArgumentSyntax {
 
 @_spi(ExperimentalLanguageFeatures)
 extension ConcreteSyntaxProperty where Base == LifetimeTypeSpecifierSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDependsOnKeyword: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var dependsOnKeyword: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDependsOnKeywordAndLeftParen: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndScopedKeyword: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var scopedKeyword: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenScopedKeywordAndArguments: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, LifetimeSpecifierArgumentListSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MacroDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<MacroDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<MacroDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndMacroKeyword: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var macroKeyword: ConcreteSyntaxProperty<MacroDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMacroKeywordAndName: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<MacroDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<MacroDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndSignature: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var signature: ConcreteSyntaxProperty<MacroDeclSyntax, FunctionSignatureSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndDefinition: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var definition: ConcreteSyntaxProperty<MacroDeclSyntax, InitializerClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefinitionAndGenericWhereClause: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<MacroDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: ConcreteSyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MacroExpansionDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPound: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var pound: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundAndModuleSelector: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleSelector: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, ModuleSelectorSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndMacroName: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var macroName: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMacroNameAndGenericArgumentClause: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, GenericArgumentClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericArgumentClauseAndLeftParen: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, TokenSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, LabeledExprListSyntax> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, TokenSyntax?> {
     .init(index: 17)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndTrailingClosure: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 18)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingClosure: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, ClosureExprSyntax?> {
     .init(index: 19)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 20)
   }
 
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, MultipleTrailingClosureElementListSyntax> {
     .init(index: 21)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: ConcreteSyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 22)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MacroExpansionExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePound: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var pound: ConcreteSyntaxProperty<MacroExpansionExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundAndModuleSelector: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleSelector: ConcreteSyntaxProperty<MacroExpansionExprSyntax, ModuleSelectorSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndMacroName: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var macroName: ConcreteSyntaxProperty<MacroExpansionExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMacroNameAndGenericArgumentClause: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: ConcreteSyntaxProperty<MacroExpansionExprSyntax, GenericArgumentClauseSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericArgumentClauseAndLeftParen: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<MacroExpansionExprSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<MacroExpansionExprSyntax, LabeledExprListSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<MacroExpansionExprSyntax, TokenSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndTrailingClosure: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingClosure: ConcreteSyntaxProperty<MacroExpansionExprSyntax, ClosureExprSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: ConcreteSyntaxProperty<MacroExpansionExprSyntax, MultipleTrailingClosureElementListSyntax> {
     .init(index: 17)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: ConcreteSyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 18)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MatchingPatternConditionSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCaseKeyword: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var caseKeyword: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndPattern: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, PatternSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, TypeAnnotationSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInitializer: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var initializer: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, InitializerClauseSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInitializer: ConcreteSyntaxProperty<MatchingPatternConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MemberAccessExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBase: ConcreteSyntaxProperty<MemberAccessExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var base: ConcreteSyntaxProperty<MemberAccessExprSyntax, ExprSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseAndPeriod: ConcreteSyntaxProperty<MemberAccessExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var period: ConcreteSyntaxProperty<MemberAccessExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndDeclName: ConcreteSyntaxProperty<MemberAccessExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var declName: ConcreteSyntaxProperty<MemberAccessExprSyntax, DeclReferenceExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDeclName: ConcreteSyntaxProperty<MemberAccessExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
@@ -4901,1620 +6038,1996 @@ extension ConcreteSyntaxProperty where Base == MemberAccessExprSyntax {
 
 @_spi(Compiler)
 extension ConcreteSyntaxProperty where Base == MemberBlockItemListFileSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeMembers: ConcreteSyntaxProperty<MemberBlockItemListFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var members: ConcreteSyntaxProperty<MemberBlockItemListFileSyntax, MemberBlockItemListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMembersAndEndOfFileToken: ConcreteSyntaxProperty<MemberBlockItemListFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: ConcreteSyntaxProperty<MemberBlockItemListFileSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: ConcreteSyntaxProperty<MemberBlockItemListFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MemberBlockItemSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDecl: ConcreteSyntaxProperty<MemberBlockItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var decl: ConcreteSyntaxProperty<MemberBlockItemSyntax, DeclSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclAndSemicolon: ConcreteSyntaxProperty<MemberBlockItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var semicolon: ConcreteSyntaxProperty<MemberBlockItemSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSemicolon: ConcreteSyntaxProperty<MemberBlockItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MemberBlockSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: ConcreteSyntaxProperty<MemberBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: ConcreteSyntaxProperty<MemberBlockSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndMembers: ConcreteSyntaxProperty<MemberBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var members: ConcreteSyntaxProperty<MemberBlockSyntax, MemberBlockItemListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMembersAndRightBrace: ConcreteSyntaxProperty<MemberBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: ConcreteSyntaxProperty<MemberBlockSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: ConcreteSyntaxProperty<MemberBlockSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MemberTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBaseType: ConcreteSyntaxProperty<MemberTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var baseType: ConcreteSyntaxProperty<MemberTypeSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseTypeAndPeriod: ConcreteSyntaxProperty<MemberTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var period: ConcreteSyntaxProperty<MemberTypeSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndModuleSelector: ConcreteSyntaxProperty<MemberTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleSelector: ConcreteSyntaxProperty<MemberTypeSyntax, ModuleSelectorSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndName: ConcreteSyntaxProperty<MemberTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<MemberTypeSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericArgumentClause: ConcreteSyntaxProperty<MemberTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: ConcreteSyntaxProperty<MemberTypeSyntax, GenericArgumentClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: ConcreteSyntaxProperty<MemberTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MetatypeTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBaseType: ConcreteSyntaxProperty<MetatypeTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var baseType: ConcreteSyntaxProperty<MetatypeTypeSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseTypeAndPeriod: ConcreteSyntaxProperty<MetatypeTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var period: ConcreteSyntaxProperty<MetatypeTypeSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndMetatypeSpecifier: ConcreteSyntaxProperty<MetatypeTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var metatypeSpecifier: ConcreteSyntaxProperty<MetatypeTypeSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMetatypeSpecifier: ConcreteSyntaxProperty<MetatypeTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MissingDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<MissingDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<MissingDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<MissingDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<MissingDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPlaceholder: ConcreteSyntaxProperty<MissingDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<MissingDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<MissingDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MissingExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: ConcreteSyntaxProperty<MissingExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<MissingExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<MissingExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MissingPatternSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: ConcreteSyntaxProperty<MissingPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<MissingPatternSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<MissingPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MissingStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: ConcreteSyntaxProperty<MissingStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<MissingStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<MissingStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MissingSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: ConcreteSyntaxProperty<MissingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<MissingSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<MissingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MissingTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: ConcreteSyntaxProperty<MissingTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var placeholder: ConcreteSyntaxProperty<MissingTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: ConcreteSyntaxProperty<MissingTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ModuleSelectorSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleName: ConcreteSyntaxProperty<ModuleSelectorSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleName: ConcreteSyntaxProperty<ModuleSelectorSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleNameAndColonColon: ConcreteSyntaxProperty<ModuleSelectorSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colonColon: ConcreteSyntaxProperty<ModuleSelectorSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColonColon: ConcreteSyntaxProperty<ModuleSelectorSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == MultipleTrailingClosureElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: ConcreteSyntaxProperty<MultipleTrailingClosureElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<MultipleTrailingClosureElementSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<MultipleTrailingClosureElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<MultipleTrailingClosureElementSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndClosure: ConcreteSyntaxProperty<MultipleTrailingClosureElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var closure: ConcreteSyntaxProperty<MultipleTrailingClosureElementSyntax, ClosureExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosure: ConcreteSyntaxProperty<MultipleTrailingClosureElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == NamedOpaqueReturnTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeGenericParameterClause: ConcreteSyntaxProperty<NamedOpaqueReturnTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<NamedOpaqueReturnTypeSyntax, GenericParameterClauseSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndType: ConcreteSyntaxProperty<NamedOpaqueReturnTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<NamedOpaqueReturnTypeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<NamedOpaqueReturnTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == NilLiteralExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeNilKeyword: ConcreteSyntaxProperty<NilLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var nilKeyword: ConcreteSyntaxProperty<NilLiteralExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterNilKeyword: ConcreteSyntaxProperty<NilLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == NonisolatedSpecifierArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<NonisolatedSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<NonisolatedSpecifierArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndNonsendingKeyword: ConcreteSyntaxProperty<NonisolatedSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var nonsendingKeyword: ConcreteSyntaxProperty<NonisolatedSpecifierArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNonsendingKeywordAndRightParen: ConcreteSyntaxProperty<NonisolatedSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<NonisolatedSpecifierArgumentSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<NonisolatedSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == NonisolatedTypeSpecifierSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeNonisolatedKeyword: ConcreteSyntaxProperty<NonisolatedTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var nonisolatedKeyword: ConcreteSyntaxProperty<NonisolatedTypeSpecifierSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNonisolatedKeywordAndArgument: ConcreteSyntaxProperty<NonisolatedTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var argument: ConcreteSyntaxProperty<NonisolatedTypeSpecifierSyntax, NonisolatedSpecifierArgumentSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArgument: ConcreteSyntaxProperty<NonisolatedTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ObjCSelectorPieceSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<ObjCSelectorPieceSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<ObjCSelectorPieceSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndColon: ConcreteSyntaxProperty<ObjCSelectorPieceSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<ObjCSelectorPieceSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: ConcreteSyntaxProperty<ObjCSelectorPieceSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == OperatorDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeFixitySpecifier: ConcreteSyntaxProperty<OperatorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var fixitySpecifier: ConcreteSyntaxProperty<OperatorDeclSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFixitySpecifierAndOperatorKeyword: ConcreteSyntaxProperty<OperatorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var operatorKeyword: ConcreteSyntaxProperty<OperatorDeclSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOperatorKeywordAndName: ConcreteSyntaxProperty<OperatorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<OperatorDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndOperatorPrecedenceAndTypes: ConcreteSyntaxProperty<OperatorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var operatorPrecedenceAndTypes: ConcreteSyntaxProperty<OperatorDeclSyntax, OperatorPrecedenceAndTypesSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterOperatorPrecedenceAndTypes: ConcreteSyntaxProperty<OperatorDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == OperatorPrecedenceAndTypesSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeColon: ConcreteSyntaxProperty<OperatorPrecedenceAndTypesSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<OperatorPrecedenceAndTypesSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPrecedenceGroup: ConcreteSyntaxProperty<OperatorPrecedenceAndTypesSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var precedenceGroup: ConcreteSyntaxProperty<OperatorPrecedenceAndTypesSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrecedenceGroupAndDesignatedTypes: ConcreteSyntaxProperty<OperatorPrecedenceAndTypesSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var designatedTypes: ConcreteSyntaxProperty<OperatorPrecedenceAndTypesSyntax, DesignatedTypeListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDesignatedTypes: ConcreteSyntaxProperty<OperatorPrecedenceAndTypesSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == OptionalBindingConditionSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBindingSpecifier: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var bindingSpecifier: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBindingSpecifierAndPattern: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, PatternSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, TypeAnnotationSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInitializer: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var initializer: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, InitializerClauseSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInitializer: ConcreteSyntaxProperty<OptionalBindingConditionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == OptionalChainingExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<OptionalChainingExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<OptionalChainingExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndQuestionMark: ConcreteSyntaxProperty<OptionalChainingExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionMark: ConcreteSyntaxProperty<OptionalChainingExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionMark: ConcreteSyntaxProperty<OptionalChainingExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == OptionalTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWrappedType: ConcreteSyntaxProperty<OptionalTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var wrappedType: ConcreteSyntaxProperty<OptionalTypeSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWrappedTypeAndQuestionMark: ConcreteSyntaxProperty<OptionalTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionMark: ConcreteSyntaxProperty<OptionalTypeSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionMark: ConcreteSyntaxProperty<OptionalTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == OriginallyDefinedInAttributeArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleLabel: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleLabel: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleLabelAndColon: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndModuleName: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var moduleName: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, StringLiteralExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleNameAndComma: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndPlatforms: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var platforms: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, PlatformVersionItemListSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlatforms: ConcreteSyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PackElementExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEachKeyword: ConcreteSyntaxProperty<PackElementExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var eachKeyword: ConcreteSyntaxProperty<PackElementExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEachKeywordAndPack: ConcreteSyntaxProperty<PackElementExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var pack: ConcreteSyntaxProperty<PackElementExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPack: ConcreteSyntaxProperty<PackElementExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PackElementTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEachKeyword: ConcreteSyntaxProperty<PackElementTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var eachKeyword: ConcreteSyntaxProperty<PackElementTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEachKeywordAndPack: ConcreteSyntaxProperty<PackElementTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var pack: ConcreteSyntaxProperty<PackElementTypeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPack: ConcreteSyntaxProperty<PackElementTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PackExpansionExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRepeatKeyword: ConcreteSyntaxProperty<PackExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var repeatKeyword: ConcreteSyntaxProperty<PackExpansionExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRepeatKeywordAndRepetitionPattern: ConcreteSyntaxProperty<PackExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var repetitionPattern: ConcreteSyntaxProperty<PackExpansionExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRepetitionPattern: ConcreteSyntaxProperty<PackExpansionExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PackExpansionTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRepeatKeyword: ConcreteSyntaxProperty<PackExpansionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var repeatKeyword: ConcreteSyntaxProperty<PackExpansionTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRepeatKeywordAndRepetitionPattern: ConcreteSyntaxProperty<PackExpansionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var repetitionPattern: ConcreteSyntaxProperty<PackExpansionTypeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRepetitionPattern: ConcreteSyntaxProperty<PackExpansionTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PatternBindingSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: ConcreteSyntaxProperty<PatternBindingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<PatternBindingSyntax, PatternSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: ConcreteSyntaxProperty<PatternBindingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: ConcreteSyntaxProperty<PatternBindingSyntax, TypeAnnotationSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInitializer: ConcreteSyntaxProperty<PatternBindingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var initializer: ConcreteSyntaxProperty<PatternBindingSyntax, InitializerClauseSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndAccessorBlock: ConcreteSyntaxProperty<PatternBindingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var accessorBlock: ConcreteSyntaxProperty<PatternBindingSyntax, AccessorBlockSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorBlockAndTrailingComma: ConcreteSyntaxProperty<PatternBindingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<PatternBindingSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<PatternBindingSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PatternExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: ConcreteSyntaxProperty<PatternExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<PatternExprSyntax, PatternSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPattern: ConcreteSyntaxProperty<PatternExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PlatformVersionItemSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlatformVersion: ConcreteSyntaxProperty<PlatformVersionItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var platformVersion: ConcreteSyntaxProperty<PlatformVersionItemSyntax, PlatformVersionSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPlatformVersionAndTrailingComma: ConcreteSyntaxProperty<PlatformVersionItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<PlatformVersionItemSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<PlatformVersionItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PlatformVersionSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlatform: ConcreteSyntaxProperty<PlatformVersionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var platform: ConcreteSyntaxProperty<PlatformVersionSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPlatformAndVersion: ConcreteSyntaxProperty<PlatformVersionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var version: ConcreteSyntaxProperty<PlatformVersionSyntax, VersionTupleSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterVersion: ConcreteSyntaxProperty<PlatformVersionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PostfixIfConfigExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBase: ConcreteSyntaxProperty<PostfixIfConfigExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var base: ConcreteSyntaxProperty<PostfixIfConfigExprSyntax, ExprSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseAndConfig: ConcreteSyntaxProperty<PostfixIfConfigExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var config: ConcreteSyntaxProperty<PostfixIfConfigExprSyntax, IfConfigDeclSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterConfig: ConcreteSyntaxProperty<PostfixIfConfigExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PostfixOperatorExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<PostfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<PostfixOperatorExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndOperator: ConcreteSyntaxProperty<PostfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var `operator`: ConcreteSyntaxProperty<PostfixOperatorExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterOperator: ConcreteSyntaxProperty<PostfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PoundSourceLocationArgumentsSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeFileLabel: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var fileLabel: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFileLabelAndFileColon: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var fileColon: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFileColonAndFileName: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var fileName: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, SimpleStringLiteralExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFileNameAndComma: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndLineLabel: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var lineLabel: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLineLabelAndLineColon: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var lineColon: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, TokenSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLineColonAndLineNumber: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var lineNumber: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, TokenSyntax> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLineNumber: ConcreteSyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PoundSourceLocationSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePoundSourceLocation: ConcreteSyntaxProperty<PoundSourceLocationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var poundSourceLocation: ConcreteSyntaxProperty<PoundSourceLocationSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundSourceLocationAndLeftParen: ConcreteSyntaxProperty<PoundSourceLocationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<PoundSourceLocationSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: ConcreteSyntaxProperty<PoundSourceLocationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<PoundSourceLocationSyntax, PoundSourceLocationArgumentsSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: ConcreteSyntaxProperty<PoundSourceLocationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<PoundSourceLocationSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<PoundSourceLocationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrecedenceGroupAssignmentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAssignmentLabel: ConcreteSyntaxProperty<PrecedenceGroupAssignmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var assignmentLabel: ConcreteSyntaxProperty<PrecedenceGroupAssignmentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAssignmentLabelAndColon: ConcreteSyntaxProperty<PrecedenceGroupAssignmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<PrecedenceGroupAssignmentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: ConcreteSyntaxProperty<PrecedenceGroupAssignmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<PrecedenceGroupAssignmentSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: ConcreteSyntaxProperty<PrecedenceGroupAssignmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrecedenceGroupAssociativitySyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAssociativityLabel: ConcreteSyntaxProperty<PrecedenceGroupAssociativitySyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var associativityLabel: ConcreteSyntaxProperty<PrecedenceGroupAssociativitySyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAssociativityLabelAndColon: ConcreteSyntaxProperty<PrecedenceGroupAssociativitySyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<PrecedenceGroupAssociativitySyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: ConcreteSyntaxProperty<PrecedenceGroupAssociativitySyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<PrecedenceGroupAssociativitySyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: ConcreteSyntaxProperty<PrecedenceGroupAssociativitySyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrecedenceGroupDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPrecedencegroupKeyword: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var precedencegroupKeyword: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrecedencegroupKeywordAndName: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndLeftBrace: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndGroupAttributes: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var groupAttributes: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, PrecedenceGroupAttributeListSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGroupAttributesAndRightBrace: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, TokenSyntax> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: ConcreteSyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrecedenceGroupNameSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<PrecedenceGroupNameSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<PrecedenceGroupNameSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingComma: ConcreteSyntaxProperty<PrecedenceGroupNameSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<PrecedenceGroupNameSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<PrecedenceGroupNameSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrecedenceGroupRelationSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeHigherThanOrLowerThanLabel: ConcreteSyntaxProperty<PrecedenceGroupRelationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var higherThanOrLowerThanLabel: ConcreteSyntaxProperty<PrecedenceGroupRelationSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenHigherThanOrLowerThanLabelAndColon: ConcreteSyntaxProperty<PrecedenceGroupRelationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<PrecedenceGroupRelationSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPrecedenceGroups: ConcreteSyntaxProperty<PrecedenceGroupRelationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var precedenceGroups: ConcreteSyntaxProperty<PrecedenceGroupRelationSyntax, PrecedenceGroupNameListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPrecedenceGroups: ConcreteSyntaxProperty<PrecedenceGroupRelationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrefixOperatorExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOperator: ConcreteSyntaxProperty<PrefixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var `operator`: ConcreteSyntaxProperty<PrefixOperatorExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOperatorAndExpression: ConcreteSyntaxProperty<PrefixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<PrefixOperatorExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<PrefixOperatorExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrimaryAssociatedTypeClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftAngle: ConcreteSyntaxProperty<PrimaryAssociatedTypeClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftAngle: ConcreteSyntaxProperty<PrimaryAssociatedTypeClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes: ConcreteSyntaxProperty<PrimaryAssociatedTypeClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var primaryAssociatedTypes: ConcreteSyntaxProperty<PrimaryAssociatedTypeClauseSyntax, PrimaryAssociatedTypeListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrimaryAssociatedTypesAndRightAngle: ConcreteSyntaxProperty<PrimaryAssociatedTypeClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightAngle: ConcreteSyntaxProperty<PrimaryAssociatedTypeClauseSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightAngle: ConcreteSyntaxProperty<PrimaryAssociatedTypeClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == PrimaryAssociatedTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: ConcreteSyntaxProperty<PrimaryAssociatedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<PrimaryAssociatedTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingComma: ConcreteSyntaxProperty<PrimaryAssociatedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<PrimaryAssociatedTypeSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<PrimaryAssociatedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ProtocolDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<ProtocolDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<ProtocolDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndProtocolKeyword: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var protocolKeyword: ConcreteSyntaxProperty<ProtocolDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenProtocolKeywordAndName: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<ProtocolDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndPrimaryAssociatedTypeClause: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var primaryAssociatedTypeClause: ConcreteSyntaxProperty<ProtocolDeclSyntax, PrimaryAssociatedTypeClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: ConcreteSyntaxProperty<ProtocolDeclSyntax, InheritanceClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<ProtocolDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var memberBlock: ConcreteSyntaxProperty<ProtocolDeclSyntax, MemberBlockSyntax> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: ConcreteSyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == RegexLiteralExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOpeningPounds: ConcreteSyntaxProperty<RegexLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var openingPounds: ConcreteSyntaxProperty<RegexLiteralExprSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningPoundsAndOpeningSlash: ConcreteSyntaxProperty<RegexLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var openingSlash: ConcreteSyntaxProperty<RegexLiteralExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningSlashAndRegex: ConcreteSyntaxProperty<RegexLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var regex: ConcreteSyntaxProperty<RegexLiteralExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRegexAndClosingSlash: ConcreteSyntaxProperty<RegexLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingSlash: ConcreteSyntaxProperty<RegexLiteralExprSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClosingSlashAndClosingPounds: ConcreteSyntaxProperty<RegexLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingPounds: ConcreteSyntaxProperty<RegexLiteralExprSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosingPounds: ConcreteSyntaxProperty<RegexLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == RepeatStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRepeatKeyword: ConcreteSyntaxProperty<RepeatStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var repeatKeyword: ConcreteSyntaxProperty<RepeatStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRepeatKeywordAndBody: ConcreteSyntaxProperty<RepeatStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<RepeatStmtSyntax, CodeBlockSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndWhileKeyword: ConcreteSyntaxProperty<RepeatStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var whileKeyword: ConcreteSyntaxProperty<RepeatStmtSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhileKeywordAndCondition: ConcreteSyntaxProperty<RepeatStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var condition: ConcreteSyntaxProperty<RepeatStmtSyntax, ExprSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCondition: ConcreteSyntaxProperty<RepeatStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ReturnClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArrow: ConcreteSyntaxProperty<ReturnClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var arrow: ConcreteSyntaxProperty<ReturnClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArrowAndType: ConcreteSyntaxProperty<ReturnClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<ReturnClauseSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<ReturnClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ReturnStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeReturnKeyword: ConcreteSyntaxProperty<ReturnStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var returnKeyword: ConcreteSyntaxProperty<ReturnStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenReturnKeywordAndExpression: ConcreteSyntaxProperty<ReturnStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ReturnStmtSyntax, ExprSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<ReturnStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SameTypeRequirementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftType: ConcreteSyntaxProperty<SameTypeRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftType: ConcreteSyntaxProperty<SameTypeRequirementSyntax, SameTypeRequirementSyntax.LeftType> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftTypeAndEqual: ConcreteSyntaxProperty<SameTypeRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var equal: ConcreteSyntaxProperty<SameTypeRequirementSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEqualAndRightType: ConcreteSyntaxProperty<SameTypeRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightType: ConcreteSyntaxProperty<SameTypeRequirementSyntax, SameTypeRequirementSyntax.RightType> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightType: ConcreteSyntaxProperty<SameTypeRequirementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SectionAttributeArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSection: ConcreteSyntaxProperty<SectionAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var section: ConcreteSyntaxProperty<SectionAttributeArgumentSyntax, SectionAttributeArgumentSyntax.Section> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSection: ConcreteSyntaxProperty<SectionAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SequenceExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeElements: ConcreteSyntaxProperty<SequenceExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<SequenceExprSyntax, ExprListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: ConcreteSyntaxProperty<SequenceExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SimpleStringLiteralExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOpeningQuote: ConcreteSyntaxProperty<SimpleStringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var openingQuote: ConcreteSyntaxProperty<SimpleStringLiteralExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningQuoteAndSegments: ConcreteSyntaxProperty<SimpleStringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var segments: ConcreteSyntaxProperty<SimpleStringLiteralExprSyntax, SimpleStringLiteralSegmentListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSegmentsAndClosingQuote: ConcreteSyntaxProperty<SimpleStringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingQuote: ConcreteSyntaxProperty<SimpleStringLiteralExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosingQuote: ConcreteSyntaxProperty<SimpleStringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SimpleTypeSpecifierSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifier: ConcreteSyntaxProperty<SimpleTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var specifier: ConcreteSyntaxProperty<SimpleTypeSpecifierSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSpecifier: ConcreteSyntaxProperty<SimpleTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SomeOrAnyTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSomeOrAnySpecifier: ConcreteSyntaxProperty<SomeOrAnyTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var someOrAnySpecifier: ConcreteSyntaxProperty<SomeOrAnyTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSomeOrAnySpecifierAndConstraint: ConcreteSyntaxProperty<SomeOrAnyTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var constraint: ConcreteSyntaxProperty<SomeOrAnyTypeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterConstraint: ConcreteSyntaxProperty<SomeOrAnyTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SourceFileSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeShebang: ConcreteSyntaxProperty<SourceFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var shebang: ConcreteSyntaxProperty<SourceFileSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenShebangAndStatements: ConcreteSyntaxProperty<SourceFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var statements: ConcreteSyntaxProperty<SourceFileSyntax, CodeBlockItemListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStatementsAndEndOfFileToken: ConcreteSyntaxProperty<SourceFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: ConcreteSyntaxProperty<SourceFileSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: ConcreteSyntaxProperty<SourceFileSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SpecializeAvailabilityArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAvailabilityLabel: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var availabilityLabel: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityLabelAndColon: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndAvailabilityArguments: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var availabilityArguments: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, AvailabilityArgumentListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityArgumentsAndSemicolon: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var semicolon: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSemicolon: ConcreteSyntaxProperty<SpecializeAvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SpecializeTargetFunctionArgumentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeTargetLabel: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var targetLabel: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTargetLabelAndColon: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndDeclName: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var declName: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, DeclReferenceExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclNameAndTrailingComma: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<SpecializeTargetFunctionArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
@@ -6522,529 +8035,653 @@ extension ConcreteSyntaxProperty where Base == SpecializeTargetFunctionArgumentS
 
 extension ConcreteSyntaxProperty where Base == SpecializedAttributeArgumentSyntax {
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExportedArgument: ConcreteSyntaxProperty<SpecializedAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var exportedArgument: ConcreteSyntaxProperty<SpecializedAttributeArgumentSyntax, LabeledSpecializeArgumentSyntax?> {
     .init(index: 1)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExportedArgumentAndGenericWhereClause: ConcreteSyntaxProperty<SpecializedAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<SpecializedAttributeArgumentSyntax, GenericWhereClauseSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: ConcreteSyntaxProperty<SpecializedAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == StringLiteralExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOpeningPounds: ConcreteSyntaxProperty<StringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var openingPounds: ConcreteSyntaxProperty<StringLiteralExprSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningPoundsAndOpeningQuote: ConcreteSyntaxProperty<StringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var openingQuote: ConcreteSyntaxProperty<StringLiteralExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningQuoteAndSegments: ConcreteSyntaxProperty<StringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var segments: ConcreteSyntaxProperty<StringLiteralExprSyntax, StringLiteralSegmentListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSegmentsAndClosingQuote: ConcreteSyntaxProperty<StringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingQuote: ConcreteSyntaxProperty<StringLiteralExprSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClosingQuoteAndClosingPounds: ConcreteSyntaxProperty<StringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingPounds: ConcreteSyntaxProperty<StringLiteralExprSyntax, TokenSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosingPounds: ConcreteSyntaxProperty<StringLiteralExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == StringSegmentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeContent: ConcreteSyntaxProperty<StringSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var content: ConcreteSyntaxProperty<StringSegmentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterContent: ConcreteSyntaxProperty<StringSegmentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == StructDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<StructDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<StructDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndStructKeyword: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var structKeyword: ConcreteSyntaxProperty<StructDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStructKeywordAndName: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<StructDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<StructDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: ConcreteSyntaxProperty<StructDeclSyntax, InheritanceClauseSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<StructDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var memberBlock: ConcreteSyntaxProperty<StructDeclSyntax, MemberBlockSyntax> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: ConcreteSyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SubscriptCallExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCalledExpression: ConcreteSyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var calledExpression: ConcreteSyntaxProperty<SubscriptCallExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCalledExpressionAndLeftSquare: ConcreteSyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftSquare: ConcreteSyntaxProperty<SubscriptCallExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndArguments: ConcreteSyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var arguments: ConcreteSyntaxProperty<SubscriptCallExprSyntax, LabeledExprListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightSquare: ConcreteSyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: ConcreteSyntaxProperty<SubscriptCallExprSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightSquareAndTrailingClosure: ConcreteSyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingClosure: ConcreteSyntaxProperty<SubscriptCallExprSyntax, ClosureExprSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ConcreteSyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: ConcreteSyntaxProperty<SubscriptCallExprSyntax, MultipleTrailingClosureElementListSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: ConcreteSyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SubscriptDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<SubscriptDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<SubscriptDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndSubscriptKeyword: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var subscriptKeyword: ConcreteSyntaxProperty<SubscriptDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSubscriptKeywordAndGenericParameterClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndParameterClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var parameterClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, FunctionParameterClauseSyntax> {
     .init(index: 9)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndYieldClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var yieldClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, FunctionYieldClauseSyntax?> {
     .init(index: 11)
   }
 
   @_spi(ExperimentalLanguageFeatures)
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var returnClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, ReturnClauseSyntax> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenReturnClauseAndGenericWhereClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<SubscriptDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 15)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndAccessorBlock: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var accessorBlock: ConcreteSyntaxProperty<SubscriptDeclSyntax, AccessorBlockSyntax?> {
     .init(index: 17)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAccessorBlock: ConcreteSyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 18)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SuperExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSuperKeyword: ConcreteSyntaxProperty<SuperExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var superKeyword: ConcreteSyntaxProperty<SuperExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSuperKeyword: ConcreteSyntaxProperty<SuperExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SuppressedTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWithoutTilde: ConcreteSyntaxProperty<SuppressedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var withoutTilde: ConcreteSyntaxProperty<SuppressedTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWithoutTildeAndType: ConcreteSyntaxProperty<SuppressedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<SuppressedTypeSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<SuppressedTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SwitchCaseItemSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: ConcreteSyntaxProperty<SwitchCaseItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<SwitchCaseItemSyntax, PatternSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndWhereClause: ConcreteSyntaxProperty<SwitchCaseItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var whereClause: ConcreteSyntaxProperty<SwitchCaseItemSyntax, WhereClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereClauseAndTrailingComma: ConcreteSyntaxProperty<SwitchCaseItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<SwitchCaseItemSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<SwitchCaseItemSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SwitchCaseLabelSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCaseKeyword: ConcreteSyntaxProperty<SwitchCaseLabelSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var caseKeyword: ConcreteSyntaxProperty<SwitchCaseLabelSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndCaseItems: ConcreteSyntaxProperty<SwitchCaseLabelSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var caseItems: ConcreteSyntaxProperty<SwitchCaseLabelSyntax, SwitchCaseItemListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseItemsAndColon: ConcreteSyntaxProperty<SwitchCaseLabelSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<SwitchCaseLabelSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: ConcreteSyntaxProperty<SwitchCaseLabelSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SwitchCaseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttribute: ConcreteSyntaxProperty<SwitchCaseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attribute: ConcreteSyntaxProperty<SwitchCaseSyntax, AttributeSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributeAndLabel: ConcreteSyntaxProperty<SwitchCaseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<SwitchCaseSyntax, SwitchCaseSyntax.Label> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndStatements: ConcreteSyntaxProperty<SwitchCaseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var statements: ConcreteSyntaxProperty<SwitchCaseSyntax, CodeBlockItemListSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterStatements: ConcreteSyntaxProperty<SwitchCaseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SwitchDefaultLabelSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDefaultKeyword: ConcreteSyntaxProperty<SwitchDefaultLabelSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var defaultKeyword: ConcreteSyntaxProperty<SwitchDefaultLabelSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultKeywordAndColon: ConcreteSyntaxProperty<SwitchDefaultLabelSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<SwitchDefaultLabelSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: ConcreteSyntaxProperty<SwitchDefaultLabelSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == SwitchExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSwitchKeyword: ConcreteSyntaxProperty<SwitchExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var switchKeyword: ConcreteSyntaxProperty<SwitchExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSwitchKeywordAndSubject: ConcreteSyntaxProperty<SwitchExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var subject: ConcreteSyntaxProperty<SwitchExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSubjectAndLeftBrace: ConcreteSyntaxProperty<SwitchExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: ConcreteSyntaxProperty<SwitchExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndCases: ConcreteSyntaxProperty<SwitchExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var cases: ConcreteSyntaxProperty<SwitchExprSyntax, SwitchCaseListSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCasesAndRightBrace: ConcreteSyntaxProperty<SwitchExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: ConcreteSyntaxProperty<SwitchExprSyntax, TokenSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: ConcreteSyntaxProperty<SwitchExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TernaryExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCondition: ConcreteSyntaxProperty<TernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var condition: ConcreteSyntaxProperty<TernaryExprSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionAndQuestionMark: ConcreteSyntaxProperty<TernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionMark: ConcreteSyntaxProperty<TernaryExprSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionMarkAndThenExpression: ConcreteSyntaxProperty<TernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var thenExpression: ConcreteSyntaxProperty<TernaryExprSyntax, ExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThenExpressionAndColon: ConcreteSyntaxProperty<TernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<TernaryExprSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndElseExpression: ConcreteSyntaxProperty<TernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var elseExpression: ConcreteSyntaxProperty<TernaryExprSyntax, ExprSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElseExpression: ConcreteSyntaxProperty<TernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
@@ -7052,782 +8689,963 @@ extension ConcreteSyntaxProperty where Base == TernaryExprSyntax {
 
 @_spi(ExperimentalLanguageFeatures)
 extension ConcreteSyntaxProperty where Base == ThenStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeThenKeyword: ConcreteSyntaxProperty<ThenStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var thenKeyword: ConcreteSyntaxProperty<ThenStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThenKeywordAndExpression: ConcreteSyntaxProperty<ThenStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ThenStmtSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<ThenStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ThrowStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeThrowKeyword: ConcreteSyntaxProperty<ThrowStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var throwKeyword: ConcreteSyntaxProperty<ThrowStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThrowKeywordAndExpression: ConcreteSyntaxProperty<ThrowStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<ThrowStmtSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<ThrowStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ThrowsClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeThrowsSpecifier: ConcreteSyntaxProperty<ThrowsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var throwsSpecifier: ConcreteSyntaxProperty<ThrowsClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThrowsSpecifierAndLeftParen: ConcreteSyntaxProperty<ThrowsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<ThrowsClauseSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndType: ConcreteSyntaxProperty<ThrowsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<ThrowsClauseSyntax, TypeSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndRightParen: ConcreteSyntaxProperty<ThrowsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<ThrowsClauseSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<ThrowsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TryExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeTryKeyword: ConcreteSyntaxProperty<TryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var tryKeyword: ConcreteSyntaxProperty<TryExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: ConcreteSyntaxProperty<TryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: ConcreteSyntaxProperty<TryExprSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionOrExclamationMarkAndExpression: ConcreteSyntaxProperty<TryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<TryExprSyntax, ExprSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<TryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TupleExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<TupleExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<TupleExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: ConcreteSyntaxProperty<TupleExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<TupleExprSyntax, LabeledExprListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: ConcreteSyntaxProperty<TupleExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<TupleExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<TupleExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TuplePatternElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: ConcreteSyntaxProperty<TuplePatternElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: ConcreteSyntaxProperty<TuplePatternElementSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: ConcreteSyntaxProperty<TuplePatternElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<TuplePatternElementSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPattern: ConcreteSyntaxProperty<TuplePatternElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<TuplePatternElementSyntax, PatternSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTrailingComma: ConcreteSyntaxProperty<TuplePatternElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<TuplePatternElementSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<TuplePatternElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TuplePatternSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<TuplePatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<TuplePatternSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: ConcreteSyntaxProperty<TuplePatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<TuplePatternSyntax, TuplePatternElementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: ConcreteSyntaxProperty<TuplePatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<TuplePatternSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<TuplePatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TupleTypeElementSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeInoutKeyword: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var inoutKeyword: ConcreteSyntaxProperty<TupleTypeElementSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInoutKeywordAndFirstName: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var firstName: ConcreteSyntaxProperty<TupleTypeElementSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var secondName: ConcreteSyntaxProperty<TupleTypeElementSyntax, TokenSyntax?> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<TupleTypeElementSyntax, TokenSyntax?> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<TupleTypeElementSyntax, TypeSyntax> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndEllipsis: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var ellipsis: ConcreteSyntaxProperty<TupleTypeElementSyntax, TokenSyntax?> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEllipsisAndTrailingComma: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: ConcreteSyntaxProperty<TupleTypeElementSyntax, TokenSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: ConcreteSyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TupleTypeSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<TupleTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<TupleTypeSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: ConcreteSyntaxProperty<TupleTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<TupleTypeSyntax, TupleTypeElementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: ConcreteSyntaxProperty<TupleTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<TupleTypeSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<TupleTypeSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TypeAliasDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<TypeAliasDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<TypeAliasDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndTypealiasKeyword: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var typealiasKeyword: ConcreteSyntaxProperty<TypeAliasDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypealiasKeywordAndName: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: ConcreteSyntaxProperty<TypeAliasDeclSyntax, TokenSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: ConcreteSyntaxProperty<TypeAliasDeclSyntax, GenericParameterClauseSyntax?> {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInitializer: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var initializer: ConcreteSyntaxProperty<TypeAliasDeclSyntax, TypeInitializerClauseSyntax> {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndGenericWhereClause: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: ConcreteSyntaxProperty<TypeAliasDeclSyntax, GenericWhereClauseSyntax?> {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: ConcreteSyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 14)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TypeAnnotationSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeColon: ConcreteSyntaxProperty<TypeAnnotationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<TypeAnnotationSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: ConcreteSyntaxProperty<TypeAnnotationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<TypeAnnotationSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<TypeAnnotationSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TypeEffectSpecifiersSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: ConcreteSyntaxProperty<TypeEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: ConcreteSyntaxProperty<TypeEffectSpecifiersSyntax, TokenSyntax?> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsyncSpecifierAndThrowsClause: ConcreteSyntaxProperty<TypeEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var throwsClause: ConcreteSyntaxProperty<TypeEffectSpecifiersSyntax, ThrowsClauseSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterThrowsClause: ConcreteSyntaxProperty<TypeEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TypeExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: ConcreteSyntaxProperty<TypeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var type: ConcreteSyntaxProperty<TypeExprSyntax, TypeSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: ConcreteSyntaxProperty<TypeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == TypeInitializerClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEqual: ConcreteSyntaxProperty<TypeInitializerClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var equal: ConcreteSyntaxProperty<TypeInitializerClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEqualAndValue: ConcreteSyntaxProperty<TypeInitializerClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: ConcreteSyntaxProperty<TypeInitializerClauseSyntax, TypeSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: ConcreteSyntaxProperty<TypeInitializerClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == UnexpectedCodeDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedCode: ConcreteSyntaxProperty<UnexpectedCodeDeclSyntax, UnexpectedNodesSyntax> {
     .init(index: 0)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == UnresolvedAsExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsKeyword: ConcreteSyntaxProperty<UnresolvedAsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var asKeyword: ConcreteSyntaxProperty<UnresolvedAsExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsKeywordAndQuestionOrExclamationMark: ConcreteSyntaxProperty<UnresolvedAsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: ConcreteSyntaxProperty<UnresolvedAsExprSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionOrExclamationMark: ConcreteSyntaxProperty<UnresolvedAsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == UnresolvedIsExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIsKeyword: ConcreteSyntaxProperty<UnresolvedIsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var isKeyword: ConcreteSyntaxProperty<UnresolvedIsExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterIsKeyword: ConcreteSyntaxProperty<UnresolvedIsExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == UnresolvedTernaryExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeQuestionMark: ConcreteSyntaxProperty<UnresolvedTernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var questionMark: ConcreteSyntaxProperty<UnresolvedTernaryExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionMarkAndThenExpression: ConcreteSyntaxProperty<UnresolvedTernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var thenExpression: ConcreteSyntaxProperty<UnresolvedTernaryExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThenExpressionAndColon: ConcreteSyntaxProperty<UnresolvedTernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: ConcreteSyntaxProperty<UnresolvedTernaryExprSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: ConcreteSyntaxProperty<UnresolvedTernaryExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == UnsafeExprSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeUnsafeKeyword: ConcreteSyntaxProperty<UnsafeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unsafeKeyword: ConcreteSyntaxProperty<UnsafeExprSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenUnsafeKeywordAndExpression: ConcreteSyntaxProperty<UnsafeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<UnsafeExprSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: ConcreteSyntaxProperty<UnsafeExprSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == ValueBindingPatternSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBindingSpecifier: ConcreteSyntaxProperty<ValueBindingPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var bindingSpecifier: ConcreteSyntaxProperty<ValueBindingPatternSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBindingSpecifierAndPattern: ConcreteSyntaxProperty<ValueBindingPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var pattern: ConcreteSyntaxProperty<ValueBindingPatternSyntax, PatternSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPattern: ConcreteSyntaxProperty<ValueBindingPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == VariableDeclSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: ConcreteSyntaxProperty<VariableDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var attributes: ConcreteSyntaxProperty<VariableDeclSyntax, AttributeListSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: ConcreteSyntaxProperty<VariableDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var modifiers: ConcreteSyntaxProperty<VariableDeclSyntax, DeclModifierListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndBindingSpecifier: ConcreteSyntaxProperty<VariableDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var bindingSpecifier: ConcreteSyntaxProperty<VariableDeclSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBindingSpecifierAndBindings: ConcreteSyntaxProperty<VariableDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var bindings: ConcreteSyntaxProperty<VariableDeclSyntax, PatternBindingListSyntax> {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBindings: ConcreteSyntaxProperty<VariableDeclSyntax, UnexpectedNodesSyntax?> {
     .init(index: 8)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == VersionComponentSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePeriod: ConcreteSyntaxProperty<VersionComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var period: ConcreteSyntaxProperty<VersionComponentSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndNumber: ConcreteSyntaxProperty<VersionComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var number: ConcreteSyntaxProperty<VersionComponentSyntax, TokenSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterNumber: ConcreteSyntaxProperty<VersionComponentSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == VersionTupleSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeMajor: ConcreteSyntaxProperty<VersionTupleSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var major: ConcreteSyntaxProperty<VersionTupleSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMajorAndComponents: ConcreteSyntaxProperty<VersionTupleSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var components: ConcreteSyntaxProperty<VersionTupleSyntax, VersionComponentListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComponents: ConcreteSyntaxProperty<VersionTupleSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == WhereClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWhereKeyword: ConcreteSyntaxProperty<WhereClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var whereKeyword: ConcreteSyntaxProperty<WhereClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereKeywordAndCondition: ConcreteSyntaxProperty<WhereClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var condition: ConcreteSyntaxProperty<WhereClauseSyntax, ExprSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCondition: ConcreteSyntaxProperty<WhereClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == WhileStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWhileKeyword: ConcreteSyntaxProperty<WhileStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var whileKeyword: ConcreteSyntaxProperty<WhileStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhileKeywordAndConditions: ConcreteSyntaxProperty<WhileStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var conditions: ConcreteSyntaxProperty<WhileStmtSyntax, ConditionElementListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionsAndBody: ConcreteSyntaxProperty<WhileStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var body: ConcreteSyntaxProperty<WhileStmtSyntax, CodeBlockSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: ConcreteSyntaxProperty<WhileStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == WildcardPatternSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWildcard: ConcreteSyntaxProperty<WildcardPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var wildcard: ConcreteSyntaxProperty<WildcardPatternSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterWildcard: ConcreteSyntaxProperty<WildcardPatternSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == YieldStmtSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeYieldKeyword: ConcreteSyntaxProperty<YieldStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var yieldKeyword: ConcreteSyntaxProperty<YieldStmtSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldKeywordAndYieldedExpressions: ConcreteSyntaxProperty<YieldStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var yieldedExpressions: ConcreteSyntaxProperty<YieldStmtSyntax, YieldStmtSyntax.YieldedExpressions> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterYieldedExpressions: ConcreteSyntaxProperty<YieldStmtSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == YieldedExpressionSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: ConcreteSyntaxProperty<YieldedExpressionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var expression: ConcreteSyntaxProperty<YieldedExpressionSyntax, ExprSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndComma: ConcreteSyntaxProperty<YieldedExpressionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: ConcreteSyntaxProperty<YieldedExpressionSyntax, TokenSyntax?> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComma: ConcreteSyntaxProperty<YieldedExpressionSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 }
 
 extension ConcreteSyntaxProperty where Base == YieldedExpressionsClauseSyntax {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: ConcreteSyntaxProperty<YieldedExpressionsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: ConcreteSyntaxProperty<YieldedExpressionsClauseSyntax, TokenSyntax> {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: ConcreteSyntaxProperty<YieldedExpressionsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var elements: ConcreteSyntaxProperty<YieldedExpressionsClauseSyntax, YieldedExpressionListSyntax> {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: ConcreteSyntaxProperty<YieldedExpressionsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: ConcreteSyntaxProperty<YieldedExpressionsClauseSyntax, TokenSyntax> {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: ConcreteSyntaxProperty<YieldedExpressionsClauseSyntax, UnexpectedNodesSyntax?> {
     .init(index: 6)
   }

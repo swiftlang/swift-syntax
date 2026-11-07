@@ -13,14 +13,9 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-extension SyntaxLayout {
-  fileprivate init(syntaxKind: SyntaxKind) {
-    self.syntaxKind = syntaxKind
-  }
-}
-
 extension ABIAttributeArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .abiAttributeArguments)
   }
@@ -28,6 +23,7 @@ extension ABIAttributeArgumentsSyntax {
 
 extension AccessorBlockFileSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .accessorBlockFile)
   }
@@ -35,6 +31,7 @@ extension AccessorBlockFileSyntax {
 
 extension AccessorBlockSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .accessorBlock)
   }
@@ -42,6 +39,7 @@ extension AccessorBlockSyntax {
 
 extension AccessorDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .accessorDecl)
   }
@@ -49,6 +47,7 @@ extension AccessorDeclSyntax {
 
 extension AccessorEffectSpecifiersSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .accessorEffectSpecifiers)
   }
@@ -56,6 +55,7 @@ extension AccessorEffectSpecifiersSyntax {
 
 extension AccessorParametersSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .accessorParameters)
   }
@@ -63,6 +63,7 @@ extension AccessorParametersSyntax {
 
 extension ActorDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .actorDecl)
   }
@@ -70,6 +71,7 @@ extension ActorDeclSyntax {
 
 extension ArrayElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .arrayElement)
   }
@@ -77,6 +79,7 @@ extension ArrayElementSyntax {
 
 extension ArrayExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .arrayExpr)
   }
@@ -84,6 +87,7 @@ extension ArrayExprSyntax {
 
 extension ArrayTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .arrayType)
   }
@@ -91,6 +95,7 @@ extension ArrayTypeSyntax {
 
 extension ArrowExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .arrowExpr)
   }
@@ -98,6 +103,7 @@ extension ArrowExprSyntax {
 
 extension AsExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .asExpr)
   }
@@ -105,6 +111,7 @@ extension AsExprSyntax {
 
 extension AssignmentExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .assignmentExpr)
   }
@@ -112,6 +119,7 @@ extension AssignmentExprSyntax {
 
 extension AssociatedTypeDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .associatedTypeDecl)
   }
@@ -119,6 +127,7 @@ extension AssociatedTypeDeclSyntax {
 
 extension AttributeClauseFileSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .attributeClauseFile)
   }
@@ -126,6 +135,7 @@ extension AttributeClauseFileSyntax {
 
 extension AttributeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .attribute)
   }
@@ -133,6 +143,7 @@ extension AttributeSyntax {
 
 extension AttributedTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .attributedType)
   }
@@ -140,6 +151,7 @@ extension AttributedTypeSyntax {
 
 extension AvailabilityArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .availabilityArgument)
   }
@@ -147,6 +159,7 @@ extension AvailabilityArgumentSyntax {
 
 extension AvailabilityConditionSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .availabilityCondition)
   }
@@ -154,6 +167,7 @@ extension AvailabilityConditionSyntax {
 
 extension AvailabilityLabeledArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .availabilityLabeledArgument)
   }
@@ -161,6 +175,7 @@ extension AvailabilityLabeledArgumentSyntax {
 
 extension AvailabilityMacroDefinitionFileSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .availabilityMacroDefinitionFile)
   }
@@ -168,6 +183,7 @@ extension AvailabilityMacroDefinitionFileSyntax {
 
 extension AwaitExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .awaitExpr)
   }
@@ -175,6 +191,7 @@ extension AwaitExprSyntax {
 
 extension BackDeployedAttributeArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .backDeployedAttributeArguments)
   }
@@ -182,6 +199,7 @@ extension BackDeployedAttributeArgumentsSyntax {
 
 extension BinaryOperatorExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .binaryOperatorExpr)
   }
@@ -189,6 +207,7 @@ extension BinaryOperatorExprSyntax {
 
 extension BooleanLiteralExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .booleanLiteralExpr)
   }
@@ -196,6 +215,7 @@ extension BooleanLiteralExprSyntax {
 
 extension BorrowExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .borrowExpr)
   }
@@ -203,6 +223,7 @@ extension BorrowExprSyntax {
 
 extension BreakStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .breakStmt)
   }
@@ -210,6 +231,7 @@ extension BreakStmtSyntax {
 
 extension _CanImportExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: ._canImportExpr)
   }
@@ -217,6 +239,7 @@ extension _CanImportExprSyntax {
 
 extension _CanImportVersionInfoSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: ._canImportVersionInfo)
   }
@@ -224,6 +247,7 @@ extension _CanImportVersionInfoSyntax {
 
 extension CatchClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .catchClause)
   }
@@ -231,6 +255,7 @@ extension CatchClauseSyntax {
 
 extension CatchItemSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .catchItem)
   }
@@ -238,6 +263,7 @@ extension CatchItemSyntax {
 
 extension ClassDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .classDecl)
   }
@@ -245,6 +271,7 @@ extension ClassDeclSyntax {
 
 extension ClassRestrictionTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .classRestrictionType)
   }
@@ -252,6 +279,7 @@ extension ClassRestrictionTypeSyntax {
 
 extension ClosureCaptureClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureCaptureClause)
   }
@@ -259,6 +287,7 @@ extension ClosureCaptureClauseSyntax {
 
 extension ClosureCaptureSpecifierSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureCaptureSpecifier)
   }
@@ -266,6 +295,7 @@ extension ClosureCaptureSpecifierSyntax {
 
 extension ClosureCaptureSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureCapture)
   }
@@ -273,6 +303,7 @@ extension ClosureCaptureSyntax {
 
 extension ClosureExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureExpr)
   }
@@ -280,6 +311,7 @@ extension ClosureExprSyntax {
 
 extension ClosureParameterClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureParameterClause)
   }
@@ -287,6 +319,7 @@ extension ClosureParameterClauseSyntax {
 
 extension ClosureParameterSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureParameter)
   }
@@ -294,6 +327,7 @@ extension ClosureParameterSyntax {
 
 extension ClosureShorthandParameterSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureShorthandParameter)
   }
@@ -301,6 +335,7 @@ extension ClosureShorthandParameterSyntax {
 
 extension ClosureSignatureSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .closureSignature)
   }
@@ -308,6 +343,7 @@ extension ClosureSignatureSyntax {
 
 extension CodeBlockFileSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .codeBlockFile)
   }
@@ -315,6 +351,7 @@ extension CodeBlockFileSyntax {
 
 extension CodeBlockItemSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .codeBlockItem)
   }
@@ -322,6 +359,7 @@ extension CodeBlockItemSyntax {
 
 extension CodeBlockSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .codeBlock)
   }
@@ -329,6 +367,7 @@ extension CodeBlockSyntax {
 
 extension CompositionTypeElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .compositionTypeElement)
   }
@@ -336,6 +375,7 @@ extension CompositionTypeElementSyntax {
 
 extension CompositionTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .compositionType)
   }
@@ -343,6 +383,7 @@ extension CompositionTypeSyntax {
 
 extension ConditionElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .conditionElement)
   }
@@ -350,6 +391,7 @@ extension ConditionElementSyntax {
 
 extension ConformanceRequirementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .conformanceRequirement)
   }
@@ -357,6 +399,7 @@ extension ConformanceRequirementSyntax {
 
 extension ConsumeExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .consumeExpr)
   }
@@ -364,6 +407,7 @@ extension ConsumeExprSyntax {
 
 extension ContinueStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .continueStmt)
   }
@@ -371,6 +415,7 @@ extension ContinueStmtSyntax {
 
 extension CopyExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .copyExpr)
   }
@@ -378,6 +423,7 @@ extension CopyExprSyntax {
 
 extension DeclModifierDetailSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .declModifierDetail)
   }
@@ -385,6 +431,7 @@ extension DeclModifierDetailSyntax {
 
 extension DeclModifierSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .declModifier)
   }
@@ -392,6 +439,7 @@ extension DeclModifierSyntax {
 
 extension DeclNameArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .declNameArgument)
   }
@@ -399,6 +447,7 @@ extension DeclNameArgumentSyntax {
 
 extension DeclNameArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .declNameArguments)
   }
@@ -406,6 +455,7 @@ extension DeclNameArgumentsSyntax {
 
 extension DeclReferenceExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .declReferenceExpr)
   }
@@ -413,6 +463,7 @@ extension DeclReferenceExprSyntax {
 
 extension DeferStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .deferStmt)
   }
@@ -420,6 +471,7 @@ extension DeferStmtSyntax {
 
 extension DeinitializerDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .deinitializerDecl)
   }
@@ -427,6 +479,7 @@ extension DeinitializerDeclSyntax {
 
 extension DeinitializerEffectSpecifiersSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .deinitializerEffectSpecifiers)
   }
@@ -434,6 +487,7 @@ extension DeinitializerEffectSpecifiersSyntax {
 
 extension DerivativeAttributeArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .derivativeAttributeArguments)
   }
@@ -441,6 +495,7 @@ extension DerivativeAttributeArgumentsSyntax {
 
 extension DesignatedTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .designatedType)
   }
@@ -448,6 +503,7 @@ extension DesignatedTypeSyntax {
 
 extension DictionaryElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .dictionaryElement)
   }
@@ -455,6 +511,7 @@ extension DictionaryElementSyntax {
 
 extension DictionaryExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .dictionaryExpr)
   }
@@ -462,6 +519,7 @@ extension DictionaryExprSyntax {
 
 extension DictionaryTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .dictionaryType)
   }
@@ -469,6 +527,7 @@ extension DictionaryTypeSyntax {
 
 extension DifferentiabilityArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .differentiabilityArgument)
   }
@@ -476,6 +535,7 @@ extension DifferentiabilityArgumentSyntax {
 
 extension DifferentiabilityArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .differentiabilityArguments)
   }
@@ -483,6 +543,7 @@ extension DifferentiabilityArgumentsSyntax {
 
 extension DifferentiabilityWithRespectToArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .differentiabilityWithRespectToArgument)
   }
@@ -490,6 +551,7 @@ extension DifferentiabilityWithRespectToArgumentSyntax {
 
 extension DifferentiableAttributeArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .differentiableAttributeArguments)
   }
@@ -497,6 +559,7 @@ extension DifferentiableAttributeArgumentsSyntax {
 
 extension DiscardAssignmentExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .discardAssignmentExpr)
   }
@@ -504,6 +567,7 @@ extension DiscardAssignmentExprSyntax {
 
 extension DiscardStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .discardStmt)
   }
@@ -511,6 +575,7 @@ extension DiscardStmtSyntax {
 
 extension DoExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .doExpr)
   }
@@ -518,6 +583,7 @@ extension DoExprSyntax {
 
 extension DoStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .doStmt)
   }
@@ -525,6 +591,7 @@ extension DoStmtSyntax {
 
 extension DocumentationAttributeArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .documentationAttributeArgument)
   }
@@ -532,6 +599,7 @@ extension DocumentationAttributeArgumentSyntax {
 
 extension DynamicReplacementAttributeArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .dynamicReplacementAttributeArguments)
   }
@@ -539,6 +607,7 @@ extension DynamicReplacementAttributeArgumentsSyntax {
 
 extension EditorPlaceholderDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .editorPlaceholderDecl)
   }
@@ -546,6 +615,7 @@ extension EditorPlaceholderDeclSyntax {
 
 extension EditorPlaceholderExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .editorPlaceholderExpr)
   }
@@ -553,6 +623,7 @@ extension EditorPlaceholderExprSyntax {
 
 extension EnumCaseDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .enumCaseDecl)
   }
@@ -560,6 +631,7 @@ extension EnumCaseDeclSyntax {
 
 extension EnumCaseElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .enumCaseElement)
   }
@@ -567,6 +639,7 @@ extension EnumCaseElementSyntax {
 
 extension EnumCaseParameterClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .enumCaseParameterClause)
   }
@@ -574,6 +647,7 @@ extension EnumCaseParameterClauseSyntax {
 
 extension EnumCaseParameterSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .enumCaseParameter)
   }
@@ -581,6 +655,7 @@ extension EnumCaseParameterSyntax {
 
 extension EnumDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .enumDecl)
   }
@@ -588,6 +663,7 @@ extension EnumDeclSyntax {
 
 extension ExpressionPatternSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .expressionPattern)
   }
@@ -595,6 +671,7 @@ extension ExpressionPatternSyntax {
 
 extension ExpressionSegmentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .expressionSegment)
   }
@@ -602,6 +679,7 @@ extension ExpressionSegmentSyntax {
 
 extension ExpressionStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .expressionStmt)
   }
@@ -609,6 +687,7 @@ extension ExpressionStmtSyntax {
 
 extension ExtensionDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .extensionDecl)
   }
@@ -616,6 +695,7 @@ extension ExtensionDeclSyntax {
 
 extension FallThroughStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .fallThroughStmt)
   }
@@ -623,6 +703,7 @@ extension FallThroughStmtSyntax {
 
 extension FileDefaultDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .fileDefaultDecl)
   }
@@ -630,6 +711,7 @@ extension FileDefaultDeclSyntax {
 
 extension FloatLiteralExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .floatLiteralExpr)
   }
@@ -637,6 +719,7 @@ extension FloatLiteralExprSyntax {
 
 extension ForStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .forStmt)
   }
@@ -644,6 +727,7 @@ extension ForStmtSyntax {
 
 extension ForceUnwrapExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .forceUnwrapExpr)
   }
@@ -651,6 +735,7 @@ extension ForceUnwrapExprSyntax {
 
 extension FunctionCallExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionCallExpr)
   }
@@ -658,6 +743,7 @@ extension FunctionCallExprSyntax {
 
 extension FunctionDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionDecl)
   }
@@ -665,6 +751,7 @@ extension FunctionDeclSyntax {
 
 extension FunctionEffectSpecifiersSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionEffectSpecifiers)
   }
@@ -672,6 +759,7 @@ extension FunctionEffectSpecifiersSyntax {
 
 extension FunctionParameterClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionParameterClause)
   }
@@ -679,6 +767,7 @@ extension FunctionParameterClauseSyntax {
 
 extension FunctionParameterSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionParameter)
   }
@@ -686,6 +775,7 @@ extension FunctionParameterSyntax {
 
 extension FunctionSignatureSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionSignature)
   }
@@ -693,6 +783,7 @@ extension FunctionSignatureSyntax {
 
 extension FunctionTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionType)
   }
@@ -700,6 +791,7 @@ extension FunctionTypeSyntax {
 
 extension FunctionYieldClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionYieldClause)
   }
@@ -707,6 +799,7 @@ extension FunctionYieldClauseSyntax {
 
 extension FunctionYieldSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .functionYield)
   }
@@ -714,6 +807,7 @@ extension FunctionYieldSyntax {
 
 extension GenericArgumentClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .genericArgumentClause)
   }
@@ -721,6 +815,7 @@ extension GenericArgumentClauseSyntax {
 
 extension GenericArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .genericArgument)
   }
@@ -728,6 +823,7 @@ extension GenericArgumentSyntax {
 
 extension GenericParameterClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .genericParameterClause)
   }
@@ -735,6 +831,7 @@ extension GenericParameterClauseSyntax {
 
 extension GenericParameterSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .genericParameter)
   }
@@ -742,6 +839,7 @@ extension GenericParameterSyntax {
 
 extension GenericRequirementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .genericRequirement)
   }
@@ -749,6 +847,7 @@ extension GenericRequirementSyntax {
 
 extension GenericSpecializationExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .genericSpecializationExpr)
   }
@@ -756,6 +855,7 @@ extension GenericSpecializationExprSyntax {
 
 extension GenericWhereClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .genericWhereClause)
   }
@@ -763,6 +863,7 @@ extension GenericWhereClauseSyntax {
 
 extension GuardStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .guardStmt)
   }
@@ -770,6 +871,7 @@ extension GuardStmtSyntax {
 
 extension IdentifierPatternSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .identifierPattern)
   }
@@ -777,6 +879,7 @@ extension IdentifierPatternSyntax {
 
 extension IdentifierTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .identifierType)
   }
@@ -784,6 +887,7 @@ extension IdentifierTypeSyntax {
 
 extension IfConfigClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .ifConfigClause)
   }
@@ -791,6 +895,7 @@ extension IfConfigClauseSyntax {
 
 extension IfConfigDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .ifConfigDecl)
   }
@@ -798,6 +903,7 @@ extension IfConfigDeclSyntax {
 
 extension IfExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .ifExpr)
   }
@@ -805,6 +911,7 @@ extension IfExprSyntax {
 
 extension ImplementsAttributeArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .implementsAttributeArguments)
   }
@@ -812,6 +919,7 @@ extension ImplementsAttributeArgumentsSyntax {
 
 extension ImplicitlyUnwrappedOptionalTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .implicitlyUnwrappedOptionalType)
   }
@@ -819,6 +927,7 @@ extension ImplicitlyUnwrappedOptionalTypeSyntax {
 
 extension ImportDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .importDecl)
   }
@@ -826,6 +935,7 @@ extension ImportDeclSyntax {
 
 extension ImportPathComponentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .importPathComponent)
   }
@@ -833,6 +943,7 @@ extension ImportPathComponentSyntax {
 
 extension InOutExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .inOutExpr)
   }
@@ -840,6 +951,7 @@ extension InOutExprSyntax {
 
 extension InfixOperatorExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .infixOperatorExpr)
   }
@@ -847,6 +959,7 @@ extension InfixOperatorExprSyntax {
 
 extension InheritanceClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .inheritanceClause)
   }
@@ -854,6 +967,7 @@ extension InheritanceClauseSyntax {
 
 extension InheritedTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .inheritedType)
   }
@@ -861,6 +975,7 @@ extension InheritedTypeSyntax {
 
 extension InitializerClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .initializerClause)
   }
@@ -868,6 +983,7 @@ extension InitializerClauseSyntax {
 
 extension InitializerDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .initializerDecl)
   }
@@ -875,6 +991,7 @@ extension InitializerDeclSyntax {
 
 extension InlineArrayTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .inlineArrayType)
   }
@@ -882,6 +999,7 @@ extension InlineArrayTypeSyntax {
 
 extension IntegerLiteralExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .integerLiteralExpr)
   }
@@ -889,6 +1007,7 @@ extension IntegerLiteralExprSyntax {
 
 extension IsExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .isExpr)
   }
@@ -896,6 +1015,7 @@ extension IsExprSyntax {
 
 extension IsTypePatternSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .isTypePattern)
   }
@@ -903,6 +1023,7 @@ extension IsTypePatternSyntax {
 
 extension KeyPathComponentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .keyPathComponent)
   }
@@ -910,6 +1031,7 @@ extension KeyPathComponentSyntax {
 
 extension KeyPathExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .keyPathExpr)
   }
@@ -917,6 +1039,7 @@ extension KeyPathExprSyntax {
 
 extension KeyPathMethodComponentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .keyPathMethodComponent)
   }
@@ -924,6 +1047,7 @@ extension KeyPathMethodComponentSyntax {
 
 extension KeyPathOptionalComponentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .keyPathOptionalComponent)
   }
@@ -931,6 +1055,7 @@ extension KeyPathOptionalComponentSyntax {
 
 extension KeyPathPropertyComponentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .keyPathPropertyComponent)
   }
@@ -938,6 +1063,7 @@ extension KeyPathPropertyComponentSyntax {
 
 extension KeyPathSubscriptComponentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .keyPathSubscriptComponent)
   }
@@ -945,6 +1071,7 @@ extension KeyPathSubscriptComponentSyntax {
 
 extension LabeledExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .labeledExpr)
   }
@@ -952,6 +1079,7 @@ extension LabeledExprSyntax {
 
 extension LabeledSpecializeArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .labeledSpecializeArgument)
   }
@@ -959,6 +1087,7 @@ extension LabeledSpecializeArgumentSyntax {
 
 extension LabeledStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .labeledStmt)
   }
@@ -966,6 +1095,7 @@ extension LabeledStmtSyntax {
 
 extension LayoutRequirementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .layoutRequirement)
   }
@@ -973,6 +1103,7 @@ extension LayoutRequirementSyntax {
 
 extension LifetimeSpecifierArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .lifetimeSpecifierArgument)
   }
@@ -980,6 +1111,7 @@ extension LifetimeSpecifierArgumentSyntax {
 
 extension LifetimeTypeSpecifierSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .lifetimeTypeSpecifier)
   }
@@ -987,6 +1119,7 @@ extension LifetimeTypeSpecifierSyntax {
 
 extension MacroDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .macroDecl)
   }
@@ -994,6 +1127,7 @@ extension MacroDeclSyntax {
 
 extension MacroExpansionDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .macroExpansionDecl)
   }
@@ -1001,6 +1135,7 @@ extension MacroExpansionDeclSyntax {
 
 extension MacroExpansionExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .macroExpansionExpr)
   }
@@ -1008,6 +1143,7 @@ extension MacroExpansionExprSyntax {
 
 extension MatchingPatternConditionSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .matchingPatternCondition)
   }
@@ -1015,6 +1151,7 @@ extension MatchingPatternConditionSyntax {
 
 extension MemberAccessExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .memberAccessExpr)
   }
@@ -1022,6 +1159,7 @@ extension MemberAccessExprSyntax {
 
 extension MemberBlockItemListFileSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .memberBlockItemListFile)
   }
@@ -1029,6 +1167,7 @@ extension MemberBlockItemListFileSyntax {
 
 extension MemberBlockItemSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .memberBlockItem)
   }
@@ -1036,6 +1175,7 @@ extension MemberBlockItemSyntax {
 
 extension MemberBlockSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .memberBlock)
   }
@@ -1043,6 +1183,7 @@ extension MemberBlockSyntax {
 
 extension MemberTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .memberType)
   }
@@ -1050,6 +1191,7 @@ extension MemberTypeSyntax {
 
 extension MetatypeTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .metatypeType)
   }
@@ -1057,6 +1199,7 @@ extension MetatypeTypeSyntax {
 
 extension MissingDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .missingDecl)
   }
@@ -1064,6 +1207,7 @@ extension MissingDeclSyntax {
 
 extension MissingExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .missingExpr)
   }
@@ -1071,6 +1215,7 @@ extension MissingExprSyntax {
 
 extension MissingPatternSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .missingPattern)
   }
@@ -1078,6 +1223,7 @@ extension MissingPatternSyntax {
 
 extension MissingStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .missingStmt)
   }
@@ -1085,6 +1231,7 @@ extension MissingStmtSyntax {
 
 extension MissingSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .missing)
   }
@@ -1092,6 +1239,7 @@ extension MissingSyntax {
 
 extension MissingTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .missingType)
   }
@@ -1099,6 +1247,7 @@ extension MissingTypeSyntax {
 
 extension ModuleSelectorSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .moduleSelector)
   }
@@ -1106,6 +1255,7 @@ extension ModuleSelectorSyntax {
 
 extension MultipleTrailingClosureElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .multipleTrailingClosureElement)
   }
@@ -1113,6 +1263,7 @@ extension MultipleTrailingClosureElementSyntax {
 
 extension NamedOpaqueReturnTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .namedOpaqueReturnType)
   }
@@ -1120,6 +1271,7 @@ extension NamedOpaqueReturnTypeSyntax {
 
 extension NilLiteralExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .nilLiteralExpr)
   }
@@ -1127,6 +1279,7 @@ extension NilLiteralExprSyntax {
 
 extension NonisolatedSpecifierArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .nonisolatedSpecifierArgument)
   }
@@ -1134,6 +1287,7 @@ extension NonisolatedSpecifierArgumentSyntax {
 
 extension NonisolatedTypeSpecifierSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .nonisolatedTypeSpecifier)
   }
@@ -1141,6 +1295,7 @@ extension NonisolatedTypeSpecifierSyntax {
 
 extension ObjCSelectorPieceSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .objCSelectorPiece)
   }
@@ -1148,6 +1303,7 @@ extension ObjCSelectorPieceSyntax {
 
 extension OperatorDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .operatorDecl)
   }
@@ -1155,6 +1311,7 @@ extension OperatorDeclSyntax {
 
 extension OperatorPrecedenceAndTypesSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .operatorPrecedenceAndTypes)
   }
@@ -1162,6 +1319,7 @@ extension OperatorPrecedenceAndTypesSyntax {
 
 extension OptionalBindingConditionSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .optionalBindingCondition)
   }
@@ -1169,6 +1327,7 @@ extension OptionalBindingConditionSyntax {
 
 extension OptionalChainingExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .optionalChainingExpr)
   }
@@ -1176,6 +1335,7 @@ extension OptionalChainingExprSyntax {
 
 extension OptionalTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .optionalType)
   }
@@ -1183,6 +1343,7 @@ extension OptionalTypeSyntax {
 
 extension OriginallyDefinedInAttributeArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .originallyDefinedInAttributeArguments)
   }
@@ -1190,6 +1351,7 @@ extension OriginallyDefinedInAttributeArgumentsSyntax {
 
 extension PackElementExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .packElementExpr)
   }
@@ -1197,6 +1359,7 @@ extension PackElementExprSyntax {
 
 extension PackElementTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .packElementType)
   }
@@ -1204,6 +1367,7 @@ extension PackElementTypeSyntax {
 
 extension PackExpansionExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .packExpansionExpr)
   }
@@ -1211,6 +1375,7 @@ extension PackExpansionExprSyntax {
 
 extension PackExpansionTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .packExpansionType)
   }
@@ -1218,6 +1383,7 @@ extension PackExpansionTypeSyntax {
 
 extension PatternBindingSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .patternBinding)
   }
@@ -1225,6 +1391,7 @@ extension PatternBindingSyntax {
 
 extension PatternExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .patternExpr)
   }
@@ -1232,6 +1399,7 @@ extension PatternExprSyntax {
 
 extension PlatformVersionItemSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .platformVersionItem)
   }
@@ -1239,6 +1407,7 @@ extension PlatformVersionItemSyntax {
 
 extension PlatformVersionSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .platformVersion)
   }
@@ -1246,6 +1415,7 @@ extension PlatformVersionSyntax {
 
 extension PostfixIfConfigExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .postfixIfConfigExpr)
   }
@@ -1253,6 +1423,7 @@ extension PostfixIfConfigExprSyntax {
 
 extension PostfixOperatorExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .postfixOperatorExpr)
   }
@@ -1260,6 +1431,7 @@ extension PostfixOperatorExprSyntax {
 
 extension PoundSourceLocationArgumentsSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .poundSourceLocationArguments)
   }
@@ -1267,6 +1439,7 @@ extension PoundSourceLocationArgumentsSyntax {
 
 extension PoundSourceLocationSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .poundSourceLocation)
   }
@@ -1274,6 +1447,7 @@ extension PoundSourceLocationSyntax {
 
 extension PrecedenceGroupAssignmentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .precedenceGroupAssignment)
   }
@@ -1281,6 +1455,7 @@ extension PrecedenceGroupAssignmentSyntax {
 
 extension PrecedenceGroupAssociativitySyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .precedenceGroupAssociativity)
   }
@@ -1288,6 +1463,7 @@ extension PrecedenceGroupAssociativitySyntax {
 
 extension PrecedenceGroupDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .precedenceGroupDecl)
   }
@@ -1295,6 +1471,7 @@ extension PrecedenceGroupDeclSyntax {
 
 extension PrecedenceGroupNameSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .precedenceGroupName)
   }
@@ -1302,6 +1479,7 @@ extension PrecedenceGroupNameSyntax {
 
 extension PrecedenceGroupRelationSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .precedenceGroupRelation)
   }
@@ -1309,6 +1487,7 @@ extension PrecedenceGroupRelationSyntax {
 
 extension PrefixOperatorExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .prefixOperatorExpr)
   }
@@ -1316,6 +1495,7 @@ extension PrefixOperatorExprSyntax {
 
 extension PrimaryAssociatedTypeClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .primaryAssociatedTypeClause)
   }
@@ -1323,6 +1503,7 @@ extension PrimaryAssociatedTypeClauseSyntax {
 
 extension PrimaryAssociatedTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .primaryAssociatedType)
   }
@@ -1330,6 +1511,7 @@ extension PrimaryAssociatedTypeSyntax {
 
 extension ProtocolDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .protocolDecl)
   }
@@ -1337,6 +1519,7 @@ extension ProtocolDeclSyntax {
 
 extension RegexLiteralExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .regexLiteralExpr)
   }
@@ -1344,6 +1527,7 @@ extension RegexLiteralExprSyntax {
 
 extension RepeatStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .repeatStmt)
   }
@@ -1351,6 +1535,7 @@ extension RepeatStmtSyntax {
 
 extension ReturnClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .returnClause)
   }
@@ -1358,6 +1543,7 @@ extension ReturnClauseSyntax {
 
 extension ReturnStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .returnStmt)
   }
@@ -1365,6 +1551,7 @@ extension ReturnStmtSyntax {
 
 extension SameTypeRequirementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .sameTypeRequirement)
   }
@@ -1372,6 +1559,7 @@ extension SameTypeRequirementSyntax {
 
 extension SectionAttributeArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .sectionAttributeArgument)
   }
@@ -1379,6 +1567,7 @@ extension SectionAttributeArgumentSyntax {
 
 extension SequenceExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .sequenceExpr)
   }
@@ -1386,6 +1575,7 @@ extension SequenceExprSyntax {
 
 extension SimpleStringLiteralExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .simpleStringLiteralExpr)
   }
@@ -1393,6 +1583,7 @@ extension SimpleStringLiteralExprSyntax {
 
 extension SimpleTypeSpecifierSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .simpleTypeSpecifier)
   }
@@ -1400,6 +1591,7 @@ extension SimpleTypeSpecifierSyntax {
 
 extension SomeOrAnyTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .someOrAnyType)
   }
@@ -1407,6 +1599,7 @@ extension SomeOrAnyTypeSyntax {
 
 extension SourceFileSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .sourceFile)
   }
@@ -1414,6 +1607,7 @@ extension SourceFileSyntax {
 
 extension SpecializeAvailabilityArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .specializeAvailabilityArgument)
   }
@@ -1421,6 +1615,7 @@ extension SpecializeAvailabilityArgumentSyntax {
 
 extension SpecializeTargetFunctionArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .specializeTargetFunctionArgument)
   }
@@ -1428,6 +1623,7 @@ extension SpecializeTargetFunctionArgumentSyntax {
 
 extension SpecializedAttributeArgumentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .specializedAttributeArgument)
   }
@@ -1435,6 +1631,7 @@ extension SpecializedAttributeArgumentSyntax {
 
 extension StringLiteralExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .stringLiteralExpr)
   }
@@ -1442,6 +1639,7 @@ extension StringLiteralExprSyntax {
 
 extension StringSegmentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .stringSegment)
   }
@@ -1449,6 +1647,7 @@ extension StringSegmentSyntax {
 
 extension StructDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .structDecl)
   }
@@ -1456,6 +1655,7 @@ extension StructDeclSyntax {
 
 extension SubscriptCallExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .subscriptCallExpr)
   }
@@ -1463,6 +1663,7 @@ extension SubscriptCallExprSyntax {
 
 extension SubscriptDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .subscriptDecl)
   }
@@ -1470,6 +1671,7 @@ extension SubscriptDeclSyntax {
 
 extension SuperExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .superExpr)
   }
@@ -1477,6 +1679,7 @@ extension SuperExprSyntax {
 
 extension SuppressedTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .suppressedType)
   }
@@ -1484,6 +1687,7 @@ extension SuppressedTypeSyntax {
 
 extension SwitchCaseItemSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .switchCaseItem)
   }
@@ -1491,6 +1695,7 @@ extension SwitchCaseItemSyntax {
 
 extension SwitchCaseLabelSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .switchCaseLabel)
   }
@@ -1498,6 +1703,7 @@ extension SwitchCaseLabelSyntax {
 
 extension SwitchCaseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .switchCase)
   }
@@ -1505,6 +1711,7 @@ extension SwitchCaseSyntax {
 
 extension SwitchDefaultLabelSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .switchDefaultLabel)
   }
@@ -1512,6 +1719,7 @@ extension SwitchDefaultLabelSyntax {
 
 extension SwitchExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .switchExpr)
   }
@@ -1519,6 +1727,7 @@ extension SwitchExprSyntax {
 
 extension TernaryExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .ternaryExpr)
   }
@@ -1526,6 +1735,7 @@ extension TernaryExprSyntax {
 
 extension ThenStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .thenStmt)
   }
@@ -1533,6 +1743,7 @@ extension ThenStmtSyntax {
 
 extension ThrowStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .throwStmt)
   }
@@ -1540,6 +1751,7 @@ extension ThrowStmtSyntax {
 
 extension ThrowsClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .throwsClause)
   }
@@ -1547,6 +1759,7 @@ extension ThrowsClauseSyntax {
 
 extension TryExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .tryExpr)
   }
@@ -1554,6 +1767,7 @@ extension TryExprSyntax {
 
 extension TupleExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .tupleExpr)
   }
@@ -1561,6 +1775,7 @@ extension TupleExprSyntax {
 
 extension TuplePatternElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .tuplePatternElement)
   }
@@ -1568,6 +1783,7 @@ extension TuplePatternElementSyntax {
 
 extension TuplePatternSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .tuplePattern)
   }
@@ -1575,6 +1791,7 @@ extension TuplePatternSyntax {
 
 extension TupleTypeElementSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .tupleTypeElement)
   }
@@ -1582,6 +1799,7 @@ extension TupleTypeElementSyntax {
 
 extension TupleTypeSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .tupleType)
   }
@@ -1589,6 +1807,7 @@ extension TupleTypeSyntax {
 
 extension TypeAliasDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .typeAliasDecl)
   }
@@ -1596,6 +1815,7 @@ extension TypeAliasDeclSyntax {
 
 extension TypeAnnotationSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .typeAnnotation)
   }
@@ -1603,6 +1823,7 @@ extension TypeAnnotationSyntax {
 
 extension TypeEffectSpecifiersSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .typeEffectSpecifiers)
   }
@@ -1610,6 +1831,7 @@ extension TypeEffectSpecifiersSyntax {
 
 extension TypeExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .typeExpr)
   }
@@ -1617,6 +1839,7 @@ extension TypeExprSyntax {
 
 extension TypeInitializerClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .typeInitializerClause)
   }
@@ -1624,6 +1847,7 @@ extension TypeInitializerClauseSyntax {
 
 extension UnexpectedCodeDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .unexpectedCodeDecl)
   }
@@ -1631,6 +1855,7 @@ extension UnexpectedCodeDeclSyntax {
 
 extension UnresolvedAsExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .unresolvedAsExpr)
   }
@@ -1638,6 +1863,7 @@ extension UnresolvedAsExprSyntax {
 
 extension UnresolvedIsExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .unresolvedIsExpr)
   }
@@ -1645,6 +1871,7 @@ extension UnresolvedIsExprSyntax {
 
 extension UnresolvedTernaryExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .unresolvedTernaryExpr)
   }
@@ -1652,6 +1879,7 @@ extension UnresolvedTernaryExprSyntax {
 
 extension UnsafeExprSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .unsafeExpr)
   }
@@ -1659,6 +1887,7 @@ extension UnsafeExprSyntax {
 
 extension ValueBindingPatternSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .valueBindingPattern)
   }
@@ -1666,6 +1895,7 @@ extension ValueBindingPatternSyntax {
 
 extension VariableDeclSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .variableDecl)
   }
@@ -1673,6 +1903,7 @@ extension VariableDeclSyntax {
 
 extension VersionComponentSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .versionComponent)
   }
@@ -1680,6 +1911,7 @@ extension VersionComponentSyntax {
 
 extension VersionTupleSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .versionTuple)
   }
@@ -1687,6 +1919,7 @@ extension VersionTupleSyntax {
 
 extension WhereClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .whereClause)
   }
@@ -1694,6 +1927,7 @@ extension WhereClauseSyntax {
 
 extension WhileStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .whileStmt)
   }
@@ -1701,6 +1935,7 @@ extension WhileStmtSyntax {
 
 extension WildcardPatternSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .wildcardPattern)
   }
@@ -1708,6 +1943,7 @@ extension WildcardPatternSyntax {
 
 extension YieldStmtSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .yieldStmt)
   }
@@ -1715,6 +1951,7 @@ extension YieldStmtSyntax {
 
 extension YieldedExpressionSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .yieldedExpression)
   }
@@ -1722,6 +1959,7 @@ extension YieldedExpressionSyntax {
 
 extension YieldedExpressionsClauseSyntax {
   /// The layout of this node type.
+  @_alwaysEmitIntoClient
   public static var layout: SyntaxLayout<Self> {
     SyntaxLayout<Self>(syntaxKind: .yieldedExpressionsClause)
   }

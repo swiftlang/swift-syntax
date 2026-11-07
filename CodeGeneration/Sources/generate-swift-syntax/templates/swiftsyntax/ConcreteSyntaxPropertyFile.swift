@@ -16,16 +16,6 @@ import SyntaxSupport
 import Utils
 
 let concreteSyntaxPropertyFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    extension ConcreteSyntaxProperty {
-      fileprivate init(index: UInt32) {
-        self.index = .init(index)
-      }
-    }
-    """
-  )
-
   for node in NON_BASE_SYNTAX_NODES {
     if let layoutNode = node.layoutNode {
       try! ExtensionDeclSyntax(
@@ -39,7 +29,8 @@ let concreteSyntaxPropertyFile = SourceFileSyntax(leadingTrivia: copyrightHeader
           let type = child.isOptional ? TypeSyntax("\(childType)?") : TypeSyntax("\(childType)")
           DeclSyntax(
             """
-            \(child.apiAttributes)public static var \(child.varDeclName): ConcreteSyntaxProperty<\(node.kind.syntaxType), \(type)> {
+            \(child.apiAttributes)@_alwaysEmitIntoClient
+            public static var \(child.varDeclName): ConcreteSyntaxProperty<\(node.kind.syntaxType), \(type)> {
               .init(index: \(raw: index))
             }
             """

@@ -225,7 +225,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             )
           }
         }
-        "public static let structure: SyntaxNodeStructure = .layout(\(layout))"
+        ifStructureReflectionEnabled("public static let structure: SyntaxNodeStructure = .layout(\(layout))")
       }
     }
   }
@@ -248,17 +248,21 @@ extension ChildNodeChoices {
 
       self.syntaxInitDecl(inputType: "__shared some SyntaxProtocol")
 
-      try! VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-        let choices = ArrayExprSyntax {
-          for choice in self.choices {
-            ArrayElementSyntax(
-              expression: ExprSyntax(".node(\(choice.syntaxType).self)")
-            )
-          }
-        }
+      ifStructureReflectionEnabled(
+        DeclSyntax(
+          try! VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
+            let choices = ArrayExprSyntax {
+              for choice in self.choices {
+                ArrayElementSyntax(
+                  expression: ExprSyntax(".node(\(choice.syntaxType).self)")
+                )
+              }
+            }
 
-        StmtSyntax("return .choices(\(choices))")
-      }
+            StmtSyntax("return .choices(\(choices))")
+          }
+        )
+      )
 
       for choice in self.choices {
         choice.castingMethods

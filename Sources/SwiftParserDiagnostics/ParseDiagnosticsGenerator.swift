@@ -198,29 +198,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       correctToken.isMissing
     {
       // We are exchanging two adjacent tokens, transfer the trivia from the incorrect token to the corrected token.
-      // `reasync` takes the place of the missing `async`, so it must keep its own spelling.
-      let insertedKind: TokenKind? =
-        misplacedToken.tokenKind == .keyword(.reasync) && correctToken.tokenKind == .keyword(.async)
-        ? misplacedToken.tokenKind : nil
       changes.append(
         FixIt.MultiNodeChange.makePresent(
           correctToken,
           // Transfer any existing trivia. If there is no trivia in the misplaced token, pass `nil` so that `makePresent` can add required trivia, if necessary.
           leadingTrivia: misplacedToken.leadingTrivia.isEmpty ? nil : misplacedToken.leadingTrivia,
-          trailingTrivia: misplacedToken.trailingTrivia.isEmpty ? nil : misplacedToken.trailingTrivia,
-          tokenKind: insertedKind
+          trailingTrivia: misplacedToken.trailingTrivia.isEmpty ? nil : misplacedToken.trailingTrivia
         )
       )
       changes.append(FixIt.MultiNodeChange.makeMissing(misplacedTokens, transferTrivia: false))
     } else {
       changes += misplacedTokens.map { FixIt.MultiNodeChange.makeMissing($0) }
-      changes += correctAndMissingNodes.map {
-        // `reasync` takes the place of a missing `async`, so it keeps its own spelling.
-        let keepsMisplacedSpelling =
-          misplacedTokens.only?.tokenKind == .keyword(.reasync)
-          && $0.as(TokenSyntax.self)?.tokenKind == .keyword(.async)
-        return FixIt.MultiNodeChange.makePresent($0, tokenKind: keepsMisplacedSpelling ? .keyword(.reasync) : nil)
-      }
+      changes += correctAndMissingNodes.map { FixIt.MultiNodeChange.makePresent($0) }
     }
     var fixIts: [FixIt] = []
     if changes.count > 1 {

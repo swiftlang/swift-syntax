@@ -1591,6 +1591,21 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testSpaceBetweenAtAndTypeAttribute() {
+    assertParse(
+      "let x: @1️⃣ escaping () -> Void = {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace after '@' is not permitted; this is an error in Swift 6",
+          severity: .warning,
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: "let x: @escaping () -> Void = {}",
+      swiftVersion: .v5
+    )
+  }
+
   func testSpaceBetweenAttributeNameAndLeftParen() {
     assertParse(
       "@custom1️⃣ (1) func foo() {}",

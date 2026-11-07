@@ -149,7 +149,14 @@ extension Parser {
 
 extension Parser {
   mutating func parseAttributeWithoutArguments() -> RawAttributeListSyntax.Element {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    if atSign.trailingTriviaByteLength > 0 || self.currentToken.leadingTriviaByteLength > 0 {
+      let diagnostic = TokenDiagnostic(
+        self.swiftVersion < .v6 ? .extraneousTrailingWhitespaceWarning : .extraneousTrailingWhitespaceError,
+        byteOffset: atSign.leadingTriviaByteLength + atSign.tokenText.count
+      )
+      atSign = atSign.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
+    }
     let attributeName = self.parseType()
     return .attribute(
       RawAttributeSyntax(

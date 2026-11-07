@@ -185,6 +185,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var invalidPrecedenceGroupAssociativity: Self {
     .init("Expected 'none', 'left', or 'right' after 'associativity'")
   }
+  public static var letCaseMisspelled: Self {
+    .init("pattern matching binding is spelled with 'case let', not 'let case'")
+  }
   public static var joinConditionsUsingComma: Self {
     .init("expected ',' joining parts of a multi-clause condition")
   }

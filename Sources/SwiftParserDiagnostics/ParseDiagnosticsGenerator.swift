@@ -374,6 +374,25 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `let case` is a misspelling of `case let`.
+    if let valueBinding = node.pattern.as(ValueBindingPatternSyntax.self) {
+      exchangeNodes(
+        unexpected: node.unexpectedBeforeCaseKeyword,
+        unexpectedNodeCondition: { (token: TokenSyntax) in
+          token.tokenKind == .keyword(.let) || token.tokenKind == .keyword(.var)
+        },
+        correctNodes: [valueBinding.bindingSpecifier],
+        message: { _ in .letCaseMisspelled },
+        moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .keyword(.case)) }
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: UnexpectedCodeDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -754,24 +754,24 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       for 1️⃣
-        2️⃣;
-      }
+        ;
+      2️⃣}
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected pattern, 'in', and expression in 'for' statement",
-          fixIts: ["insert pattern, 'in', and expression"]
+          message: "expected pattern, 'in', expression, and body in 'for' statement",
+          fixIts: ["insert pattern, 'in', expression, and body"]
         ),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'for' statement", fixIts: ["insert '{'"]),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "standalone ';' statements are not allowed",
-          fixIts: ["remove ';'"]
+          message: "unexpected brace in source file"
         ),
       ],
       fixedSource: """
-        for   <#pattern#> in <#expression#> {
+        for <#pattern#> in <#expression#> {
+        }
+          ;
         }
         """
     )
@@ -1033,7 +1033,11 @@ final class RecoveryTests: ParserTestCase {
       extension NoBracesStruct25️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum", fixIts: ["insert member block"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
         DiagnosticSpec(

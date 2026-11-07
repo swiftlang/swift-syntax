@@ -631,6 +631,57 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testMissingBodyOnNextLineDoesNotSwallowFollowingStatements() {
+    assertParse(
+      """
+      func f() {
+        if true1️⃣
+        let z = 1
+        while true2️⃣
+        let w = 2
+      }
+      func g() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected body in 'if' statement", fixIts: ["insert body"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected code block in 'while' statement",
+          fixIts: ["insert code block"]
+        ),
+      ],
+      fixedSource: """
+        func f() {
+          if true {
+        }
+          let z = 1
+          while true {
+        }
+          let w = 2
+        }
+        func g() {}
+        """
+    )
+  }
+
+  func testLetCaseIsMisspelledCaseLet() {
+    assertParse(
+      """
+      if 1️⃣let case 2️⃣(b?) = a, b != 42 {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "pattern matching binding is spelled with 'case let', not 'let case'",
+          fixIts: ["move 'let' after 'case'"]
+        )
+      ],
+      fixedSource: """
+        if case let (b?) = a, b != 42 {}
+        """
+    )
+  }
+
   func testBogusSwitchStatement() {
     assertParse(
       """

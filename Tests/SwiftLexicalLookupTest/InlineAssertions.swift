@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(_QualifiedLookup) @_spi(_QualifiedLookupTests) import SwiftLexicalLookup
-import SwiftParser
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
@@ -489,7 +489,10 @@ where
     line: UInt = #line
   ) -> Self {
     // Wrap the type syntax in a file
-    var parser = Parser(Node.fileContents(prefix: prefix, syntaxString: string))
+    var parser = Parser(
+      Node.fileContents(prefix: prefix, syntaxString: string),
+      languageFeatures: .namedOpaqueTypes
+    )
     let sourceFile = SourceFileSyntax.parse(from: &parser)
     guard let castSyntax = sourceFile.children(ofType: Node.self).first else {
       fatalError("Couldn't parse `\(string)` as \(Node.self).", file: file, line: line)

@@ -12,7 +12,7 @@ All the ideas described in the following apply to all packages that depend on sw
 
 For simplicity, this article assumes that 509 is the current swift-syntax version and 510 the next, but everything applies to any other major swift-syntax version update, including version jumps to e.g. 600.
 
-Any given version macro can depend on multiple major swift-syntax versions at once. For example, if a macro supports both swift-syntax 509 and swift-syntax 510, it may declare its dependency on swift-syntax as 
+Any given version macro can depend on multiple major swift-syntax versions at once. For example, if a macro supports both swift-syntax 509 and swift-syntax 510, it may declare its dependency on swift-syntax as
 
 ```
 .package(url: "https://github.com/swiftlang/swift-syntax.git", "509.0.0"..<"511.0.0"),
@@ -30,10 +30,10 @@ In order to handle breaking API changes, clients can wrap uses of such APIs in c
 #endif
 ```
 
-The `SwiftSyntax<version>` modules are empty and don’t contain any code. Their only purpose is to serve as targets for the `canImport` checks. 
+The `SwiftSyntax<version>` modules are empty and don’t contain any code. Their only purpose is to serve as targets for the `canImport` checks.
 
 ## Representation of New Syntax with Old swift-syntax Versions
 
 If a swift-syntax version is used that is older than the compiler’s version, then swift-syntax will not be able to represent the new syntactic structures (like new statements) in the source file because it doesn’t know about them.
 
-In this case, swift-syntax will represent the unknown syntactic constructs as a mixture of unexpected syntax nodes in the `unexpected*` children of the syntax nodes. Depending on the macro’s behavior this might not pose any issues. For example, if the macro adds an completion-handler alternative to an async function, it most likely doesn’t care if some statement in the body couldn’t be parsed, since it is only interested in the signature.
+In this case, swift-syntax will represent the unknown syntactic constructs as a mixture of unexpected syntax nodes in the `unexpected*` children of the syntax nodes. Depending on the macro’s behavior this might not pose any issues. For example, if the macro adds a completion-handler alternative to an async function, it most likely doesn’t care if some statement in the body couldn’t be parsed, since it is only interested in the signature.

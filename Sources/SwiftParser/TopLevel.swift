@@ -127,6 +127,20 @@ extension Parser {
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    // If the '{' is missing and what follows starts a new line, don't take the
+    // following lines as the body: they are most likely ordinary statements, and
+    // taking them would make the block swallow the rest of its scope. This is
+    // what the C++ parser does. (On the same line, `for x in y foo()` keeps
+    // `foo()` as the body, which the fix-it can then wrap in braces.)
+    if lbrace.isMissing && introducer != nil && (self.atStartOfLine || self.at(.endOfFile)) {
+      return .init(
+        unexpectedBeforeLBrace,
+        leftBrace: lbrace,
+        statements: RawCodeBlockItemListSyntax(elements: .init(), arena: self.arena),
+        rightBrace: self.missingToken(.rightBrace),
+        arena: self.arena
+      )
+    }
     let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl)
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 

@@ -1704,6 +1704,29 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testMissingMemberBlockDoesNotSwallowFollowingDeclarations() {
+    assertParse(
+      """
+      class C1️⃣
+      func f() {}
+      struct S: P2️⃣
+      let y = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct", fixIts: ["insert member block"]),
+      ],
+      fixedSource: """
+        class C {
+        }
+        func f() {}
+        struct S: P {
+        }
+        let y = 1
+        """
+    )
+  }
+
   func testMalforedStruct() {
     assertParse(
       """
@@ -1714,8 +1737,8 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected '{' in struct",
-          fixIts: ["insert '{'"]
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1733,19 +1756,13 @@ final class DeclarationTests: ParserTestCase {
           message: "expected '#endif' in conditional compilation block",
           fixIts: ["insert '#endif'"]
         ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected '}' to end struct",
-          fixIts: ["insert '}'"]
-        ),
-
       ],
       fixedSource: """
         struct n {
+        }
         #if <#expression#>
         @<#type#> <#declaration#>
         #endif
-        }
         """
     )
   }

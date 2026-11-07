@@ -260,6 +260,7 @@ public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
   return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
 }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(AccessorDeclSyntax.self),
@@ -290,6 +291,7 @@ public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
       .node(VariableDeclSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -609,6 +611,7 @@ public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
   return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
 }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(ArrayExprSyntax.self),
@@ -667,6 +670,7 @@ public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
       .node(UnsafeExprSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -942,6 +946,7 @@ public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtoc
   return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
 }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(ExpressionPatternSyntax.self),
@@ -953,6 +958,7 @@ public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtoc
       .node(WildcardPatternSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -1237,6 +1243,7 @@ public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
   return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
 }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(BreakStmtSyntax.self),
@@ -1258,6 +1265,7 @@ public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
       .node(YieldStmtSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -1545,6 +1553,7 @@ public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
   return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
 }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(ArrayTypeSyntax.self),
@@ -1568,6 +1577,7 @@ public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
       .node(TupleTypeSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
@@ -1618,6 +1628,7 @@ extension _LeafTypeSyntaxNodeProtocol {
 // MARK: - Syntax
 
 extension Syntax {
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(TokenSyntax.self),
@@ -1919,6 +1930,7 @@ extension Syntax {
       .node(YieldedExpressionsClauseSyntax.self)
     ])
   }
+  #endif
 }
 
 /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.

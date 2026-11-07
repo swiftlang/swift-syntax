@@ -25,9 +25,11 @@ import SwiftSyntax
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SwiftSyntax.SyntaxNodeStructure = .choices([
     .node(NominalTypeDeclSyntax.self), .node(ExtensionDeclSyntax.self),
   ])
+  #endif
 }
 
 @_spi(_QualifiedLookup) extension DeclGroupSyntaxType: DeclGroupSyntax {

@@ -12,6 +12,7 @@
 
 import SwiftDiagnostics
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
+import SwiftParserDiagnostics
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -2215,6 +2216,25 @@ final class ExpressionTests: ParserTestCase {
       ],
       fixedSource: "a  + 2"
     )
+  }
+
+  func testNonBreakingSpaceFixItOnlyEditsTrivia() throws {
+    // The edit replaces the trivia that holds the non-breaking space and does
+    // not rewrite the neighboring token.
+    let source = "let x\u{a0}= 3\n    \u{a0}_ = 42"
+    let tree = Parser.parse(source: source)
+    let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
+    XCTAssertEqual(diagnostics.count, 2)
+    let utf8 = Array(source.utf8)
+    for diagnostic in diagnostics {
+      let edit = try XCTUnwrap(diagnostic.fixIts.first?.edits.first)
+      let replaced = String(
+        decoding: utf8[edit.range.lowerBound.utf8Offset..<edit.range.upperBound.utf8Offset],
+        as: UTF8.self
+      )
+      XCTAssertTrue(replaced.allSatisfy { $0.isWhitespace || $0 == "\u{a0}" }, "edit replaced '\(replaced)'")
+      XCTAssertFalse(edit.replacement.contains("\u{a0}"))
+    }
   }
 
   func testTabsIndentationInMultilineStringLiteral() {

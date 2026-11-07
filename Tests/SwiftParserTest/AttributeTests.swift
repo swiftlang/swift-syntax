@@ -77,7 +77,7 @@ final class AttributeTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected ':' and arguments in '@differentiable' argument",
+          message: "expected ':' and arguments in differentiability argument",
           fixIts: ["insert ':' and arguments"]
         ),
         DiagnosticSpec(

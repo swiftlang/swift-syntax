@@ -18,6 +18,20 @@ import SwiftSyntaxBuilder
 import XCTest
 
 final class ExpressionTests: ParserTestCase {
+  func testEditorPlaceholderAsClosureBody() {
+    // The diagnostic is on the placeholder, not on the closure around it.
+    assertParse(
+      """
+      fn { arg in
+        1️⃣<#FOO#>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "editor placeholder in source file")
+      ]
+    )
+  }
+
   func testTernary() {
     assertParse(
       "let a =1️⃣",

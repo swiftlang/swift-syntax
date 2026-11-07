@@ -281,7 +281,8 @@ public struct Parser {
     self.lexemes = Lexer.tokenize(
       input,
       lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker,
-      stateAllocator: lexerStateAllocator
+      stateAllocator: lexerStateAllocator,
+      allowsBareSlashRegex: !languageFeatures.contains(.disableBareSlashRegexLiterals)
     )
     self.currentToken = self.lexemes.advance()
     if let parseTransition {

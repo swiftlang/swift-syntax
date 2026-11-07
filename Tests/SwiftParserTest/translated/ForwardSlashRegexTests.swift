@@ -12,7 +12,7 @@
 
 // This test file has been translated from swift/test/StringProcessing/Parse/forward-slash-regex.swift
 
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
@@ -343,6 +343,92 @@ final class ForwardSlashRegexTests: ParserTestCase {
           _ = /x / <#expression#>? 0 : 1
         }
         """
+    )
+  }
+
+  func testBareSlashRegexCanBeDisabled() {
+    func hasRegexLiteral(
+      _ source: String,
+      languageFeatures: Parser.LanguageFeatures = []
+    )
+      -> Bool
+    {
+      var parser = Parser(source, languageFeatures: languageFeatures)
+      let tree = SourceFileSyntax.parse(from: &parser)
+      return tree.tokens(viewMode: .sourceAccurate).contains { $0.tokenKind == .regexSlash }
+    }
+    XCTAssertTrue(hasRegexLiteral("_ = /abc/"))
+    XCTAssertFalse(hasRegexLiteral("_ = /abc/", languageFeatures: .disableBareSlashRegexLiterals))
+    // Extended regex literals are always available.
+    XCTAssertTrue(hasRegexLiteral("_ = #/abc/#", languageFeatures: .disableBareSlashRegexLiterals))
+  }
+
+  // Translated from swift/test/StringProcessing/Parse/forward-slash-regex-disabled.swift
+  func testForwardSlashRegexDisabledOperators() {
+    assertParse(
+      """
+      prefix operator /
+      prefix operator ^/
+      prefix operator /^/
+
+      precedencegroup P {
+        associativity: left
+      }
+
+      // The divisions in the body of the below operators make sure we don't try
+      // and consider them to be ending delimiters of a regex.
+      infix operator /^/ : P
+      func /^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }
+
+      infix operator /^ : P
+      func /^ (lhs: Int, rhs: Int) -> Int { 1 / 2 }
+
+      infix operator ^^/ : P
+      func ^^/ (lhs: Int, rhs: Int) -> Int { 1 / 2 }
+
+      func baz(_ x: (Int, Int) -> Int, _ y: (Int, Int) -> Int) {}
+      baz(/, /)
+      baz(/^, /)
+      baz(^^/, /)
+      """,
+      languageFeatures: .disableBareSlashRegexLiterals
+    )
+  }
+
+  func testForwardSlashRegexDisabledOperatorUse() {
+    // Without bare slash regex literals, `/x/` is a prefix and a postfix
+    // operator application, not a regex.
+    let source = """
+      prefix operator /
+      _ = /x/
+      _ = /x/ ?? /y/
+      _ = 1 /^/ 2 /^ 3
+      _ = (/x/, /y/)
+      """
+    var parser = Parser(source, languageFeatures: .disableBareSlashRegexLiterals)
+    let tree = SourceFileSyntax.parse(from: &parser)
+    XCTAssertFalse(tree.tokens(viewMode: .sourceAccurate).contains { $0.tokenKind == .regexSlash })
+    XCTAssertTrue(
+      tree.tokens(viewMode: .sourceAccurate).contains {
+        $0.tokenKind == .prefixOperator("/") || $0.tokenKind == .postfixOperator("/")
+      }
+    )
+    // The extended delimiter form is still a regex literal.
+    assertParse(
+      """
+      _ = #/x/#
+      """,
+      languageFeatures: .disableBareSlashRegexLiterals
+    )
+  }
+
+  func testForwardSlashRegexDisabledStillLexesDivision() {
+    assertParse(
+      """
+      let a = 4 / 2 / 1
+      let b = a/2/a
+      """,
+      languageFeatures: .disableBareSlashRegexLiterals
     )
   }
 

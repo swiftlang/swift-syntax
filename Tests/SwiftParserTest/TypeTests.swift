@@ -250,7 +250,30 @@ final class TypeTests: ParserTestCase {
         var prop1: Int = 5
         var prop2: <U, V> (U, V) = ("hello", 5)
       }
+      """,
+      languageFeatures: .namedOpaqueTypes
+    )
+  }
+
+  func testNamedOpaqueReturnTypesRequireFeature() {
+    // Without the feature, `<` after `->` doesn't start a result type.
+    assertParse(
       """
+      func f() -> 1️⃣<T> 2️⃣Int {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected return type in function signature",
+          fixIts: ["insert return type"]
+        ),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '<T> Int' in function"),
+      ],
+      fixedSource: """
+        func f() -> <#type#> <T> Int {
+        }
+        """
     )
   }
 

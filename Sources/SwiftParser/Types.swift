@@ -1591,7 +1591,9 @@ extension Parser {
 
 extension Parser {
   mutating func parseResultType() -> RawTypeSyntax {
-    if self.at(prefix: "<") && !self.currentToken.isEditorPlaceholder {
+    if self.at(prefix: "<") && !self.currentToken.isEditorPlaceholder
+      && self.languageFeatures.contains(.namedOpaqueTypes)
+    {
       let generics = self.parseGenericParameters()
       let baseType = self.parseType()
       return RawTypeSyntax(

@@ -629,6 +629,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       where: { $0.tokenKind == .ellipsis },
       message: { _ in .associatedTypeCannotUsePack }
     )
+    // Emit a custom diagnostic for generic parameters after an associatedtype
+    // name.
+    if let unexpected = node.unexpectedBetweenNameAndInheritanceClause,
+      let genericParameters = unexpected.compactMap({ $0.as(GenericParameterClauseSyntax.self) }).first
+    {
+      addDiagnostic(
+        genericParameters,
+        .associatedTypeCannotHaveGenericParameters,
+        fixIts: [
+          FixIt(message: RemoveNodesFixIt(genericParameters), changes: .makeMissing(genericParameters))
+        ],
+        handledNodes: [genericParameters.id]
+      )
+    }
     return .visitChildren
   }
 

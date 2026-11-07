@@ -107,6 +107,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }
+  public static var associatedTypeCannotHaveGenericParameters: Self {
+    .init("associated types must not have a generic parameter list")
+  }
   public static var caseOutsideOfSwitchOrEnum: Self {
     .init("'case' can only appear inside a 'switch' statement or 'enum' declaration")
   }

@@ -3731,4 +3731,25 @@ final class DeclarationTests: ParserTestCase {
       """
     )
   }
+
+  func testAssociatedTypeGenericParameterList() {
+    assertParse(
+      """
+      protocol P {
+        associatedtype X1️⃣<T>: Equatable
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "associated types must not have a generic parameter list",
+          fixIts: ["remove generic parameter clause"]
+        )
+      ],
+      fixedSource: """
+        protocol P {
+          associatedtype X: Equatable
+        }
+        """
+    )
+  }
 }

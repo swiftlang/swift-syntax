@@ -1176,6 +1176,14 @@ extension Parser {
     // Detect an attempt to use (early syntax) type parameter pack.
     let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis)
 
+    // Detect an attempt to give the associated type generic parameters.
+    let genericParameters: RawGenericParameterClauseSyntax?
+    if self.at(prefix: "<") {
+      genericParameters = self.parseGenericParameters()
+    } else {
+      genericParameters = nil
+    }
+
     // Parse optional inheritance clause.
     let inheritance: RawInheritanceClauseSyntax?
     if self.at(.colon) {
@@ -1212,7 +1220,7 @@ extension Parser {
       associatedtypeKeyword: assocKeyword,
       unexpectedBeforeName,
       name: name,
-      RawUnexpectedNodesSyntax([ellipsis], arena: self.arena),
+      RawUnexpectedNodesSyntax([ellipsis?.raw, genericParameters?.raw].compactMap { $0 }, arena: self.arena),
       inheritanceClause: inheritance,
       initializer: defaultType,
       genericWhereClause: whereClause,

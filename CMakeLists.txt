@@ -12,6 +12,22 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 project(SwiftSyntax LANGUAGES C Swift)
 
+# With CMP0157 NEW, CMake appends its own -emit-module-path after the
+# explicit one in AddSwiftHostLibrary and it wins. On CMake 4+, setting
+# CMP0195 NEW makes CMake's path <name>.swiftmodule/<triple>.swiftmodule,
+# identical to the explicit path, so the triple-named module layout is
+# preserved. With CMP0157 OLD (e.g. the Swift compiler build) CMake
+# appends no -emit-module-path, so leave the policy untouched there.
+cmake_policy(GET CMP0157 _swift_syntax_cmp0157)
+if(_swift_syntax_cmp0157 STREQUAL "NEW")
+  if(POLICY CMP0195)
+    cmake_policy(GET CMP0195 _swift_syntax_cmp0195)
+    if(NOT _swift_syntax_cmp0195)
+      cmake_policy(SET CMP0195 NEW)
+    endif()
+  endif()
+endif()
+
 set(SWIFT_VERSION 5)
 set(CMAKE_Swift_LANGUAGE_VERSION ${SWIFT_VERSION})
 

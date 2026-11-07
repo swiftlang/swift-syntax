@@ -1714,7 +1714,11 @@ final class DeclarationTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         class C {

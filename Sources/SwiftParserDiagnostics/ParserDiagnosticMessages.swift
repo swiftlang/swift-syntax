@@ -542,6 +542,14 @@ public struct NegatedAvailabilityCondition: ParserError {
   }
 }
 
+public struct OpaqueMidComposition: ParserError {
+  public let keyword: TokenSyntax
+
+  public var message: String {
+    return "'\(keyword.text)' should appear at the beginning of a composition"
+  }
+}
+
 public struct SpaceSeparatedIdentifiersError: ParserError {
   public let firstToken: TokenSyntax
   public let additionalTokens: [TokenSyntax]
@@ -761,6 +769,14 @@ public struct InsertFixIt: ParserFixIt {
 
   public var message: String {
     "insert '\(tokenToBeInserted.text)'"
+  }
+}
+
+public struct MoveToBeginningOfCompositionFixIt: ParserFixIt {
+  public let keyword: TokenSyntax
+
+  public var message: String {
+    "move '\(keyword.text)' to the beginning of the composition"
   }
 }
 

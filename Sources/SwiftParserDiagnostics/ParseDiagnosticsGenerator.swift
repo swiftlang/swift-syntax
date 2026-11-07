@@ -646,6 +646,50 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `some` or `any` in the middle of a composition belongs at the start.
+    if let unexpected = node.unexpectedBeforeType,
+      let keyword = unexpected.onlyPresentToken(where: { $0.text == "some" || $0.text == "any" })
+    {
+      var fixIts = [
+        FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))
+      ]
+      // Unless the composition already starts with `some` or `any`, move the
+      // keyword to the first element.
+      if let composition = node.parent?.parent?.as(CompositionTypeSyntax.self),
+        composition.parent?.is(SomeOrAnyTypeSyntax.self) != true,
+        let first = composition.elements.first,
+        first.id != node.id,
+        first.unexpectedBeforeType == nil
+      {
+        let firstType = first.type
+        let withKeyword = SomeOrAnyTypeSyntax(
+          someOrAnySpecifier: .keyword(keyword.text == "any" ? .any : .some, trailingTrivia: .space),
+          constraint: firstType.with(\.leadingTrivia, [])
+        ).with(\.leadingTrivia, firstType.leadingTrivia)
+        fixIts = [
+          FixIt(
+            message: MoveToBeginningOfCompositionFixIt(keyword: keyword),
+            changes: [
+              .replace(oldNode: Syntax(unexpected), newNode: Syntax(UnexpectedNodesSyntax([]))),
+              .replace(oldNode: Syntax(firstType), newNode: Syntax(withKeyword)),
+            ]
+          )
+        ]
+      }
+      addDiagnostic(
+        keyword,
+        OpaqueMidComposition(keyword: keyword),
+        fixIts: fixIts,
+        handledNodes: [unexpected.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

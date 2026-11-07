@@ -1073,4 +1073,35 @@ final class InlineArrayTypeTests: ParserTestCase {
       """
     )
   }
+
+  func testSomeOrAnyInMiddleOfComposition() {
+    assertParse(
+      """
+      let a: P & 1️⃣some Q = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'some' should appear at the beginning of a composition",
+          fixIts: ["move 'some' to the beginning of the composition"]
+        )
+      ],
+      fixedSource: """
+        let a: some P & Q = 1
+        """
+    )
+    assertParse(
+      """
+      let a: any P & 1️⃣any Q
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'any' should appear at the beginning of a composition",
+          fixIts: ["remove 'any'"]
+        )
+      ],
+      fixedSource: """
+        let a: any P & Q
+        """
+    )
+  }
 }

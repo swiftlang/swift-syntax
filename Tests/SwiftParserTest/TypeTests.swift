@@ -77,6 +77,26 @@ final class TypeTests: ParserTestCase {
     )
   }
 
+  func testLegacyProtocolCompositionInClosureResult() {
+    // The lookahead that recognizes a closure signature has to accept the
+    // removed composition too, or the closure is parsed as a body.
+    assertParse(
+      """
+      let f = { () -> 1️⃣protocol<P> in 1 }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'protocol<...>' composition syntax has been removed and is not needed here",
+          highlight: "protocol<P>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        )
+      ],
+      fixedSource: """
+        let f = { () -> P in 1 }
+        """
+    )
+  }
+
   func testClosureParsing() {
     assertParse("let a: (a, b) -> c")
 

@@ -374,6 +374,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: UnexpectedCodeDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    // The rest of a line that follows an operator with a missing right operand
+    // (e.g., `x / ? a : b`) is a consequence of the missing-operand error that
+    // is already diagnosed, so don't diagnose it as unexpected code as well.
+    if let item = node.parent?.as(CodeBlockItemSyntax.self),
+      let list = item.parent?.as(CodeBlockItemListSyntax.self),
+      let index = list.index(of: item),
+      index != list.startIndex,
+      let previous = list[list.index(before: index)].item.as(SequenceExprSyntax.self),
+      previous.elements.last?.is(MissingExprSyntax.self) == true,
+      let firstToken = node.firstToken(viewMode: .sourceAccurate),
+      !firstToken.leadingTrivia.contains(where: { $0.isNewline })
+    {
+      handledNodes.append(contentsOf: node.unexpectedCode.map(\.id))
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

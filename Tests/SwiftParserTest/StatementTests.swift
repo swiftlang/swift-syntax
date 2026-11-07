@@ -560,6 +560,77 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testStatementInSwitchBeforeDistantPoundIf() {
+    // Recovering to a '#if' must not take the cases in between, and the rest of
+    // the file, as unexpected code before it.
+    assertParse(
+      """
+      switch x {
+        1️⃣x = 1
+      default:
+        x = 0
+      }
+      #if true
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          x = 1
+        default:
+          x = 0
+        }
+        #if true
+        #endif
+        """
+    )
+  }
+
+  func testStatementInSwitchBeforeDistantPoundIfWithNestedBrackets() {
+    // A '}' or 'default' inside nested braces doesn't end the case body.
+    assertParse(
+      """
+      switch x {
+        1️⃣if c {
+      #if A
+          foo()
+      #endif
+        }
+      default:
+        x = 0
+      }
+      #if B
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          if c {
+        #if A
+            foo()
+        #endif
+          }
+        default:
+          x = 0
+        }
+        #if B
+        #endif
+        """
+    )
+  }
+
   func testBogusSwitchStatement() {
     assertParse(
       """

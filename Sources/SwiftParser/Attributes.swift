@@ -169,6 +169,8 @@ extension Parser {
     case customAttribute
     case optional
     case noArgument
+    /// Parse arguments only if the given lookahead check, evaluated at the '(', succeeds.
+    case conditional((inout Lookahead) -> Bool)
   }
 
   /// Parse the argument of an attribute, if it has one.
@@ -211,6 +213,8 @@ extension Parser {
       }
     case .noArgument:
       shouldParseArgument = false
+    case .conditional(let atArguments):
+      shouldParseArgument = self.withLookahead(atArguments)
     }
     if shouldParseArgument {
       var (unexpectedBeforeLeftParen, leftParen) = self.expect(TokenSpec(.leftParen, allowAtStartOfLine: false))
@@ -432,32 +436,9 @@ extension Parser {
 
 extension Parser {
   mutating func parseDifferentiableAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(
-      TokenSpec(.differentiable, remapping: .identifier)
-    )
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-
-    let argument = self.parseDifferentiableAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSign: atSign,
-      unexpectedBeforeDifferentiable,
-      attributeName: RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        name: differentiable,
-        genericArgumentClause: nil,
-        arena: self.arena
-      ),
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      arguments: .differentiableArguments(argument),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
+    return parseAttribute(argumentMode: .conditional({ $0.atDifferentiableAttributeArguments() })) { parser in
+      return (nil, .differentiableArguments(parser.parseDifferentiableAttributeArguments()))
+    }
   }
 
   mutating func parseDifferentiableAttributeArguments() -> RawDifferentiableAttributeArgumentsSyntax {
@@ -580,60 +561,6 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseDerivativeAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDerivative, derivative) = self.expect(TokenSpec(.derivative, remapping: .identifier))
-
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let argument = self.parseDerivativeAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSign: atSign,
-      attributeName: RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        unexpectedBeforeDerivative,
-        name: derivative,
-        genericArgumentClause: nil,
-        arena: self.arena
-      ),
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      arguments: .derivativeRegistrationArguments(argument),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
-  mutating func parseTransposeAttribute() -> RawAttributeSyntax {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeTranspose, transpose) = self.expect(TokenSpec(.transpose, remapping: .identifier))
-
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let argument = self.parseDerivativeAttributeArguments()
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawAttributeSyntax(
-      unexpectedBeforeAtSign,
-      atSign: atSign,
-      unexpectedBeforeTranspose,
-      attributeName: RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        name: transpose,
-        genericArgumentClause: nil,
-        arena: self.arena
-      ),
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      arguments: .derivativeRegistrationArguments(argument),
-      unexpectedBeforeRightParen,
-      rightParen: rightParen,
-      arena: self.arena
-    )
-  }
-
   mutating func parseDerivativeAttributeArguments() -> RawDerivativeAttributeArgumentsSyntax {
     let (unexpectedBeforeOfLabel, ofLabel) = self.expect(.keyword(.of))
     let (unexpectedBetweenOfLabelAndColon, colon) = self.expect(.colon)
@@ -1169,6 +1096,22 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
+  /// Whether '(' starts the arguments of '@differentiable' rather than the
+  /// function type's parameters. Like the C++ parser, this is '( id )' followed
+  /// by a type, or '( id ('.
+  mutating func atDifferentiableAttributeArguments() -> Bool {
+    guard self.consume(if: .leftParen) != nil else { return false }
+
+    guard self.consume(if: .identifier) != nil else { return false }
+    if self.at(.leftParen) {
+      return true
+    }
+    guard self.consume(if: .rightParen) != nil else {
+      return false
+    }
+    return self.at(.leftParen) || self.at(.atSign) || self.at(.identifier)
+  }
+
   mutating func atAttributeOrSpecifierArgument(
     lastTokenHadSpace: Bool,
     forCustomAttribute: Bool = false

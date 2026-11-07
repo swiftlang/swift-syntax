@@ -3752,4 +3752,21 @@ final class DeclarationTests: ParserTestCase {
         """
     )
   }
+
+  func testReasyncMustPrecedeRethrows() {
+    assertParse(
+      """
+      func f(_: () async throws -> ()) rethrows 1️⃣reasync {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'reasync' must precede 'rethrows'",
+          fixIts: ["move 'reasync' in front of 'rethrows'"]
+        )
+      ],
+      fixedSource: """
+        func f(_: () async throws -> ()) reasync rethrows {}
+        """
+    )
+  }
 }

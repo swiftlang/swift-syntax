@@ -654,6 +654,18 @@ public class EvaluateTests: XCTestCase {
 
 /// Assert the results of evaluating the condition within an `#if` against the
 /// given build configuration.
+extension EvaluateTests {
+  func testIntegerLiteralFixItKeepsTrivia() throws {
+    let condition: ExprSyntax = "0  // comment"
+    let (_, _, diagnostics) = IfConfigRegionState.evaluating(condition, in: TestingBuildConfiguration())
+    let edit = try XCTUnwrap(diagnostics.first?.fixIts.first?.edits.first)
+    // Only the literal is replaced; the trailing comment is left alone.
+    XCTAssertEqual(edit.replacement, "false")
+    XCTAssertEqual(edit.range.lowerBound.utf8Offset, 0)
+    XCTAssertEqual(edit.range.upperBound.utf8Offset, 1)
+  }
+}
+
 private func assertIfConfig(
   _ condition: ExprSyntax,
   _ expectedState: IfConfigRegionState,

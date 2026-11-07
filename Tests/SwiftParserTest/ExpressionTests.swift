@@ -18,6 +18,20 @@ import SwiftSyntaxBuilder
 import XCTest
 
 final class ExpressionTests: ParserTestCase {
+  func testEditorPlaceholderAsTrailingClosureDoesNotSwallowFollowingStatements() {
+    assertParse(
+      """
+      func t() {
+        fn {} g: 1️⃣<#T##() -> Void#>
+        let a = 1
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "editor placeholder in source file")
+      ]
+    )
+  }
+
   func testEditorPlaceholderAsClosureBody() {
     // The diagnostic is on the placeholder, not on the closure around it.
     assertParse(

@@ -11,9 +11,13 @@
 //===----------------------------------------------------------------------===//
 
 /// The position of a child in the layout of a syntax node.
+@frozen
+@usableFromInline
 struct SyntaxLayoutIndex: Hashable {
+  @usableFromInline
   let value: UInt32
 
+  @_alwaysEmitIntoClient
   init(_ value: UInt32) {
     self.value = value
   }
@@ -41,11 +45,17 @@ public struct AnySyntaxProperty: Hashable {
 }
 
 /// The layout of a syntax node type: the children it has, each at a fixed position.
+@frozen
 public struct SyntaxLayout<Node: SyntaxProtocol> {
+  @usableFromInline
   let syntaxKind: SyntaxKind
 
-  // A `SyntaxLayout` is only constructed by the `layout` property of each layout node type.
-  private init() { fatalError() }
+  /// Used by the `layout` property of each layout node type, which is the only way to
+  /// construct a `SyntaxLayout`.
+  @_alwaysEmitIntoClient
+  init(syntaxKind: SyntaxKind) {
+    self.syntaxKind = syntaxKind
+  }
 }
 
 /// A child of a syntax node type, typed by the node type and the child's type.
@@ -65,11 +75,18 @@ public struct SyntaxLayout<Node: SyntaxProtocol> {
 /// `infixExpr.leftOperand` and `infixExpr.with(\.leftOperand, newOperand)`.
 ///
 /// ``SyntaxLayout/subscript(_:)`` turns it into the ``AnySyntaxProperty`` it stands for.
+@frozen
 public struct SyntaxProperty<Node: SyntaxProtocol, Value> {
+  @usableFromInline
   let index: SyntaxLayoutIndex
 
-  // SyntaxProperty can only be constructed by `SyntaxProperty<Node, Value>.${name}`
-  private init() { fatalError() }
+  /// Used by the static property of each child, such as
+  /// `SyntaxProperty<ReturnStmtSyntax, ExprSyntax?>.expression`, which are the only way
+  /// to construct a `SyntaxProperty`.
+  @_alwaysEmitIntoClient
+  init(index: UInt32) {
+    self.index = SyntaxLayoutIndex(index)
+  }
 }
 
 extension SyntaxLayout {
@@ -119,9 +136,10 @@ extension SyntaxProtocol {
   }
 
   /// The child at `property`.
+  @inlinable
   public subscript<T: SyntaxProtocol>(property property: SyntaxProperty<Self, T>) -> T {
     get {
-      return Syntax(self).child(at: Int(property.index.value))!.cast(T.self)
+      return T(Syntax(self).child(at: Int(property.index.value))!)!
     }
     set {
       self = with(property, newValue)
@@ -129,9 +147,10 @@ extension SyntaxProtocol {
   }
 
   /// The child at `property`, or `nil` if that child is absent.
+  @inlinable
   public subscript<T: SyntaxProtocol>(property property: SyntaxProperty<Self, T?>) -> T? {
     get {
-      return Syntax(self).child(at: Int(property.index.value))?.cast(T.self)
+      return Syntax(self).child(at: Int(property.index.value)).map { T($0)! }
     }
     set {
       self = with(property, newValue)
@@ -139,17 +158,15 @@ extension SyntaxProtocol {
   }
 
   /// Returns a new syntax node that has the child at `property` replaced by `value`.
+  @inlinable
   public func with<T: SyntaxProtocol>(_ property: SyntaxProperty<Self, T>, _ value: T) -> Self {
-    Syntax(self)
-      .replacingChild(at: Int(property.index.value), with: Syntax(value), rawAllocationArena: RawSyntaxArena())
-      .cast(Self.self)
+    return Self(Syntax(self).replacingChild(at: Int(property.index.value), with: Syntax(value)))!
   }
 
   /// Returns a new syntax node that has the child at `property` replaced by `value`, or
   /// removed if `value` is `nil`.
+  @inlinable
   public func with<T: SyntaxProtocol>(_ property: SyntaxProperty<Self, T?>, _ value: T?) -> Self {
-    Syntax(self)
-      .replacingChild(at: Int(property.index.value), with: Syntax(value), rawAllocationArena: RawSyntaxArena())
-      .cast(Self.self)
+    return Self(Syntax(self).replacingChild(at: Int(property.index.value), with: value.map { Syntax($0) }))!
   }
 }

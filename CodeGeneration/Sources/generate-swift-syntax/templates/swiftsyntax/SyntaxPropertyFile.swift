@@ -16,16 +16,6 @@ import SyntaxSupport
 import Utils
 
 let syntaxPropertyFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    extension SyntaxProperty {
-      fileprivate init(index: UInt32) {
-        self.index = .init(index)
-      }
-    }
-    """
-  )
-
   for node in NON_BASE_SYNTAX_NODES {
     if let layoutNode = node.layoutNode {
       // One extension per child type, so that `Value` is known from the node type and the
@@ -49,6 +39,7 @@ let syntaxPropertyFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           for entry in group {
             DeclSyntax(
               """
+              @_alwaysEmitIntoClient
               public static var \(entry.child.varDeclName): Self {
                 .init(index: \(raw: entry.index))
               }

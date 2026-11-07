@@ -134,6 +134,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///
   /// - Parameter index: The index to create and cache.
   /// - Returns: The child's node at the provided index.
+  @usableFromInline
   func child(at index: Int) -> Syntax? {
     let layoutBuffer = self.layoutBuffer
     guard let dataRef = layoutBuffer[index] else {
@@ -232,6 +233,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
         rawAllocationArena: rawAllocationArena
       )
     }
+  }
+
+  /// Same as ``replacingChild(at:with:rawAllocationArena:)``, allocating in a new arena.
+  @usableFromInline
+  func replacingChild(at index: Int, with newChild: Syntax?) -> Syntax {
+    return replacingChild(at: index, with: newChild, rawAllocationArena: RawSyntaxArena())
   }
 
   func withLeadingTrivia(_ leadingTrivia: Trivia, rawAllocationArena: RawSyntaxArena) -> Syntax {

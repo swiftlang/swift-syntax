@@ -13,23 +13,20 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-extension SyntaxProperty {
-  fileprivate init(index: UInt32) {
-    self.index = .init(index)
-  }
-}
-
 extension SyntaxProperty<ABIAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeProvider: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterProvider: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<ABIAttributeArgumentsSyntax, ABIAttributeArgumentsSyntax.Provider> {
+  @_alwaysEmitIntoClient
   public static var provider: Self {
     .init(index: 1)
   }
@@ -37,22 +34,27 @@ extension SyntaxProperty<ABIAttributeArgumentsSyntax, ABIAttributeArgumentsSynta
 
 @_spi(Compiler)
 extension SyntaxProperty<AccessorBlockFileSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndAccessors: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorsAndRightBrace: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightBraceAndEndOfFileToken: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: Self {
     .init(index: 8)
   }
@@ -60,10 +62,12 @@ extension SyntaxProperty<AccessorBlockFileSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AccessorBlockFileSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftBrace: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: Self {
     .init(index: 5)
   }
@@ -71,6 +75,7 @@ extension SyntaxProperty<AccessorBlockFileSyntax, TokenSyntax?> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AccessorBlockFileSyntax, AccessorDeclListSyntax> {
+  @_alwaysEmitIntoClient
   public static var accessors: Self {
     .init(index: 3)
   }
@@ -78,358 +83,430 @@ extension SyntaxProperty<AccessorBlockFileSyntax, AccessorDeclListSyntax> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AccessorBlockFileSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<AccessorBlockSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndAccessors: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorsAndRightBrace: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<AccessorBlockSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftBrace: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AccessorBlockSyntax, AccessorBlockSyntax.Accessors> {
+  @_alwaysEmitIntoClient
   public static var accessors: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AccessorDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndAccessorSpecifier: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorSpecifierAndParameters: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndEffectSpecifiers: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndBody: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 12)
   }
 }
 
 extension SyntaxProperty<AccessorDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AccessorDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AccessorDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var accessorSpecifier: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AccessorDeclSyntax, AccessorParametersSyntax?> {
+  @_alwaysEmitIntoClient
   public static var parameters: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<AccessorDeclSyntax, AccessorEffectSpecifiersSyntax?> {
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<AccessorDeclSyntax, CodeBlockSyntax?> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<AccessorEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsyncSpecifierAndThrowsClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterThrowsClause: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<AccessorEffectSpecifiersSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AccessorEffectSpecifiersSyntax, ThrowsClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var throwsClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AccessorParametersSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<AccessorParametersSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndActorKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenActorKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var actorKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, InheritanceClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<ActorDeclSyntax, MemberBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var memberBlock: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<ArrayElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ArrayElementSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ArrayElementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ArrayExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndElements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightSquare: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<ArrayExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ArrayExprSyntax, ArrayElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ArrayTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndElement: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementAndRightSquare: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<ArrayTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ArrayTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var element: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ArrowExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEffectSpecifiers: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArrow: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<ArrowExprSyntax, TypeEffectSpecifiersSyntax?> {
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: Self {
     .init(index: 1)
   }
@@ -437,10 +514,12 @@ extension SyntaxProperty<ArrowExprSyntax, TypeEffectSpecifiersSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<ArrowExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndArrow: Self {
     .init(index: 4)
   }
@@ -448,148 +527,177 @@ extension SyntaxProperty<ArrowExprSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<ArrowExprSyntax, FunctionYieldClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var yieldClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ArrowExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var arrow: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AsExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndAsKeyword: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsKeywordAndQuestionOrExclamationMark: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionOrExclamationMarkAndType: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<AsExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AsExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var asKeyword: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AsExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AsExprSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<AssignmentExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEqual: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEqual: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<AssignmentExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var equal: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AssociatedTypeDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndAssociatedtypeKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAssociatedtypeKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndInheritanceClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndInitializer: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<AssociatedTypeDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AssociatedTypeDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AssociatedTypeDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var associatedtypeKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<AssociatedTypeDeclSyntax, InheritanceClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<AssociatedTypeDeclSyntax, TypeInitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var initializer: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<AssociatedTypeDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
@@ -597,18 +705,22 @@ extension SyntaxProperty<AssociatedTypeDeclSyntax, GenericWhereClauseSyntax?> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AttributeClauseFileSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndEndOfFileToken: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: Self {
     .init(index: 6)
   }
@@ -616,6 +728,7 @@ extension SyntaxProperty<AttributeClauseFileSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AttributeClauseFileSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
@@ -623,6 +736,7 @@ extension SyntaxProperty<AttributeClauseFileSyntax, AttributeListSyntax> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AttributeClauseFileSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
@@ -630,206 +744,248 @@ extension SyntaxProperty<AttributeClauseFileSyntax, DeclModifierListSyntax> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AttributeClauseFileSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AttributeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAtSign: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAtSignAndAttributeName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributeNameAndLeftParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<AttributeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var atSign: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AttributeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributeName: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AttributeSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<AttributeSyntax, AttributeSyntax.Arguments?> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<AttributedTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifiers: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifiersAndAttributes: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndLateSpecifiers: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLateSpecifiersAndBaseType: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBaseType: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<AttributedTypeSyntax, TypeSpecifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var specifiers: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var lateSpecifiers: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AttributedTypeSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AttributedTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var baseType: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<AvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArgument: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<AvailabilityArgumentSyntax, AvailabilityArgumentSyntax.Argument> {
+  @_alwaysEmitIntoClient
   public static var argument: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AvailabilityArgumentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AvailabilityConditionSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAvailabilityKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityKeywordAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndAvailabilityArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityArgumentsAndRightParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<AvailabilityConditionSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var availabilityKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<AvailabilityConditionSyntax, AvailabilityArgumentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var availabilityArguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AvailabilityLabeledArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<AvailabilityLabeledArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<AvailabilityLabeledArgumentSyntax, AvailabilityLabeledArgumentSyntax.Value> {
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 5)
   }
@@ -837,22 +993,27 @@ extension SyntaxProperty<AvailabilityLabeledArgumentSyntax, AvailabilityLabeledA
 
 @_spi(Compiler)
 extension SyntaxProperty<AvailabilityMacroDefinitionFileSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlatformVersion: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPlatformVersionAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndSpecs: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecsAndEndOfFileToken: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: Self {
     .init(index: 8)
   }
@@ -860,6 +1021,7 @@ extension SyntaxProperty<AvailabilityMacroDefinitionFileSyntax, UnexpectedNodesS
 
 @_spi(Compiler)
 extension SyntaxProperty<AvailabilityMacroDefinitionFileSyntax, PlatformVersionSyntax> {
+  @_alwaysEmitIntoClient
   public static var platformVersion: Self {
     .init(index: 1)
   }
@@ -867,10 +1029,12 @@ extension SyntaxProperty<AvailabilityMacroDefinitionFileSyntax, PlatformVersionS
 
 @_spi(Compiler)
 extension SyntaxProperty<AvailabilityMacroDefinitionFileSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: Self {
     .init(index: 7)
   }
@@ -878,770 +1042,926 @@ extension SyntaxProperty<AvailabilityMacroDefinitionFileSyntax, TokenSyntax> {
 
 @_spi(Compiler)
 extension SyntaxProperty<AvailabilityMacroDefinitionFileSyntax, AvailabilityArgumentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var specs: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<AwaitExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAwaitKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAwaitKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<AwaitExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var awaitKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<AwaitExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<BackDeployedAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBeforeLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPlatforms: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlatforms: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<BackDeployedAttributeArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var beforeLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<BackDeployedAttributeArgumentsSyntax, PlatformVersionItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var platforms: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<BinaryOperatorExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOperator: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterOperator: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<BinaryOperatorExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var `operator`: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<BooleanLiteralExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLiteral: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLiteral: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<BooleanLiteralExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var literal: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<BorrowExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBorrowKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBorrowKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<BorrowExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var borrowKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<BorrowExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<BreakStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBreakKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBreakKeywordAndLabel: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLabel: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<BreakStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var breakKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<BreakStmtSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<_CanImportExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCanImportKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCanImportKeywordAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndImportPath: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenImportPathAndVersionInfo: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenVersionInfoAndRightParen: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<_CanImportExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var canImportKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var importPath: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<_CanImportExprSyntax, _CanImportVersionInfoSyntax?> {
+  @_alwaysEmitIntoClient
   public static var versionInfo: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<_CanImportVersionInfoSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeComma: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndLabel: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndVersion: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterVersion: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<_CanImportVersionInfoSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var comma: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<_CanImportVersionInfoSyntax, VersionTupleSyntax> {
+  @_alwaysEmitIntoClient
   public static var version: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<CatchClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCatchKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCatchKeywordAndCatchItems: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCatchItemsAndBody: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<CatchClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var catchKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<CatchClauseSyntax, CatchItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var catchItems: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<CatchClauseSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<CatchItemSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndWhereClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereClauseAndTrailingComma: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<CatchItemSyntax, PatternSyntax?> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<CatchItemSyntax, WhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var whereClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<CatchItemSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndClassKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClassKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var classKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, InheritanceClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<ClassDeclSyntax, MemberBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var memberBlock: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<ClassRestrictionTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeClassKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClassKeyword: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<ClassRestrictionTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var classKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndItems: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenItemsAndRightSquare: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureClauseSyntax, ClosureCaptureListSyntax> {
+  @_alwaysEmitIntoClient
   public static var items: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSpecifierSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifierAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndDetail: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDetailAndRightParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSpecifierSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var specifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSpecifierSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var detail: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifierAndName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndInitializer: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSyntax, ClosureCaptureSpecifierSyntax?> {
+  @_alwaysEmitIntoClient
   public static var specifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSyntax, InitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var initializer: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ClosureCaptureSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ClosureExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndSignature: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndStatements: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStatementsAndRightBrace: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<ClosureExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftBrace: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ClosureExprSyntax, ClosureSignatureSyntax?> {
+  @_alwaysEmitIntoClient
   public static var signature: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClosureExprSyntax, CodeBlockItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var statements: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ClosureParameterClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<ClosureParameterClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ClosureParameterClauseSyntax, ClosureParameterListSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameters: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClosureParameterSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFirstName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndEllipsis: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEllipsisAndTrailingComma: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<ClosureParameterSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ClosureParameterSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClosureParameterSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var firstName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ClosureParameterSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var secondName: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var ellipsis: Self {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<ClosureParameterSyntax, TypeSyntax?> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<ClosureShorthandParameterSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ClosureShorthandParameterSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ClosureShorthandParameterSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndCapture: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaptureAndParameterClause: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndEffectSpecifiers: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenReturnClauseAndInKeyword: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInKeyword: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<ClosureSignatureSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ClosureSignatureSyntax, ClosureCaptureClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var capture: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ClosureSignatureSyntax, ClosureSignatureSyntax.ParameterClause?> {
+  @_alwaysEmitIntoClient
   public static var parameterClause: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ClosureSignatureSyntax, TypeEffectSpecifiersSyntax?> {
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: Self {
     .init(index: 7)
   }
@@ -1649,10 +1969,12 @@ extension SyntaxProperty<ClosureSignatureSyntax, TypeEffectSpecifiersSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: Self {
     .init(index: 10)
   }
@@ -1660,18 +1982,21 @@ extension SyntaxProperty<ClosureSignatureSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<ClosureSignatureSyntax, FunctionYieldClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var yieldClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ClosureSignatureSyntax, ReturnClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var returnClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<ClosureSignatureSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var inKeyword: Self {
     .init(index: 13)
   }
@@ -1679,14 +2004,17 @@ extension SyntaxProperty<ClosureSignatureSyntax, TokenSyntax> {
 
 @_spi(Compiler)
 extension SyntaxProperty<CodeBlockFileSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBody: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndEndOfFileToken: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: Self {
     .init(index: 4)
   }
@@ -1694,6 +2022,7 @@ extension SyntaxProperty<CodeBlockFileSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(Compiler)
 extension SyntaxProperty<CodeBlockFileSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 1)
   }
@@ -1701,906 +2030,1089 @@ extension SyntaxProperty<CodeBlockFileSyntax, CodeBlockSyntax> {
 
 @_spi(Compiler)
 extension SyntaxProperty<CodeBlockFileSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<CodeBlockItemSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeItem: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenItemAndSemicolon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSemicolon: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<CodeBlockItemSyntax, CodeBlockItemSyntax.Item> {
+  @_alwaysEmitIntoClient
   public static var item: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<CodeBlockItemSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var semicolon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<CodeBlockSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndStatements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStatementsAndRightBrace: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<CodeBlockSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftBrace: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<CodeBlockSyntax, CodeBlockItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var statements: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<CompositionTypeElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndAmpersand: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAmpersand: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<CompositionTypeElementSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<CompositionTypeElementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var ampersand: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<CompositionTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeElements: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<CompositionTypeSyntax, CompositionTypeElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ConditionElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCondition: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ConditionElementSyntax, ConditionElementSyntax.Condition> {
+  @_alwaysEmitIntoClient
   public static var condition: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ConditionElementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ConformanceRequirementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftTypeAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndRightType: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightType: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<ConformanceRequirementSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftType: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightType: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ConformanceRequirementSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ConsumeExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeConsumeKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConsumeKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ConsumeExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var consumeKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ConsumeExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ContinueStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeContinueKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenContinueKeywordAndLabel: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLabel: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ContinueStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var continueKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ContinueStmtSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<CopyExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCopyKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCopyKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<CopyExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var copyKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<CopyExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DeclModifierDetailSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndDetail: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDetailAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<DeclModifierDetailSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var detail: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DeclModifierSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndDetail: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDetail: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<DeclModifierSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DeclModifierSyntax, DeclModifierDetailSyntax?> {
+  @_alwaysEmitIntoClient
   public static var detail: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DeclNameArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<DeclNameArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DeclNameArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<DeclNameArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DeclNameArgumentsSyntax, DeclNameArgumentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DeclReferenceExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleSelector: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndBaseName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseNameAndArgumentNames: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArgumentNames: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<DeclReferenceExprSyntax, ModuleSelectorSyntax?> {
+  @_alwaysEmitIntoClient
   public static var moduleSelector: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DeclReferenceExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var baseName: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DeclReferenceExprSyntax, DeclNameArgumentsSyntax?> {
+  @_alwaysEmitIntoClient
   public static var argumentNames: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DeferStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDeferKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeferKeywordAndBody: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<DeferStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var deferKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DeferStmtSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DeinitializerDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndDeinitKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeinitKeywordAndEffectSpecifiers: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndBody: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<DeinitializerDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DeinitializerDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DeinitializerDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var deinitKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DeinitializerDeclSyntax, DeinitializerEffectSpecifiersSyntax?> {
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<DeinitializerDeclSyntax, CodeBlockSyntax?> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<DeinitializerEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAsyncSpecifier: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<DeinitializerEffectSpecifiersSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DerivativeAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOfLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOfLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndOriginalDeclName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOriginalDeclNameAndPeriod: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndAccessorSpecifier: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorSpecifierAndComma: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndArguments: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArguments: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<DerivativeAttributeArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var ofLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DerivativeAttributeArgumentsSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var originalDeclName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DerivativeAttributeArgumentsSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var period: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var accessorSpecifier: Self {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<DerivativeAttributeArgumentsSyntax, DifferentiabilityWithRespectToArgumentSyntax?> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<DesignatedTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeadingComma: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeadingCommaAndName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterName: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<DesignatedTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leadingComma: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DictionaryElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeKey: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKeyAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<DictionaryElementSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var key: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DictionaryElementSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DictionaryElementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<DictionaryExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndContent: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenContentAndRightSquare: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<DictionaryExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DictionaryExprSyntax, DictionaryExprSyntax.Content> {
+  @_alwaysEmitIntoClient
   public static var content: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DictionaryTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndKey: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKeyAndColon: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndRightSquare: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<DictionaryTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<DictionaryTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var key: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArgument: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var argument: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityArgumentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityArgumentsSyntax, DifferentiabilityArgumentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWrtLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWrtLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArguments: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var wrtLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DifferentiabilityWithRespectToArgumentSyntax, DifferentiabilityWithRespectToArgumentSyntax.Arguments> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DifferentiableAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeKindSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKindSpecifierAndKindSpecifierComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenKindSpecifierCommaAndArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndArgumentsComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsCommaAndGenericWhereClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<DifferentiableAttributeArgumentsSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var kindSpecifier: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var kindSpecifierComma: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var argumentsComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<DifferentiableAttributeArgumentsSyntax, DifferentiabilityWithRespectToArgumentSyntax?> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DifferentiableAttributeArgumentsSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<DiscardAssignmentExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWildcard: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterWildcard: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<DiscardAssignmentExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var wildcard: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DiscardStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDiscardKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDiscardKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<DiscardStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var discardKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DiscardStmtSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
@@ -2608,18 +3120,22 @@ extension SyntaxProperty<DiscardStmtSyntax, ExprSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<DoExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDoKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDoKeywordAndBody: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndCatchClauses: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCatchClauses: Self {
     .init(index: 6)
   }
@@ -2627,6 +3143,7 @@ extension SyntaxProperty<DoExprSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<DoExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var doKeyword: Self {
     .init(index: 1)
   }
@@ -2634,6 +3151,7 @@ extension SyntaxProperty<DoExprSyntax, TokenSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<DoExprSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 3)
   }
@@ -2641,1138 +3159,1368 @@ extension SyntaxProperty<DoExprSyntax, CodeBlockSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<DoExprSyntax, CatchClauseListSyntax> {
+  @_alwaysEmitIntoClient
   public static var catchClauses: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DoStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDoKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDoKeywordAndThrowsClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThrowsClauseAndBody: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndCatchClauses: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCatchClauses: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<DoStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var doKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<DoStmtSyntax, ThrowsClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var throwsClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DoStmtSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DoStmtSyntax, CatchClauseListSyntax> {
+  @_alwaysEmitIntoClient
   public static var catchClauses: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<DocumentationAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<DocumentationAttributeArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DocumentationAttributeArgumentSyntax, DocumentationAttributeArgumentSyntax.Value> {
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<DocumentationAttributeArgumentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeForLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenForLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndDeclName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDeclName: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var forLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<DynamicReplacementAttributeArgumentsSyntax, DeclReferenceExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var declName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<EditorPlaceholderDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPlaceholder: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<EditorPlaceholderDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<EditorPlaceholderDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<EditorPlaceholderDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<EditorPlaceholderExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<EditorPlaceholderExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<EnumCaseDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndCaseKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndElements: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<EnumCaseDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<EnumCaseDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<EnumCaseDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var caseKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<EnumCaseDeclSyntax, EnumCaseElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<EnumCaseElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndParameterClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndRawValue: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRawValueAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<EnumCaseElementSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<EnumCaseElementSyntax, EnumCaseParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var parameterClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<EnumCaseElementSyntax, InitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var rawValue: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<EnumCaseElementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterClauseSyntax, EnumCaseParameterListSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameters: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModifiers: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFirstName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndDefaultValue: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultValueAndTrailingComma: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var firstName: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var secondName: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<EnumCaseParameterSyntax, InitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var defaultValue: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndEnumKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEnumKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var enumKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, InheritanceClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<EnumDeclSyntax, MemberBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var memberBlock: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<ExpressionPatternSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<ExpressionPatternSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ExpressionSegmentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBackslash: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBackslashAndPounds: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundsAndLeftParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndExpressions: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionsAndRightParen: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<ExpressionSegmentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var backslash: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ExpressionSegmentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var pounds: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ExpressionSegmentSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var expressions: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ExpressionStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<ExpressionStmtSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndExtensionKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExtensionKeywordAndExtendedType: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExtendedTypeAndInheritanceClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var extensionKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var extendedType: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, InheritanceClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<ExtensionDeclSyntax, MemberBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var memberBlock: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<FallThroughStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeFallthroughKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterFallthroughKeyword: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<FallThroughStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var fallthroughKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<FileDefaultDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDefaultKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultKeywordAndSpecifier: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSpecifier: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<FileDefaultDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var defaultKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<FileDefaultDeclSyntax, FileDefaultDeclSyntax.Specifier> {
+  @_alwaysEmitIntoClient
   public static var specifier: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<FloatLiteralExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLiteral: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLiteral: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<FloatLiteralExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var literal: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeForKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenForKeywordAndTryKeyword: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTryKeywordAndAwaitKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAwaitKeywordAndUnsafeKeyword: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenUnsafeKeywordAndCaseKeyword: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndPattern: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInKeyword: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInKeywordAndSequence: Self {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSequenceAndWhereClause: Self {
     .init(index: 18)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereClauseAndBody: Self {
     .init(index: 20)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 22)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var forKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var inKeyword: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var tryKeyword: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var awaitKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var unsafeKeyword: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var caseKeyword: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, TypeAnnotationSyntax?> {
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var sequence: Self {
     .init(index: 17)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, WhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var whereClause: Self {
     .init(index: 19)
   }
 }
 
 extension SyntaxProperty<ForStmtSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 21)
   }
 }
 
 extension SyntaxProperty<ForceUnwrapExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndExclamationMark: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExclamationMark: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ForceUnwrapExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ForceUnwrapExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var exclamationMark: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<FunctionCallExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCalledExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCalledExpressionAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndTrailingClosure: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: Self {
     .init(index: 12)
   }
 }
 
 extension SyntaxProperty<FunctionCallExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var calledExpression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<FunctionCallExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<FunctionCallExprSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<FunctionCallExprSyntax, ClosureExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingClosure: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<FunctionCallExprSyntax, MultipleTrailingClosureElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFuncKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFuncKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndSignature: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndBody: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var funcKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, FunctionSignatureSyntax> {
+  @_alwaysEmitIntoClient
   public static var signature: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<FunctionDeclSyntax, CodeBlockSyntax?> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<FunctionEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsyncSpecifierAndThrowsClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterThrowsClause: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<FunctionEffectSpecifiersSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<FunctionEffectSpecifiersSyntax, ThrowsClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var throwsClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<FunctionParameterClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<FunctionParameterClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<FunctionParameterClauseSyntax, FunctionParameterListSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameters: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<FunctionParameterSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndFirstName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndEllipsis: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEllipsisAndDefaultValue: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultValueAndTrailingComma: Self {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 18)
   }
 }
 
 extension SyntaxProperty<FunctionParameterSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<FunctionParameterSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<FunctionParameterSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var firstName: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<FunctionParameterSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var secondName: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var ellipsis: Self {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 17)
   }
 }
 
 extension SyntaxProperty<FunctionParameterSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<FunctionParameterSyntax, InitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var defaultValue: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeParameterClause: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndEffectSpecifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterReturnClause: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<FunctionSignatureSyntax, FunctionParameterClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameterClause: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<FunctionSignatureSyntax, FunctionEffectSpecifiersSyntax?> {
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: Self {
     .init(index: 3)
   }
@@ -3780,10 +4528,12 @@ extension SyntaxProperty<FunctionSignatureSyntax, FunctionEffectSpecifiersSyntax
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: Self {
     .init(index: 6)
   }
@@ -3791,56 +4541,67 @@ extension SyntaxProperty<FunctionSignatureSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionSignatureSyntax, FunctionYieldClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var yieldClause: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<FunctionSignatureSyntax, ReturnClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var returnClause: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndParameters: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndEffectSpecifiers: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterReturnClause: Self {
     .init(index: 12)
   }
 }
 
 extension SyntaxProperty<FunctionTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<FunctionTypeSyntax, TupleTypeElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameters: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<FunctionTypeSyntax, TypeEffectSpecifiersSyntax?> {
+  @_alwaysEmitIntoClient
   public static var effectSpecifiers: Self {
     .init(index: 7)
   }
@@ -3848,10 +4609,12 @@ extension SyntaxProperty<FunctionTypeSyntax, TypeEffectSpecifiersSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEffectSpecifiersAndYieldClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: Self {
     .init(index: 10)
   }
@@ -3859,12 +4622,14 @@ extension SyntaxProperty<FunctionTypeSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionTypeSyntax, FunctionYieldClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var yieldClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<FunctionTypeSyntax, ReturnClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var returnClause: Self {
     .init(index: 11)
   }
@@ -3872,22 +4637,27 @@ extension SyntaxProperty<FunctionTypeSyntax, ReturnClauseSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionYieldClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeYieldsKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldsKeywordAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndYields: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldsAndRightParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 8)
   }
@@ -3895,14 +4665,17 @@ extension SyntaxProperty<FunctionYieldClauseSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionYieldClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var yieldsKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 7)
   }
@@ -3910,6 +4683,7 @@ extension SyntaxProperty<FunctionYieldClauseSyntax, TokenSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionYieldClauseSyntax, FunctionYieldListSyntax> {
+  @_alwaysEmitIntoClient
   public static var yields: Self {
     .init(index: 5)
   }
@@ -3917,14 +4691,17 @@ extension SyntaxProperty<FunctionYieldClauseSyntax, FunctionYieldListSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionYieldSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
@@ -3932,6 +4709,7 @@ extension SyntaxProperty<FunctionYieldSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionYieldSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 1)
   }
@@ -3939,1020 +4717,1222 @@ extension SyntaxProperty<FunctionYieldSyntax, TypeSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<FunctionYieldSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GenericArgumentClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftAngle: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftAngleAndArguments: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightAngle: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightAngle: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<GenericArgumentClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftAngle: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightAngle: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<GenericArgumentClauseSyntax, GenericArgumentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GenericArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArgument: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<GenericArgumentSyntax, GenericArgumentSyntax.Argument> {
+  @_alwaysEmitIntoClient
   public static var argument: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<GenericArgumentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GenericParameterClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftAngle: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftAngleAndParameters: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParametersAndGenericWhereClause: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndRightAngle: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightAngle: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<GenericParameterClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftAngle: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightAngle: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<GenericParameterClauseSyntax, GenericParameterListSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameters: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GenericParameterClauseSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<GenericParameterSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndSpecifier: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSpecifierAndName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndColon: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndInheritedType: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritedTypeAndTrailingComma: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 12)
   }
 }
 
 extension SyntaxProperty<GenericParameterSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<GenericParameterSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var specifier: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<GenericParameterSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<GenericParameterSyntax, TypeSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritedType: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<GenericRequirementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRequirement: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRequirementAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<GenericRequirementSyntax, GenericRequirementSyntax.Requirement> {
+  @_alwaysEmitIntoClient
   public static var requirement: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<GenericRequirementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GenericSpecializationExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndGenericArgumentClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<GenericSpecializationExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<GenericSpecializationExprSyntax, GenericArgumentClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GenericWhereClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWhereKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereKeywordAndRequirements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRequirements: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<GenericWhereClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var whereKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<GenericWhereClauseSyntax, GenericRequirementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var requirements: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GuardStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeGuardKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGuardKeywordAndConditions: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionsAndElseKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElseKeywordAndBody: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<GuardStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var guardKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var elseKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<GuardStmtSyntax, ConditionElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var conditions: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<GuardStmtSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<IdentifierPatternSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIdentifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterIdentifier: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<IdentifierPatternSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var identifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IdentifierTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleSelector: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericArgumentClause: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<IdentifierTypeSyntax, ModuleSelectorSyntax?> {
+  @_alwaysEmitIntoClient
   public static var moduleSelector: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IdentifierTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<IdentifierTypeSyntax, GenericArgumentClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<IfConfigClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePoundKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundKeywordAndCondition: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionAndElements: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<IfConfigClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var poundKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IfConfigClauseSyntax, ExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var condition: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<IfConfigClauseSyntax, IfConfigClauseSyntax.Elements?> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<IfConfigDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeClauses: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClausesAndPoundEndif: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPoundEndif: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<IfConfigDeclSyntax, IfConfigClauseListSyntax> {
+  @_alwaysEmitIntoClient
   public static var clauses: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IfConfigDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var poundEndif: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<IfExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIfKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenIfKeywordAndConditions: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionsAndBody: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndElseKeyword: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElseKeywordAndElseBody: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElseBody: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<IfExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var ifKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IfExprSyntax, ConditionElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var conditions: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<IfExprSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<IfExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var elseKeyword: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<IfExprSyntax, IfExprSyntax.ElseBody?> {
+  @_alwaysEmitIntoClient
   public static var elseBody: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ImplementsAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndDeclName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDeclName: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<ImplementsAttributeArgumentsSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ImplementsAttributeArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var comma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ImplementsAttributeArgumentsSyntax, DeclReferenceExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var declName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWrappedType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWrappedTypeAndExclamationMark: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExclamationMark: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var wrappedType: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ImplicitlyUnwrappedOptionalTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var exclamationMark: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ImportDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndImportKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenImportKeywordAndImportKindSpecifier: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenImportKindSpecifierAndPath: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPath: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<ImportDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ImportDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ImportDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var importKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<ImportDeclSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var importKindSpecifier: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ImportDeclSyntax, ImportPathComponentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var path: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ImportPathComponentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingPeriod: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingPeriod: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ImportPathComponentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ImportPathComponentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingPeriod: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<InOutExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAmpersand: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAmpersandAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<InOutExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var ampersand: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<InOutExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<InfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftOperand: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftOperandAndOperator: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOperatorAndRightOperand: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightOperand: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<InfixOperatorExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftOperand: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var `operator`: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightOperand: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<InheritanceClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeColon: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndInheritedTypes: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInheritedTypes: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<InheritanceClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<InheritanceClauseSyntax, InheritedTypeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var inheritedTypes: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<InheritedTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<InheritedTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<InheritedTypeSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<InitializerClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEqual: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEqualAndValue: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<InitializerClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var equal: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<InitializerClauseSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndInitKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitKeywordAndOptionalMark: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOptionalMarkAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndSignature: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndBody: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var initKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var optionalMark: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, FunctionSignatureSyntax> {
+  @_alwaysEmitIntoClient
   public static var signature: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<InitializerDeclSyntax, CodeBlockSyntax?> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<InlineArrayTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndCount: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCountAndSeparator: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSeparatorAndElement: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementAndRightSquare: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<InlineArrayTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var separator: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<InlineArrayTypeSyntax, GenericArgumentSyntax> {
+  @_alwaysEmitIntoClient
   public static var count: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var element: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<IntegerLiteralExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLiteral: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLiteral: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<IntegerLiteralExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var literal: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IsExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndIsKeyword: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenIsKeywordAndType: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<IsExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IsExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var isKeyword: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<IsExprSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<IsTypePatternSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIsKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenIsKeywordAndType: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<IsTypePatternSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var isKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<IsTypePatternSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<KeyPathComponentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePeriod: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndComponent: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComponent: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<KeyPathComponentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var period: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<KeyPathComponentSyntax, KeyPathComponentSyntax.Component> {
+  @_alwaysEmitIntoClient
   public static var component: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<KeyPathExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBackslash: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBackslashAndRoot: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRootAndComponents: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComponents: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<KeyPathExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var backslash: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<KeyPathExprSyntax, TypeSyntax?> {
+  @_alwaysEmitIntoClient
   public static var root: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<KeyPathExprSyntax, KeyPathComponentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var components: Self {
     .init(index: 5)
   }
@@ -4960,22 +5940,27 @@ extension SyntaxProperty<KeyPathExprSyntax, KeyPathComponentListSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<KeyPathMethodComponentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDeclName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclNameAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 8)
   }
@@ -4983,6 +5968,7 @@ extension SyntaxProperty<KeyPathMethodComponentSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<KeyPathMethodComponentSyntax, DeclReferenceExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var declName: Self {
     .init(index: 1)
   }
@@ -4990,10 +5976,12 @@ extension SyntaxProperty<KeyPathMethodComponentSyntax, DeclReferenceExprSyntax> 
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<KeyPathMethodComponentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 7)
   }
@@ -5001,276 +5989,334 @@ extension SyntaxProperty<KeyPathMethodComponentSyntax, TokenSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<KeyPathMethodComponentSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<KeyPathOptionalComponentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeQuestionOrExclamationMark: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionOrExclamationMark: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<KeyPathOptionalComponentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<KeyPathPropertyComponentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDeclName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclNameAndGenericArgumentClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<KeyPathPropertyComponentSyntax, DeclReferenceExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var declName: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<KeyPathPropertyComponentSyntax, GenericArgumentClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<KeyPathSubscriptComponentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftSquare: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndArguments: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightSquare: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightSquare: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<KeyPathSubscriptComponentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<KeyPathSubscriptComponentSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<LabeledExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndExpression: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<LabeledExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<LabeledExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<LabeledSpecializeArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenValueAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<LabeledSpecializeArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<LabeledSpecializeArgumentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<LabeledStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndStatement: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterStatement: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<LabeledStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<LabeledStmtSyntax, StmtSyntax> {
+  @_alwaysEmitIntoClient
   public static var statement: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<LayoutRequirementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndLayoutSpecifier: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLayoutSpecifierAndLeftParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndSize: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSizeAndComma: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndAlignment: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAlignmentAndRightParen: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<LayoutRequirementSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<LayoutRequirementSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var layoutSpecifier: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<LayoutRequirementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var size: Self {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: Self {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var alignment: Self {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 15)
   }
@@ -5278,14 +6324,17 @@ extension SyntaxProperty<LayoutRequirementSyntax, TokenSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<LifetimeSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeParameter: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
@@ -5293,6 +6342,7 @@ extension SyntaxProperty<LifetimeSpecifierArgumentSyntax, UnexpectedNodesSyntax?
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<LifetimeSpecifierArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameter: Self {
     .init(index: 1)
   }
@@ -5300,6 +6350,7 @@ extension SyntaxProperty<LifetimeSpecifierArgumentSyntax, TokenSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<LifetimeSpecifierArgumentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
@@ -5307,26 +6358,32 @@ extension SyntaxProperty<LifetimeSpecifierArgumentSyntax, TokenSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDependsOnKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDependsOnKeywordAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndScopedKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenScopedKeywordAndArguments: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 10)
   }
@@ -5334,14 +6391,17 @@ extension SyntaxProperty<LifetimeTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var dependsOnKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 9)
   }
@@ -5349,6 +6409,7 @@ extension SyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var scopedKeyword: Self {
     .init(index: 5)
   }
@@ -5356,376 +6417,452 @@ extension SyntaxProperty<LifetimeTypeSpecifierSyntax, TokenSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<LifetimeTypeSpecifierSyntax, LifetimeSpecifierArgumentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndMacroKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMacroKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndSignature: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSignatureAndDefinition: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefinitionAndGenericWhereClause: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var macroKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, FunctionSignatureSyntax> {
+  @_alwaysEmitIntoClient
   public static var signature: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, InitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var definition: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<MacroDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPound: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundAndModuleSelector: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndMacroName: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMacroNameAndGenericArgumentClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericArgumentClauseAndLeftParen: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndTrailingClosure: Self {
     .init(index: 18)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: Self {
     .init(index: 20)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: Self {
     .init(index: 22)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var pound: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var macroName: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, ModuleSelectorSyntax?> {
+  @_alwaysEmitIntoClient
   public static var moduleSelector: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, GenericArgumentClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 13)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 17)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, ClosureExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingClosure: Self {
     .init(index: 19)
   }
 }
 
 extension SyntaxProperty<MacroExpansionDeclSyntax, MultipleTrailingClosureElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: Self {
     .init(index: 21)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePound: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundAndModuleSelector: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndMacroName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMacroNameAndGenericArgumentClause: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericArgumentClauseAndLeftParen: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightParenAndTrailingClosure: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: Self {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: Self {
     .init(index: 18)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var pound: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var macroName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, ModuleSelectorSyntax?> {
+  @_alwaysEmitIntoClient
   public static var moduleSelector: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, GenericArgumentClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, ClosureExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingClosure: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<MacroExpansionExprSyntax, MultipleTrailingClosureElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: Self {
     .init(index: 17)
   }
 }
 
 extension SyntaxProperty<MatchingPatternConditionSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCaseKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndPattern: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInitializer: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInitializer: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<MatchingPatternConditionSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var caseKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MatchingPatternConditionSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MatchingPatternConditionSyntax, TypeAnnotationSyntax?> {
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<MatchingPatternConditionSyntax, InitializerClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var initializer: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<MemberAccessExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBase: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseAndPeriod: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndDeclName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDeclName: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<MemberAccessExprSyntax, ExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var base: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MemberAccessExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var period: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MemberAccessExprSyntax, DeclReferenceExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var declName: Self {
     .init(index: 5)
   }
@@ -5733,14 +6870,17 @@ extension SyntaxProperty<MemberAccessExprSyntax, DeclReferenceExprSyntax> {
 
 @_spi(Compiler)
 extension SyntaxProperty<MemberBlockItemListFileSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeMembers: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMembersAndEndOfFileToken: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: Self {
     .init(index: 4)
   }
@@ -5748,6 +6888,7 @@ extension SyntaxProperty<MemberBlockItemListFileSyntax, UnexpectedNodesSyntax?> 
 
 @_spi(Compiler)
 extension SyntaxProperty<MemberBlockItemListFileSyntax, MemberBlockItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var members: Self {
     .init(index: 1)
   }
@@ -5755,1842 +6896,2214 @@ extension SyntaxProperty<MemberBlockItemListFileSyntax, MemberBlockItemListSynta
 
 @_spi(Compiler)
 extension SyntaxProperty<MemberBlockItemListFileSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MemberBlockItemSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDecl: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclAndSemicolon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSemicolon: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<MemberBlockItemSyntax, DeclSyntax> {
+  @_alwaysEmitIntoClient
   public static var decl: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MemberBlockItemSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var semicolon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MemberBlockSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftBrace: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndMembers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMembersAndRightBrace: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<MemberBlockSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftBrace: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<MemberBlockSyntax, MemberBlockItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var members: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MemberTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBaseType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseTypeAndPeriod: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndModuleSelector: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleSelectorAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericArgumentClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericArgumentClause: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<MemberTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var baseType: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MemberTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var period: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<MemberTypeSyntax, ModuleSelectorSyntax?> {
+  @_alwaysEmitIntoClient
   public static var moduleSelector: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<MemberTypeSyntax, GenericArgumentClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericArgumentClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<MetatypeTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBaseType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseTypeAndPeriod: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndMetatypeSpecifier: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMetatypeSpecifier: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<MetatypeTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var baseType: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MetatypeTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var period: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var metatypeSpecifier: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<MissingDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPlaceholder: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<MissingDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MissingDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MissingDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<MissingExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<MissingExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MissingPatternSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<MissingPatternSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MissingStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<MissingStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MissingSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<MissingSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<MissingTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlaceholder: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlaceholder: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<MissingTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var placeholder: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ModuleSelectorSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleNameAndColonColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColonColon: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ModuleSelectorSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var moduleName: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colonColon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MultipleTrailingClosureElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndClosure: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosure: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<MultipleTrailingClosureElementSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<MultipleTrailingClosureElementSyntax, ClosureExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var closure: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<NamedOpaqueReturnTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeGenericParameterClause: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndType: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<NamedOpaqueReturnTypeSyntax, GenericParameterClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<NamedOpaqueReturnTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<NilLiteralExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeNilKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterNilKeyword: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<NilLiteralExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var nilKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<NonisolatedSpecifierArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndNonsendingKeyword: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNonsendingKeywordAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<NonisolatedSpecifierArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var nonsendingKeyword: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<NonisolatedTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeNonisolatedKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNonisolatedKeywordAndArgument: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterArgument: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<NonisolatedTypeSpecifierSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var nonisolatedKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<NonisolatedTypeSpecifierSyntax, NonisolatedSpecifierArgumentSyntax?> {
+  @_alwaysEmitIntoClient
   public static var argument: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ObjCSelectorPieceSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ObjCSelectorPieceSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<OperatorDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeFixitySpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFixitySpecifierAndOperatorKeyword: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOperatorKeywordAndName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndOperatorPrecedenceAndTypes: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterOperatorPrecedenceAndTypes: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<OperatorDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var fixitySpecifier: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var operatorKeyword: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<OperatorDeclSyntax, OperatorPrecedenceAndTypesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var operatorPrecedenceAndTypes: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<OperatorPrecedenceAndTypesSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeColon: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPrecedenceGroup: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrecedenceGroupAndDesignatedTypes: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterDesignatedTypes: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<OperatorPrecedenceAndTypesSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var precedenceGroup: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<OperatorPrecedenceAndTypesSyntax, DesignatedTypeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var designatedTypes: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<OptionalBindingConditionSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBindingSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBindingSpecifierAndPattern: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInitializer: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterInitializer: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<OptionalBindingConditionSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var bindingSpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<OptionalBindingConditionSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<OptionalBindingConditionSyntax, TypeAnnotationSyntax?> {
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<OptionalBindingConditionSyntax, InitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var initializer: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<OptionalChainingExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndQuestionMark: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionMark: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<OptionalChainingExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<OptionalChainingExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var questionMark: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<OptionalTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWrappedType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWrappedTypeAndQuestionMark: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionMark: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<OptionalTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var wrappedType: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<OptionalTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var questionMark: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeModuleLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndModuleName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModuleNameAndComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndPlatforms: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPlatforms: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var moduleLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, StringLiteralExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var moduleName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<OriginallyDefinedInAttributeArgumentsSyntax, PlatformVersionItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var platforms: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<PackElementExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEachKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEachKeywordAndPack: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPack: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PackElementExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var eachKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PackElementExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var pack: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PackElementTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEachKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEachKeywordAndPack: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPack: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PackElementTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var eachKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PackElementTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var pack: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PackExpansionExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRepeatKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRepeatKeywordAndRepetitionPattern: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRepetitionPattern: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PackExpansionExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var repeatKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PackExpansionExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var repetitionPattern: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PackExpansionTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRepeatKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRepeatKeywordAndRepetitionPattern: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRepetitionPattern: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PackExpansionTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var repeatKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PackExpansionTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var repetitionPattern: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PatternBindingSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTypeAnnotation: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAnnotationAndInitializer: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndAccessorBlock: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAccessorBlockAndTrailingComma: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<PatternBindingSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PatternBindingSyntax, TypeAnnotationSyntax?> {
+  @_alwaysEmitIntoClient
   public static var typeAnnotation: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PatternBindingSyntax, InitializerClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var initializer: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<PatternBindingSyntax, AccessorBlockSyntax?> {
+  @_alwaysEmitIntoClient
   public static var accessorBlock: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<PatternBindingSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<PatternExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPattern: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<PatternExprSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PlatformVersionItemSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlatformVersion: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPlatformVersionAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PlatformVersionItemSyntax, PlatformVersionSyntax> {
+  @_alwaysEmitIntoClient
   public static var platformVersion: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PlatformVersionItemSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PlatformVersionSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePlatform: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPlatformAndVersion: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterVersion: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PlatformVersionSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var platform: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PlatformVersionSyntax, VersionTupleSyntax?> {
+  @_alwaysEmitIntoClient
   public static var version: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PostfixIfConfigExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBase: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBaseAndConfig: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterConfig: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PostfixIfConfigExprSyntax, ExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var base: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PostfixIfConfigExprSyntax, IfConfigDeclSyntax> {
+  @_alwaysEmitIntoClient
   public static var config: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PostfixOperatorExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndOperator: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterOperator: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PostfixOperatorExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PostfixOperatorExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var `operator`: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PoundSourceLocationArgumentsSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeFileLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFileLabelAndFileColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFileColonAndFileName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFileNameAndComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCommaAndLineLabel: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLineLabelAndLineColon: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLineColonAndLineNumber: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterLineNumber: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<PoundSourceLocationArgumentsSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var fileLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var fileColon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var comma: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var lineLabel: Self {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var lineColon: Self {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var lineNumber: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<PoundSourceLocationArgumentsSyntax, SimpleStringLiteralExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var fileName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<PoundSourceLocationSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePoundSourceLocation: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPoundSourceLocationAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<PoundSourceLocationSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var poundSourceLocation: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<PoundSourceLocationSyntax, PoundSourceLocationArgumentsSyntax?> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupAssignmentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAssignmentLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAssignmentLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupAssignmentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var assignmentLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupAssociativitySyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAssociativityLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAssociativityLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndValue: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupAssociativitySyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var associativityLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndPrecedencegroupKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrecedencegroupKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndLeftBrace: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndGroupAttributes: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGroupAttributesAndRightBrace: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var precedencegroupKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: Self {
     .init(index: 9)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupDeclSyntax, PrecedenceGroupAttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var groupAttributes: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupNameSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupNameSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupNameSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupRelationSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeHigherThanOrLowerThanLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenHigherThanOrLowerThanLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPrecedenceGroups: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPrecedenceGroups: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupRelationSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var higherThanOrLowerThanLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PrecedenceGroupRelationSyntax, PrecedenceGroupNameListSyntax> {
+  @_alwaysEmitIntoClient
   public static var precedenceGroups: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<PrefixOperatorExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOperator: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOperatorAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PrefixOperatorExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var `operator`: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PrefixOperatorExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PrimaryAssociatedTypeClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftAngle: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrimaryAssociatedTypesAndRightAngle: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightAngle: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<PrimaryAssociatedTypeClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftAngle: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightAngle: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<PrimaryAssociatedTypeClauseSyntax, PrimaryAssociatedTypeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var primaryAssociatedTypes: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<PrimaryAssociatedTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeName: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndTrailingComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<PrimaryAssociatedTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<PrimaryAssociatedTypeSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndProtocolKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenProtocolKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndPrimaryAssociatedTypeClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var protocolKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, PrimaryAssociatedTypeClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var primaryAssociatedTypeClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, InheritanceClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<ProtocolDeclSyntax, MemberBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var memberBlock: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<RegexLiteralExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOpeningPounds: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningPoundsAndOpeningSlash: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningSlashAndRegex: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRegexAndClosingSlash: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClosingSlashAndClosingPounds: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosingPounds: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<RegexLiteralExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var openingPounds: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingPounds: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<RegexLiteralExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var openingSlash: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var regex: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingSlash: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<RepeatStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeRepeatKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRepeatKeywordAndBody: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBodyAndWhileKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhileKeywordAndCondition: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCondition: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<RepeatStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var repeatKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var whileKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<RepeatStmtSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<RepeatStmtSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var condition: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ReturnClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeArrow: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArrowAndType: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ReturnClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var arrow: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ReturnClauseSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ReturnStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeReturnKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenReturnKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ReturnStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var returnKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ReturnStmtSyntax, ExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SameTypeRequirementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftTypeAndEqual: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEqualAndRightType: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightType: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<SameTypeRequirementSyntax, SameTypeRequirementSyntax.LeftType> {
+  @_alwaysEmitIntoClient
   public static var leftType: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SameTypeRequirementSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var equal: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SameTypeRequirementSyntax, SameTypeRequirementSyntax.RightType> {
+  @_alwaysEmitIntoClient
   public static var rightType: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SectionAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSection: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSection: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<SectionAttributeArgumentSyntax, SectionAttributeArgumentSyntax.Section> {
+  @_alwaysEmitIntoClient
   public static var section: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SequenceExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeElements: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElements: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<SequenceExprSyntax, ExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SimpleStringLiteralExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOpeningQuote: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningQuoteAndSegments: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSegmentsAndClosingQuote: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosingQuote: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<SimpleStringLiteralExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var openingQuote: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingQuote: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SimpleStringLiteralExprSyntax, SimpleStringLiteralSegmentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var segments: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SimpleTypeSpecifierSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSpecifier: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<SimpleTypeSpecifierSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var specifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SomeOrAnyTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSomeOrAnySpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSomeOrAnySpecifierAndConstraint: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterConstraint: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<SomeOrAnyTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var someOrAnySpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SomeOrAnyTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var constraint: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SourceFileSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeShebang: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenShebangAndStatements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStatementsAndEndOfFileToken: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterEndOfFileToken: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<SourceFileSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var shebang: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SourceFileSyntax, CodeBlockItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var statements: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SourceFileSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var endOfFileToken: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SpecializeAvailabilityArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAvailabilityLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndAvailabilityArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAvailabilityArgumentsAndSemicolon: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSemicolon: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<SpecializeAvailabilityArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var availabilityLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var semicolon: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<SpecializeAvailabilityArgumentSyntax, AvailabilityArgumentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var availabilityArguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SpecializeTargetFunctionArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeTargetLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTargetLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndDeclName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDeclNameAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<SpecializeTargetFunctionArgumentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var targetLabel: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SpecializeTargetFunctionArgumentSyntax, DeclReferenceExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var declName: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SpecializeTargetFunctionArgumentSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
@@ -7598,10 +9111,12 @@ extension SyntaxProperty<SpecializeTargetFunctionArgumentSyntax, TokenSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<SpecializedAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExportedArgument: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExportedArgumentAndGenericWhereClause: Self {
     .init(index: 2)
   }
@@ -7609,298 +9124,358 @@ extension SyntaxProperty<SpecializedAttributeArgumentSyntax, UnexpectedNodesSynt
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<SpecializedAttributeArgumentSyntax, LabeledSpecializeArgumentSyntax?> {
+  @_alwaysEmitIntoClient
   public static var exportedArgument: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SpecializedAttributeArgumentSyntax, GenericWhereClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SpecializedAttributeArgumentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<StringLiteralExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeOpeningPounds: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningPoundsAndOpeningQuote: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenOpeningQuoteAndSegments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSegmentsAndClosingQuote: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenClosingQuoteAndClosingPounds: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterClosingPounds: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<StringLiteralExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var openingPounds: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingPounds: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<StringLiteralExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var openingQuote: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var closingQuote: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<StringLiteralExprSyntax, StringLiteralSegmentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var segments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<StringSegmentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeContent: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterContent: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<StringSegmentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var content: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndStructKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenStructKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInheritanceClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInheritanceClauseAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndMemberBlock: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterMemberBlock: Self {
     .init(index: 16)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var structKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, InheritanceClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inheritanceClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<StructDeclSyntax, MemberBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var memberBlock: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<SubscriptCallExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCalledExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCalledExpressionAndLeftSquare: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftSquareAndArguments: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenArgumentsAndRightSquare: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenRightSquareAndTrailingClosure: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAdditionalTrailingClosures: Self {
     .init(index: 12)
   }
 }
 
 extension SyntaxProperty<SubscriptCallExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var calledExpression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SubscriptCallExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftSquare: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightSquare: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<SubscriptCallExprSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var arguments: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SubscriptCallExprSyntax, ClosureExprSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingClosure: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<SubscriptCallExprSyntax, MultipleTrailingClosureElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var additionalTrailingClosures: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndSubscriptKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSubscriptKeywordAndGenericParameterClause: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenReturnClauseAndGenericWhereClause: Self {
     .init(index: 14)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericWhereClauseAndAccessorBlock: Self {
     .init(index: 16)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterAccessorBlock: Self {
     .init(index: 18)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var subscriptKeyword: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, FunctionParameterClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var parameterClause: Self {
     .init(index: 9)
   }
@@ -7908,10 +9483,12 @@ extension SyntaxProperty<SubscriptDeclSyntax, FunctionParameterClauseSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenParameterClauseAndYieldClause: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldClauseAndReturnClause: Self {
     .init(index: 12)
   }
@@ -7919,298 +9496,358 @@ extension SyntaxProperty<SubscriptDeclSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<SubscriptDeclSyntax, FunctionYieldClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var yieldClause: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, ReturnClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var returnClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 15)
   }
 }
 
 extension SyntaxProperty<SubscriptDeclSyntax, AccessorBlockSyntax?> {
+  @_alwaysEmitIntoClient
   public static var accessorBlock: Self {
     .init(index: 17)
   }
 }
 
 extension SyntaxProperty<SuperExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSuperKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterSuperKeyword: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<SuperExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var superKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SuppressedTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWithoutTilde: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWithoutTildeAndType: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<SuppressedTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var withoutTilde: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SuppressedTypeSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SwitchCaseItemSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePattern: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndWhereClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereClauseAndTrailingComma: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<SwitchCaseItemSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SwitchCaseItemSyntax, WhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var whereClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SwitchCaseItemSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SwitchCaseLabelSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCaseKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseKeywordAndCaseItems: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCaseItemsAndColon: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<SwitchCaseLabelSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var caseKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SwitchCaseLabelSyntax, SwitchCaseItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var caseItems: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SwitchCaseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttribute: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributeAndLabel: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndStatements: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterStatements: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<SwitchCaseSyntax, AttributeSyntax?> {
+  @_alwaysEmitIntoClient
   public static var attribute: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<SwitchCaseSyntax, SwitchCaseSyntax.Label> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SwitchCaseSyntax, CodeBlockItemListSyntax> {
+  @_alwaysEmitIntoClient
   public static var statements: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<SwitchDefaultLabelSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeDefaultKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenDefaultKeywordAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<SwitchDefaultLabelSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var defaultKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SwitchExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeSwitchKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSwitchKeywordAndSubject: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSubjectAndLeftBrace: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftBraceAndCases: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenCasesAndRightBrace: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightBrace: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<SwitchExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var switchKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var leftBrace: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightBrace: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<SwitchExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var subject: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<SwitchExprSyntax, SwitchCaseListSyntax> {
+  @_alwaysEmitIntoClient
   public static var cases: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<TernaryExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeCondition: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionAndQuestionMark: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionMarkAndThenExpression: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThenExpressionAndColon: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndElseExpression: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterElseExpression: Self {
     .init(index: 10)
   }
 }
 
 extension SyntaxProperty<TernaryExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var condition: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var thenExpression: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var elseExpression: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<TernaryExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var questionMark: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 7)
   }
@@ -8218,14 +9855,17 @@ extension SyntaxProperty<TernaryExprSyntax, TokenSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<ThenStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeThenKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThenKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
@@ -8233,6 +9873,7 @@ extension SyntaxProperty<ThenStmtSyntax, UnexpectedNodesSyntax?> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<ThenStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var thenKeyword: Self {
     .init(index: 1)
   }
@@ -8240,884 +9881,1061 @@ extension SyntaxProperty<ThenStmtSyntax, TokenSyntax> {
 
 @_spi(ExperimentalLanguageFeatures)
 extension SyntaxProperty<ThenStmtSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ThrowStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeThrowKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThrowKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ThrowStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var throwKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ThrowStmtSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ThrowsClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeThrowsSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThrowsSpecifierAndLeftParen: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndType: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndRightParen: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<ThrowsClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var throwsSpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ThrowsClauseSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<ThrowsClauseSyntax, TypeSyntax?> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<TryExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeTryKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionOrExclamationMarkAndExpression: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<TryExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var tryKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<TryExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<TryExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<TupleExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<TupleExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<TupleExprSyntax, LabeledExprListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<TuplePatternElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLabel: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLabelAndColon: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndPattern: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPatternAndTrailingComma: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<TuplePatternElementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var label: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<TuplePatternElementSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<TuplePatternSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<TuplePatternSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<TuplePatternSyntax, TuplePatternElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<TupleTypeElementSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeInoutKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInoutKeywordAndFirstName: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenFirstNameAndSecondName: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenSecondNameAndColon: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypeAndEllipsis: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEllipsisAndTrailingComma: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterTrailingComma: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<TupleTypeElementSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var inoutKeyword: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var firstName: Self {
     .init(index: 3)
   }
 
+  @_alwaysEmitIntoClient
   public static var secondName: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 7)
   }
 
+  @_alwaysEmitIntoClient
   public static var ellipsis: Self {
     .init(index: 11)
   }
 
+  @_alwaysEmitIntoClient
   public static var trailingComma: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<TupleTypeElementSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<TupleTypeSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<TupleTypeSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<TupleTypeSyntax, TupleTypeElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<TypeAliasDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndTypealiasKeyword: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenTypealiasKeywordAndName: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenNameAndGenericParameterClause: Self {
     .init(index: 8)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenGenericParameterClauseAndInitializer: Self {
     .init(index: 10)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenInitializerAndGenericWhereClause: Self {
     .init(index: 12)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterGenericWhereClause: Self {
     .init(index: 14)
   }
 }
 
 extension SyntaxProperty<TypeAliasDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<TypeAliasDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<TypeAliasDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var typealiasKeyword: Self {
     .init(index: 5)
   }
 
+  @_alwaysEmitIntoClient
   public static var name: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<TypeAliasDeclSyntax, GenericParameterClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericParameterClause: Self {
     .init(index: 9)
   }
 }
 
 extension SyntaxProperty<TypeAliasDeclSyntax, TypeInitializerClauseSyntax> {
+  @_alwaysEmitIntoClient
   public static var initializer: Self {
     .init(index: 11)
   }
 }
 
 extension SyntaxProperty<TypeAliasDeclSyntax, GenericWhereClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var genericWhereClause: Self {
     .init(index: 13)
   }
 }
 
 extension SyntaxProperty<TypeAnnotationSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeColon: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenColonAndType: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<TypeAnnotationSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<TypeAnnotationSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<TypeEffectSpecifiersSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsyncSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsyncSpecifierAndThrowsClause: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterThrowsClause: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<TypeEffectSpecifiersSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var asyncSpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<TypeEffectSpecifiersSyntax, ThrowsClauseSyntax?> {
+  @_alwaysEmitIntoClient
   public static var throwsClause: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<TypeExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeType: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterType: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<TypeExprSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var type: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<TypeInitializerClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeEqual: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenEqualAndValue: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterValue: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<TypeInitializerClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var equal: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<TypeInitializerClauseSyntax, TypeSyntax> {
+  @_alwaysEmitIntoClient
   public static var value: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<UnexpectedCodeDeclSyntax, UnexpectedNodesSyntax> {
+  @_alwaysEmitIntoClient
   public static var unexpectedCode: Self {
     .init(index: 0)
   }
 }
 
 extension SyntaxProperty<UnresolvedAsExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAsKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAsKeywordAndQuestionOrExclamationMark: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterQuestionOrExclamationMark: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<UnresolvedAsExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var asKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<UnresolvedAsExprSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var questionOrExclamationMark: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<UnresolvedIsExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeIsKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterIsKeyword: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<UnresolvedIsExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var isKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<UnresolvedTernaryExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeQuestionMark: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenQuestionMarkAndThenExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenThenExpressionAndColon: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterColon: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<UnresolvedTernaryExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var questionMark: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var colon: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<UnresolvedTernaryExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var thenExpression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<UnsafeExprSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeUnsafeKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenUnsafeKeywordAndExpression: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterExpression: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<UnsafeExprSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var unsafeKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<UnsafeExprSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<ValueBindingPatternSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeBindingSpecifier: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBindingSpecifierAndPattern: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterPattern: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<ValueBindingPatternSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var bindingSpecifier: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<ValueBindingPatternSyntax, PatternSyntax> {
+  @_alwaysEmitIntoClient
   public static var pattern: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<VariableDeclSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeAttributes: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenAttributesAndModifiers: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenModifiersAndBindingSpecifier: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenBindingSpecifierAndBindings: Self {
     .init(index: 6)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBindings: Self {
     .init(index: 8)
   }
 }
 
 extension SyntaxProperty<VariableDeclSyntax, AttributeListSyntax> {
+  @_alwaysEmitIntoClient
   public static var attributes: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<VariableDeclSyntax, DeclModifierListSyntax> {
+  @_alwaysEmitIntoClient
   public static var modifiers: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<VariableDeclSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var bindingSpecifier: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<VariableDeclSyntax, PatternBindingListSyntax> {
+  @_alwaysEmitIntoClient
   public static var bindings: Self {
     .init(index: 7)
   }
 }
 
 extension SyntaxProperty<VersionComponentSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforePeriod: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenPeriodAndNumber: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterNumber: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<VersionComponentSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var period: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var number: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<VersionTupleSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeMajor: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenMajorAndComponents: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComponents: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<VersionTupleSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var major: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<VersionTupleSyntax, VersionComponentListSyntax> {
+  @_alwaysEmitIntoClient
   public static var components: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<WhereClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWhereKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhereKeywordAndCondition: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterCondition: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<WhereClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var whereKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<WhereClauseSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var condition: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<WhileStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWhileKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenWhileKeywordAndConditions: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenConditionsAndBody: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterBody: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<WhileStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var whileKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<WhileStmtSyntax, ConditionElementListSyntax> {
+  @_alwaysEmitIntoClient
   public static var conditions: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<WhileStmtSyntax, CodeBlockSyntax> {
+  @_alwaysEmitIntoClient
   public static var body: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<WildcardPatternSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeWildcard: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterWildcard: Self {
     .init(index: 2)
   }
 }
 
 extension SyntaxProperty<WildcardPatternSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var wildcard: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<YieldStmtSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeYieldKeyword: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenYieldKeywordAndYieldedExpressions: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterYieldedExpressions: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<YieldStmtSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var yieldKeyword: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<YieldStmtSyntax, YieldStmtSyntax.YieldedExpressions> {
+  @_alwaysEmitIntoClient
   public static var yieldedExpressions: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<YieldedExpressionSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeExpression: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenExpressionAndComma: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterComma: Self {
     .init(index: 4)
   }
 }
 
 extension SyntaxProperty<YieldedExpressionSyntax, ExprSyntax> {
+  @_alwaysEmitIntoClient
   public static var expression: Self {
     .init(index: 1)
   }
 }
 
 extension SyntaxProperty<YieldedExpressionSyntax, TokenSyntax?> {
+  @_alwaysEmitIntoClient
   public static var comma: Self {
     .init(index: 3)
   }
 }
 
 extension SyntaxProperty<YieldedExpressionsClauseSyntax, UnexpectedNodesSyntax?> {
+  @_alwaysEmitIntoClient
   public static var unexpectedBeforeLeftParen: Self {
     .init(index: 0)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenLeftParenAndElements: Self {
     .init(index: 2)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedBetweenElementsAndRightParen: Self {
     .init(index: 4)
   }
 
+  @_alwaysEmitIntoClient
   public static var unexpectedAfterRightParen: Self {
     .init(index: 6)
   }
 }
 
 extension SyntaxProperty<YieldedExpressionsClauseSyntax, TokenSyntax> {
+  @_alwaysEmitIntoClient
   public static var leftParen: Self {
     .init(index: 1)
   }
 
+  @_alwaysEmitIntoClient
   public static var rightParen: Self {
     .init(index: 5)
   }
 }
 
 extension SyntaxProperty<YieldedExpressionsClauseSyntax, YieldedExpressionListSyntax> {
+  @_alwaysEmitIntoClient
   public static var elements: Self {
     .init(index: 3)
   }

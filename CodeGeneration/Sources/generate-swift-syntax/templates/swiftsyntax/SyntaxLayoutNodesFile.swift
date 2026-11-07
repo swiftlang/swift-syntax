@@ -16,16 +16,6 @@ import SyntaxSupport
 import Utils
 
 let syntaxLayoutNodesFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    extension SyntaxLayout {
-      fileprivate init(syntaxKind: SyntaxKind) {
-        self.syntaxKind = syntaxKind
-      }
-    }
-    """
-  )
-
   for node in NON_BASE_SYNTAX_NODES {
     if node.layoutNode != nil {
       try! ExtensionDeclSyntax(
@@ -34,6 +24,7 @@ let syntaxLayoutNodesFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader
         DeclSyntax(
           """
           /// The layout of this node type.
+          @_alwaysEmitIntoClient
           public static var layout: SyntaxLayout<Self> {
             SyntaxLayout<Self>(syntaxKind: .\(node.enumCaseCallName))
           }

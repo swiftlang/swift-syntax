@@ -260,8 +260,8 @@ extension SwiftSyntax.TokenDiagnostic {
     switch self.kind {
     case .nonBreakingSpace:
       let replaceNonBreakingSpace = { (piece: TriviaPiece) -> TriviaPiece in
-        if piece == .unexpectedText("\u{a0}") {
-          return .spaces(1)
+        if case .unexpectedText(let text) = piece, !text.isEmpty, text.unicodeScalars.allSatisfy({ $0 == "\u{a0}" }) {
+          return .spaces(text.unicodeScalars.count)
         } else {
           return piece
         }
@@ -276,6 +276,9 @@ extension SwiftSyntax.TokenDiagnostic {
       let trailingTrivia = Trivia(pieces: token.trailingTrivia.map(replaceNonBreakingSpace))
       if trailingTrivia != token.trailingTrivia {
         changes.append(.replaceTrailingTrivia(token: token, newTrivia: trailingTrivia))
+      }
+      if changes.isEmpty {
+        return []
       }
       return [FixIt(message: .replaceNonBreakingSpaceBySpace, changes: changes)]
     case .unicodeCurlyQuote:

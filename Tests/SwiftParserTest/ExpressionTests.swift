@@ -2221,10 +2221,12 @@ final class ExpressionTests: ParserTestCase {
   func testNonBreakingSpaceFixItOnlyEditsTrivia() throws {
     // The edit replaces the trivia that holds the non-breaking space and does
     // not rewrite the neighboring token.
-    let source = "let x\u{a0}= 3\n    \u{a0}_ = 42"
+    // The last line contains several consecutive non-breaking spaces, which
+    // are lexed as a single unexpected-text trivia piece.
+    let source = "let x\u{a0}= 3\n    \u{a0}_ = 42\n\u{a0}\u{a0}\u{a0}\u{a0}_ = 42"
     let tree = Parser.parse(source: source)
     let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
-    XCTAssertEqual(diagnostics.count, 2)
+    XCTAssertEqual(diagnostics.count, 3)
     let utf8 = Array(source.utf8)
     for diagnostic in diagnostics {
       let edit = try XCTUnwrap(diagnostic.fixIts.first?.edits.first)

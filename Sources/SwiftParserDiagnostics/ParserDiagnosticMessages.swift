@@ -104,6 +104,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var ambiguousOptionalComposition: Self {
     .init("confusing use of optional after a 'some' or 'any' composition; use parentheses to clarify precedence")
   }
+  public static var expectedLeftBraceOrIfAfterElseDidYouMeanIf: Self {
+    .init("expected '{' or 'if' after 'else'; did you mean to write 'if'?")
+  }
   public static var defaultArgumentInTupleType: Self {
     .init("default argument not permitted in a tuple type")
   }

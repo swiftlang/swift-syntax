@@ -1376,4 +1376,50 @@ final class StatementTests: ParserTestCase {
       "for unsafe: Int in e { }"
     )
   }
+
+  func testElseFollowedByConditionSuggestsIf() {
+    assertParse(
+      """
+      if a { } 1️⃣else b { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected '{' or 'if' after 'else'; did you mean to write 'if'?",
+          fixIts: ["insert 'if'"]
+        )
+      ],
+      fixedSource: """
+        if a { } else if b { }
+        """
+    )
+  }
+
+  func testAmpersandAmpersandBeforeBindingInCondition() {
+    assertParse(
+      """
+      if a 1️⃣&& let x = b { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' joining parts of a multi-clause condition",
+          fixIts: ["replace '&&' with ','"]
+        )
+      ],
+      fixedSource: """
+        if a, let x = b { }
+        """
+    )
+  }
+
+  func testElseFollowedByConditionOnNextLineIsNotMisspelledIf() {
+    assertParse(
+      """
+      if a { } else 1️⃣b
+      { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '{' or 'if' after 'else'")
+      ]
+    )
+  }
 }

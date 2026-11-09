@@ -1411,6 +1411,42 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(leftBrace, .expectedLeftBraceOrIfAfterElse, handledNodes: [leftBrace.id])
     }
 
+    // `else <condition> { ... }`: the condition was meant to follow an `if`.
+    if let elseKeyword = node.elseKeyword, elseKeyword.isPresent,
+      let elseBlock = node.elseBody?.as(CodeBlockSyntax.self),
+      let unexpected = elseBlock.unexpectedBeforeLeftBrace, elseBlock.leftBrace.isPresent
+    {
+      // Only assume that `if` was forgotten when the `{` is on the same line as the `else`.
+      let hasNewline = (Array(unexpected.tokens(viewMode: .sourceAccurate)) + [elseBlock.leftBrace]).contains {
+        $0.leadingTrivia.contains(where: { $0.isNewline })
+      }
+      if hasNewline {
+        if let firstUnexpected = unexpected.tokens(viewMode: .sourceAccurate).first(where: { _ in true }) {
+          addDiagnostic(
+            firstUnexpected,
+            .expectedLeftBraceOrIfAfterElse,
+            handledNodes: [unexpected.id]
+          )
+        }
+        return .visitChildren
+      }
+      let elseWithIf = UnexpectedNodesSyntax([
+        Syntax(elseKeyword.with(\.trailingTrivia, .space)),
+        Syntax(TokenSyntax.keyword(.if, trailingTrivia: elseKeyword.trailingTrivia)),
+      ])
+      addDiagnostic(
+        elseKeyword,
+        .expectedLeftBraceOrIfAfterElseDidYouMeanIf,
+        fixIts: [
+          FixIt(
+            message: InsertTokenFixIt(missingNodes: [Syntax(TokenSyntax.keyword(.if))]),
+            changes: [.replace(oldNode: Syntax(elseKeyword), newNode: Syntax(elseWithIf))]
+          )
+        ],
+        handledNodes: [unexpected.id]
+      )
+    }
+
     return .visitChildren
   }
 

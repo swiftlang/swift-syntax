@@ -107,6 +107,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var curriedParameterLists: Self {
     .init("cannot have more than one parameter list")
   }
+  public static var asyncInExpression: Self {
+    .init("found 'async' in expression; did you mean 'await'?")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }

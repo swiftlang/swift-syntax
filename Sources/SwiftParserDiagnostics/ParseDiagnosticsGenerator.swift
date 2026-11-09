@@ -690,6 +690,42 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: AwaitExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `async f()` where `await f()` was meant.
+    if let unexpected = node.unexpectedBeforeAwaitKeyword,
+      let asyncKeyword = unexpected.onlyPresentToken(where: { $0.text == "async" }),
+      node.awaitKeyword.isMissing
+    {
+      addDiagnostic(
+        asyncKeyword,
+        .asyncInExpression,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [asyncKeyword], replacements: [node.awaitKeyword]),
+            changes: [
+              .replace(oldNode: Syntax(unexpected), newNode: Syntax(UnexpectedNodesSyntax([]))),
+              .replace(
+                oldNode: Syntax(node.awaitKeyword),
+                newNode: Syntax(
+                  TokenSyntax.keyword(
+                    .await,
+                    leadingTrivia: asyncKeyword.leadingTrivia,
+                    trailingTrivia: asyncKeyword.trailingTrivia
+                  )
+                )
+              ),
+            ]
+          )
+        ],
+        handledNodes: [unexpected.id, node.awaitKeyword.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

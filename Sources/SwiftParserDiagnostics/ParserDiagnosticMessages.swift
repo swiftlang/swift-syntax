@@ -104,6 +104,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var ambiguousOptionalComposition: Self {
     .init("confusing use of optional after a 'some' or 'any' composition; use parentheses to clarify precedence")
   }
+  public static var defaultArgumentInTupleType: Self {
+    .init("default argument not permitted in a tuple type")
+  }
   public static var curriedParameterLists: Self {
     .init("cannot have more than one parameter list")
   }

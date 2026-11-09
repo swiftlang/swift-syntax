@@ -2198,6 +2198,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
+
+    // A default argument, as in `(Int = 3, Int)`.
+    if let unexpected = node.unexpectedBetweenTypeAndEllipsis,
+      let equal = unexpected.first?.as(TokenSyntax.self), equal.tokenKind == .equal, unexpected.count >= 2
+    {
+      addDiagnostic(
+        equal,
+        .defaultArgumentInTupleType,
+        fixIts: [FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))],
+        handledNodes: [unexpected.id]
+      )
+    }
     return .visitChildren
   }
 

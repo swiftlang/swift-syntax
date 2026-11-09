@@ -765,6 +765,15 @@ extension Parser {
         }
         // Parse the type annotation.
         let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+        // A default argument is not allowed in a tuple type; parse it so that
+        // it can be diagnosed.
+        let unexpectedDefault: RawUnexpectedNodesSyntax?
+        if let equal = self.consume(if: .equal) {
+          let defaultValue = self.parseExpression(flavor: .basic, pattern: .none)
+          unexpectedDefault = RawUnexpectedNodesSyntax([equal.raw, defaultValue.raw], arena: self.arena)
+        } else {
+          unexpectedDefault = nil
+        }
         let ellipsis = self.consumeIfContextualPunctuator("...", remapping: .ellipsis)
         var trailingComma = self.consume(if: .comma)
         if trailingComma == nil && self.withLookahead({ $0.canParseType() }) {
@@ -782,6 +791,7 @@ extension Parser {
             unexpectedBeforeColon,
             colon: colon,
             type: type,
+            unexpectedDefault,
             ellipsis: ellipsis,
             trailingComma: trailingComma,
             arena: self.arena

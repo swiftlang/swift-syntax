@@ -1104,4 +1104,21 @@ final class InlineArrayTypeTests: ParserTestCase {
         """
     )
   }
+
+  func testDefaultArgumentInTupleType() {
+    assertParse(
+      """
+      let t: (Int 1️⃣= 3, Int) = (1, 2)
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "default argument not permitted in a tuple type",
+          fixIts: ["remove '=' and integer literal"]
+        )
+      ],
+      fixedSource: """
+        let t: (Int , Int) = (1, 2)
+        """
+    )
+  }
 }

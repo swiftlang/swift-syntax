@@ -3769,4 +3769,15 @@ final class DeclarationTests: ParserTestCase {
         """
     )
   }
+
+  func testCurriedParameterLists() {
+    assertParse(
+      """
+      func f1️⃣(_ x: Int)(y: Int) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "cannot have more than one parameter list")
+      ]
+    )
+  }
 }

@@ -104,6 +104,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var ambiguousOptionalComposition: Self {
     .init("confusing use of optional after a 'some' or 'any' composition; use parentheses to clarify precedence")
   }
+  public static var curriedParameterLists: Self {
+    .init("cannot have more than one parameter list")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }

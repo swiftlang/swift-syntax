@@ -1136,6 +1136,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.returnClause)
+    // `func f(_ a: Int)(_ b: Int)`
+    if let unexpected = node.unexpectedBetweenParameterClauseAndEffectSpecifiers,
+      !unexpected.isEmpty,
+      unexpected.allSatisfy({ $0.is(FunctionParameterClauseSyntax.self) })
+    {
+      addDiagnostic(
+        node.parameterClause.leftParen,
+        .curriedParameterLists,
+        handledNodes: [unexpected.id]
+      )
+    }
     return .visitChildren
   }
 

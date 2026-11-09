@@ -116,6 +116,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var asyncInExpression: Self {
     .init("found 'async' in expression; did you mean 'await'?")
   }
+  public static var doKeywordSpecifiesCatchRegion: Self {
+    .init("the 'do' keyword is used to specify a 'catch' region")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }

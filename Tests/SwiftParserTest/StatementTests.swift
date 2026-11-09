@@ -1411,6 +1411,23 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testTryInsteadOfDoBeforeCatch() {
+    assertParse(
+      """
+      func f() { 1️⃣try { g() } catch { } }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "the 'do' keyword is used to specify a 'catch' region",
+          fixIts: ["replace 'try' with 'do'"]
+        )
+      ],
+      fixedSource: """
+        func f() { do { g() } catch { } }
+        """
+    )
+  }
+
   func testElseFollowedByConditionOnNextLineIsNotMisspelledIf() {
     assertParse(
       """

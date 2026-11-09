@@ -423,7 +423,7 @@ extension Parser {
     let additionalArgs = self.parseArgumentListElements(
       pattern: .none,
       flavor: .attributeArguments,
-      allowTrailingComma: false
+      allowTrailingComma: true
     )
     var resultBuilder = RawSyntaxNodeListBuilder<RawLabeledExprSyntax>(
       initialCapacity: additionalArgs.count + 1

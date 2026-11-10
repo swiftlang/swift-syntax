@@ -3780,4 +3780,23 @@ final class DeclarationTests: ParserTestCase {
       ]
     )
   }
+
+  func testBraceLessActorFollowedByActor() {
+    assertParse(
+      """
+      actor A11️⃣
+
+      actor A2 { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected member block in actor", fixIts: ["insert member block"])
+      ],
+      fixedSource: """
+        actor A1 {
+        }
+
+        actor A2 { }
+        """
+    )
+  }
 }

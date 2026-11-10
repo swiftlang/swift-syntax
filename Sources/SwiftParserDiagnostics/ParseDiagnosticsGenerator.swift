@@ -788,6 +788,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let arguments = node.arguments, arguments.isMissingAllTokens {
       addDiagnostic(
         arguments,
+        position: arguments.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia,
         MissingAttributeArgument(attributeName: node.attributeName),
         fixIts: [
           FixIt(message: .insertAttributeArguments, changes: .makePresent(arguments))

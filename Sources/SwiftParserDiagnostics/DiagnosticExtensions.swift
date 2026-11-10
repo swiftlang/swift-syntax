@@ -170,7 +170,8 @@ extension FixIt.MultiNodeChange {
     _ node: some SyntaxProtocol,
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil,
-    tokenKind: TokenKind? = nil
+    tokenKind: TokenKind? = nil,
+    carriesPreviousComment: Bool = true
   ) -> Self {
     var presentNode = PresentMakingFormatter().rewrite(node, detach: true)
 
@@ -209,8 +210,12 @@ extension FixIt.MultiNodeChange {
       let previousToken = node.previousToken(viewMode: .fixedUp)
     {
       // If the previous token and this node don't need to be separated, remove
-      // the separation.
+      // the separation. A comment that follows the previous token stays after
+      // the inserted node, instead of ending up in front of it.
       changes.append(.replaceTrailingTrivia(token: previousToken, newTrivia: []))
+      if carriesPreviousComment, previousToken.trailingTrivia.contains(where: { $0.isComment }) {
+        presentNode = presentNode.with(\.trailingTrivia, previousToken.trailingTrivia)
+      }
     }
 
     changes.append(

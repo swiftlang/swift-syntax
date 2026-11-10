@@ -21,7 +21,7 @@ final class AttributeTests: ParserTestCase {
     // The attribute's name in the message does not include its trailing trivia.
     assertParse(
       """
-      @_specialize 1️⃣// comment
+      @_specialize1️⃣ // comment
       func foo() {
       }
       """,
@@ -32,6 +32,7 @@ final class AttributeTests: ParserTestCase {
           fixIts: ["insert attribute argument"]
         ),
       ],
+      applyFixIts: ["insert '()'"],
       fixedSource: """
         @_specialize() // comment
         func foo() {

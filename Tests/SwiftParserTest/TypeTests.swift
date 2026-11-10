@@ -1121,4 +1121,38 @@ final class InlineArrayTypeTests: ParserTestCase {
         """
     )
   }
+
+  func testOldStyleArrayType() {
+    assertParse(
+      """
+      var v: Int1️⃣[] = []
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["insert '['"]
+        )
+      ],
+      fixedSource: """
+        var v: [Int] = []
+        """
+    )
+  }
+
+  func testOldStyleArrayTypeWithSize() {
+    assertParse(
+      """
+      var v: Int1️⃣[3] = []
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
+      ],
+      fixedSource: """
+        var v: [3 of Int] = []
+        """
+    )
+  }
 }

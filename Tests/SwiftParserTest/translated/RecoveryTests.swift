@@ -1881,8 +1881,15 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '[0]' in function")
-      ]
+        DiagnosticSpec(message: "array types are now written with the brackets around the element type", fixIts: ["write as an inline array type"])
+      ],
+      fixedSource: """
+        struct ErrorInFunctionSignatureResultArrayType3 {
+          func foo() -> [0 of Int] {
+            return [0]
+          }
+        }
+        """
     )
   }
 
@@ -1896,8 +1903,15 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '[0_1]' in function")
-      ]
+        DiagnosticSpec(message: "array types are now written with the brackets around the element type", fixIts: ["write as an inline array type"])
+      ],
+      fixedSource: """
+        struct ErrorInFunctionSignatureResultArrayType4 {
+          func foo() -> [0_1 of Int] {
+            return [0]
+          }
+        }
+        """
     )
   }
 
@@ -1911,8 +1925,15 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '[0b1]' in function")
-      ]
+        DiagnosticSpec(message: "array types are now written with the brackets around the element type", fixIts: ["write as an inline array type"])
+      ],
+      fixedSource: """
+        struct ErrorInFunctionSignatureResultArrayType5 {
+          func foo() -> [0b1 of Int] {
+            return [0]
+          }
+        }
+        """
     )
   }
 

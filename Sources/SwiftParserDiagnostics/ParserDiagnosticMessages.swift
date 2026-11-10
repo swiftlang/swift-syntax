@@ -119,6 +119,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var doKeywordSpecifiesCatchRegion: Self {
     .init("the 'do' keyword is used to specify a 'catch' region")
   }
+  public static var oldStyleArrayType: Self {
+    .init("array types are now written with the brackets around the element type")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }
@@ -745,6 +748,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var insertWhitespace: Self {
     .init("insert whitespace")
+  }
+  public static var writeInlineArrayType: Self {
+    .init("write as an inline array type")
   }
   public static var joinIdentifiers: Self {
     .init("join the identifiers together")

@@ -767,6 +767,47 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
+    // `Int[]`: an array type written with the old spelling.
+    if node.leftSquare.isMissing, node.rightSquare.isPresent,
+      let unexpected = node.unexpectedBetweenElementAndRightSquare,
+      let misplacedSquare = unexpected.first?.as(TokenSyntax.self), misplacedSquare.tokenKind == .leftSquare
+    {
+      let fixIt: FixIt
+      if let size = unexpected.dropFirst().first?.as(TokenSyntax.self), size.tokenKind.isIntegerLiteral {
+        // `Int[3]` is the old spelling of what is now `[3 of Int]`.
+        let inlineArray = InlineArrayTypeSyntax(
+          count: GenericArgumentSyntax(
+            argument: .expr(ExprSyntax(IntegerLiteralExprSyntax(literal: size.with(\.leadingTrivia, []).with(\.trailingTrivia, []))))
+          ),
+          separator: .keyword(.of, leadingTrivia: .space, trailingTrivia: .space),
+          element: GenericArgumentSyntax(
+            argument: .type(node.element.with(\.leadingTrivia, []).with(\.trailingTrivia, []))
+          )
+        )
+        .with(\.leadingTrivia, node.leadingTrivia)
+        .with(\.trailingTrivia, node.trailingTrivia)
+        fixIt = FixIt(
+          message: .writeInlineArrayType,
+          changes: [.replace(oldNode: Syntax(node), newNode: Syntax(inlineArray))]
+        )
+      } else {
+        fixIt = FixIt(
+          message: InsertTokenFixIt(missingNodes: [Syntax(node.leftSquare)]),
+          changes: [
+            .makePresent(node.leftSquare),
+            .makeMissing(unexpected),
+          ]
+        )
+      }
+      addDiagnostic(
+        misplacedSquare,
+        .oldStyleArrayType,
+        fixIts: [fixIt],
+        handledNodes: [node.leftSquare.id, unexpected.id]
+      )
+      return .visitChildren
+    }
+
     if node.leftSquare.isMissing && node.rightSquare.isPresent {
       addDiagnostic(
         node.rightSquare,

@@ -125,6 +125,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var oldStyleArrayType: Self {
     .init("array types are now written with the brackets around the element type")
   }
+  public static var fileDefaultRejectsAttributes: Self {
+    .init("attribute cannot be attached to a file-level default")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }

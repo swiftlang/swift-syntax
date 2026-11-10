@@ -778,6 +778,23 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: FileDefaultDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `@objc default @MainActor`, `private default @MainActor`
+    if let unexpected = node.unexpectedBeforeDefaultKeyword,
+      let first = unexpected.first, first.is(AttributeSyntax.self) || first.is(DeclModifierSyntax.self)
+    {
+      addDiagnostic(
+        first,
+        .fileDefaultRejectsAttributes,
+        handledNodes: [unexpected.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

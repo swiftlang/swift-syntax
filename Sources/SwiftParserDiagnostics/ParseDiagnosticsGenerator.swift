@@ -425,7 +425,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       addDiagnostic(
         enumCase.caseKeyword,
         .caseLabelOutsideOfSwitch,
-        handledNodes: [node.unexpectedCode.id] + (node.parent?.as(MemberBlockItemSyntax.self)?.semicolon.map { [$0.id] } ?? [])
+        handledNodes: [node.unexpectedCode.id]
+          + (node.parent?.as(MemberBlockItemSyntax.self)?.semicolon.map { [$0.id] } ?? [])
       )
     }
     return .visitChildren
@@ -810,7 +811,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         // `Int[3]` is the old spelling of what is now `[3 of Int]`.
         let inlineArray = InlineArrayTypeSyntax(
           count: GenericArgumentSyntax(
-            argument: .expr(ExprSyntax(IntegerLiteralExprSyntax(literal: size.with(\.leadingTrivia, []).with(\.trailingTrivia, []))))
+            argument: .expr(
+              ExprSyntax(IntegerLiteralExprSyntax(literal: size.with(\.leadingTrivia, []).with(\.trailingTrivia, [])))
+            )
           ),
           separator: .keyword(.of, leadingTrivia: .space, trailingTrivia: .space),
           element: GenericArgumentSyntax(
@@ -877,7 +880,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
               .replace(
                 oldNode: Syntax(kind),
                 newNode: Syntax(
-                  TokenSyntax.identifier("reverse", leadingTrivia: kind.leadingTrivia, trailingTrivia: kind.trailingTrivia)
+                  TokenSyntax.identifier(
+                    "reverse",
+                    leadingTrivia: kind.leadingTrivia,
+                    trailingTrivia: kind.trailingTrivia
+                  )
                 )
               )
             ]

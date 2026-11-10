@@ -401,7 +401,8 @@ public struct DuplicateEffectSpecifiers: ParserError {
   public let unexpectedSpecifier: TokenSyntax
 
   public var message: String {
-    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind || correctSpecifier.text == unexpectedSpecifier.text {
+    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind || correctSpecifier.text == unexpectedSpecifier.text
+    {
       return "\(nodesDescription([unexpectedSpecifier], format: false)) has already been specified"
     } else {
       return
@@ -593,7 +594,8 @@ public struct SpecifierOnParameterName: ParserError {
   public let misplacedSpecifiers: [TokenSyntax]
 
   public var message: String {
-    return "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed, place it before the parameter type instead"
+    return
+      "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed, place it before the parameter type instead"
   }
 }
 

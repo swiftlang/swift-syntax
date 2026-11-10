@@ -1881,7 +1881,10 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "array types are now written with the brackets around the element type", fixIts: ["write as an inline array type"])
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType3 {
@@ -1903,7 +1906,10 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "array types are now written with the brackets around the element type", fixIts: ["write as an inline array type"])
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType4 {
@@ -1925,7 +1931,10 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "array types are now written with the brackets around the element type", fixIts: ["write as an inline array type"])
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType5 {

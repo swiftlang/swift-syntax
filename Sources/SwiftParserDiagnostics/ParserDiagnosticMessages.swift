@@ -119,6 +119,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var doKeywordSpecifiesCatchRegion: Self {
     .init("the 'do' keyword is used to specify a 'catch' region")
   }
+  public static var caseLabelOutsideOfSwitch: Self {
+    .init("'case' label can only appear inside a 'switch' statement")
+  }
   public static var oldStyleArrayType: Self {
     .init("array types are now written with the brackets around the element type")
   }

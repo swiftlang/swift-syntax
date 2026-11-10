@@ -3799,4 +3799,18 @@ final class DeclarationTests: ParserTestCase {
         """
     )
   }
+
+  func testCaseLabelInEnum() {
+    assertParse(
+      """
+      enum E {
+        1️⃣case a:
+        case b
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
+      ]
+    )
+  }
 }

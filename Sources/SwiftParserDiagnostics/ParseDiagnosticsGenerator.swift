@@ -415,6 +415,19 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     {
       handledNodes.append(contentsOf: node.unexpectedCode.map(\.id))
     }
+
+    // `case a:` in an enum is a `switch` case label in the wrong place.
+    if let colon = node.unexpectedCode.first?.as(TokenSyntax.self), colon.tokenKind == .colon, colon.isPresent,
+      let previousToken = colon.previousToken(viewMode: .sourceAccurate),
+      let enumCase = previousToken.ancestorOrSelf(mapping: { $0.as(EnumCaseDeclSyntax.self) }),
+      enumCase.elements.first?.name.isPresent == true
+    {
+      addDiagnostic(
+        enumCase.caseKeyword,
+        .caseLabelOutsideOfSwitch,
+        handledNodes: [node.unexpectedCode.id] + (node.parent?.as(MemberBlockItemSyntax.self)?.semicolon.map { [$0.id] } ?? [])
+      )
+    }
     return .visitChildren
   }
 

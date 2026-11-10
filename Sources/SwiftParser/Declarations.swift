@@ -1045,7 +1045,12 @@ extension Parser {
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    // A token on the next line that is not the `{` starts something else: don't
+    // skip ahead looking for a `{` that belongs to a later declaration, as in
+    // `actor A` followed by `actor B {`.
+    let (unexpectedBeforeLBrace, lbrace): (RawUnexpectedNodesSyntax?, RawTokenSyntax) =
+      !self.at(.leftBrace) && self.atStartOfLine && !self.at(.endOfFile)
+      ? (nil, self.missingToken(.leftBrace)) : self.expect(.leftBrace)
     if lbrace.isMissing {
       // Without a '{', whatever follows is not this declaration's members: don't
       // let it swallow the rest of the file.
@@ -1432,6 +1437,20 @@ extension Parser {
       parser.parseFunctionParameter()
     }
 
+    // Curried parameter lists, e.g., `func f(_ a: Int)(_ b: Int)`, are not
+    // supported; parse the extra lists so that they can be diagnosed.
+    var extraParameterClauses: [RawFunctionParameterClauseSyntax] = []
+    while !parameterClause.rightParen.isMissing, self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
+      extraParameterClauses.append(
+        self.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
+          parser.parseFunctionParameter()
+        }
+      )
+    }
+    let unexpectedAfterParameters: RawUnexpectedNodesSyntax? =
+      extraParameterClauses.isEmpty
+      ? nil : RawUnexpectedNodesSyntax(extraParameterClauses.map { $0.raw }, arena: self.arena)
+
     var (effectSpecifiers, yields) = self.parseFunctionEffectSpecifiers()
 
     var returnClause: RawReturnClauseSyntax?
@@ -1448,6 +1467,7 @@ extension Parser {
     }
     return RawFunctionSignatureSyntax(
       parameterClause: parameterClause,
+      unexpectedAfterParameters,
       effectSpecifiers: effectSpecifiers,
       yieldClause: yields,
       returnClause: returnClause,

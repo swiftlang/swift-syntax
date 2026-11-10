@@ -458,6 +458,36 @@ extension Parser {
         continue
       }
 
+      // `Int[0]` or `Int[]`: the old spelling of an array type. Parse it as an
+      // array type whose brackets are in the wrong place so that it can be
+      // diagnosed.
+      if allowMemberTypes,
+        self.at(TokenSpec(.leftSquare, allowAtStartOfLine: false)),
+        self.currentToken.leadingTriviaByteLength == 0,
+        base.raw.trailingTriviaByteLength == 0,
+        self.withLookahead({
+          $0.consumeAnyToken()
+          _ = $0.consume(if: .integerLiteral)
+          return $0.at(.rightSquare)
+        })
+      {
+        var misplaced: [RawSyntax] = [RawSyntax(self.consumeAnyToken())]
+        if let size = self.consume(if: .integerLiteral) {
+          misplaced.append(RawSyntax(size))
+        }
+        let rightSquare = self.consumeAnyToken()
+        base = RawTypeSyntax(
+          RawArrayTypeSyntax(
+            leftSquare: self.missingToken(.leftSquare),
+            element: base,
+            RawUnexpectedNodesSyntax(misplaced, arena: self.arena),
+            rightSquare: rightSquare,
+            arena: self.arena
+          )
+        )
+        continue
+      }
+
       if self.at(.postfixQuestionMark, .exclamationMark) {
         // Even if we're not generally allowing trailing optional sugar (e.g.,
         // at the end of a `some` type), we still need to consume them if they
@@ -765,6 +795,15 @@ extension Parser {
         }
         // Parse the type annotation.
         let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+        // A default argument is not allowed in a tuple type; parse it so that
+        // it can be diagnosed.
+        let unexpectedDefault: RawUnexpectedNodesSyntax?
+        if let equal = self.consume(if: .equal) {
+          let defaultValue = self.parseExpression(flavor: .basic, pattern: .none)
+          unexpectedDefault = RawUnexpectedNodesSyntax([equal.raw, defaultValue.raw], arena: self.arena)
+        } else {
+          unexpectedDefault = nil
+        }
         let ellipsis = self.consumeIfContextualPunctuator("...", remapping: .ellipsis)
         var trailingComma = self.consume(if: .comma)
         if trailingComma == nil && self.withLookahead({ $0.canParseType() }) {
@@ -782,6 +821,7 @@ extension Parser {
             unexpectedBeforeColon,
             colon: colon,
             type: type,
+            unexpectedDefault,
             ellipsis: ellipsis,
             trailingComma: trailingComma,
             arena: self.arena

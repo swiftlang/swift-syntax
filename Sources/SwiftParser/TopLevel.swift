@@ -200,7 +200,12 @@ extension Parser {
       item = self.parseStatementItem()
       attachSemi = true
     } else if self.atStartOfExpression() {
-      item = .expr(self.parseExpression(flavor: .basic, pattern: .none))
+      let expr = self.parseExpression(flavor: .basic, pattern: .none)
+      if self.at(.keyword(.catch)), let doStmt = self.reinterpretTryClosureAsDoStatement(expr) {
+        item = .stmt(RawStmtSyntax(doStmt))
+      } else {
+        item = .expr(expr)
+      }
       attachSemi = true
     } else if self.withLookahead({ $0.atStartOfSwitchCase() }) {
       // 'case' and 'default' are invalid in code block items.

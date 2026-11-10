@@ -3769,4 +3769,48 @@ final class DeclarationTests: ParserTestCase {
         """
     )
   }
+
+  func testCurriedParameterLists() {
+    assertParse(
+      """
+      func f1️⃣(_ x: Int)(y: Int) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "cannot have more than one parameter list")
+      ]
+    )
+  }
+
+  func testBraceLessActorFollowedByActor() {
+    assertParse(
+      """
+      actor A11️⃣
+
+      actor A2 { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected member block in actor", fixIts: ["insert member block"])
+      ],
+      fixedSource: """
+        actor A1 {
+        }
+
+        actor A2 { }
+        """
+    )
+  }
+
+  func testCaseLabelInEnum() {
+    assertParse(
+      """
+      enum E {
+        1️⃣case a:
+        case b
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
+      ]
+    )
+  }
 }

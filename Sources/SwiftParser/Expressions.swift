@@ -185,6 +185,14 @@ extension Parser {
         break
       }
 
+      // In a statement condition, `&& let x = y` (or `var`/`case`) is a
+      // misspelled comma: leave the `&&` to the condition list.
+      if flavor == .stmtCondition, self.atContextualPunctuator("&&"),
+        self.peek(isAt: .keyword(.let), .keyword(.var), .keyword(.case))
+      {
+        break
+      }
+
       // Parse the operator.
       guard
         let (operatorExpr, rhsExpr) =
@@ -468,6 +476,23 @@ extension Parser {
     flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawExprSyntax? {
+    // `async f()` is most likely a misspelling of `await f()`.
+    if self.at(.keyword(.async)),
+      self.peek(isAt: .identifier, .keyword(.self), .dollarIdentifier),
+      !self.peek().isAtStartOfLine
+    {
+      let asyncTok = self.consumeAnyToken()
+      let sub = self.parseSequenceExpressionElement(flavor: flavor, pattern: pattern)
+      return RawExprSyntax(
+        RawAwaitExprSyntax(
+          RawUnexpectedNodesSyntax([asyncTok], arena: self.arena),
+          awaitKeyword: self.missingToken(.await),
+          expression: sub,
+          arena: self.arena
+        )
+      )
+    }
+
     switch self.at(anyIn: ExpressionModifierKeyword.self) {
     case (.await, let handle)?:
       let awaitTok = self.eat(handle)

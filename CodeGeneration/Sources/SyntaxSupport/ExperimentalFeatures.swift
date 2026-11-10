@@ -101,3 +101,23 @@ public enum ExperimentalFeature: String, CaseIterable {
     .identifier(rawValue)
   }
 }
+
+/// Parser language features that the compiler sets for its own use. They are
+/// `@_spi(Compiler)`, are not part of the feature names the compiler knows, and
+/// change the parser's defaults for clients of the compiler's parser only.
+public enum CompilerOnlyLanguageFeature: String, CaseIterable {
+  case disableBareSlashRegexLiterals
+
+  /// A brief description of the feature that is used in the doc comment.
+  public var documentationDescription: String {
+    switch self {
+    case .disableBareSlashRegexLiterals:
+      return "bare slash regex literals; `#/.../#` literals are still parsed"
+    }
+  }
+
+  /// The token that represents the feature case name.
+  public var token: TokenSyntax {
+    .identifier(rawValue)
+  }
+}

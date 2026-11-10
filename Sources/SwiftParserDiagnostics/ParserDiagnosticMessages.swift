@@ -104,6 +104,30 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var ambiguousOptionalComposition: Self {
     .init("confusing use of optional after a 'some' or 'any' composition; use parentheses to clarify precedence")
   }
+  public static var expectedLeftBraceOrIfAfterElseDidYouMeanIf: Self {
+    .init("expected '{' or 'if' after 'else'; did you mean to write 'if'?")
+  }
+  public static var defaultArgumentInTupleType: Self {
+    .init("default argument not permitted in a tuple type")
+  }
+  public static var curriedParameterLists: Self {
+    .init("cannot have more than one parameter list")
+  }
+  public static var asyncInExpression: Self {
+    .init("found 'async' in expression; did you mean 'await'?")
+  }
+  public static var doKeywordSpecifiesCatchRegion: Self {
+    .init("the 'do' keyword is used to specify a 'catch' region")
+  }
+  public static var caseLabelOutsideOfSwitch: Self {
+    .init("'case' label can only appear inside a 'switch' statement")
+  }
+  public static var oldStyleArrayType: Self {
+    .init("array types are now written with the brackets around the element type")
+  }
+  public static var fileDefaultRejectsAttributes: Self {
+    .init("attribute cannot be attached to a file-level default")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }
@@ -377,7 +401,8 @@ public struct DuplicateEffectSpecifiers: ParserError {
   public let unexpectedSpecifier: TokenSyntax
 
   public var message: String {
-    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind {
+    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind || correctSpecifier.text == unexpectedSpecifier.text
+    {
       return "\(nodesDescription([unexpectedSpecifier], format: false)) has already been specified"
     } else {
       return
@@ -496,7 +521,7 @@ public struct MissingAttributeArgument: ParserError {
   public let attributeName: TypeSyntax
 
   public var message: String {
-    return "expected argument for '@\(attributeName)' attribute"
+    return "expected argument for '@\(attributeName.trimmedDescription)' attribute"
   }
 }
 
@@ -569,7 +594,8 @@ public struct SpecifierOnParameterName: ParserError {
   public let misplacedSpecifiers: [TokenSyntax]
 
   public var message: String {
-    return "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed"
+    return
+      "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed, place it before the parameter type instead"
   }
 }
 
@@ -618,6 +644,14 @@ public struct UnexpectedNodesError: ParserError {
       }
     }
     return message
+  }
+}
+
+public struct UnknownDifferentiabilityKind: ParserError {
+  public let kind: TokenSyntax
+
+  public var message: String {
+    return "unknown differentiability kind '\(kind.text)'; only 'reverse' is supported"
   }
 }
 
@@ -722,6 +756,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var insertWhitespace: Self {
     .init("insert whitespace")
+  }
+  public static var writeInlineArrayType: Self {
+    .init("write as an inline array type")
   }
   public static var joinIdentifiers: Self {
     .init("join the identifiers together")

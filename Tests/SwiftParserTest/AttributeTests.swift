@@ -17,6 +17,30 @@ import SwiftSyntaxBuilder
 import XCTest
 
 final class AttributeTests: ParserTestCase {
+  func testMissingArgumentToAttributeFollowedByComment() {
+    // The attribute's name in the message does not include its trailing trivia.
+    assertParse(
+      """
+      @_specialize1️⃣ // comment
+      func foo() {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '()' in attribute", fixIts: ["insert '()'"]),
+        DiagnosticSpec(
+          message: "expected argument for '@_specialize' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+      ],
+      applyFixIts: ["insert '()'"],
+      fixedSource: """
+        @_specialize() // comment
+        func foo() {
+        }
+        """
+    )
+  }
+
   func testMissingArgumentToAttribute() {
     assertParse(
       """
@@ -1781,6 +1805,25 @@ final class AttributeTests: ParserTestCase {
       var _ = [@Sendable () -> Void]()
       """,
       swiftVersion: .v5
+    )
+  }
+
+  func testUnknownDifferentiabilityKind() {
+    assertParse(
+      """
+      @differentiable(1️⃣horse)
+      func f(_ x: Float) -> Float { x }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unknown differentiability kind 'horse'; only 'reverse' is supported",
+          fixIts: ["replace 'horse' with 'reverse'"]
+        )
+      ],
+      fixedSource: """
+        @differentiable(reverse)
+        func f(_ x: Float) -> Float { x }
+        """
     )
   }
 }

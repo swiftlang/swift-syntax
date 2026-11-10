@@ -511,7 +511,7 @@ public struct MissingAttributeArgument: ParserError {
   public let attributeName: TypeSyntax
 
   public var message: String {
-    return "expected argument for '@\(attributeName)' attribute"
+    return "expected argument for '@\(attributeName.trimmedDescription)' attribute"
   }
 }
 
@@ -584,7 +584,7 @@ public struct SpecifierOnParameterName: ParserError {
   public let misplacedSpecifiers: [TokenSyntax]
 
   public var message: String {
-    return "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed"
+    return "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed, place it before the parameter type instead"
   }
 }
 

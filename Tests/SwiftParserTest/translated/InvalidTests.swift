@@ -23,7 +23,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout' before a parameter name is not allowed",
+          message: "'inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout' in front of type"]
         )
       ],
@@ -38,7 +38,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout' before a parameter name is not allowed",
+          message: "'inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout' in front of type"]
         )
       ],
@@ -55,7 +55,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout' before a parameter name is not allowed",
+          message: "'inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout' in front of type"]
         )
       ],
@@ -70,7 +70,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'__shared' before a parameter name is not allowed",
+          message: "'__shared' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move '__shared' in front of type"]
         )
       ],
@@ -87,7 +87,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'__shared' before a parameter name is not allowed",
+          message: "'__shared' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move '__shared' in front of type"]
         )
       ],
@@ -104,7 +104,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'__owned' before a parameter name is not allowed",
+          message: "'__owned' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move '__owned' in front of type"]
         )
       ],
@@ -121,7 +121,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'__owned' before a parameter name is not allowed",
+          message: "'__owned' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move '__owned' in front of type"]
         )
       ],
@@ -384,7 +384,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout inout' before a parameter name is not allowed",
+          message: "'inout inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout inout' in front of type"]
         )
       ],
@@ -410,7 +410,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout' before a parameter name is not allowed",
+          message: "'inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout' in front of type"]
         )
       ],
@@ -427,7 +427,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout' before a parameter name is not allowed",
+          message: "'inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout' in front of type"]
         )
       ],
@@ -478,7 +478,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout' before a parameter name is not allowed",
+          message: "'inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout' in front of type"]
         )
       ],
@@ -495,7 +495,7 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'inout' before a parameter name is not allowed",
+          message: "'inout' before a parameter name is not allowed, place it before the parameter type instead",
           fixIts: ["move 'inout' in front of type"]
         )
       ],

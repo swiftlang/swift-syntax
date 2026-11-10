@@ -17,6 +17,29 @@ import SwiftSyntaxBuilder
 import XCTest
 
 final class AttributeTests: ParserTestCase {
+  func testMissingArgumentToAttributeFollowedByComment() {
+    // The attribute's name in the message does not include its trailing trivia.
+    assertParse(
+      """
+      @_specialize 1️⃣// comment
+      func foo() {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '()' in attribute", fixIts: ["insert '()'"]),
+        DiagnosticSpec(
+          message: "expected argument for '@_specialize' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+      ],
+      fixedSource: """
+        @_specialize() // comment
+        func foo() {
+        }
+        """
+    )
+  }
+
   func testMissingArgumentToAttribute() {
     assertParse(
       """

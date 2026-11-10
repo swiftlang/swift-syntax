@@ -297,7 +297,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
 
     let specifierInfo = [
-      (node.asyncSpecifier, { AsyncEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledAsync),
+      (
+        node.asyncSpecifier, { AsyncEffectSpecifier(token: $0) != nil || $0.text == "async" },
+        StaticParserError.misspelledAsync
+      ),
       (
         node.throwsClause?.throwsSpecifier, { ThrowsEffectSpecifier(token: $0) != nil },
         StaticParserError.misspelledThrows

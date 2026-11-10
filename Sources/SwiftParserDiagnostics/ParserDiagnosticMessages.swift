@@ -395,7 +395,7 @@ public struct DuplicateEffectSpecifiers: ParserError {
   public let unexpectedSpecifier: TokenSyntax
 
   public var message: String {
-    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind {
+    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind || correctSpecifier.text == unexpectedSpecifier.text {
       return "\(nodesDescription([unexpectedSpecifier], format: false)) has already been specified"
     } else {
       return

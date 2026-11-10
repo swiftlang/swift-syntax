@@ -1946,6 +1946,26 @@ extension Parser {
 
     // Parse the opening left brace.
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+
+    // An editor placeholder stands in for the whole closure, braces included:
+    // don't let it swallow the statements that follow it.
+    if lbrace.isMissing && self.currentToken.isEditorPlaceholder {
+      let placeholder = self.parseExpression(flavor: .basic, pattern: .none)
+      let item = RawCodeBlockItemSyntax(
+        item: .init(expr: placeholder),
+        semicolon: nil,
+        arena: self.arena
+      )
+      return RawClosureExprSyntax(
+        unexpectedBeforeLBrace,
+        leftBrace: lbrace,
+        signature: nil,
+        statements: RawCodeBlockItemListSyntax(elements: self.nodeListAllocator.listOfOne(item), arena: self.arena),
+        rightBrace: self.missingToken(.rightBrace),
+        arena: self.arena
+      )
+    }
+
     // Parse the closure-signature, if present.
     let signature = self.parseClosureSignatureIfPresent()
 

@@ -1704,6 +1704,33 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testMissingMemberBlockDoesNotSwallowFollowingDeclarations() {
+    assertParse(
+      """
+      class C1️⃣
+      func f() {}
+      struct S: P2️⃣
+      let y = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
+      ],
+      fixedSource: """
+        class C {
+        }
+        func f() {}
+        struct S: P {
+        }
+        let y = 1
+        """
+    )
+  }
+
   func testMalforedStruct() {
     assertParse(
       """
@@ -1714,8 +1741,8 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected '{' in struct",
-          fixIts: ["insert '{'"]
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1733,19 +1760,13 @@ final class DeclarationTests: ParserTestCase {
           message: "expected '#endif' in conditional compilation block",
           fixIts: ["insert '#endif'"]
         ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected '}' to end struct",
-          fixIts: ["insert '}'"]
-        ),
-
       ],
       fixedSource: """
         struct n {
+        }
         #if <#expression#>
         @<#type#> <#declaration#>
         #endif
-        }
         """
     )
   }
@@ -3708,6 +3729,44 @@ final class DeclarationTests: ParserTestCase {
         T2,
       > {}
       """
+    )
+  }
+
+  func testAssociatedTypeGenericParameterList() {
+    assertParse(
+      """
+      protocol P {
+        associatedtype X1️⃣<T>: Equatable
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "associated types must not have a generic parameter list",
+          fixIts: ["remove generic parameter clause"]
+        )
+      ],
+      fixedSource: """
+        protocol P {
+          associatedtype X: Equatable
+        }
+        """
+    )
+  }
+
+  func testReasyncMustPrecedeRethrows() {
+    assertParse(
+      """
+      func f(_: () async throws -> ()) rethrows 1️⃣reasync {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'reasync' must precede 'rethrows'",
+          fixIts: ["move 'reasync' in front of 'rethrows'"]
+        )
+      ],
+      fixedSource: """
+        func f(_: () async throws -> ()) reasync rethrows {}
+        """
     )
   }
 }

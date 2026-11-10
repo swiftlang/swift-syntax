@@ -220,14 +220,32 @@ extension Parser {
 
     // We're parsing a conditional binding.
     enum BindingKind {
-      case pattern(RawTokenSyntax, RawPatternSyntax)
+      case pattern(RawUnexpectedNodesSyntax?, RawTokenSyntax, RawPatternSyntax)
       case optional(RawUnexpectedNodesSyntax?, RawTokenSyntax, RawPatternSyntax)
     }
 
     let kind: BindingKind
     if let caseKeyword = self.consume(if: .keyword(.case)) {
       let pattern = self.parseMatchingPattern(context: .matching)
-      kind = .pattern(caseKeyword, pattern)
+      kind = .pattern(nil, caseKeyword, pattern)
+    } else if self.at(.keyword(.let), .keyword(.var)) && self.peek(isAt: .keyword(.case)) {
+      // `let case` is a misspelling of `case let`: parse it as the latter, with
+      // the misplaced 'let' or 'var' reported as unexpected.
+      let isVar = self.at(.keyword(.var))
+      let letOrVar = self.consumeAnyToken()
+      let caseKeyword = self.eat(.keyword(.case))
+      let pattern = self.parseMatchingPattern(context: .bindingIntroducer)
+      kind = .pattern(
+        RawUnexpectedNodesSyntax([letOrVar], arena: self.arena),
+        caseKeyword,
+        RawPatternSyntax(
+          RawValueBindingPatternSyntax(
+            bindingSpecifier: self.missingToken(isVar ? .var : .let),
+            pattern: pattern,
+            arena: self.arena
+          )
+        )
+      )
     } else {
       let unexpectedBeforeBindingKeyword: RawUnexpectedNodesSyntax?
       let letOrVar: RawTokenSyntax
@@ -287,9 +305,10 @@ extension Parser {
           arena: self.arena
         )
       )
-    case let .pattern(caseKeyword, pattern):
+    case let .pattern(unexpectedBeforeCaseKeyword, caseKeyword, pattern):
       return .matchingPattern(
         RawMatchingPatternConditionSyntax(
+          unexpectedBeforeCaseKeyword,
           caseKeyword: caseKeyword,
           pattern: pattern,
           typeAnnotation: annotation,

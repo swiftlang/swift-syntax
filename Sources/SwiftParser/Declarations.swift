@@ -1046,6 +1046,17 @@ extension Parser {
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    if lbrace.isMissing {
+      // Without a '{', whatever follows is not this declaration's members: don't
+      // let it swallow the rest of the file.
+      return RawMemberBlockSyntax(
+        unexpectedBeforeLBrace,
+        leftBrace: lbrace,
+        members: RawMemberBlockItemListSyntax(elements: .init(), arena: self.arena),
+        rightBrace: self.missingToken(.rightBrace),
+        arena: self.arena
+      )
+    }
     let members = parseMemberDeclList()
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
@@ -1165,6 +1176,14 @@ extension Parser {
     // Detect an attempt to use (early syntax) type parameter pack.
     let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis)
 
+    // Detect an attempt to give the associated type generic parameters.
+    let genericParameters: RawGenericParameterClauseSyntax?
+    if self.at(prefix: "<") {
+      genericParameters = self.parseGenericParameters()
+    } else {
+      genericParameters = nil
+    }
+
     // Parse optional inheritance clause.
     let inheritance: RawInheritanceClauseSyntax?
     if self.at(.colon) {
@@ -1201,7 +1220,7 @@ extension Parser {
       associatedtypeKeyword: assocKeyword,
       unexpectedBeforeName,
       name: name,
-      RawUnexpectedNodesSyntax([ellipsis], arena: self.arena),
+      RawUnexpectedNodesSyntax([ellipsis?.raw, genericParameters?.raw].compactMap { $0 }, arena: self.arena),
       inheritanceClause: inheritance,
       initializer: defaultType,
       genericWhereClause: whereClause,

@@ -737,12 +737,19 @@ extension Parser {
 
     var unexpectedAfterThrownErrorLoopProgress = LoopProgressCondition()
     while self.hasProgressed(&unexpectedAfterThrownErrorLoopProgress) {
-      if let (_, handle, _) = self.at(anyIn: S.MisspelledAsyncTokenKinds.self, or: S.CorrectAsyncTokenKinds.self) {
+      if let (spec, handle, matchedSubset) = self.at(
+        anyIn: S.MisspelledAsyncTokenKinds.self,
+        or: S.CorrectAsyncTokenKinds.self
+      ) {
         let misspelledAsync = self.eat(handle)
         unexpectedAfterThrowsClause.append(RawSyntax(misspelledAsync))
         if asyncKeyword == nil {
           // Handle `async` after `throws`
-          asyncKeyword = missingToken(.keyword(.async))
+          if matchedSubset == S.CorrectAsyncTokenKinds.self {
+            asyncKeyword = missingToken(spec)
+          } else {
+            asyncKeyword = missingToken(.keyword(.async))
+          }
         }
       } else if let (_, handle, _) = self.at(
         anyIn: S.MisspelledThrowsTokenKinds.self,

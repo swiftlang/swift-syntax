@@ -183,7 +183,7 @@ extension IfConfigDiagnostic: DiagnosticMessage {
           oldNode: syntax,
           newNode: BooleanLiteralExprSyntax(
             literal: .keyword(replacement ? .true : .false)
-          )
+          ).with(\.leadingTrivia, syntax.leadingTrivia).with(\.trailingTrivia, syntax.trailingTrivia)
         )
       )
     }
@@ -198,7 +198,8 @@ extension IfConfigDiagnostic: DiagnosticMessage {
             message: "replace with 'targetEnvironment(simulator)'"
           ),
           oldNode: syntax,
-          newNode: "targetEnvironment(simulator)" as ExprSyntax
+          newNode: ("targetEnvironment(simulator)" as ExprSyntax)
+            .with(\.leadingTrivia, syntax.leadingTrivia).with(\.trailingTrivia, syntax.trailingTrivia)
         )
       )
     }

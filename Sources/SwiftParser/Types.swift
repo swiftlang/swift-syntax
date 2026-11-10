@@ -107,6 +107,21 @@ extension Parser {
     }
   }
 
+  /// Consume a `some` or `any` that appears in the middle of a protocol
+  /// composition, e.g., `P & some Q`, so that a diagnostic can be emitted for
+  /// it later. It is only recognized when a type follows.
+  mutating func consumeMisplacedSomeOrAnyInComposition() -> RawUnexpectedNodesSyntax? {
+    guard self.at(.keyword(.some), .keyword(.any)),
+      self.withLookahead({
+        $0.consumeAnyToken()
+        return $0.canParseType()
+      })
+    else {
+      return nil
+    }
+    return RawUnexpectedNodesSyntax([self.consumeAnyToken()], arena: self.arena)
+  }
+
   /// Parse a protocol composition involving at least one element.
   mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
@@ -161,6 +176,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
+        let misplacedSomeOrAny = self.consumeMisplacedSomeOrAnyInComposition()
         var elementType: RawTypeSyntax
         if someOrAny == nil {
           elementType = self.parseSimpleType()
@@ -190,6 +206,7 @@ extension Parser {
         keepGoing = self.consumeIfContextualPunctuator("&")
         elements.append(
           RawCompositionTypeElementSyntax(
+            misplacedSomeOrAny,
             type: elementType,
             ampersand: keepGoing,
             arena: self.arena
@@ -265,10 +282,12 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
+        let misplacedSomeOrAny = self.consumeMisplacedSomeOrAnyInComposition()
         let elementType = self.parseSimpleType()
         keepGoing = self.consumeIfContextualPunctuator("&")
         elements.append(
           RawCompositionTypeElementSyntax(
+            misplacedSomeOrAny,
             type: elementType,
             ampersand: keepGoing,
             arena: self.arena

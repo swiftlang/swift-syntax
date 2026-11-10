@@ -107,6 +107,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }
+  public static var associatedTypeCannotHaveGenericParameters: Self {
+    .init("associated types must not have a generic parameter list")
+  }
   public static var caseOutsideOfSwitchOrEnum: Self {
     .init("'case' can only appear inside a 'switch' statement or 'enum' declaration")
   }
@@ -184,6 +187,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   }
   public static var invalidPrecedenceGroupAssociativity: Self {
     .init("Expected 'none', 'left', or 'right' after 'associativity'")
+  }
+  public static var letCaseMisspelled: Self {
+    .init("pattern matching binding is spelled with 'case let', not 'let case'")
   }
   public static var joinConditionsUsingComma: Self {
     .init("expected ',' joining parts of a multi-clause condition")
@@ -536,6 +542,14 @@ public struct NegatedAvailabilityCondition: ParserError {
   }
 }
 
+public struct OpaqueMidComposition: ParserError {
+  public let keyword: TokenSyntax
+
+  public var message: String {
+    return "'\(keyword.text)' should appear at the beginning of a composition"
+  }
+}
+
 public struct SpaceSeparatedIdentifiersError: ParserError {
   public let firstToken: TokenSyntax
   public let additionalTokens: [TokenSyntax]
@@ -755,6 +769,14 @@ public struct InsertFixIt: ParserFixIt {
 
   public var message: String {
     "insert '\(tokenToBeInserted.text)'"
+  }
+}
+
+public struct MoveToBeginningOfCompositionFixIt: ParserFixIt {
+  public let keyword: TokenSyntax
+
+  public var message: String {
+    "move '\(keyword.text)' to the beginning of the composition"
   }
 }
 

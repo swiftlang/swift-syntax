@@ -77,7 +77,7 @@ final class AttributeTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected ':' and arguments in '@differentiable' argument",
+          message: "expected ':' and arguments in differentiability argument",
           fixIts: ["insert ':' and arguments"]
         ),
         DiagnosticSpec(
@@ -970,28 +970,18 @@ final class AttributeTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected identifier in class",
-          fixIts: ["insert identifier"]
+          message: "expected identifier and member block in class",
+          fixIts: ["insert identifier and member block"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected '{' in class",
-          fixIts: ["insert '{'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "unexpected code '))' in class"
-        ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected '}' to end class",
-          fixIts: ["insert '}'"]
+          message: "unexpected code '))' in source file"
         ),
       ],
       fixedSource: """
-        @attached(member, names: named(<#expression#>)) class <#identifier#> {))
+        @attached(member, names: named(<#expression#>)) class <#identifier#> {
+        }))
         macro m()
-        }
         """
     )
   }
@@ -1588,6 +1578,21 @@ final class AttributeTests: ParserTestCase {
         DiagnosticSpec(message: "extraneous whitespace after '@' is not permitted", fixIts: ["remove whitespace"])
       ],
       fixedSource: "@custom func foo() {}"
+    )
+  }
+
+  func testSpaceBetweenAtAndTypeAttribute() {
+    assertParse(
+      "let x: @1️⃣ escaping () -> Void = {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace after '@' is not permitted; this is an error in Swift 6",
+          severity: .warning,
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: "let x: @escaping () -> Void = {}",
+      swiftVersion: .v5
     )
   }
 

@@ -1891,7 +1891,7 @@ extension Lexer.Cursor {
       self.advance(while: { $0.isHexDigit || $0 == "_" })
 
       if self.isAtEndOfFile || self.is(notAt: "p", "P") {
-        if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit {
+        if let last = self.previous, !Unicode.Scalar(last).isDigit {
           // e.g: 0xff.description
           self = cursorToDot!
           return Lexer.Result(.integerLiteral)

@@ -2117,7 +2117,8 @@ extension Parser {
       if self.at(.arrow) {
         returnClause = self.parseFunctionReturnClause(
           effectSpecifiers: &effectSpecifiers,
-          allowNamedOpaqueResultType: false
+          allowNamedOpaqueResultType: false,
+          allowYieldType: false
         )
       }
     }

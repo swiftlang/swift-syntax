@@ -323,6 +323,8 @@ public enum SyntaxKind: Sendable {
   case whileStmt
   case wildcardPattern
   case yieldStmt
+  @_spi(ExperimentalLanguageFeatures)
+  case yieldType
   case yieldedExpressionList
   case yieldedExpression
   case yieldedExpressionsClause
@@ -928,6 +930,8 @@ public enum SyntaxKind: Sendable {
     case .wildcardPattern:
       return true
     case .yieldStmt:
+      return true
+    case .yieldType:
       return true
     case .yieldedExpression:
       return true
@@ -1547,6 +1551,8 @@ public enum SyntaxKind: Sendable {
       return WildcardPatternSyntax.self
     case .yieldStmt:
       return YieldStmtSyntax.self
+    case .yieldType:
+      return YieldTypeSyntax.self
     case .yieldedExpressionList:
       return YieldedExpressionListSyntax.self
     case .yieldedExpression:
@@ -2147,6 +2153,8 @@ public enum SyntaxKind: Sendable {
       return "WildcardPatternSyntax"
     case .yieldStmt:
       return "YieldStmtSyntax"
+    case .yieldType:
+      return "YieldTypeSyntax"
     case .yieldedExpressionList:
       return "YieldedExpressionListSyntax"
     case .yieldedExpression:
@@ -2747,6 +2755,8 @@ public enum SyntaxKind: Sendable {
       return "wildcardPattern"
     case .yieldStmt:
       return "yieldStmt"
+    case .yieldType:
+      return "yieldType"
     case .yieldedExpressionList:
       return "yieldedExpressionList"
     case .yieldedExpression:

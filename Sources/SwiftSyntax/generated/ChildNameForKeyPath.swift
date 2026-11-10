@@ -3642,6 +3642,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "yieldedExpressions"
   case \YieldStmtSyntax.unexpectedAfterYieldedExpressions:
     return "unexpectedAfterYieldedExpressions"
+  case \YieldTypeSyntax.unexpectedBeforeYieldKeyword:
+    return "unexpectedBeforeYieldKeyword"
+  case \YieldTypeSyntax.yieldKeyword:
+    return "yieldKeyword"
+  case \YieldTypeSyntax.unexpectedBetweenYieldKeywordAndSpecifier:
+    return "unexpectedBetweenYieldKeywordAndSpecifier"
+  case \YieldTypeSyntax.specifier:
+    return "specifier"
+  case \YieldTypeSyntax.unexpectedBetweenSpecifierAndType:
+    return "unexpectedBetweenSpecifierAndType"
+  case \YieldTypeSyntax.type:
+    return "type"
+  case \YieldTypeSyntax.unexpectedAfterType:
+    return "unexpectedAfterType"
   case \YieldedExpressionSyntax.unexpectedBeforeExpression:
     return "unexpectedBeforeExpression"
   case \YieldedExpressionSyntax.expression:

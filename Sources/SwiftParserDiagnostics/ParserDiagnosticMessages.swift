@@ -636,6 +636,14 @@ public struct UnexpectedNodesError: ParserError {
   }
 }
 
+public struct UnknownDifferentiabilityKind: ParserError {
+  public let kind: TokenSyntax
+
+  public var message: String {
+    return "unknown differentiability kind '\(kind.text)'; only 'reverse' is supported"
+  }
+}
+
 public struct UnknownDirectiveError: ParserError {
   public let unexpected: UnexpectedNodesSyntax
 

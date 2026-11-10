@@ -785,6 +785,34 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    // `@differentiable(horse)`: an identifier that is not a differentiability kind.
+    if let unexpected = node.unexpectedBetweenArgumentsAndRightParen,
+      node.attributeName.trimmedDescription == "differentiable",
+      node.arguments?.isMissingAllTokens ?? true,
+      let kind = unexpected.first?.as(TokenSyntax.self), kind.tokenKind.isIdentifier,
+      kind.text != "wrt", kind.text != "where",
+      unexpected.count == 1 || unexpected.dropFirst().first?.as(TokenSyntax.self)?.tokenKind == .comma
+    {
+      addDiagnostic(
+        kind,
+        UnknownDifferentiabilityKind(kind: kind),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [kind], replacements: [.keyword(.reverse)]),
+            changes: [
+              .replace(
+                oldNode: Syntax(kind),
+                newNode: Syntax(
+                  TokenSyntax.identifier("reverse", leadingTrivia: kind.leadingTrivia, trailingTrivia: kind.trailingTrivia)
+                )
+              )
+            ]
+          )
+        ],
+        handledNodes: [unexpected.id]
+      )
+      return .visitChildren
+    }
     if let arguments = node.arguments, arguments.isMissingAllTokens {
       addDiagnostic(
         arguments,

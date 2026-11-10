@@ -1807,4 +1807,23 @@ final class AttributeTests: ParserTestCase {
       swiftVersion: .v5
     )
   }
+
+  func testUnknownDifferentiabilityKind() {
+    assertParse(
+      """
+      @differentiable(1️⃣horse)
+      func f(_ x: Float) -> Float { x }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unknown differentiability kind 'horse'; only 'reverse' is supported",
+          fixIts: ["replace 'horse' with 'reverse'"]
+        )
+      ],
+      fixedSource: """
+        @differentiable(reverse)
+        func f(_ x: Float) -> Float { x }
+        """
+    )
+  }
 }

@@ -56,6 +56,10 @@ extension TypeGraph {
       guard !_components.isEmpty else { return nil }
       self.components = _components
     }
+
+    var base: GlobalTypeName? {
+      GlobalTypeName(_components: components.dropLast())
+    }
   }
 }
 
@@ -103,6 +107,19 @@ extension TypeGraph.GlobalTypeName {
   init(component: Component) {
     // Upholds the invariant because we provide exactly one component
     self.components = [component]
+  }
+
+  /// Creates a mock name for types declared in the internal file `fileID`
+  /// without checking it against a `SymbolTable`; only use for tests.
+  ///
+  /// E.g. `["A", "B"]` gives `_(fileID)::A._(fileID)::B`.
+  ///
+  /// Precondition: `names` isn't empty.
+  @_spi(_QualifiedLookupTests)
+  public init(_uncheckedInternalNames names: [String], fileID: String) {
+    self.init(
+      _components: names.map({ Component(qualifier: .internal(fileID: fileID), name: $0) })
+    )!
   }
 
   /// Adds the given component to a type name to get the name of a nested type.

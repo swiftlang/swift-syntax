@@ -766,6 +766,34 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: RepeatStmtSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `do { } while condition`
+    if node.repeatKeyword.isMissing, let doKeyword = node.unexpectedBeforeRepeatKeyword?.onlyPresentToken(where: { $0.tokenKind == .keyword(.do) }) {
+      addDiagnostic(
+        doKeyword,
+        .doWhileNotAllowed,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [doKeyword], replacements: [node.repeatKeyword]),
+            changes: [
+              .replace(
+                oldNode: Syntax(doKeyword),
+                newNode: Syntax(
+                  TokenSyntax.keyword(.repeat, leadingTrivia: doKeyword.leadingTrivia, trailingTrivia: doKeyword.trailingTrivia)
+                )
+              )
+            ]
+          )
+        ],
+        handledNodes: [node.unexpectedBeforeRepeatKeyword!.id, node.repeatKeyword.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

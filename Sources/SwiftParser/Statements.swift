@@ -109,6 +109,21 @@ extension Parser {
     case (.then, let handle)?:
       return label(self.parseThenStatement(handle: handle), with: optLabel)
     case nil:
+      if optLabel != nil, self.at(.leftBrace) {
+        // A labeled block without `do`; diagnosed as a missing `do`.
+        let doKeyword = self.missingToken(.do)
+        let body = self.parseCodeBlock(introducer: doKeyword)
+        return label(
+          RawDoStmtSyntax(
+            doKeyword: doKeyword,
+            throwsClause: nil,
+            body: body,
+            catchClauses: RawCatchClauseListSyntax(elements: RawSyntaxNodeListBuilder<RawCatchClauseSyntax>().build(), arena: self.arena),
+            arena: self.arena
+          ),
+          with: optLabel
+        )
+      }
       return label(RawMissingStmtSyntax(arena: self.arena), with: optLabel)
     }
   }
@@ -455,7 +470,7 @@ extension Parser {
   }
 
   /// Parse a do statement.
-  mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawDoStmtSyntax {
+  mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawStmtSyntax {
     let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(doHandle)
 
     // Parse the optional throws clause.
@@ -476,13 +491,36 @@ extension Parser {
       elements.append(self.parseCatchClause(), allocator: self.nodeListAllocator)
     }
 
-    return RawDoStmtSyntax(
-      unexpectedBeforeDoKeyword,
-      doKeyword: doKeyword,
-      throwsClause: throwsClause,
-      body: body,
-      catchClauses: RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena),
-      arena: self.arena
+    let catchClauses = RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena)
+
+    // `do { } while condition` is a `repeat`-`while` loop written with the
+    // wrong keyword, as long as the `while` is on the same line.
+    if catchClauses.isEmpty, throwsClause == nil, unexpectedBeforeDoKeyword == nil,
+      self.at(.keyword(.while)), !self.currentToken.isAtStartOfLine
+    {
+      let whileKeyword = self.consumeAnyToken()
+      let condition = self.parseExpression(flavor: .basic, pattern: .none)
+      return RawStmtSyntax(
+        RawRepeatStmtSyntax(
+          RawUnexpectedNodesSyntax([doKeyword], arena: self.arena),
+          repeatKeyword: self.missingToken(.repeat),
+          body: body,
+          whileKeyword: whileKeyword,
+          condition: condition,
+          arena: self.arena
+        )
+      )
+    }
+
+    return RawStmtSyntax(
+      RawDoStmtSyntax(
+        unexpectedBeforeDoKeyword,
+        doKeyword: doKeyword,
+        throwsClause: throwsClause,
+        body: body,
+        catchClauses: catchClauses,
+        arena: self.arena
+      )
     )
   }
 
@@ -1099,7 +1137,7 @@ extension Parser.Lookahead {
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
   mutating func atStartOfStatement(preferExpr: Bool) -> Bool {
-    _ = self.consume(if: .identifier, followedBy: .colon)
+    let hasLabel = self.consume(if: .identifier, followedBy: .colon) != nil
     switch self.at(anyIn: CanBeStatementStart.self)?.0 {
     case .return?,
       .throw?,
@@ -1133,6 +1171,10 @@ extension Parser.Lookahead {
       )
 
     case nil:
+      // A labeled block, which is missing its `do`.
+      if hasLabel, self.at(.leftBrace) {
+        return true
+      }
       // Special recovery 'try return' etc..
       if !preferExpr,
         consume(if: .keyword(.try)) != nil,

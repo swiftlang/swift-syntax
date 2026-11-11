@@ -302,6 +302,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var unaryOperatorSeparatedFromOperand: Self {
     .init("unary operator cannot be separated from its operand")
   }
+  public static var variadicEnumCase: Self {
+    .init("variadic enum cases are not supported")
+  }
   public static var labeledBlockNeedsDo: Self {
     .init("labeled block needs 'do'")
   }

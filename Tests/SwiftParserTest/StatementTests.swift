@@ -1501,4 +1501,18 @@ final class StatementTests: ParserTestCase {
         """
     )
   }
+
+  func testVariadicEnumCase() {
+    assertParse(
+      """
+      enum E { case a(Int1️⃣...) }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "variadic enum cases are not supported", fixIts: ["remove '...'"])
+      ],
+      fixedSource: """
+        enum E { case a(Int) }
+        """
+    )
+  }
 }

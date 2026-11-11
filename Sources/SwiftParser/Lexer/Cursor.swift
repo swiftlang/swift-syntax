@@ -338,32 +338,17 @@ extension Lexer {
       /// How many bytes remain from `ptr`, and whether anything precedes it.
       ///
       /// The sign bit says this position is at the start of the input, where
-      /// there is no byte before it; the rest is the count of bytes left. The
-      /// two flag bits leave `Int.bitWidth - 2` bits for the count (a gigabyte
-      /// on 32-bit platforms), which is more than a source file needs.
-      /// Everywhere but the start, the byte of look-behind the lexer needs is
-      /// `ptr[-1]`.
+      /// there is no byte before it; the rest is the count of bytes left. A file
+      /// is nowhere near eight exabytes, so the bit is free. Everywhere but the
+      /// start, the byte of look-behind the lexer needs is `ptr[-1]`.
       var metadata: Int
 
       static let startBit = Int.min
+      static let countMask = Int.max
 
-      /// Set when an operator that starts with `/` must not begin a regex
-      /// literal. Before Swift 6, bare slash regex literals are opt-in. It is
-      /// stored here, and negated, to keep the cursor small and to leave the
-      /// default as the all-zero state.
-      static let noBareSlashRegexBit = 1 << (Int.bitWidth - 2)
-
-      static let countMask = noBareSlashRegexBit - 1
-
-      init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool, allowsBareSlashRegex: Bool = true) {
+      init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool) {
         self.ptr = input.baseAddress
-        self.metadata =
-          input.count | (isAtStartOfInput ? Self.startBit : 0) | (allowsBareSlashRegex ? 0 : Self.noBareSlashRegexBit)
-      }
-
-      /// Whether a regex literal may begin with a bare `/`.
-      var allowsBareSlashRegex: Bool {
-        self.metadata & Self.noBareSlashRegexBit == 0
+        self.metadata = input.count | (isAtStartOfInput ? Self.startBit : 0)
       }
 
       /// How many bytes remain to be read.
@@ -403,15 +388,15 @@ extension Lexer {
     /// `nil`.
     var previousKeyword: Keyword?
 
+    /// Whether to handle "/" as a regex literal (rather than operator).
+    var allowsBareSlashRegex: Bool
+
     private var stateStack: StateStack = StateStack()
 
     init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool, allowsBareSlashRegex: Bool = true) {
-      self.position = Position(
-        input: input,
-        isAtStartOfInput: isAtStartOfInput,
-        allowsBareSlashRegex: allowsBareSlashRegex
-      )
+      self.position = Position(input: input, isAtStartOfInput: isAtStartOfInput)
       self.previousLexemeTrailingNewlinePresence = isAtStartOfInput ? .present : .absent
+      self.allowsBareSlashRegex = allowsBareSlashRegex
     }
 
     /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has
@@ -807,7 +792,7 @@ extension Lexer.Cursor.Position {
     self.ptr = ptr + 1
     // Assigning the count also clears the start bit, since a byte precedes the
     // advanced position.
-    self.metadata = (self.metadata & Self.noBareSlashRegexBit) | (self.count - 1)
+    self.metadata = self.count - 1
     return ptr.pointee
   }
 
@@ -931,7 +916,7 @@ extension Lexer.Cursor.Position {
     var advanced = self
     advanced.ptr = self.ptr! + n
     // Assigning the count also clears the start bit.
-    advanced.metadata = (self.metadata & Self.noBareSlashRegexBit) | (self.count - n)
+    advanced.metadata = self.count - n
     return advanced
   }
 
@@ -2661,7 +2646,7 @@ extension Lexer.Cursor {
     } while self.advance(if: { $0.isOperatorContinuationCodePoint })
 
     // Check to see if we have a regex literal starting in the operator.
-    if self.position.allowsBareSlashRegex {
+    if self.allowsBareSlashRegex {
       var regexScan = tokStart
       while regexScan.input.baseAddress! < self.input.baseAddress! {
         // Scan for the first '/' in the operator to see if it starts a regex

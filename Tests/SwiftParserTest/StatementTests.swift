@@ -1440,6 +1440,37 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testDoWhile() {
+    assertParse(
+      """
+      1️⃣do { } while x > 3
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'do-while' statement is not allowed; use 'repeat-while' instead",
+          fixIts: ["replace 'do' with 'repeat'"]
+        )
+      ],
+      fixedSource: """
+        repeat { } while x > 3
+        """
+    )
+  }
+
+  func testLabeledBlockNeedsDo() {
+    assertParse(
+      """
+      foo: 1️⃣{ }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "labeled block needs 'do'", fixIts: ["insert 'do'"])
+      ],
+      fixedSource: """
+        foo: do { }
+        """
+    )
+  }
+
   func testAndAvailableInCondition() {
     assertParse(
       """

@@ -743,9 +743,46 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.operator.isMissing,
+      let op = node.unexpectedBeforeOperator?.onlyPresentToken(where: { if case .binaryOperator = $0.tokenKind { return true } else { return false } }),
+      !op.trailingTrivia.isEmpty
+    {
+      addDiagnostic(
+        op,
+        .unaryOperatorSeparatedFromOperand,
+        fixIts: [
+          FixIt(
+            message: RemoveNodesFixIt([Syntax(op)]),
+            changes: [.replaceTrailingTrivia(token: op, newTrivia: [])]
+          )
+        ],
+        handledNodes: [node.unexpectedBeforeOperator!.id, node.operator.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
+    }
+    // `label: { ... }`
+    if node.doKeyword.isMissing, node.unexpectedBeforeDoKeyword == nil, node.parent?.is(LabeledStmtSyntax.self) == true {
+      addDiagnostic(
+        node.body.leftBrace,
+        .labeledBlockNeedsDo,
+        fixIts: [
+          FixIt(
+            message: InsertTokenFixIt(missingNodes: [Syntax(node.doKeyword)]),
+            changes: [.makePresent(node.doKeyword, leadingTrivia: [], trailingTrivia: .space)]
+          )
+        ],
+        handledNodes: [node.doKeyword.id]
+      )
     }
     // `try { ... } catch { ... }`
     if let unexpected = node.unexpectedBeforeDoKeyword,

@@ -296,6 +296,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var unexpectedPoundElseSpaceIf: Self {
     .init("unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?")
   }
+  public static var unaryOperatorSeparatedFromOperand: Self {
+    .init("unary operator cannot be separated from its operand")
+  }
   public static var unexpectedSemicolon: Self {
     .init("unexpected ';' separator")
   }

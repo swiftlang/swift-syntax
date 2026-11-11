@@ -2950,19 +2950,14 @@ final class DeclarationTests: ParserTestCase {
 
     assertParse(
       """
-      typealias T = 1️⃣~Int2️⃣ -> Bool
+      typealias T = 1️⃣~Int -> Bool
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected '(' to start function type",
-          fixIts: ["insert '('"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "expected ')' in function type",
-          fixIts: ["insert ')'"]
-        ),
+          message: "single argument function types require parentheses",
+          fixIts: ["insert '(' and ')'"]
+        )
       ],
       fixedSource: """
         typealias T = (~Int) -> Bool

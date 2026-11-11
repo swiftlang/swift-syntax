@@ -305,6 +305,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var variadicEnumCase: Self {
     .init("variadic enum cases are not supported")
   }
+  public static var singleArgumentFunctionTypeNeedsParens: Self {
+    .init("single argument function types require parentheses")
+  }
   public static var labeledBlockNeedsDo: Self {
     .init("labeled block needs 'do'")
   }

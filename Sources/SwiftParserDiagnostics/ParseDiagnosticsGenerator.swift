@@ -208,7 +208,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
       changes.append(FixIt.MultiNodeChange.makeMissing(misplacedTokens, transferTrivia: false))
     } else {
-      changes += misplacedTokens.map { FixIt.MultiNodeChange.makeMissing($0) }
+      let removeSpaces = misplacedTokens.count == 1
+      changes += misplacedTokens.map {
+        FixIt.MultiNodeChange.makeMissing([Syntax($0)], removeTrailingSpaces: removeSpaces)
+      }
       changes += correctAndMissingNodes.map { FixIt.MultiNodeChange.makePresent($0) }
     }
     var fixIts: [FixIt] = []
@@ -243,7 +246,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     let fixit = FixIt(
       message: RemoveNodesFixIt(unexpected),
-      changes: .makeMissing(unexpected)
+      changes: .makeMissing(unexpected.map(Syntax.init), removeTrailingSpaces: unexpected.count == 1)
     )
     addDiagnostic(
       unexpected,
@@ -457,7 +460,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         fixIts: [
           FixIt(
             message: RemoveNodesFixIt(semicolons),
-            changes: semicolons.map { FixIt.MultiNodeChange.makeMissing($0) }
+            changes: semicolons.map { FixIt.MultiNodeChange.makeMissing([Syntax($0)], removeTrailingSpaces: true) }
           )
         ]
       )
@@ -723,9 +726,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: ReplaceTokensFixIt(replaceTokens: [asyncKeyword], replacements: [node.awaitKeyword]),
             changes: [
-              .replace(oldNode: Syntax(unexpected), newNode: Syntax(UnexpectedNodesSyntax([]))),
               .replace(
-                oldNode: Syntax(node.awaitKeyword),
+                oldNode: Syntax(asyncKeyword),
                 newNode: Syntax(
                   TokenSyntax.keyword(
                     .await,
@@ -733,7 +735,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
                     trailingTrivia: asyncKeyword.trailingTrivia
                   )
                 )
-              ),
+              )
             ]
           )
         ],
@@ -748,7 +750,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.operator.isMissing,
-      let op = node.unexpectedBeforeOperator?.onlyPresentToken(where: { if case .binaryOperator = $0.tokenKind { return true } else { return false } }),
+      let op = node.unexpectedBeforeOperator?.onlyPresentToken(where: {
+        if case .binaryOperator = $0.tokenKind { return true } else { return false }
+      }),
       !op.trailingTrivia.isEmpty
     {
       addDiagnostic(
@@ -810,7 +814,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     // `do { } while condition`
-    if node.repeatKeyword.isMissing, let doKeyword = node.unexpectedBeforeRepeatKeyword?.onlyPresentToken(where: { $0.tokenKind == .keyword(.do) }) {
+    if node.repeatKeyword.isMissing,
+      let doKeyword = node.unexpectedBeforeRepeatKeyword?.onlyPresentToken(where: { $0.tokenKind == .keyword(.do) })
+    {
       addDiagnostic(
         doKeyword,
         .doWhileNotAllowed,
@@ -821,7 +827,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
               .replace(
                 oldNode: Syntax(doKeyword),
                 newNode: Syntax(
-                  TokenSyntax.keyword(.repeat, leadingTrivia: doKeyword.leadingTrivia, trailingTrivia: doKeyword.trailingTrivia)
+                  TokenSyntax.keyword(
+                    .repeat,
+                    leadingTrivia: doKeyword.leadingTrivia,
+                    trailingTrivia: doKeyword.trailingTrivia
+                  )
                 )
               )
             ]
@@ -838,7 +848,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     // `label: { ... }`
-    if node.doKeyword.isMissing, node.unexpectedBeforeDoKeyword == nil, node.parent?.is(LabeledStmtSyntax.self) == true {
+    if node.doKeyword.isMissing, node.unexpectedBeforeDoKeyword == nil, node.parent?.is(LabeledStmtSyntax.self) == true
+    {
       addDiagnostic(
         node.body.leftBrace,
         .labeledBlockNeedsDo,
@@ -863,9 +874,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: ReplaceTokensFixIt(replaceTokens: [tryKeyword], replacements: [node.doKeyword]),
             changes: [
-              .replace(oldNode: Syntax(unexpected), newNode: Syntax(UnexpectedNodesSyntax([]))),
               .replace(
-                oldNode: Syntax(node.doKeyword),
+                oldNode: Syntax(tryKeyword),
                 newNode: Syntax(
                   TokenSyntax.keyword(
                     .do,
@@ -873,7 +883,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
                     trailingTrivia: tryKeyword.trailingTrivia
                   )
                 )
-              ),
+              )
             ]
           )
         ],
@@ -1173,7 +1183,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         node,
         .standaloneSemicolonStatement,
         fixIts: [
-          FixIt(message: RemoveNodesFixIt(semicolon), changes: .makeMissing(semicolon))
+          FixIt(
+            message: RemoveNodesFixIt(semicolon),
+            changes: .makeMissing([Syntax(semicolon)], removeTrailingSpaces: true)
+          )
         ],
         handledNodes: [node.item.id]
       )
@@ -1343,9 +1356,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: InsertFixIt(tokenToBeInserted: .integerLiteral("0")),
             changes: [
-              .makePresent(node.literal),
-              .makeMissing(period),
-              .makeMissing(integerLiteral),
+              // Only insert the `0`; the `.` and the digits stay where they are.
+              .replace(
+                oldNode: Syntax(node.literal),
+                newNode: Syntax(TokenSyntax(.integerLiteral("0"), presence: .present))
+              )
             ]
           )
         ],
@@ -1643,10 +1658,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             fixIts: [
               FixIt(
                 message: ReplaceTokensFixIt(replaceTokens: unexpectedTokens, replacements: [clause.poundKeyword]),
-                changes: [
-                  .makeMissing(unexpectedBeforePoundKeyword, transferTrivia: false),
-                  .makePresent(clause.poundKeyword, leadingTrivia: unexpectedBeforePoundKeyword.leadingTrivia),
-                ]
+                changes: elseIfChanges(
+                  unexpectedTokens: unexpectedTokens,
+                  unexpected: unexpectedBeforePoundKeyword,
+                  poundKeyword: clause.poundKeyword
+                )
               )
             ],
             handledNodes: [unexpectedBeforePoundKeyword.id, clause.poundKeyword.id]
@@ -2747,6 +2763,41 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // IMPORTANT: If you are tempted to add a `visit` method here, please       //
   // insert it in alphabetical order above                                    //
   //==========================================================================//
+}
+
+/// The changes that turn `#else if` or `#elif` into `#elseif`: the first
+/// token becomes the directive and the rest are removed, so that the edits
+/// together cover just the text of the unexpected tokens.
+private func elseIfChanges(
+  unexpectedTokens: [TokenSyntax],
+  unexpected: UnexpectedNodesSyntax,
+  poundKeyword: TokenSyntax
+) -> [FixIt.MultiNodeChange] {
+  guard let first = unexpectedTokens.first, let last = unexpectedTokens.last, first.id != last.id,
+    unexpected.count == unexpectedTokens.count
+  else {
+    return [
+      .makeMissing(unexpected, transferTrivia: false),
+      .makePresent(poundKeyword, leadingTrivia: unexpected.leadingTrivia),
+    ]
+  }
+  let directive = TokenSyntax(
+    poundKeyword.tokenKind,
+    leadingTrivia: first.leadingTrivia,
+    trailingTrivia: last.trailingTrivia,
+    presence: .present
+  )
+  var changes: [FixIt.MultiNodeChange] = [
+    FixIt.MultiNodeChange(primitiveChanges: [.replace(oldNode: Syntax(first), newNode: Syntax(directive))])
+  ]
+  for token in unexpectedTokens.dropFirst() {
+    changes.append(
+      FixIt.MultiNodeChange(primitiveChanges: [
+        .replace(oldNode: Syntax(token), newNode: Syntax(TokenSyntax(.identifier(""), presence: .present)))
+      ])
+    )
+  }
+  return changes
 }
 
 extension FunctionTypeSyntax {

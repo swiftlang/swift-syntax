@@ -188,8 +188,8 @@ extension Parser {
       // In a statement condition, `&& let x = y` (or `var`/`case`) is a
       // misspelled comma: leave the `&&` to the condition list.
       if flavor == .stmtCondition, self.atContextualPunctuator("&&"),
-        (self.peek(isAt: .keyword(.let), .keyword(.var), .keyword(.case))
-          || self.peek(isAt: .poundAvailable, .poundUnavailable))
+        self.peek(isAt: .keyword(.let), .keyword(.var), .keyword(.case))
+          || self.peek(isAt: .poundAvailable, .poundUnavailable)
       {
         break
       }
@@ -659,7 +659,8 @@ extension Parser {
 
     // An operator that is separated from its operand is a prefix operator
     // with a space after it.
-    if self.at(.binaryOperator), !self.currentToken.isAtStartOfLine, !self.currentToken.tokenText.hasPrefix("/"), self.currentToken.tokenText != "&", !self.peek().tokenText.hasPrefix("/"),
+    if self.at(.binaryOperator), !self.currentToken.isAtStartOfLine, !self.currentToken.tokenText.hasPrefix("/"),
+      self.currentToken.tokenText != "&", !self.peek().tokenText.hasPrefix("/"),
       !self.peek(isAt: .rightParen, .comma, .rightSquare),
       !self.peek(isAt: .rightBrace, .colon, .endOfFile),
       !self.peek(isAt: .semicolon, .equal, .arrow),

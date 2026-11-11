@@ -118,7 +118,10 @@ extension Parser {
             doKeyword: doKeyword,
             throwsClause: nil,
             body: body,
-            catchClauses: RawCatchClauseListSyntax(elements: RawSyntaxNodeListBuilder<RawCatchClauseSyntax>().build(), arena: self.arena),
+            catchClauses: RawCatchClauseListSyntax(
+              elements: RawSyntaxNodeListBuilder<RawCatchClauseSyntax>().build(),
+              arena: self.arena
+            ),
             arena: self.arena
           ),
           with: optLabel

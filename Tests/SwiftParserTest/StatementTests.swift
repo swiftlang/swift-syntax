@@ -1440,6 +1440,23 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testAndAvailableInCondition() {
+    assertParse(
+      """
+      if a 1️⃣&& #available(macOS 10, *) { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' joining parts of a multi-clause condition",
+          fixIts: ["replace '&&' with ','"]
+        )
+      ],
+      fixedSource: """
+        if a, #available(macOS 10, *) { }
+        """
+    )
+  }
+
   func testUnaryOperatorSeparatedFromOperand() {
     assertParse(
       """

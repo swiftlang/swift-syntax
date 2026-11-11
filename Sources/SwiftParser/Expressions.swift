@@ -188,7 +188,8 @@ extension Parser {
       // In a statement condition, `&& let x = y` (or `var`/`case`) is a
       // misspelled comma: leave the `&&` to the condition list.
       if flavor == .stmtCondition, self.atContextualPunctuator("&&"),
-        self.peek(isAt: .keyword(.let), .keyword(.var), .keyword(.case))
+        (self.peek(isAt: .keyword(.let), .keyword(.var), .keyword(.case))
+          || self.peek(isAt: .poundAvailable, .poundUnavailable))
       {
         break
       }

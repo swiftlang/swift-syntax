@@ -766,6 +766,45 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: EnumCaseParameterSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `case a(Int...)`
+    for unexpected in [
+      node.unexpectedBetweenTypeAndDefaultValue, node.unexpectedBetweenDefaultValueAndTrailingComma,
+      node.unexpectedAfterTrailingComma,
+    ] {
+      if let unexpected, let ellipsis = unexpected.onlyPresentToken(where: { $0.text == "..." }) {
+        addDiagnostic(
+          ellipsis,
+          .variadicEnumCase,
+          fixIts: [FixIt(message: RemoveNodesFixIt([Syntax(ellipsis)]), changes: .makeMissing(ellipsis))],
+          handledNodes: [unexpected.id]
+        )
+      }
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: EnumCaseParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `case a(Int...)`
+    if let unexpected = node.unexpectedBetweenParametersAndRightParen,
+      let ellipsis = unexpected.onlyPresentToken(where: { $0.text == "..." })
+    {
+      addDiagnostic(
+        ellipsis,
+        .variadicEnumCase,
+        fixIts: [FixIt(message: RemoveNodesFixIt([Syntax(ellipsis)]), changes: .makeMissing(ellipsis))],
+        handledNodes: [unexpected.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: RepeatStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

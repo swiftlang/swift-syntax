@@ -1439,4 +1439,18 @@ final class StatementTests: ParserTestCase {
       ]
     )
   }
+
+  func testUnaryOperatorSeparatedFromOperand() {
+    assertParse(
+      """
+      y = 1️⃣+ -y
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unary operator cannot be separated from its operand", fixIts: ["remove '+'"])
+      ],
+      fixedSource: """
+        y = +-y
+        """
+    )
+  }
 }

@@ -421,6 +421,7 @@ extension Parser {
   /// where `do` was meant: parse the `catch` clauses and produce a `do`
   /// statement whose `do` keyword is missing and whose `try` is unexpected.
   mutating func reinterpretTryClosureAsDoStatement(_ expr: RawExprSyntax) -> RawDoStmtSyntax? {
+    assert(self.at(.keyword(.catch)))
     guard let tryExpr = expr.as(RawTryExprSyntax.self),
       tryExpr.questionOrExclamationMark == nil,
       let closure = tryExpr.expression.as(RawClosureExprSyntax.self),

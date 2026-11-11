@@ -1449,6 +1449,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    // `Int -> Int`
+    if node.leftParen.isMissing, node.rightParen.isMissing, node.unexpectedBeforeLeftParen == nil,
+      let parameter = node.parameters.first, node.parameters.count == 1, !parameter.hasError,
+      !node.isInsideIncompleteParameterClause
+    {
+      addDiagnostic(
+        parameter,
+        .singleArgumentFunctionTypeNeedsParens,
+        fixIts: [
+          FixIt(
+            message: InsertTokenFixIt(missingNodes: [Syntax(node.leftParen), Syntax(node.rightParen)]),
+            changes: [
+              .makePresent(node.leftParen),
+              .makePresent(node.rightParen, leadingTrivia: [], trailingTrivia: .space),
+            ]
+          )
+        ],
+        handledNodes: [node.leftParen.id, node.rightParen.id]
+      )
+    }
     handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.returnClause)
     return .visitChildren
   }
@@ -2727,4 +2747,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // IMPORTANT: If you are tempted to add a `visit` method here, please       //
   // insert it in alphabetical order above                                    //
   //==========================================================================//
+}
+
+extension FunctionTypeSyntax {
+  /// Whether this type is part of a parameter clause that is itself missing a
+  /// parenthesis. The missing parentheses of the type are then a consequence of
+  /// that.
+  fileprivate var isInsideIncompleteParameterClause: Bool {
+    var current: Syntax? = Syntax(self).parent
+    while let node = current {
+      if let clause = node.as(FunctionParameterClauseSyntax.self) {
+        return clause.leftParen.isMissing || clause.rightParen.isMissing
+      }
+      if let clause = node.as(ClosureParameterClauseSyntax.self) {
+        return clause.leftParen.isMissing || clause.rightParen.isMissing
+      }
+      if node.is(CodeBlockItemSyntax.self) || node.is(MemberBlockItemSyntax.self) {
+        return false
+      }
+      current = node.parent
+    }
+    return false
+  }
 }

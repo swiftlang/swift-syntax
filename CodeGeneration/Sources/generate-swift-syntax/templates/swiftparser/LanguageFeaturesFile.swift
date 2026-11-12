@@ -44,10 +44,20 @@ let languageFeaturesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       )
     }
 
+    for (i, feature) in CompilerOnlyLanguageFeature.allCases.enumerated() {
+      DeclSyntax(
+        """
+        /// Whether to disable the parsing of \(raw: feature.documentationDescription).
+        @_spi(Compiler)
+        public static let \(feature.token) = Self(rawValue: 1 << \(raw: ExperimentalFeature.allCases.count + i))
+        """
+      )
+    }
+
     try! InitializerDeclSyntax(
       """
-      /// Creates a new value representing the experimental feature with the
-      /// given name, or returns nil if the name is not recognized.
+      /// Creates a new value representing the feature with the given name, or
+      /// returns nil if the name is not recognized.
       @_spi(ExperimentalLanguageFeatures)
       public init?(name: String)
       """

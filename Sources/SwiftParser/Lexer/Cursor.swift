@@ -388,11 +388,15 @@ extension Lexer {
     /// `nil`.
     var previousKeyword: Keyword?
 
+    /// Whether to handle "/" as a regex literal (rather than operator).
+    var allowsBareSlashRegex: Bool
+
     private var stateStack: StateStack = StateStack()
 
-    init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool) {
+    init(input: UnsafeBufferPointer<UInt8>, isAtStartOfInput: Bool, allowsBareSlashRegex: Bool = true) {
       self.position = Position(input: input, isAtStartOfInput: isAtStartOfInput)
       self.previousLexemeTrailingNewlinePresence = isAtStartOfInput ? .present : .absent
+      self.allowsBareSlashRegex = allowsBareSlashRegex
     }
 
     /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has
@@ -2642,7 +2646,7 @@ extension Lexer.Cursor {
     } while self.advance(if: { $0.isOperatorContinuationCodePoint })
 
     // Check to see if we have a regex literal starting in the operator.
-    do {
+    if self.allowsBareSlashRegex {
       var regexScan = tokStart
       while regexScan.input.baseAddress! < self.input.baseAddress! {
         // Scan for the first '/' in the operator to see if it starts a regex

@@ -153,6 +153,20 @@ extension Parser.Lookahead {
     )
   }
 
+  /// The recovery precedence of the current token, taking contextual keywords
+  /// into account.
+  private mutating func currentContextualTokenPrecedence() -> TokenPrecedence {
+    let precedence = TokenPrecedence(self.currentToken)
+
+    // `actor` is lexed as an identifier, but an `actor` followed
+    /// by a name starts a declaration, just like `class`.
+    if precedence < .declKeyword, self.at(.keyword(.actor)), self.peek(isAt: .identifier) {
+      return TokenPrecedence(.actor)
+    }
+
+    return precedence
+  }
+
   @inline(__always)
   private mutating func canRecoverToImpl<Match>(
     recoveryPrecedence: TokenPrecedence,
@@ -183,7 +197,7 @@ extension Parser.Lookahead {
         )
         return (matchedSpec, handle)
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken)
+      let currentTokenPrecedence = self.currentContextualTokenPrecedence()
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }

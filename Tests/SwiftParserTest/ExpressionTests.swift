@@ -4448,4 +4448,21 @@ final class StatementExpressionTests: ParserTestCase {
       )
     )
   }
+
+  func testAsyncInsteadOfAwait() {
+    assertParse(
+      """
+      func g() async { 1️⃣async f() }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "found 'async' in expression; did you mean 'await'?",
+          fixIts: ["replace 'async' with 'await'"]
+        )
+      ],
+      fixedSource: """
+        func g() async { await f() }
+        """
+    )
+  }
 }

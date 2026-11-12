@@ -1432,6 +1432,20 @@ extension Parser {
       parser.parseFunctionParameter()
     }
 
+    // Curried parameter lists, e.g., `func f(_ a: Int)(_ b: Int)`, are not
+    // supported; parse the extra lists so that they can be diagnosed.
+    var extraParameterClauses: [RawFunctionParameterClauseSyntax] = []
+    while !parameterClause.rightParen.isMissing, self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
+      extraParameterClauses.append(
+        self.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
+          parser.parseFunctionParameter()
+        }
+      )
+    }
+    let unexpectedAfterParameters: RawUnexpectedNodesSyntax? =
+      extraParameterClauses.isEmpty
+      ? nil : RawUnexpectedNodesSyntax(extraParameterClauses.map { $0.raw }, arena: self.arena)
+
     var (effectSpecifiers, yields) = self.parseFunctionEffectSpecifiers()
 
     var returnClause: RawReturnClauseSyntax?
@@ -1448,6 +1462,7 @@ extension Parser {
     }
     return RawFunctionSignatureSyntax(
       parameterClause: parameterClause,
+      unexpectedAfterParameters,
       effectSpecifiers: effectSpecifiers,
       yieldClause: yields,
       returnClause: returnClause,

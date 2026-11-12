@@ -297,7 +297,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
 
     let specifierInfo = [
-      (node.asyncSpecifier, { AsyncEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledAsync),
+      (
+        node.asyncSpecifier, { AsyncEffectSpecifier(token: $0) != nil || $0.text == "async" },
+        StaticParserError.misspelledAsync
+      ),
       (
         node.throwsClause?.throwsSpecifier, { ThrowsEffectSpecifier(token: $0) != nil },
         StaticParserError.misspelledThrows
@@ -411,6 +414,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       !firstToken.leadingTrivia.contains(where: { $0.isNewline })
     {
       handledNodes.append(contentsOf: node.unexpectedCode.map(\.id))
+    }
+
+    // `case a:` in an enum is a `switch` case label in the wrong place.
+    if let colon = node.unexpectedCode.first?.as(TokenSyntax.self), colon.tokenKind == .colon, colon.isPresent,
+      let previousToken = colon.previousToken(viewMode: .sourceAccurate),
+      let enumCase = previousToken.ancestorOrSelf(mapping: { $0.as(EnumCaseDeclSyntax.self) }),
+      enumCase.elements.first?.name.isPresent == true
+    {
+      addDiagnostic(
+        enumCase.caseKeyword,
+        .caseLabelOutsideOfSwitch,
+        handledNodes: [node.unexpectedCode.id]
+          + (node.parent?.as(MemberBlockItemSyntax.self)?.semicolon.map { [$0.id] } ?? [])
+      )
     }
     return .visitChildren
   }
@@ -690,9 +707,141 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: AwaitExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `async f()` where `await f()` was meant.
+    if let unexpected = node.unexpectedBeforeAwaitKeyword,
+      let asyncKeyword = unexpected.onlyPresentToken(where: { $0.text == "async" }),
+      node.awaitKeyword.isMissing
+    {
+      addDiagnostic(
+        asyncKeyword,
+        .asyncInExpression,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [asyncKeyword], replacements: [node.awaitKeyword]),
+            changes: [
+              .replace(oldNode: Syntax(unexpected), newNode: Syntax(UnexpectedNodesSyntax([]))),
+              .replace(
+                oldNode: Syntax(node.awaitKeyword),
+                newNode: Syntax(
+                  TokenSyntax.keyword(
+                    .await,
+                    leadingTrivia: asyncKeyword.leadingTrivia,
+                    trailingTrivia: asyncKeyword.trailingTrivia
+                  )
+                )
+              ),
+            ]
+          )
+        ],
+        handledNodes: [unexpected.id, node.awaitKeyword.id]
+      )
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `try { ... } catch { ... }`
+    if let unexpected = node.unexpectedBeforeDoKeyword,
+      let tryKeyword = unexpected.onlyPresentToken(where: { $0.tokenKind == .keyword(.try) }),
+      node.doKeyword.isMissing
+    {
+      addDiagnostic(
+        tryKeyword,
+        .doKeywordSpecifiesCatchRegion,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [tryKeyword], replacements: [node.doKeyword]),
+            changes: [
+              .replace(oldNode: Syntax(unexpected), newNode: Syntax(UnexpectedNodesSyntax([]))),
+              .replace(
+                oldNode: Syntax(node.doKeyword),
+                newNode: Syntax(
+                  TokenSyntax.keyword(
+                    .do,
+                    leadingTrivia: tryKeyword.leadingTrivia,
+                    trailingTrivia: tryKeyword.trailingTrivia
+                  )
+                )
+              ),
+            ]
+          )
+        ],
+        handledNodes: [unexpected.id, node.doKeyword.id]
+      )
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: FileDefaultDeclSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // `@objc default @MainActor`, `private default @MainActor`
+    if let unexpected = node.unexpectedBeforeDefaultKeyword,
+      let first = unexpected.first, first.is(AttributeSyntax.self) || first.is(DeclModifierSyntax.self)
+    {
+      addDiagnostic(
+        first,
+        .fileDefaultRejectsAttributes,
+        handledNodes: [unexpected.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
+    }
+
+    // `Int[]`: an array type written with the old spelling.
+    if node.leftSquare.isMissing, node.rightSquare.isPresent,
+      let unexpected = node.unexpectedBetweenElementAndRightSquare,
+      let misplacedSquare = unexpected.first?.as(TokenSyntax.self), misplacedSquare.tokenKind == .leftSquare
+    {
+      let fixIt: FixIt
+      if let size = unexpected.dropFirst().first?.as(TokenSyntax.self), size.tokenKind.isIntegerLiteral {
+        // `Int[3]` is the old spelling of what is now `[3 of Int]`.
+        let inlineArray = InlineArrayTypeSyntax(
+          count: GenericArgumentSyntax(
+            argument: .expr(
+              ExprSyntax(IntegerLiteralExprSyntax(literal: size.with(\.leadingTrivia, []).with(\.trailingTrivia, [])))
+            )
+          ),
+          separator: .keyword(.of, leadingTrivia: .space, trailingTrivia: .space),
+          element: GenericArgumentSyntax(
+            argument: .type(node.element.with(\.leadingTrivia, []).with(\.trailingTrivia, []))
+          )
+        )
+        .with(\.leadingTrivia, node.leadingTrivia)
+        .with(\.trailingTrivia, node.trailingTrivia)
+        fixIt = FixIt(
+          message: .writeInlineArrayType,
+          changes: [.replace(oldNode: Syntax(node), newNode: Syntax(inlineArray))]
+        )
+      } else {
+        fixIt = FixIt(
+          message: InsertTokenFixIt(missingNodes: [Syntax(node.leftSquare)]),
+          changes: [
+            .makePresent(node.leftSquare),
+            .makeMissing(unexpected),
+          ]
+        )
+      }
+      addDiagnostic(
+        misplacedSquare,
+        .oldStyleArrayType,
+        fixIts: [fixIt],
+        handledNodes: [node.leftSquare.id, unexpected.id]
+      )
+      return .visitChildren
     }
 
     if node.leftSquare.isMissing && node.rightSquare.isPresent {
@@ -713,9 +862,42 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    // `@differentiable(horse)`: an identifier that is not a differentiability kind.
+    if let unexpected = node.unexpectedBetweenArgumentsAndRightParen,
+      node.attributeName.trimmedDescription == "differentiable",
+      node.arguments?.isMissingAllTokens ?? true,
+      let kind = unexpected.first?.as(TokenSyntax.self), kind.tokenKind.isIdentifier,
+      kind.text != "wrt", kind.text != "where",
+      unexpected.count == 1 || unexpected.dropFirst().first?.as(TokenSyntax.self)?.tokenKind == .comma
+    {
+      addDiagnostic(
+        kind,
+        UnknownDifferentiabilityKind(kind: kind),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [kind], replacements: [.keyword(.reverse)]),
+            changes: [
+              .replace(
+                oldNode: Syntax(kind),
+                newNode: Syntax(
+                  TokenSyntax.identifier(
+                    "reverse",
+                    leadingTrivia: kind.leadingTrivia,
+                    trailingTrivia: kind.trailingTrivia
+                  )
+                )
+              )
+            ]
+          )
+        ],
+        handledNodes: [unexpected.id]
+      )
+      return .visitChildren
+    }
     if let arguments = node.arguments, arguments.isMissingAllTokens {
       addDiagnostic(
         arguments,
+        position: arguments.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia,
         MissingAttributeArgument(attributeName: node.attributeName),
         fixIts: [
           FixIt(message: .insertAttributeArguments, changes: .makePresent(arguments))
@@ -1136,6 +1318,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.returnClause)
+    // `func f(_ a: Int)(_ b: Int)`
+    if let unexpected = node.unexpectedBetweenParameterClauseAndEffectSpecifiers,
+      !unexpected.isEmpty,
+      unexpected.allSatisfy({ $0.is(FunctionParameterClauseSyntax.self) })
+    {
+      addDiagnostic(
+        node.parameterClause.leftParen,
+        .curriedParameterLists,
+        handledNodes: [unexpected.id]
+      )
+    }
     return .visitChildren
   }
 
@@ -1362,6 +1555,42 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
     if let leftBrace = node.elseBody?.as(CodeBlockSyntax.self)?.leftBrace, leftBrace.isMissing {
       addDiagnostic(leftBrace, .expectedLeftBraceOrIfAfterElse, handledNodes: [leftBrace.id])
+    }
+
+    // `else <condition> { ... }`: the condition was meant to follow an `if`.
+    if let elseKeyword = node.elseKeyword, elseKeyword.isPresent,
+      let elseBlock = node.elseBody?.as(CodeBlockSyntax.self),
+      let unexpected = elseBlock.unexpectedBeforeLeftBrace, elseBlock.leftBrace.isPresent
+    {
+      // Only assume that `if` was forgotten when the `{` is on the same line as the `else`.
+      let hasNewline = (Array(unexpected.tokens(viewMode: .sourceAccurate)) + [elseBlock.leftBrace]).contains {
+        $0.leadingTrivia.contains(where: { $0.isNewline })
+      }
+      if hasNewline {
+        if let firstUnexpected = unexpected.tokens(viewMode: .sourceAccurate).first(where: { _ in true }) {
+          addDiagnostic(
+            firstUnexpected,
+            .expectedLeftBraceOrIfAfterElse,
+            handledNodes: [unexpected.id]
+          )
+        }
+        return .visitChildren
+      }
+      let elseWithIf = UnexpectedNodesSyntax([
+        Syntax(elseKeyword.with(\.trailingTrivia, .space)),
+        Syntax(TokenSyntax.keyword(.if, trailingTrivia: elseKeyword.trailingTrivia)),
+      ])
+      addDiagnostic(
+        elseKeyword,
+        .expectedLeftBraceOrIfAfterElseDidYouMeanIf,
+        fixIts: [
+          FixIt(
+            message: InsertTokenFixIt(missingNodes: [Syntax(TokenSyntax.keyword(.if))]),
+            changes: [.replace(oldNode: Syntax(elseKeyword), newNode: Syntax(elseWithIf))]
+          )
+        ],
+        handledNodes: [unexpected.id]
+      )
     }
 
     return .visitChildren
@@ -2151,6 +2380,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       moveFixIt: { MoveTokensInFrontOfTypeFixIt(movedTokens: $0) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
+
+    // A default argument, as in `(Int = 3, Int)`.
+    if let unexpected = node.unexpectedBetweenTypeAndEllipsis,
+      let equal = unexpected.first?.as(TokenSyntax.self), equal.tokenKind == .equal, unexpected.count >= 2
+    {
+      addDiagnostic(
+        equal,
+        .defaultArgumentInTupleType,
+        fixIts: [FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))],
+        handledNodes: [unexpected.id]
+      )
+    }
     return .visitChildren
   }
 

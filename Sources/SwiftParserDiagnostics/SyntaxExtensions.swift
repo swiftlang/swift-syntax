@@ -140,7 +140,7 @@ extension SyntaxProtocol {
     if let previousToken = self.previousToken(viewMode: .fixedUp),
       previousToken.isPresent,
       let firstToken = self.firstToken(viewMode: .all),
-      previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace }),
+      previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace || $0.isComment }),
       !BasicFormat().requiresWhitespace(between: previousToken, and: firstToken),
       !BasicFormat().requiresNewline(between: previousToken, and: firstToken)
     {

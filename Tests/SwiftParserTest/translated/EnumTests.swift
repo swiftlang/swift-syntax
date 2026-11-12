@@ -168,11 +168,11 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum SwitchEnvy {
-        case X1️⃣:
+        1️⃣case X:
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum")
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
       ]
     )
   }
@@ -181,11 +181,11 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum SwitchEnvy {
-        case X(Y)1️⃣:
+        1️⃣case X(Y):
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum")
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
       ]
     )
   }
@@ -194,11 +194,11 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum SwitchEnvy {
-        case X, Y1️⃣:
+        1️⃣case X, Y:
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum")
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
       ]
     )
   }
@@ -220,11 +220,11 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum SwitchEnvy {
-        case X(Y), Z(W)1️⃣:
+        1️⃣case X(Y), Z(W):
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum")
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
       ]
     )
   }
@@ -376,11 +376,11 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum Recovery2 {
-        case UE11️⃣:
+        1️⃣case UE1:
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum")
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
       ]
     )
   }
@@ -389,11 +389,11 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum Recovery3 {
-        case UE2(Void)1️⃣:
+        1️⃣case UE2(Void):
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ':' in enum")
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
       ]
     )
   }

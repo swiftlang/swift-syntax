@@ -417,6 +417,43 @@ extension Parser {
 // MARK: Do-Catch Statements
 
 extension Parser {
+  /// If `expr` is `try { ... }` and a `catch` follows, the user wrote `try`
+  /// where `do` was meant: parse the `catch` clauses and produce a `do`
+  /// statement whose `do` keyword is missing and whose `try` is unexpected.
+  mutating func reinterpretTryClosureAsDoStatement(_ expr: RawExprSyntax) -> RawDoStmtSyntax? {
+    assert(self.at(.keyword(.catch)))
+    guard let tryExpr = expr.as(RawTryExprSyntax.self),
+      tryExpr.questionOrExclamationMark == nil,
+      let closure = tryExpr.expression.as(RawClosureExprSyntax.self),
+      closure.signature == nil,
+      closure.unexpectedBeforeLeftBrace == nil,
+      closure.unexpectedBetweenLeftBraceAndSignature == nil,
+      closure.unexpectedBetweenSignatureAndStatements == nil,
+      closure.unexpectedBetweenStatementsAndRightBrace == nil
+    else {
+      return nil
+    }
+    let body = RawCodeBlockSyntax(
+      leftBrace: closure.leftBrace,
+      statements: closure.statements,
+      rightBrace: closure.rightBrace,
+      arena: self.arena
+    )
+    var elements = RawSyntaxNodeListBuilder<RawCatchClauseSyntax>()
+    var loopProgress = LoopProgressCondition()
+    while self.at(.keyword(.catch)) && self.hasProgressed(&loopProgress) {
+      elements.append(self.parseCatchClause(), allocator: self.nodeListAllocator)
+    }
+    return RawDoStmtSyntax(
+      RawUnexpectedNodesSyntax([tryExpr.tryKeyword], arena: self.arena),
+      doKeyword: self.missingToken(.do),
+      throwsClause: nil,
+      body: body,
+      catchClauses: RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena),
+      arena: self.arena
+    )
+  }
+
   /// Parse a do statement.
   mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawDoStmtSyntax {
     let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(doHandle)

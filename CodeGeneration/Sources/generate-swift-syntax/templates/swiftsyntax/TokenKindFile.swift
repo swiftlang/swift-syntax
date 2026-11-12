@@ -122,7 +122,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   }
 
   try! ExtensionDeclSyntax("extension TokenKind: Equatable") {
-    try FunctionDeclSyntax("public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool") {
+    try FunctionDeclSyntax("public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool") {
       try SwitchExprSyntax("switch (lhs, rhs)") {
         for tokenSpec in Token.allCases.map(\.spec) {
           if tokenSpec.text != nil {

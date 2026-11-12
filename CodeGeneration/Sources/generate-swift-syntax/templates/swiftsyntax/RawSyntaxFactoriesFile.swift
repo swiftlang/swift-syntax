@@ -80,11 +80,14 @@ func rawSyntaxFactoriesFile(nodesStartingWith: [Character]) -> SourceFileSyntax 
             unexpectedChildren.isEmpty
             ? ".flat"
             : "hasUnexpected ? .layoutWithUnexpected : .layout"
+          // `\(list)` is not indented: interpolation would add that indentation
+          // after every newline in `list`, and formatting keeps it as written
+          // indentation on top of the indentation it generates.
           StmtSyntax(
             """
             return RawSyntax.makeLayout(
               kind: .\(node.memberCallName), childCount: \(raw: realChildren.count), storage: \(raw: storage), arena: arena) { layout in
-              \(list)
+            \(list)
             }
             """
           )

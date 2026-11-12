@@ -337,6 +337,28 @@ final class DeclarationMacroTests: XCTestCase {
     )
   }
 
+  func testFreestandingDeclInsideIfConfigDeclInMemberDeclList() {
+    assertMacroExpansion(
+      """
+      struct Foo {
+        #if true
+        #decls("func foo() {}")
+        #endif
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          #if true
+          func foo() {
+          }
+          #endif
+        }
+        """,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testFreestandingDeclThatIncludesDocComment() {
     assertMacroExpansion(
       #"""

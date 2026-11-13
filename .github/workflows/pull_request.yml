@@ -22,7 +22,7 @@ jobs:
       linux_exclude_swift_versions: '[{"swift_version": "5.9"}, {"swift_version": "5.10"}, {"swift_version": "6.0"}, {"swift_version": "6.1"}]'
       windows_exclude_swift_versions: '[{"swift_version": "5.9"}, {"swift_version": "5.10"}, {"swift_version": "6.0"}, {"swift_version": "6.1"}]'
       enable_wasm_sdk_build: true
-      wasm_sdk_build_command: "swift test -c release --explicit-target-dependency-import-check error --toolset Toolsets/wasi-test-toolset.json"
+      wasm_sdk_build_command: "swift test -c release --explicit-target-dependency-import-check error --toolset .github/toolsets/wasi-test-toolset.json"
       linux_build_command: "swift test --explicit-target-dependency-import-check error"
       windows_build_command: "Invoke-Program swift test --explicit-target-dependency-import-check error"
   soundness:

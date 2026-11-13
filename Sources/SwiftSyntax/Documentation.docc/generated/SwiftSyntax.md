@@ -29,6 +29,9 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 - <doc:SwiftSyntax/Syntax>
 - <doc:SwiftSyntax/SyntaxCollection>
+- <doc:SwiftSyntax/SyntaxLayout>
+- <doc:SwiftSyntax/SyntaxProperty>
+- <doc:SwiftSyntax/AnySyntaxProperty>
 
 ### Trivia
 

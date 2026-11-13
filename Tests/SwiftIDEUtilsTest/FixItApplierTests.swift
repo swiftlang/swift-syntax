@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(FixItApplier) import SwiftIDEUtils
+import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
@@ -237,6 +238,66 @@ class FixItApplierApplyEditsTests: XCTestCase {
         .init(oneOf: "_ = 1", "vaar x = 1")
       ]
     )
+  }
+
+  func testSubtreeEditInWholeFileCoordinates() {
+    let source = """
+      func test() {
+        var x = 1
+        let y = 2
+      }
+      """
+    let file = Parser.parse(source: source)
+    let fn = Array(file.statements)[0].item.as(FunctionDeclSyntax.self)!
+    let stmt = Array(fn.body!.statements)[1]
+    XCTAssertGreaterThan(stmt.position.utf8Offset, 0)
+
+    let yDecl = stmt.item.as(VariableDeclSyntax.self)!
+    let bindingSpec = yDecl.bindingSpecifier
+    let edit = SourceEdit(
+      range: bindingSpec.position..<bindingSpec.endPosition,
+      replacement: "  var "
+    )
+
+    let result = FixItApplier.apply(edits: [edit], to: stmt)
+    XCTAssertEqual(result, "  var y = 2")
+  }
+
+  func testSubtreeIgnoresExternalEdits() {
+    let source = """
+      func test() {
+        var x = 1
+        let y = 2
+        var z = 3
+      }
+      """
+    let file = Parser.parse(source: source)
+    let fn = Array(file.statements)[0].item.as(FunctionDeclSyntax.self)!
+    let firstStmt = Array(fn.body!.statements)[0]
+    let secondStmt = Array(fn.body!.statements)[1]
+    let thirdStmt = Array(fn.body!.statements)[2]
+
+    let xDecl = firstStmt.item.as(VariableDeclSyntax.self)!
+    let editBefore = SourceEdit(
+      range: xDecl.bindingSpecifier.position..<xDecl.bindingSpecifier.endPosition,
+      replacement: "  let "
+    )
+
+    let zDecl = thirdStmt.item.as(VariableDeclSyntax.self)!
+    let editAfter = SourceEdit(
+      range: zDecl.bindingSpecifier.position..<zDecl.bindingSpecifier.endPosition,
+      replacement: "  let "
+    )
+
+    let yDecl = secondStmt.item.as(VariableDeclSyntax.self)!
+    let editInside = SourceEdit(
+      range: yDecl.bindingSpecifier.position..<yDecl.bindingSpecifier.endPosition,
+      replacement: "  var "
+    )
+
+    // Apply edits before, inside, and after secondStmt. External edits must be ignored.
+    let result = FixItApplier.apply(edits: [editBefore, editInside, editAfter], to: secondStmt)
+    XCTAssertEqual(result, "  var y = 2")
   }
 }
 

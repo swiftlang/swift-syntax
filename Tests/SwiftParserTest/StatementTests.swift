@@ -1439,4 +1439,80 @@ final class StatementTests: ParserTestCase {
       ]
     )
   }
+
+  func testDoWhile() {
+    assertParse(
+      """
+      1️⃣do { } while x > 3
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'do-while' statement is not allowed; use 'repeat-while' instead",
+          fixIts: ["replace 'do' with 'repeat'"]
+        )
+      ],
+      fixedSource: """
+        repeat { } while x > 3
+        """
+    )
+  }
+
+  func testLabeledBlockNeedsDo() {
+    assertParse(
+      """
+      foo: 1️⃣{ }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "labeled block needs 'do'", fixIts: ["insert 'do'"])
+      ],
+      fixedSource: """
+        foo: do { }
+        """
+    )
+  }
+
+  func testAndAvailableInCondition() {
+    assertParse(
+      """
+      if a 1️⃣&& #available(macOS 10, *) { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' joining parts of a multi-clause condition",
+          fixIts: ["replace '&&' with ','"]
+        )
+      ],
+      fixedSource: """
+        if a, #available(macOS 10, *) { }
+        """
+    )
+  }
+
+  func testUnaryOperatorSeparatedFromOperand() {
+    assertParse(
+      """
+      y = 1️⃣+ -y
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unary operator cannot be separated from its operand", fixIts: ["remove '+'"])
+      ],
+      fixedSource: """
+        y = +-y
+        """
+    )
+  }
+
+  func testVariadicEnumCase() {
+    assertParse(
+      """
+      enum E { case a(Int1️⃣...) }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "variadic enum cases are not supported", fixIts: ["remove '...'"])
+      ],
+      fixedSource: """
+        enum E { case a(Int) }
+        """
+    )
+  }
 }

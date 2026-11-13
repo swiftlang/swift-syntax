@@ -296,6 +296,21 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var unexpectedPoundElseSpaceIf: Self {
     .init("unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?")
   }
+  public static var doWhileNotAllowed: Self {
+    .init("'do-while' statement is not allowed; use 'repeat-while' instead")
+  }
+  public static var unaryOperatorSeparatedFromOperand: Self {
+    .init("unary operator cannot be separated from its operand")
+  }
+  public static var variadicEnumCase: Self {
+    .init("variadic enum cases are not supported")
+  }
+  public static var singleArgumentFunctionTypeNeedsParens: Self {
+    .init("single argument function types require parentheses")
+  }
+  public static var labeledBlockNeedsDo: Self {
+    .init("labeled block needs 'do'")
+  }
   public static var unexpectedSemicolon: Self {
     .init("unexpected ';' separator")
   }

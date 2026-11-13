@@ -165,7 +165,11 @@ extension ParseDiagnosticsGenerator {
         handledNodes: [invalidTokenContainer.id, identifier.id]
       )
     } else {
-      let fixIt = FixIt(message: .removeExtraneousWhitespace, changes: changes)
+      // Only the whitespace after the period goes away; the period stays.
+      let fixIt = FixIt(
+        message: .removeExtraneousWhitespace,
+        changes: [.replaceTrailingTrivia(token: invalidToken, newTrivia: [])]
+      )
       addDiagnostic(
         invalidToken,
         ExtraneousWhitespace(tokenWithWhitespace: invalidToken),

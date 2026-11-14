@@ -15,7 +15,9 @@ extension String {
     return
       self
       .split(separator: "\n", omittingEmptySubsequences: false)
-      .map { $0.droppingLast(while: \.isWhitespace) }
+      // Key paths are not available in Embedded Swift, so use an explicit
+      // closure instead to keep this module buildable for Embedded Swift SDKs.
+      .map { $0.droppingLast(while: { $0.isWhitespace }) }
       .joined(separator: "\n")
   }
 }

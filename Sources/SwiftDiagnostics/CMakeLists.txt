@@ -18,6 +18,7 @@ add_swift_syntax_library(SwiftDiagnostics
   GroupedDiagnostics.swift
   Message.swift
   Note.swift
+  Suppression.swift
 )
 
 target_link_swift_syntax_libraries(SwiftDiagnostics PUBLIC

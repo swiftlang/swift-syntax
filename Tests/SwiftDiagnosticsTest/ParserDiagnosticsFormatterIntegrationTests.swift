@@ -89,8 +89,7 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
     let source = "let _ :\tFloat  -> Int"
     let expectedOutput = """
       1 | let _ :\tFloat  -> Int
-        |        \t|    `- error: expected ')' in function type
-        |        \t`- error: expected '(' to start function type
+        |        \t`- error: single argument function types require parentheses
 
       """
     assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -201,8 +200,7 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
     let expectedOutput = """
       1 | let _ : Float  -> Int
-        |         |    `- error: expected ')' in function type
-        |         `- error: expected '(' to start function type
+        |         `- error: single argument function types require parentheses
 
       """
 

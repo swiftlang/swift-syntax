@@ -29,6 +29,11 @@ public struct Diagnostic: CustomDebugStringConvertible, Sendable {
   /// Notes that point to additional locations which are relevant for this diagnostic.
   public let notes: [Note]
 
+  /// Suppressions that prevent this diagnostic from being emitted.
+  /// Each suppression records the location and kind of the syntax that introduced
+  /// the suppression (e.g., `@diagnose(Group, as: ignored)`, or `unsafe`.
+  public let suppressions: [Suppression]
+
   /// Fix-Its that can be applied to resolve this diagnostic.
   /// Each Fix-It offers a different way to resolve the diagnostic. Usually, there's only one.
   public let fixIts: [FixIt]
@@ -41,6 +46,7 @@ public struct Diagnostic: CustomDebugStringConvertible, Sendable {
     message: DiagnosticMessage,
     highlights: [Syntax]? = nil,
     notes: [Note] = [],
+    suppressions: [Suppression] = [],
     fixIts: [FixIt] = []
   ) {
     self.node = Syntax(node)
@@ -48,6 +54,7 @@ public struct Diagnostic: CustomDebugStringConvertible, Sendable {
     self.diagMessage = message
     self.highlights = highlights ?? [Syntax(node)]
     self.notes = notes
+    self.suppressions = suppressions
     self.fixIts = fixIts
   }
 

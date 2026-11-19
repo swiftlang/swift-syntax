@@ -193,17 +193,32 @@ public let STMT_NODES: [Node] = [
     kind: .deferStmt,
     base: .stmt,
     nameForDiagnostics: "'defer' statement",
+    documentation: """
+      A statement that schedules a code block to execute when the current scope exits.
+
+      Reaching a `defer` statement registers its body for execution when control leaves
+      the enclosing scope. If multiple `defer` statements are reached in the same scope,
+      their bodies execute in reverse order.
+
+      ```swift
+      defer {
+        closeFile()
+      }
+      ```
+      """,
     traits: [
       "WithCodeBlock"
     ],
     children: [
       Child(
         name: "deferKeyword",
-        kind: .token(choices: [.keyword(.defer)])
+        kind: .token(choices: [.keyword(.defer)]),
+        documentation: "The `defer` keyword."
       ),
       Child(
         name: "body",
-        kind: .node(kind: .codeBlock)
+        kind: .node(kind: .codeBlock),
+        documentation: "The code block to execute when the enclosing scope exits."
       ),
     ]
   ),
@@ -466,27 +481,43 @@ public let STMT_NODES: [Node] = [
     kind: .repeatStmt,
     base: .stmt,
     nameForDiagnostics: "'repeat' statement",
+    documentation: """
+      A loop that executes its body before checking whether to repeat it.
+
+      The body executes at least once. After each iteration, the condition is evaluated
+      and the loop repeats if it is `true`.
+
+      ```swift
+      repeat {
+        step()
+      } while shouldContinue()
+      ```
+      """,
     traits: [
       "WithCodeBlock"
     ],
     children: [
       Child(
         name: "repeatKeyword",
-        kind: .token(choices: [.keyword(.repeat)])
+        kind: .token(choices: [.keyword(.repeat)]),
+        documentation: "The `repeat` keyword that introduces the loop."
       ),
       Child(
         name: "body",
         kind: .node(kind: .codeBlock),
-        nameForDiagnostics: "body"
+        nameForDiagnostics: "body",
+        documentation: "The code block to execute before evaluating the condition."
       ),
       Child(
         name: "whileKeyword",
-        kind: .token(choices: [.keyword(.while)])
+        kind: .token(choices: [.keyword(.while)]),
+        documentation: "The `while` keyword that introduces the condition after the loop body."
       ),
       Child(
         name: "condition",
         kind: .node(kind: .expr),
-        nameForDiagnostics: "condition"
+        nameForDiagnostics: "condition",
+        documentation: "The Boolean expression evaluated after each iteration to decide whether to repeat the loop."
       ),
     ]
   ),
@@ -570,21 +601,37 @@ public let STMT_NODES: [Node] = [
     kind: .whileStmt,
     base: .stmt,
     nameForDiagnostics: "'while' statement",
+    documentation: """
+      A loop that executes its body while all of its conditions are satisfied.
+
+      The conditions are evaluated before each iteration, so the body might never execute.
+      Conditions are separated by commas and can include Boolean expressions, optional
+      bindings, and pattern matching.
+
+      ```swift
+      while let element = iterator.next(), shouldProcess(element) {
+        process(element)
+      }
+      ```
+      """,
     traits: [
       "WithCodeBlock"
     ],
     children: [
       Child(
         name: "whileKeyword",
-        kind: .token(choices: [.keyword(.while)])
+        kind: .token(choices: [.keyword(.while)]),
+        documentation: "The `while` keyword that introduces the loop."
       ),
       Child(
         name: "conditions",
-        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition")
+        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition"),
+        documentation: "The comma-separated conditions that must all be satisfied before each iteration."
       ),
       Child(
         name: "body",
-        kind: .node(kind: .codeBlock)
+        kind: .node(kind: .codeBlock),
+        documentation: "The code block to execute each time all of the conditions are satisfied."
       ),
     ]
   ),

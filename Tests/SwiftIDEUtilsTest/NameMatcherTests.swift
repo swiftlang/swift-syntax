@@ -152,6 +152,15 @@ class NameMatcherTests: XCTestCase {
     )
   }
 
+  func testStringLiteralWithPositionOnWhitespace() {
+    assertNameMatcherResult(
+      """
+      "hello1️⃣ world"
+      """,
+      expected: []
+    )
+  }
+
   func testWildcardParameter() {
     assertNameMatcherResult(
       "func 0️⃣foo1(_ x: Int) {}",

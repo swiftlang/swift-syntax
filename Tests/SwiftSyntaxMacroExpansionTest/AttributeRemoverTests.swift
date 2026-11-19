@@ -60,25 +60,23 @@ final class AttributeRemoverTests: XCTestCase {
     )
   }
 
-  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyOnOwnLineBeforeVariable() {
     assertSyntaxRemovingTestAttributes(
       """
       @Test
       var x: Int
       """,
-      reduction: "\nvar x: Int"
+      reduction: "var x: Int"
     )
   }
 
-  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyTwiceOnOwnLineBeforeVariable() {
     assertSyntaxRemovingTestAttributes(
       """
       @Test @Test
       var x: Int
       """,
-      reduction: "\nvar x: Int"
+      reduction: "var x: Int"
     )
   }
 
@@ -167,7 +165,6 @@ final class AttributeRemoverTests: XCTestCase {
     )
   }
 
-  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyNewlineBlockComment() {
     assertSyntaxRemovingTestAttributes(
       """
@@ -176,7 +173,7 @@ final class AttributeRemoverTests: XCTestCase {
       var value: Int
       """,
       reduction: """
-        \n/* comment */
+        /* comment */
         var value: Int
         """
     )
@@ -340,7 +337,6 @@ final class AttributeRemoverTests: XCTestCase {
     )
   }
 
-  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyAndAttributeOnOwnLinesBeforeVariable() {
     assertSyntaxRemovingTestAttributes(
       """
@@ -349,7 +345,7 @@ final class AttributeRemoverTests: XCTestCase {
       var x: Int
       """,
       reduction: """
-        \n@State
+        @State
         var x: Int
         """
     )
@@ -368,14 +364,13 @@ final class AttributeRemoverTests: XCTestCase {
     )
   }
 
-  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyOnOwnLineThenEmptyBeforeVariable() {
     assertSyntaxRemovingTestAttributes(
       """
       @Test
       @Test var x: Int
       """,
-      reduction: "\nvar x: Int"
+      reduction: "var x: Int"
     )
   }
 

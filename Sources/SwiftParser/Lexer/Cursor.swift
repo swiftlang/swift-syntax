@@ -1098,6 +1098,12 @@ extension Lexer.Cursor {
       case "/":
         // Check for a '/*'
         if self.advance(matching: "*") {
+          if self.advance(matching: "/") {
+              depth -= 1
+              if depth == 0 {
+                  break LOOP
+                }
+            }
           depth += 1
         }
 

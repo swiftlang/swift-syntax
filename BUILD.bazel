@@ -227,6 +227,7 @@ swift_syntax_library(
         ":SwiftSyntax603",
         ":SwiftSyntax604",
         ":SwiftSyntax605",
+        ":SwiftSyntax606",
         ":_SwiftSyntaxCShims",
     ],
 )
@@ -283,6 +284,13 @@ swift_syntax_library(
 swift_syntax_library(
     name = "SwiftSyntax605",
     srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax605/**/*.swift"]),
+    deps = [
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftSyntax606",
+    srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax606/**/*.swift"]),
     deps = [
     ],
 )

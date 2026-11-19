@@ -965,6 +965,71 @@ final class ManifestEditTests: XCTestCase {
       )
     }
   }
+
+  func testUpgradePackageDependencies() async throws {
+    try await assertManifestRefactor(
+      """
+      // swift-tools-version: 6.0
+      let package = Package(
+        name: "packages",
+        dependencies: [
+          .package(url: "https://github.com/swiftlang/swift-syntax", from: "510.0.0"),
+          .package(url: "https://github.com/swiftlang/swift-format", exact: "510.0.0"),
+          .package(url: "https://github.com/unable-to-resolve", exact: "1.0.0"),
+          .package(id: "scope.upgradable", from: "1.0.0"),
+          .package(id: "scope.pinned", exact: "2.5.0"),
+          .package(id: "scope.unable-to-resolve", from: "1.0.0"),
+          .package(path: "my-local-dependency"),
+        ],
+        targets: []
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 6.0
+        let package = Package(
+          name: "packages",
+          dependencies: [
+            .package(url: "https://github.com/swiftlang/swift-syntax", from: "603.0.1"),
+            .package(url: "https://github.com/swiftlang/swift-format", exact: "603.0.0"),
+            .package(url: "https://github.com/unable-to-resolve", exact: "1.0.0"),
+            .package(id: "scope.upgradable", from: "2.0.0"),
+            .package(id: "scope.pinned", exact: "3.1.0"),
+            .package(id: "scope.unable-to-resolve", from: "1.0.0"),
+            .package(path: "my-local-dependency"),
+          ],
+          targets: []
+        )
+        """
+    ) { manifest in
+      let context = try await UpgradePackageDependencies.Context(resolvingLatestVersionIn: manifest) {
+        (dependency, currentVersion) in
+        switch dependency {
+        case .sourceControl(url: "https://github.com/swiftlang/swift-syntax"):
+          XCTAssertEqual(currentVersion, "510.0.0")
+          return "603.0.1"
+        case .sourceControl(url: "https://github.com/swiftlang/swift-format"):
+          XCTAssertEqual(currentVersion, "510.0.0")
+          return "603.0.0"
+        case .sourceControl(url: "https://github.com/unable-to-resolve"):
+          XCTAssertEqual(currentVersion, "1.0.0")
+          return nil
+        case .registry(identity: "scope.upgradable"):
+          XCTAssertEqual(currentVersion, "1.0.0")
+          return "2.0.0"
+        case .registry(identity: "scope.pinned"):
+          XCTAssertEqual(currentVersion, "2.5.0")
+          return "3.1.0"
+        case .registry(identity: "scope.unable-to-resolve"):
+          XCTAssertEqual(currentVersion, "1.0.0")
+          return nil
+        default:
+          XCTFail("Resolving package version called with an unexpected dependency: \(dependency)")
+          return nil
+        }
+      }
+      return try UpgradePackageDependencies.textRefactor(syntax: manifest, in: context)
+    }
+  }
 }
 
 /// Assert that applying the given edit/refactor operation to the manifest
@@ -997,6 +1062,28 @@ func assertManifestRefactor(
   operation: (SourceFileSyntax) throws -> [SourceEdit]
 ) rethrows {
   let edits = try operation(originalManifest)
+  let editedManifestSource = FixItApplier.apply(
+    edits: edits,
+    to: originalManifest
+  )
+
+  let editedManifest = Parser.parse(source: editedManifestSource)
+  assertStringsEqualWithDiff(
+    editedManifest.description,
+    expectedManifest.description,
+    file: file,
+    line: line
+  )
+}
+
+func assertManifestRefactor(
+  _ originalManifest: SourceFileSyntax,
+  expectedManifest: SourceFileSyntax,
+  file: StaticString = #filePath,
+  line: UInt = #line,
+  operation: (SourceFileSyntax) async throws -> [SourceEdit]
+) async rethrows {
+  let edits = try await operation(originalManifest)
   let editedManifestSource = FixItApplier.apply(
     edits: edits,
     to: originalManifest

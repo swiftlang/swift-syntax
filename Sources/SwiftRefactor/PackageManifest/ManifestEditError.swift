@@ -18,6 +18,7 @@ import SwiftSyntax
 public enum ManifestEditError: Error, Equatable {
   case cannotFindPackage
   case cannotFindTargets
+  case cannotFindDependencies
   case cannotFindTarget(targetName: String)
   case cannotFindArrayLiteralArgument(argumentName: String)
   case cannotAddSettingsToPluginTarget
@@ -32,6 +33,8 @@ extension ManifestEditError: CustomStringConvertible {
       return "invalid manifest: unable to find 'Package' declaration"
     case .cannotFindTargets:
       return "unable to find package targets in manifest"
+    case .cannotFindDependencies:
+      return "unable to find package dependencies in manifest"
     case .cannotFindTarget(targetName: let name):
       return "unable to find target named '\(name)' in package"
     case .cannotFindArrayLiteralArgument(argumentName: let name):

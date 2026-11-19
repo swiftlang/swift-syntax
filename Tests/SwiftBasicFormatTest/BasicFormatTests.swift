@@ -180,6 +180,36 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
+  func testSingleLineCallWithMultiLineClosureArgument() {
+    assertFormattingRoundTrips(
+      """
+      foo(someClosure: { _ in
+          return 1
+      })
+      """
+    )
+  }
+
+  func testSingleLineCallWithUnlabeledMultiLineClosureArgument() {
+    assertFormattingRoundTrips(
+      """
+      foo({ _ in
+          return 1
+      })
+      """
+    )
+  }
+
+  func testSingleLineTupleWithMultiLineClosureElement() {
+    assertFormattingRoundTrips(
+      """
+      _ = ({ _ in
+          return 1
+      })
+      """
+    )
+  }
+
   func testLineWrappingInsideIndentedBlock() {
     assertFormatted(
       source: """

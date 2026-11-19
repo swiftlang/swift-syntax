@@ -13,7 +13,7 @@
 import ArgumentParser
 import SwiftBasicFormat
 import SwiftDiagnostics
-import SwiftParser
+@_spi(Testing) import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
 
@@ -47,18 +47,8 @@ struct BasicFormat: ParsableCommand, ParseCommand {
   var nodeType: String = "SourceFileSyntax"
 
   func run() throws {
-    guard case .choices(let choices) = Syntax.structure else {
-      fatalError("Expected `Syntax.structure` to be the `choices` case")
-    }
-
-    let parsableMetatypes = choices.compactMap { (choice) -> SyntaxParseable.Type? in
-      guard case .node(let nodeType) = choice else {
-        return nil
-      }
-      return nodeType as? SyntaxParseable.Type
-    }
     let parsableMetatypesByName = Dictionary(
-      parsableMetatypes.map {
+      syntaxParseableTypes.map {
         (String(reflecting: $0).replacingOccurrences(of: "SwiftSyntax.", with: ""), $0)
       },
       uniquingKeysWith: { l, r in l }

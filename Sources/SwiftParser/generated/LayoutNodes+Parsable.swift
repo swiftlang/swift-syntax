@@ -240,6 +240,41 @@ extension VersionTupleSyntax: SyntaxParseable {
   }
 }
 
+/// Every layout node that conforms to ``SyntaxParseable``.
+///
+/// ``syntaxParseableTypes`` combines this with the collection nodes that conform to
+/// ``SyntaxParseable``.
+@_spi(Testing)
+public var layoutNodeSyntaxParseableTypes: [SyntaxParseable.Type] {
+  [
+    AccessorBlockFileSyntax.self,
+    AccessorBlockSyntax.self,
+    AccessorDeclSyntax.self,
+    AttributeClauseFileSyntax.self,
+    AttributeSyntax.self,
+    AvailabilityMacroDefinitionFileSyntax.self,
+    CatchClauseSyntax.self,
+    ClosureParameterSyntax.self,
+    CodeBlockFileSyntax.self,
+    CodeBlockItemSyntax.self,
+    CodeBlockSyntax.self,
+    DeclSyntax.self,
+    EnumCaseParameterSyntax.self,
+    ExprSyntax.self,
+    FunctionParameterSyntax.self,
+    FunctionYieldSyntax.self,
+    GenericParameterClauseSyntax.self,
+    MemberBlockItemListFileSyntax.self,
+    MemberBlockSyntax.self,
+    PatternSyntax.self,
+    SourceFileSyntax.self,
+    StmtSyntax.self,
+    SwitchCaseSyntax.self,
+    TypeSyntax.self,
+    VersionTupleSyntax.self
+  ]
+}
+
 fileprivate extension Parser {
   mutating func parseNonOptionalCodeBlockItem() -> RawCodeBlockItemSyntax {
     guard let node = self.parseCodeBlockItem(allowInitDecl: true, until: { _ in

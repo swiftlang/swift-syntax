@@ -64,6 +64,7 @@ import SwiftSyntax
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .choices([
       // Types
@@ -87,6 +88,7 @@ import SwiftSyntax
       .node(EnumCaseElementSyntax.self),
     ])
   }
+  #endif
 }
 
 // MARK: Declalaration Name

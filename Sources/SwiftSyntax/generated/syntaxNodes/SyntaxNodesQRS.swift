@@ -212,6 +212,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeOpeningPounds,
     \Self.openingPounds,
@@ -225,6 +226,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     \Self.closingPounds,
     \Self.unexpectedAfterClosingPounds
   ])
+  #endif
 }
 
 // MARK: - RepeatStmtSyntax
@@ -392,6 +394,7 @@ public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeRepeatKeyword,
     \Self.repeatKeyword,
@@ -403,6 +406,7 @@ public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
     \Self.condition,
     \Self.unexpectedAfterCondition
   ])
+  #endif
 }
 
 // MARK: - ReturnClauseSyntax
@@ -536,6 +540,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeArrow,
     \Self.arrow,
@@ -543,6 +548,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
     \Self.type,
     \Self.unexpectedAfterType
   ])
+  #endif
 }
 
 // MARK: - ReturnStmtSyntax
@@ -668,6 +674,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeReturnKeyword,
     \Self.returnKeyword,
@@ -675,6 +682,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
     \Self.expression,
     \Self.unexpectedAfterExpression
   ])
+  #endif
 }
 
 // MARK: - SameTypeRequirementSyntax
@@ -724,9 +732,11 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(TypeSyntax.self), .node(ExprSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to the type conforming to the ``TypeSyntaxProtocol`` protocol.
     ///
@@ -808,9 +818,11 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(TypeSyntax.self), .node(ExprSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to the type conforming to the ``TypeSyntaxProtocol`` protocol.
     ///
@@ -993,6 +1005,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftType,
     \Self.leftType,
@@ -1002,6 +1015,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     \Self.rightType,
     \Self.unexpectedAfterRightType
   ])
+  #endif
 }
 
 // MARK: - SectionAttributeArgumentSyntax
@@ -1068,9 +1082,11 @@ public struct SectionAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _L
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(TokenSyntax.self), .node(ExprSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``TokenSyntax``.
     ///
@@ -1187,7 +1203,9 @@ public struct SectionAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeSection, \Self.section, \Self.unexpectedAfterSection])
+  #endif
 }
 
 // MARK: - SequenceExprSyntax
@@ -1301,7 +1319,9 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprS
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeElements, \Self.elements, \Self.unexpectedAfterElements])
+  #endif
 }
 
 // MARK: - SimpleStringLiteralExprSyntax
@@ -1490,6 +1510,7 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable,
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeOpeningQuote,
     \Self.openingQuote,
@@ -1499,6 +1520,7 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable,
     \Self.closingQuote,
     \Self.unexpectedAfterClosingQuote
   ])
+  #endif
 }
 
 // MARK: - SimpleTypeSpecifierSyntax
@@ -1597,7 +1619,9 @@ public struct SimpleTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeSpecifier, \Self.specifier, \Self.unexpectedAfterSpecifier])
+  #endif
 }
 
 // MARK: - SomeOrAnyTypeSyntax
@@ -1714,6 +1738,7 @@ public struct SomeOrAnyTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafType
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeSomeOrAnySpecifier,
     \Self.someOrAnySpecifier,
@@ -1721,6 +1746,7 @@ public struct SomeOrAnyTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafType
     \Self.constraint,
     \Self.unexpectedAfterConstraint
   ])
+  #endif
 }
 
 // MARK: - SourceFileSyntax
@@ -1893,6 +1919,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeShebang,
     \Self.shebang,
@@ -1902,6 +1929,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     \Self.endOfFileToken,
     \Self.unexpectedAfterEndOfFileToken
   ])
+  #endif
 }
 
 // MARK: - SpecializeAvailabilityArgumentSyntax
@@ -2111,6 +2139,7 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAvailabilityLabel,
     \Self.availabilityLabel,
@@ -2122,6 +2151,7 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
     \Self.semicolon,
     \Self.unexpectedAfterSemicolon
   ])
+  #endif
 }
 
 // MARK: - SpecializeTargetFunctionArgumentSyntax
@@ -2309,6 +2339,7 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeTargetLabel,
     \Self.targetLabel,
@@ -2320,6 +2351,7 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
     \Self.trailingComma,
     \Self.unexpectedAfterTrailingComma
   ])
+  #endif
 }
 
 // MARK: - SpecializedAttributeArgumentSyntax
@@ -2442,6 +2474,7 @@ public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeExportedArgument,
     \Self.exportedArgument,
@@ -2449,6 +2482,7 @@ public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable
     \Self.genericWhereClause,
     \Self.unexpectedAfterGenericWhereClause
   ])
+  #endif
 }
 
 // MARK: - StringLiteralExprSyntax
@@ -2693,6 +2727,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeOpeningPounds,
     \Self.openingPounds,
@@ -2706,6 +2741,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     \Self.closingPounds,
     \Self.unexpectedAfterClosingPounds
   ])
+  #endif
 }
 
 // MARK: - StringSegmentSyntax
@@ -2796,7 +2832,9 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeContent, \Self.content, \Self.unexpectedAfterContent])
+  #endif
 }
 
 // MARK: - StructDeclSyntax
@@ -3194,6 +3232,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
@@ -3213,6 +3252,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     \Self.memberBlock,
     \Self.unexpectedAfterMemberBlock
   ])
+  #endif
 }
 
 // MARK: - SubscriptCallExprSyntax
@@ -3484,6 +3524,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeCalledExpression,
     \Self.calledExpression,
@@ -3499,6 +3540,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     \Self.additionalTrailingClosures,
     \Self.unexpectedAfterAdditionalTrailingClosures
   ])
+  #endif
 }
 
 // MARK: - SubscriptDeclSyntax
@@ -3853,6 +3895,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
@@ -3874,6 +3917,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     \Self.accessorBlock,
     \Self.unexpectedAfterAccessorBlock
   ])
+  #endif
 }
 
 // MARK: - SuperExprSyntax
@@ -3955,7 +3999,9 @@ public struct SuperExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeSuperKeyword, \Self.superKeyword, \Self.unexpectedAfterSuperKeyword])
+  #endif
 }
 
 // MARK: - SuppressedTypeSyntax
@@ -4070,6 +4116,7 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeWithoutTilde,
     \Self.withoutTilde,
@@ -4077,6 +4124,7 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     \Self.type,
     \Self.unexpectedAfterType
   ])
+  #endif
 }
 
 // MARK: - SwitchCaseItemSyntax
@@ -4220,6 +4268,7 @@ public struct SwitchCaseItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforePattern,
     \Self.pattern,
@@ -4229,6 +4278,7 @@ public struct SwitchCaseItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     \Self.trailingComma,
     \Self.unexpectedAfterTrailingComma
   ])
+  #endif
 }
 
 // MARK: - SwitchCaseLabelSyntax
@@ -4419,6 +4469,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeCaseKeyword,
     \Self.caseKeyword,
@@ -4428,6 +4479,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     \Self.colon,
     \Self.unexpectedAfterColon
   ])
+  #endif
 }
 
 // MARK: - SwitchCaseSyntax
@@ -4495,9 +4547,11 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(SwitchDefaultLabelSyntax.self), .node(SwitchCaseLabelSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``SwitchDefaultLabelSyntax``.
     ///
@@ -4699,6 +4753,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttribute,
     \Self.attribute,
@@ -4708,6 +4763,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     \Self.statements,
     \Self.unexpectedAfterStatements
   ])
+  #endif
 }
 
 // MARK: - SwitchDefaultLabelSyntax
@@ -4837,6 +4893,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeDefaultKeyword,
     \Self.defaultKeyword,
@@ -4844,6 +4901,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     \Self.colon,
     \Self.unexpectedAfterColon
   ])
+  #endif
 }
 
 // MARK: - SwitchExprSyntax
@@ -5092,6 +5150,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyn
     }
   }
 
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeSwitchKeyword,
     \Self.switchKeyword,
@@ -5105,4 +5164,5 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyn
     \Self.rightBrace,
     \Self.unexpectedAfterRightBrace
   ])
+  #endif
 }

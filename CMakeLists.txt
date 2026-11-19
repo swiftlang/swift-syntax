@@ -78,6 +78,14 @@ if (SWIFTSYNTAX_ENABLE_ASSERTIONS)
   )
 endif()
 
+# Leave out `SyntaxProtocol.structure`, `keyPathInParent` and `SyntaxNodeStructure`, for
+# clients that don't use them.
+if (SWIFTSYNTAX_NO_STRUCTURE_REFLECTION)
+  add_compile_definitions(
+    $<$<COMPILE_LANGUAGE:Swift>:SWIFTSYNTAX_NO_STRUCTURE_REFLECTION>
+  )
+endif()
+
 add_compile_definitions(
   $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_BUILD_USING_CMAKE>
 )

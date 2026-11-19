@@ -19,9 +19,11 @@ where Element: SyntaxProtocol, Index == SyntaxChildrenIndex {
 }
 
 extension SyntaxCollection {
+  #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
   public static var structure: SyntaxNodeStructure {
     return .collection(Element.self)
   }
+  #endif
 
   private var layoutView: RawSyntaxLayoutView {
     raw.layoutView!

@@ -181,6 +181,15 @@ public struct RawSyntaxLayoutView {
     let layout = raw.asLayout
     return layout.storage == .flat ? layout.childCount : 2 &* layout.childCount &+ 1
   }
+
+  /// The position of the child at `index` in this node's layout, or `nil` if this node is a
+  /// collection or `index` is out of range.
+  public func propertyOfChild(at index: Int) -> AnySyntaxProperty? {
+    guard !raw.kind.isSyntaxCollection, index >= 0, index < Int(logicalChildCount) else {
+      return nil
+    }
+    return AnySyntaxProperty(syntaxKind: raw.kind, index: SyntaxLayoutIndex(UInt32(index)))
+  }
 }
 
 /// A layout node's children as the tree describes them: an `unexpected` slot

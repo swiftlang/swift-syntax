@@ -31,7 +31,7 @@ open class SyntaxVisitor {
 
   /// Walk all nodes of the given syntax tree, calling the corresponding `visit`
   /// function for every node that is being visited.
-  public func walk(_ node: some SyntaxProtocol) {
+  public final func walk(_ node: some SyntaxProtocol) {
     dispatchVisit(Syntax(node))
   }
 
@@ -3628,14 +3628,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTokenSyntaxImpl(_ node: Syntax) {
+  private final func visitTokenSyntaxImpl(_ node: Syntax) {
     _ = visit(TokenSyntax(unsafeCasting: node))
     // No children to visit.
     visitPost(TokenSyntax(unsafeCasting: node))
   }
 
   @inline(never)
-  private func visitABIAttributeArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitABIAttributeArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(ABIAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3643,7 +3643,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAccessorBlockFileSyntaxImpl(_ node: Syntax) {
+  private final func visitAccessorBlockFileSyntaxImpl(_ node: Syntax) {
     if visit(AccessorBlockFileSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3651,7 +3651,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAccessorBlockSyntaxImpl(_ node: Syntax) {
+  private final func visitAccessorBlockSyntaxImpl(_ node: Syntax) {
     if visit(AccessorBlockSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3659,7 +3659,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAccessorDeclListSyntaxImpl(_ node: Syntax) {
+  private final func visitAccessorDeclListSyntaxImpl(_ node: Syntax) {
     if visit(AccessorDeclListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3667,7 +3667,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAccessorDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitAccessorDeclSyntaxImpl(_ node: Syntax) {
     if visit(AccessorDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3675,7 +3675,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAccessorEffectSpecifiersSyntaxImpl(_ node: Syntax) {
+  private final func visitAccessorEffectSpecifiersSyntaxImpl(_ node: Syntax) {
     if visit(AccessorEffectSpecifiersSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3683,7 +3683,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAccessorParametersSyntaxImpl(_ node: Syntax) {
+  private final func visitAccessorParametersSyntaxImpl(_ node: Syntax) {
     if visit(AccessorParametersSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3691,7 +3691,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitActorDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitActorDeclSyntaxImpl(_ node: Syntax) {
     if visit(ActorDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3699,7 +3699,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitArrayElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitArrayElementListSyntaxImpl(_ node: Syntax) {
     if visit(ArrayElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3707,7 +3707,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitArrayElementSyntaxImpl(_ node: Syntax) {
+  private final func visitArrayElementSyntaxImpl(_ node: Syntax) {
     if visit(ArrayElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3715,7 +3715,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitArrayExprSyntaxImpl(_ node: Syntax) {
+  private final func visitArrayExprSyntaxImpl(_ node: Syntax) {
     if visit(ArrayExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3723,7 +3723,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitArrayTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitArrayTypeSyntaxImpl(_ node: Syntax) {
     if visit(ArrayTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3731,7 +3731,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitArrowExprSyntaxImpl(_ node: Syntax) {
+  private final func visitArrowExprSyntaxImpl(_ node: Syntax) {
     if visit(ArrowExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3739,7 +3739,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAsExprSyntaxImpl(_ node: Syntax) {
+  private final func visitAsExprSyntaxImpl(_ node: Syntax) {
     if visit(AsExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3747,7 +3747,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAssignmentExprSyntaxImpl(_ node: Syntax) {
+  private final func visitAssignmentExprSyntaxImpl(_ node: Syntax) {
     if visit(AssignmentExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3755,7 +3755,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAssociatedTypeDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitAssociatedTypeDeclSyntaxImpl(_ node: Syntax) {
     if visit(AssociatedTypeDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3763,7 +3763,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAttributeClauseFileSyntaxImpl(_ node: Syntax) {
+  private final func visitAttributeClauseFileSyntaxImpl(_ node: Syntax) {
     if visit(AttributeClauseFileSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3771,7 +3771,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAttributeListSyntaxImpl(_ node: Syntax) {
+  private final func visitAttributeListSyntaxImpl(_ node: Syntax) {
     if visit(AttributeListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3779,7 +3779,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAttributeSyntaxImpl(_ node: Syntax) {
+  private final func visitAttributeSyntaxImpl(_ node: Syntax) {
     if visit(AttributeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3787,7 +3787,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAttributedTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitAttributedTypeSyntaxImpl(_ node: Syntax) {
     if visit(AttributedTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3795,7 +3795,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAvailabilityArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitAvailabilityArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(AvailabilityArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3803,7 +3803,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAvailabilityArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitAvailabilityArgumentSyntaxImpl(_ node: Syntax) {
     if visit(AvailabilityArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3811,7 +3811,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAvailabilityConditionSyntaxImpl(_ node: Syntax) {
+  private final func visitAvailabilityConditionSyntaxImpl(_ node: Syntax) {
     if visit(AvailabilityConditionSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3819,7 +3819,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAvailabilityLabeledArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitAvailabilityLabeledArgumentSyntaxImpl(_ node: Syntax) {
     if visit(AvailabilityLabeledArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3827,7 +3827,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAvailabilityMacroDefinitionFileSyntaxImpl(_ node: Syntax) {
+  private final func visitAvailabilityMacroDefinitionFileSyntaxImpl(_ node: Syntax) {
     if visit(AvailabilityMacroDefinitionFileSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3835,7 +3835,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAwaitExprSyntaxImpl(_ node: Syntax) {
+  private final func visitAwaitExprSyntaxImpl(_ node: Syntax) {
     if visit(AwaitExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3843,7 +3843,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitBackDeployedAttributeArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitBackDeployedAttributeArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(BackDeployedAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3851,7 +3851,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitBinaryOperatorExprSyntaxImpl(_ node: Syntax) {
+  private final func visitBinaryOperatorExprSyntaxImpl(_ node: Syntax) {
     if visit(BinaryOperatorExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3859,7 +3859,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitBooleanLiteralExprSyntaxImpl(_ node: Syntax) {
+  private final func visitBooleanLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(BooleanLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3867,7 +3867,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitBorrowExprSyntaxImpl(_ node: Syntax) {
+  private final func visitBorrowExprSyntaxImpl(_ node: Syntax) {
     if visit(BorrowExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3875,7 +3875,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitBreakStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitBreakStmtSyntaxImpl(_ node: Syntax) {
     if visit(BreakStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3883,7 +3883,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visit_CanImportExprSyntaxImpl(_ node: Syntax) {
+  private final func visit_CanImportExprSyntaxImpl(_ node: Syntax) {
     if visit(_CanImportExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3891,7 +3891,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visit_CanImportVersionInfoSyntaxImpl(_ node: Syntax) {
+  private final func visit_CanImportVersionInfoSyntaxImpl(_ node: Syntax) {
     if visit(_CanImportVersionInfoSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3899,7 +3899,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCatchClauseListSyntaxImpl(_ node: Syntax) {
+  private final func visitCatchClauseListSyntaxImpl(_ node: Syntax) {
     if visit(CatchClauseListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3907,7 +3907,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCatchClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitCatchClauseSyntaxImpl(_ node: Syntax) {
     if visit(CatchClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3915,7 +3915,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCatchItemListSyntaxImpl(_ node: Syntax) {
+  private final func visitCatchItemListSyntaxImpl(_ node: Syntax) {
     if visit(CatchItemListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3923,7 +3923,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCatchItemSyntaxImpl(_ node: Syntax) {
+  private final func visitCatchItemSyntaxImpl(_ node: Syntax) {
     if visit(CatchItemSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3931,7 +3931,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClassDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitClassDeclSyntaxImpl(_ node: Syntax) {
     if visit(ClassDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3939,7 +3939,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClassRestrictionTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitClassRestrictionTypeSyntaxImpl(_ node: Syntax) {
     if visit(ClassRestrictionTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3947,7 +3947,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureCaptureClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureCaptureClauseSyntaxImpl(_ node: Syntax) {
     if visit(ClosureCaptureClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3955,7 +3955,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureCaptureListSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureCaptureListSyntaxImpl(_ node: Syntax) {
     if visit(ClosureCaptureListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3963,7 +3963,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureCaptureSpecifierSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureCaptureSpecifierSyntaxImpl(_ node: Syntax) {
     if visit(ClosureCaptureSpecifierSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3971,7 +3971,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureCaptureSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureCaptureSyntaxImpl(_ node: Syntax) {
     if visit(ClosureCaptureSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3979,7 +3979,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureExprSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureExprSyntaxImpl(_ node: Syntax) {
     if visit(ClosureExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3987,7 +3987,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureParameterClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureParameterClauseSyntaxImpl(_ node: Syntax) {
     if visit(ClosureParameterClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -3995,7 +3995,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureParameterListSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureParameterListSyntaxImpl(_ node: Syntax) {
     if visit(ClosureParameterListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4003,7 +4003,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureParameterSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureParameterSyntaxImpl(_ node: Syntax) {
     if visit(ClosureParameterSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4011,7 +4011,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureShorthandParameterListSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureShorthandParameterListSyntaxImpl(_ node: Syntax) {
     if visit(ClosureShorthandParameterListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4019,7 +4019,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureShorthandParameterSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureShorthandParameterSyntaxImpl(_ node: Syntax) {
     if visit(ClosureShorthandParameterSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4027,7 +4027,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitClosureSignatureSyntaxImpl(_ node: Syntax) {
+  private final func visitClosureSignatureSyntaxImpl(_ node: Syntax) {
     if visit(ClosureSignatureSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4035,7 +4035,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCodeBlockFileSyntaxImpl(_ node: Syntax) {
+  private final func visitCodeBlockFileSyntaxImpl(_ node: Syntax) {
     if visit(CodeBlockFileSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4043,7 +4043,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCodeBlockItemListSyntaxImpl(_ node: Syntax) {
+  private final func visitCodeBlockItemListSyntaxImpl(_ node: Syntax) {
     if visit(CodeBlockItemListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4051,7 +4051,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCodeBlockItemSyntaxImpl(_ node: Syntax) {
+  private final func visitCodeBlockItemSyntaxImpl(_ node: Syntax) {
     if visit(CodeBlockItemSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4059,7 +4059,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCodeBlockSyntaxImpl(_ node: Syntax) {
+  private final func visitCodeBlockSyntaxImpl(_ node: Syntax) {
     if visit(CodeBlockSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4067,7 +4067,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCompositionTypeElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitCompositionTypeElementListSyntaxImpl(_ node: Syntax) {
     if visit(CompositionTypeElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4075,7 +4075,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCompositionTypeElementSyntaxImpl(_ node: Syntax) {
+  private final func visitCompositionTypeElementSyntaxImpl(_ node: Syntax) {
     if visit(CompositionTypeElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4083,7 +4083,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCompositionTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitCompositionTypeSyntaxImpl(_ node: Syntax) {
     if visit(CompositionTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4091,7 +4091,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitConditionElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitConditionElementListSyntaxImpl(_ node: Syntax) {
     if visit(ConditionElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4099,7 +4099,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitConditionElementSyntaxImpl(_ node: Syntax) {
+  private final func visitConditionElementSyntaxImpl(_ node: Syntax) {
     if visit(ConditionElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4107,7 +4107,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitConformanceRequirementSyntaxImpl(_ node: Syntax) {
+  private final func visitConformanceRequirementSyntaxImpl(_ node: Syntax) {
     if visit(ConformanceRequirementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4115,7 +4115,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitConsumeExprSyntaxImpl(_ node: Syntax) {
+  private final func visitConsumeExprSyntaxImpl(_ node: Syntax) {
     if visit(ConsumeExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4123,7 +4123,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitContinueStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitContinueStmtSyntaxImpl(_ node: Syntax) {
     if visit(ContinueStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4131,7 +4131,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitCopyExprSyntaxImpl(_ node: Syntax) {
+  private final func visitCopyExprSyntaxImpl(_ node: Syntax) {
     if visit(CopyExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4139,7 +4139,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeclModifierDetailSyntaxImpl(_ node: Syntax) {
+  private final func visitDeclModifierDetailSyntaxImpl(_ node: Syntax) {
     if visit(DeclModifierDetailSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4147,7 +4147,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeclModifierListSyntaxImpl(_ node: Syntax) {
+  private final func visitDeclModifierListSyntaxImpl(_ node: Syntax) {
     if visit(DeclModifierListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4155,7 +4155,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeclModifierSyntaxImpl(_ node: Syntax) {
+  private final func visitDeclModifierSyntaxImpl(_ node: Syntax) {
     if visit(DeclModifierSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4163,7 +4163,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeclNameArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitDeclNameArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(DeclNameArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4171,7 +4171,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeclNameArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitDeclNameArgumentSyntaxImpl(_ node: Syntax) {
     if visit(DeclNameArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4179,7 +4179,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeclNameArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitDeclNameArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(DeclNameArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4187,7 +4187,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeclReferenceExprSyntaxImpl(_ node: Syntax) {
+  private final func visitDeclReferenceExprSyntaxImpl(_ node: Syntax) {
     if visit(DeclReferenceExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4195,7 +4195,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeferStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitDeferStmtSyntaxImpl(_ node: Syntax) {
     if visit(DeferStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4203,7 +4203,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeinitializerDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitDeinitializerDeclSyntaxImpl(_ node: Syntax) {
     if visit(DeinitializerDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4211,7 +4211,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDeinitializerEffectSpecifiersSyntaxImpl(_ node: Syntax) {
+  private final func visitDeinitializerEffectSpecifiersSyntaxImpl(_ node: Syntax) {
     if visit(DeinitializerEffectSpecifiersSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4219,7 +4219,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDerivativeAttributeArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitDerivativeAttributeArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(DerivativeAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4227,7 +4227,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDesignatedTypeListSyntaxImpl(_ node: Syntax) {
+  private final func visitDesignatedTypeListSyntaxImpl(_ node: Syntax) {
     if visit(DesignatedTypeListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4235,7 +4235,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDesignatedTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitDesignatedTypeSyntaxImpl(_ node: Syntax) {
     if visit(DesignatedTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4243,7 +4243,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDictionaryElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitDictionaryElementListSyntaxImpl(_ node: Syntax) {
     if visit(DictionaryElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4251,7 +4251,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDictionaryElementSyntaxImpl(_ node: Syntax) {
+  private final func visitDictionaryElementSyntaxImpl(_ node: Syntax) {
     if visit(DictionaryElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4259,7 +4259,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDictionaryExprSyntaxImpl(_ node: Syntax) {
+  private final func visitDictionaryExprSyntaxImpl(_ node: Syntax) {
     if visit(DictionaryExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4267,7 +4267,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDictionaryTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitDictionaryTypeSyntaxImpl(_ node: Syntax) {
     if visit(DictionaryTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4275,7 +4275,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDifferentiabilityArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitDifferentiabilityArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(DifferentiabilityArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4283,7 +4283,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDifferentiabilityArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitDifferentiabilityArgumentSyntaxImpl(_ node: Syntax) {
     if visit(DifferentiabilityArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4291,7 +4291,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDifferentiabilityArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitDifferentiabilityArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(DifferentiabilityArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4299,7 +4299,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDifferentiabilityWithRespectToArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitDifferentiabilityWithRespectToArgumentSyntaxImpl(_ node: Syntax) {
     if visit(DifferentiabilityWithRespectToArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4307,7 +4307,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDifferentiableAttributeArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitDifferentiableAttributeArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(DifferentiableAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4315,7 +4315,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDiscardAssignmentExprSyntaxImpl(_ node: Syntax) {
+  private final func visitDiscardAssignmentExprSyntaxImpl(_ node: Syntax) {
     if visit(DiscardAssignmentExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4323,7 +4323,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDiscardStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitDiscardStmtSyntaxImpl(_ node: Syntax) {
     if visit(DiscardStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4331,7 +4331,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDoExprSyntaxImpl(_ node: Syntax) {
+  private final func visitDoExprSyntaxImpl(_ node: Syntax) {
     if visit(DoExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4339,7 +4339,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDoStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitDoStmtSyntaxImpl(_ node: Syntax) {
     if visit(DoStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4347,7 +4347,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDocumentationAttributeArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitDocumentationAttributeArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(DocumentationAttributeArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4355,7 +4355,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDocumentationAttributeArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitDocumentationAttributeArgumentSyntaxImpl(_ node: Syntax) {
     if visit(DocumentationAttributeArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4363,7 +4363,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitDynamicReplacementAttributeArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitDynamicReplacementAttributeArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(DynamicReplacementAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4371,7 +4371,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEditorPlaceholderDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitEditorPlaceholderDeclSyntaxImpl(_ node: Syntax) {
     if visit(EditorPlaceholderDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4379,7 +4379,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEditorPlaceholderExprSyntaxImpl(_ node: Syntax) {
+  private final func visitEditorPlaceholderExprSyntaxImpl(_ node: Syntax) {
     if visit(EditorPlaceholderExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4387,7 +4387,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEffectsAttributeArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitEffectsAttributeArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(EffectsAttributeArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4395,7 +4395,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEnumCaseDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitEnumCaseDeclSyntaxImpl(_ node: Syntax) {
     if visit(EnumCaseDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4403,7 +4403,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEnumCaseElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitEnumCaseElementListSyntaxImpl(_ node: Syntax) {
     if visit(EnumCaseElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4411,7 +4411,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEnumCaseElementSyntaxImpl(_ node: Syntax) {
+  private final func visitEnumCaseElementSyntaxImpl(_ node: Syntax) {
     if visit(EnumCaseElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4419,7 +4419,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEnumCaseParameterClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitEnumCaseParameterClauseSyntaxImpl(_ node: Syntax) {
     if visit(EnumCaseParameterClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4427,7 +4427,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEnumCaseParameterListSyntaxImpl(_ node: Syntax) {
+  private final func visitEnumCaseParameterListSyntaxImpl(_ node: Syntax) {
     if visit(EnumCaseParameterListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4435,7 +4435,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEnumCaseParameterSyntaxImpl(_ node: Syntax) {
+  private final func visitEnumCaseParameterSyntaxImpl(_ node: Syntax) {
     if visit(EnumCaseParameterSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4443,7 +4443,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitEnumDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitEnumDeclSyntaxImpl(_ node: Syntax) {
     if visit(EnumDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4451,7 +4451,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitExprListSyntaxImpl(_ node: Syntax) {
+  private final func visitExprListSyntaxImpl(_ node: Syntax) {
     if visit(ExprListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4459,7 +4459,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitExpressionPatternSyntaxImpl(_ node: Syntax) {
+  private final func visitExpressionPatternSyntaxImpl(_ node: Syntax) {
     if visit(ExpressionPatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4467,7 +4467,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitExpressionSegmentSyntaxImpl(_ node: Syntax) {
+  private final func visitExpressionSegmentSyntaxImpl(_ node: Syntax) {
     if visit(ExpressionSegmentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4475,7 +4475,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitExpressionStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitExpressionStmtSyntaxImpl(_ node: Syntax) {
     if visit(ExpressionStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4483,7 +4483,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitExtensionDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitExtensionDeclSyntaxImpl(_ node: Syntax) {
     if visit(ExtensionDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4491,7 +4491,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFallThroughStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitFallThroughStmtSyntaxImpl(_ node: Syntax) {
     if visit(FallThroughStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4499,7 +4499,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFileDefaultDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitFileDefaultDeclSyntaxImpl(_ node: Syntax) {
     if visit(FileDefaultDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4507,7 +4507,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFloatLiteralExprSyntaxImpl(_ node: Syntax) {
+  private final func visitFloatLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(FloatLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4515,7 +4515,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitForStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitForStmtSyntaxImpl(_ node: Syntax) {
     if visit(ForStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4523,7 +4523,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitForceUnwrapExprSyntaxImpl(_ node: Syntax) {
+  private final func visitForceUnwrapExprSyntaxImpl(_ node: Syntax) {
     if visit(ForceUnwrapExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4531,7 +4531,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionCallExprSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionCallExprSyntaxImpl(_ node: Syntax) {
     if visit(FunctionCallExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4539,7 +4539,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionDeclSyntaxImpl(_ node: Syntax) {
     if visit(FunctionDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4547,7 +4547,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionEffectSpecifiersSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionEffectSpecifiersSyntaxImpl(_ node: Syntax) {
     if visit(FunctionEffectSpecifiersSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4555,7 +4555,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionParameterClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionParameterClauseSyntaxImpl(_ node: Syntax) {
     if visit(FunctionParameterClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4563,7 +4563,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionParameterListSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionParameterListSyntaxImpl(_ node: Syntax) {
     if visit(FunctionParameterListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4571,7 +4571,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionParameterSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionParameterSyntaxImpl(_ node: Syntax) {
     if visit(FunctionParameterSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4579,7 +4579,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionSignatureSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionSignatureSyntaxImpl(_ node: Syntax) {
     if visit(FunctionSignatureSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4587,7 +4587,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionTypeSyntaxImpl(_ node: Syntax) {
     if visit(FunctionTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4595,7 +4595,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) {
     if visit(FunctionYieldClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4603,7 +4603,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionYieldListSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionYieldListSyntaxImpl(_ node: Syntax) {
     if visit(FunctionYieldListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4611,7 +4611,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitFunctionYieldSyntaxImpl(_ node: Syntax) {
+  private final func visitFunctionYieldSyntaxImpl(_ node: Syntax) {
     if visit(FunctionYieldSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4619,7 +4619,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericArgumentClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericArgumentClauseSyntaxImpl(_ node: Syntax) {
     if visit(GenericArgumentClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4627,7 +4627,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(GenericArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4635,7 +4635,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericArgumentSyntaxImpl(_ node: Syntax) {
     if visit(GenericArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4643,7 +4643,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericParameterClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericParameterClauseSyntaxImpl(_ node: Syntax) {
     if visit(GenericParameterClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4651,7 +4651,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericParameterListSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericParameterListSyntaxImpl(_ node: Syntax) {
     if visit(GenericParameterListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4659,7 +4659,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericParameterSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericParameterSyntaxImpl(_ node: Syntax) {
     if visit(GenericParameterSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4667,7 +4667,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericRequirementListSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericRequirementListSyntaxImpl(_ node: Syntax) {
     if visit(GenericRequirementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4675,7 +4675,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericRequirementSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericRequirementSyntaxImpl(_ node: Syntax) {
     if visit(GenericRequirementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4683,7 +4683,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericSpecializationExprSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericSpecializationExprSyntaxImpl(_ node: Syntax) {
     if visit(GenericSpecializationExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4691,7 +4691,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGenericWhereClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitGenericWhereClauseSyntaxImpl(_ node: Syntax) {
     if visit(GenericWhereClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4699,7 +4699,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitGuardStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitGuardStmtSyntaxImpl(_ node: Syntax) {
     if visit(GuardStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4707,7 +4707,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIdentifierPatternSyntaxImpl(_ node: Syntax) {
+  private final func visitIdentifierPatternSyntaxImpl(_ node: Syntax) {
     if visit(IdentifierPatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4715,7 +4715,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIdentifierTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitIdentifierTypeSyntaxImpl(_ node: Syntax) {
     if visit(IdentifierTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4723,7 +4723,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIfConfigClauseListSyntaxImpl(_ node: Syntax) {
+  private final func visitIfConfigClauseListSyntaxImpl(_ node: Syntax) {
     if visit(IfConfigClauseListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4731,7 +4731,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIfConfigClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitIfConfigClauseSyntaxImpl(_ node: Syntax) {
     if visit(IfConfigClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4739,7 +4739,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIfConfigDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitIfConfigDeclSyntaxImpl(_ node: Syntax) {
     if visit(IfConfigDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4747,7 +4747,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIfExprSyntaxImpl(_ node: Syntax) {
+  private final func visitIfExprSyntaxImpl(_ node: Syntax) {
     if visit(IfExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4755,7 +4755,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitImplementsAttributeArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitImplementsAttributeArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(ImplementsAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4763,7 +4763,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitImplicitlyUnwrappedOptionalTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitImplicitlyUnwrappedOptionalTypeSyntaxImpl(_ node: Syntax) {
     if visit(ImplicitlyUnwrappedOptionalTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4771,7 +4771,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitImportDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitImportDeclSyntaxImpl(_ node: Syntax) {
     if visit(ImportDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4779,7 +4779,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitImportPathComponentListSyntaxImpl(_ node: Syntax) {
+  private final func visitImportPathComponentListSyntaxImpl(_ node: Syntax) {
     if visit(ImportPathComponentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4787,7 +4787,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitImportPathComponentSyntaxImpl(_ node: Syntax) {
+  private final func visitImportPathComponentSyntaxImpl(_ node: Syntax) {
     if visit(ImportPathComponentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4795,7 +4795,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInOutExprSyntaxImpl(_ node: Syntax) {
+  private final func visitInOutExprSyntaxImpl(_ node: Syntax) {
     if visit(InOutExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4803,7 +4803,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInfixOperatorExprSyntaxImpl(_ node: Syntax) {
+  private final func visitInfixOperatorExprSyntaxImpl(_ node: Syntax) {
     if visit(InfixOperatorExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4811,7 +4811,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInheritanceClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitInheritanceClauseSyntaxImpl(_ node: Syntax) {
     if visit(InheritanceClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4819,7 +4819,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInheritedTypeListSyntaxImpl(_ node: Syntax) {
+  private final func visitInheritedTypeListSyntaxImpl(_ node: Syntax) {
     if visit(InheritedTypeListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4827,7 +4827,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInheritedTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitInheritedTypeSyntaxImpl(_ node: Syntax) {
     if visit(InheritedTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4835,7 +4835,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInitializerClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitInitializerClauseSyntaxImpl(_ node: Syntax) {
     if visit(InitializerClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4843,7 +4843,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInitializerDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitInitializerDeclSyntaxImpl(_ node: Syntax) {
     if visit(InitializerDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4851,7 +4851,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitInlineArrayTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitInlineArrayTypeSyntaxImpl(_ node: Syntax) {
     if visit(InlineArrayTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4859,7 +4859,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIntegerLiteralExprSyntaxImpl(_ node: Syntax) {
+  private final func visitIntegerLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(IntegerLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4867,7 +4867,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIsExprSyntaxImpl(_ node: Syntax) {
+  private final func visitIsExprSyntaxImpl(_ node: Syntax) {
     if visit(IsExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4875,7 +4875,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitIsTypePatternSyntaxImpl(_ node: Syntax) {
+  private final func visitIsTypePatternSyntaxImpl(_ node: Syntax) {
     if visit(IsTypePatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4883,7 +4883,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitKeyPathComponentListSyntaxImpl(_ node: Syntax) {
+  private final func visitKeyPathComponentListSyntaxImpl(_ node: Syntax) {
     if visit(KeyPathComponentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4891,7 +4891,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitKeyPathComponentSyntaxImpl(_ node: Syntax) {
+  private final func visitKeyPathComponentSyntaxImpl(_ node: Syntax) {
     if visit(KeyPathComponentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4899,7 +4899,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitKeyPathExprSyntaxImpl(_ node: Syntax) {
+  private final func visitKeyPathExprSyntaxImpl(_ node: Syntax) {
     if visit(KeyPathExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4907,7 +4907,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitKeyPathMethodComponentSyntaxImpl(_ node: Syntax) {
+  private final func visitKeyPathMethodComponentSyntaxImpl(_ node: Syntax) {
     if visit(KeyPathMethodComponentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4915,7 +4915,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitKeyPathOptionalComponentSyntaxImpl(_ node: Syntax) {
+  private final func visitKeyPathOptionalComponentSyntaxImpl(_ node: Syntax) {
     if visit(KeyPathOptionalComponentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4923,7 +4923,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitKeyPathPropertyComponentSyntaxImpl(_ node: Syntax) {
+  private final func visitKeyPathPropertyComponentSyntaxImpl(_ node: Syntax) {
     if visit(KeyPathPropertyComponentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4931,7 +4931,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitKeyPathSubscriptComponentSyntaxImpl(_ node: Syntax) {
+  private final func visitKeyPathSubscriptComponentSyntaxImpl(_ node: Syntax) {
     if visit(KeyPathSubscriptComponentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4939,7 +4939,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLabeledExprListSyntaxImpl(_ node: Syntax) {
+  private final func visitLabeledExprListSyntaxImpl(_ node: Syntax) {
     if visit(LabeledExprListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4947,7 +4947,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLabeledExprSyntaxImpl(_ node: Syntax) {
+  private final func visitLabeledExprSyntaxImpl(_ node: Syntax) {
     if visit(LabeledExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4955,7 +4955,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLabeledSpecializeArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitLabeledSpecializeArgumentSyntaxImpl(_ node: Syntax) {
     if visit(LabeledSpecializeArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4963,7 +4963,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLabeledStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitLabeledStmtSyntaxImpl(_ node: Syntax) {
     if visit(LabeledStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4971,7 +4971,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLayoutRequirementSyntaxImpl(_ node: Syntax) {
+  private final func visitLayoutRequirementSyntaxImpl(_ node: Syntax) {
     if visit(LayoutRequirementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4979,7 +4979,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLifetimeSpecifierArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitLifetimeSpecifierArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(LifetimeSpecifierArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4987,7 +4987,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLifetimeSpecifierArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitLifetimeSpecifierArgumentSyntaxImpl(_ node: Syntax) {
     if visit(LifetimeSpecifierArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -4995,7 +4995,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitLifetimeTypeSpecifierSyntaxImpl(_ node: Syntax) {
+  private final func visitLifetimeTypeSpecifierSyntaxImpl(_ node: Syntax) {
     if visit(LifetimeTypeSpecifierSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5003,7 +5003,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMacroDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitMacroDeclSyntaxImpl(_ node: Syntax) {
     if visit(MacroDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5011,7 +5011,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMacroExpansionDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitMacroExpansionDeclSyntaxImpl(_ node: Syntax) {
     if visit(MacroExpansionDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5019,7 +5019,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMacroExpansionExprSyntaxImpl(_ node: Syntax) {
+  private final func visitMacroExpansionExprSyntaxImpl(_ node: Syntax) {
     if visit(MacroExpansionExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5027,7 +5027,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMatchingPatternConditionSyntaxImpl(_ node: Syntax) {
+  private final func visitMatchingPatternConditionSyntaxImpl(_ node: Syntax) {
     if visit(MatchingPatternConditionSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5035,7 +5035,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMemberAccessExprSyntaxImpl(_ node: Syntax) {
+  private final func visitMemberAccessExprSyntaxImpl(_ node: Syntax) {
     if visit(MemberAccessExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5043,7 +5043,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMemberBlockItemListFileSyntaxImpl(_ node: Syntax) {
+  private final func visitMemberBlockItemListFileSyntaxImpl(_ node: Syntax) {
     if visit(MemberBlockItemListFileSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5051,7 +5051,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMemberBlockItemListSyntaxImpl(_ node: Syntax) {
+  private final func visitMemberBlockItemListSyntaxImpl(_ node: Syntax) {
     if visit(MemberBlockItemListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5059,7 +5059,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMemberBlockItemSyntaxImpl(_ node: Syntax) {
+  private final func visitMemberBlockItemSyntaxImpl(_ node: Syntax) {
     if visit(MemberBlockItemSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5067,7 +5067,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMemberBlockSyntaxImpl(_ node: Syntax) {
+  private final func visitMemberBlockSyntaxImpl(_ node: Syntax) {
     if visit(MemberBlockSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5075,7 +5075,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMemberTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitMemberTypeSyntaxImpl(_ node: Syntax) {
     if visit(MemberTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5083,7 +5083,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMetatypeTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitMetatypeTypeSyntaxImpl(_ node: Syntax) {
     if visit(MetatypeTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5091,7 +5091,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMissingDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitMissingDeclSyntaxImpl(_ node: Syntax) {
     if visit(MissingDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5099,7 +5099,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMissingExprSyntaxImpl(_ node: Syntax) {
+  private final func visitMissingExprSyntaxImpl(_ node: Syntax) {
     if visit(MissingExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5107,7 +5107,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMissingPatternSyntaxImpl(_ node: Syntax) {
+  private final func visitMissingPatternSyntaxImpl(_ node: Syntax) {
     if visit(MissingPatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5115,7 +5115,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMissingStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitMissingStmtSyntaxImpl(_ node: Syntax) {
     if visit(MissingStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5123,7 +5123,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMissingSyntaxImpl(_ node: Syntax) {
+  private final func visitMissingSyntaxImpl(_ node: Syntax) {
     if visit(MissingSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5131,7 +5131,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMissingTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitMissingTypeSyntaxImpl(_ node: Syntax) {
     if visit(MissingTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5139,7 +5139,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitModuleSelectorSyntaxImpl(_ node: Syntax) {
+  private final func visitModuleSelectorSyntaxImpl(_ node: Syntax) {
     if visit(ModuleSelectorSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5147,7 +5147,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMultipleTrailingClosureElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitMultipleTrailingClosureElementListSyntaxImpl(_ node: Syntax) {
     if visit(MultipleTrailingClosureElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5155,7 +5155,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitMultipleTrailingClosureElementSyntaxImpl(_ node: Syntax) {
+  private final func visitMultipleTrailingClosureElementSyntaxImpl(_ node: Syntax) {
     if visit(MultipleTrailingClosureElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5163,7 +5163,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitNamedOpaqueReturnTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitNamedOpaqueReturnTypeSyntaxImpl(_ node: Syntax) {
     if visit(NamedOpaqueReturnTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5171,7 +5171,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitNilLiteralExprSyntaxImpl(_ node: Syntax) {
+  private final func visitNilLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(NilLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5179,7 +5179,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) {
     if visit(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5187,7 +5187,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) {
+  private final func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) {
     if visit(NonisolatedTypeSpecifierSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5195,7 +5195,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) {
+  private final func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) {
     if visit(ObjCSelectorPieceListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5203,7 +5203,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitObjCSelectorPieceSyntaxImpl(_ node: Syntax) {
+  private final func visitObjCSelectorPieceSyntaxImpl(_ node: Syntax) {
     if visit(ObjCSelectorPieceSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5211,7 +5211,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitOperatorDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitOperatorDeclSyntaxImpl(_ node: Syntax) {
     if visit(OperatorDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5219,7 +5219,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitOperatorPrecedenceAndTypesSyntaxImpl(_ node: Syntax) {
+  private final func visitOperatorPrecedenceAndTypesSyntaxImpl(_ node: Syntax) {
     if visit(OperatorPrecedenceAndTypesSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5227,7 +5227,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitOptionalBindingConditionSyntaxImpl(_ node: Syntax) {
+  private final func visitOptionalBindingConditionSyntaxImpl(_ node: Syntax) {
     if visit(OptionalBindingConditionSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5235,7 +5235,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitOptionalChainingExprSyntaxImpl(_ node: Syntax) {
+  private final func visitOptionalChainingExprSyntaxImpl(_ node: Syntax) {
     if visit(OptionalChainingExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5243,7 +5243,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitOptionalTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitOptionalTypeSyntaxImpl(_ node: Syntax) {
     if visit(OptionalTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5251,7 +5251,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitOriginallyDefinedInAttributeArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitOriginallyDefinedInAttributeArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(OriginallyDefinedInAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5259,7 +5259,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPackElementExprSyntaxImpl(_ node: Syntax) {
+  private final func visitPackElementExprSyntaxImpl(_ node: Syntax) {
     if visit(PackElementExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5267,7 +5267,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPackElementTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitPackElementTypeSyntaxImpl(_ node: Syntax) {
     if visit(PackElementTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5275,7 +5275,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPackExpansionExprSyntaxImpl(_ node: Syntax) {
+  private final func visitPackExpansionExprSyntaxImpl(_ node: Syntax) {
     if visit(PackExpansionExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5283,7 +5283,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPackExpansionTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitPackExpansionTypeSyntaxImpl(_ node: Syntax) {
     if visit(PackExpansionTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5291,7 +5291,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPatternBindingListSyntaxImpl(_ node: Syntax) {
+  private final func visitPatternBindingListSyntaxImpl(_ node: Syntax) {
     if visit(PatternBindingListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5299,7 +5299,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPatternBindingSyntaxImpl(_ node: Syntax) {
+  private final func visitPatternBindingSyntaxImpl(_ node: Syntax) {
     if visit(PatternBindingSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5307,7 +5307,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPatternExprSyntaxImpl(_ node: Syntax) {
+  private final func visitPatternExprSyntaxImpl(_ node: Syntax) {
     if visit(PatternExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5315,7 +5315,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPlatformVersionItemListSyntaxImpl(_ node: Syntax) {
+  private final func visitPlatformVersionItemListSyntaxImpl(_ node: Syntax) {
     if visit(PlatformVersionItemListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5323,7 +5323,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPlatformVersionItemSyntaxImpl(_ node: Syntax) {
+  private final func visitPlatformVersionItemSyntaxImpl(_ node: Syntax) {
     if visit(PlatformVersionItemSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5331,7 +5331,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPlatformVersionSyntaxImpl(_ node: Syntax) {
+  private final func visitPlatformVersionSyntaxImpl(_ node: Syntax) {
     if visit(PlatformVersionSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5339,7 +5339,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPostfixIfConfigExprSyntaxImpl(_ node: Syntax) {
+  private final func visitPostfixIfConfigExprSyntaxImpl(_ node: Syntax) {
     if visit(PostfixIfConfigExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5347,7 +5347,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPostfixOperatorExprSyntaxImpl(_ node: Syntax) {
+  private final func visitPostfixOperatorExprSyntaxImpl(_ node: Syntax) {
     if visit(PostfixOperatorExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5355,7 +5355,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPoundSourceLocationArgumentsSyntaxImpl(_ node: Syntax) {
+  private final func visitPoundSourceLocationArgumentsSyntaxImpl(_ node: Syntax) {
     if visit(PoundSourceLocationArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5363,7 +5363,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPoundSourceLocationSyntaxImpl(_ node: Syntax) {
+  private final func visitPoundSourceLocationSyntaxImpl(_ node: Syntax) {
     if visit(PoundSourceLocationSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5371,7 +5371,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrecedenceGroupAssignmentSyntaxImpl(_ node: Syntax) {
+  private final func visitPrecedenceGroupAssignmentSyntaxImpl(_ node: Syntax) {
     if visit(PrecedenceGroupAssignmentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5379,7 +5379,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrecedenceGroupAssociativitySyntaxImpl(_ node: Syntax) {
+  private final func visitPrecedenceGroupAssociativitySyntaxImpl(_ node: Syntax) {
     if visit(PrecedenceGroupAssociativitySyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5387,7 +5387,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrecedenceGroupAttributeListSyntaxImpl(_ node: Syntax) {
+  private final func visitPrecedenceGroupAttributeListSyntaxImpl(_ node: Syntax) {
     if visit(PrecedenceGroupAttributeListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5395,7 +5395,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrecedenceGroupDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitPrecedenceGroupDeclSyntaxImpl(_ node: Syntax) {
     if visit(PrecedenceGroupDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5403,7 +5403,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrecedenceGroupNameListSyntaxImpl(_ node: Syntax) {
+  private final func visitPrecedenceGroupNameListSyntaxImpl(_ node: Syntax) {
     if visit(PrecedenceGroupNameListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5411,7 +5411,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrecedenceGroupNameSyntaxImpl(_ node: Syntax) {
+  private final func visitPrecedenceGroupNameSyntaxImpl(_ node: Syntax) {
     if visit(PrecedenceGroupNameSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5419,7 +5419,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrecedenceGroupRelationSyntaxImpl(_ node: Syntax) {
+  private final func visitPrecedenceGroupRelationSyntaxImpl(_ node: Syntax) {
     if visit(PrecedenceGroupRelationSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5427,7 +5427,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrefixOperatorExprSyntaxImpl(_ node: Syntax) {
+  private final func visitPrefixOperatorExprSyntaxImpl(_ node: Syntax) {
     if visit(PrefixOperatorExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5435,7 +5435,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrimaryAssociatedTypeClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitPrimaryAssociatedTypeClauseSyntaxImpl(_ node: Syntax) {
     if visit(PrimaryAssociatedTypeClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5443,7 +5443,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrimaryAssociatedTypeListSyntaxImpl(_ node: Syntax) {
+  private final func visitPrimaryAssociatedTypeListSyntaxImpl(_ node: Syntax) {
     if visit(PrimaryAssociatedTypeListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5451,7 +5451,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitPrimaryAssociatedTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitPrimaryAssociatedTypeSyntaxImpl(_ node: Syntax) {
     if visit(PrimaryAssociatedTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5459,7 +5459,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitProtocolDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitProtocolDeclSyntaxImpl(_ node: Syntax) {
     if visit(ProtocolDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5467,7 +5467,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitRegexLiteralExprSyntaxImpl(_ node: Syntax) {
+  private final func visitRegexLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(RegexLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5475,7 +5475,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitRepeatStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitRepeatStmtSyntaxImpl(_ node: Syntax) {
     if visit(RepeatStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5483,7 +5483,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitReturnClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitReturnClauseSyntaxImpl(_ node: Syntax) {
     if visit(ReturnClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5491,7 +5491,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitReturnStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitReturnStmtSyntaxImpl(_ node: Syntax) {
     if visit(ReturnStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5499,7 +5499,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSameTypeRequirementSyntaxImpl(_ node: Syntax) {
+  private final func visitSameTypeRequirementSyntaxImpl(_ node: Syntax) {
     if visit(SameTypeRequirementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5507,7 +5507,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSectionAttributeArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitSectionAttributeArgumentSyntaxImpl(_ node: Syntax) {
     if visit(SectionAttributeArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5515,7 +5515,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSequenceExprSyntaxImpl(_ node: Syntax) {
+  private final func visitSequenceExprSyntaxImpl(_ node: Syntax) {
     if visit(SequenceExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5523,7 +5523,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSimpleStringLiteralExprSyntaxImpl(_ node: Syntax) {
+  private final func visitSimpleStringLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(SimpleStringLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5531,7 +5531,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSimpleStringLiteralSegmentListSyntaxImpl(_ node: Syntax) {
+  private final func visitSimpleStringLiteralSegmentListSyntaxImpl(_ node: Syntax) {
     if visit(SimpleStringLiteralSegmentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5539,7 +5539,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSimpleTypeSpecifierSyntaxImpl(_ node: Syntax) {
+  private final func visitSimpleTypeSpecifierSyntaxImpl(_ node: Syntax) {
     if visit(SimpleTypeSpecifierSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5547,7 +5547,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSomeOrAnyTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitSomeOrAnyTypeSyntaxImpl(_ node: Syntax) {
     if visit(SomeOrAnyTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5555,7 +5555,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSourceFileSyntaxImpl(_ node: Syntax) {
+  private final func visitSourceFileSyntaxImpl(_ node: Syntax) {
     if visit(SourceFileSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5563,7 +5563,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSpecializeAttributeArgumentListSyntaxImpl(_ node: Syntax) {
+  private final func visitSpecializeAttributeArgumentListSyntaxImpl(_ node: Syntax) {
     if visit(SpecializeAttributeArgumentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5571,7 +5571,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSpecializeAvailabilityArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitSpecializeAvailabilityArgumentSyntaxImpl(_ node: Syntax) {
     if visit(SpecializeAvailabilityArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5579,7 +5579,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSpecializeTargetFunctionArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitSpecializeTargetFunctionArgumentSyntaxImpl(_ node: Syntax) {
     if visit(SpecializeTargetFunctionArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5587,7 +5587,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) {
+  private final func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) {
     if visit(SpecializedAttributeArgumentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5595,7 +5595,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitStringLiteralExprSyntaxImpl(_ node: Syntax) {
+  private final func visitStringLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(StringLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5603,7 +5603,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitStringLiteralSegmentListSyntaxImpl(_ node: Syntax) {
+  private final func visitStringLiteralSegmentListSyntaxImpl(_ node: Syntax) {
     if visit(StringLiteralSegmentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5611,7 +5611,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitStringSegmentSyntaxImpl(_ node: Syntax) {
+  private final func visitStringSegmentSyntaxImpl(_ node: Syntax) {
     if visit(StringSegmentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5619,7 +5619,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitStructDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitStructDeclSyntaxImpl(_ node: Syntax) {
     if visit(StructDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5627,7 +5627,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSubscriptCallExprSyntaxImpl(_ node: Syntax) {
+  private final func visitSubscriptCallExprSyntaxImpl(_ node: Syntax) {
     if visit(SubscriptCallExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5635,7 +5635,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSubscriptDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitSubscriptDeclSyntaxImpl(_ node: Syntax) {
     if visit(SubscriptDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5643,7 +5643,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSuperExprSyntaxImpl(_ node: Syntax) {
+  private final func visitSuperExprSyntaxImpl(_ node: Syntax) {
     if visit(SuperExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5651,7 +5651,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSuppressedTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitSuppressedTypeSyntaxImpl(_ node: Syntax) {
     if visit(SuppressedTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5659,7 +5659,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSwitchCaseItemListSyntaxImpl(_ node: Syntax) {
+  private final func visitSwitchCaseItemListSyntaxImpl(_ node: Syntax) {
     if visit(SwitchCaseItemListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5667,7 +5667,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSwitchCaseItemSyntaxImpl(_ node: Syntax) {
+  private final func visitSwitchCaseItemSyntaxImpl(_ node: Syntax) {
     if visit(SwitchCaseItemSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5675,7 +5675,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSwitchCaseLabelSyntaxImpl(_ node: Syntax) {
+  private final func visitSwitchCaseLabelSyntaxImpl(_ node: Syntax) {
     if visit(SwitchCaseLabelSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5683,7 +5683,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSwitchCaseListSyntaxImpl(_ node: Syntax) {
+  private final func visitSwitchCaseListSyntaxImpl(_ node: Syntax) {
     if visit(SwitchCaseListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5691,7 +5691,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSwitchCaseSyntaxImpl(_ node: Syntax) {
+  private final func visitSwitchCaseSyntaxImpl(_ node: Syntax) {
     if visit(SwitchCaseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5699,7 +5699,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSwitchDefaultLabelSyntaxImpl(_ node: Syntax) {
+  private final func visitSwitchDefaultLabelSyntaxImpl(_ node: Syntax) {
     if visit(SwitchDefaultLabelSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5707,7 +5707,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitSwitchExprSyntaxImpl(_ node: Syntax) {
+  private final func visitSwitchExprSyntaxImpl(_ node: Syntax) {
     if visit(SwitchExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5715,7 +5715,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTernaryExprSyntaxImpl(_ node: Syntax) {
+  private final func visitTernaryExprSyntaxImpl(_ node: Syntax) {
     if visit(TernaryExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5723,7 +5723,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitThenStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitThenStmtSyntaxImpl(_ node: Syntax) {
     if visit(ThenStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5731,7 +5731,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitThrowStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitThrowStmtSyntaxImpl(_ node: Syntax) {
     if visit(ThrowStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5739,7 +5739,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitThrowsClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitThrowsClauseSyntaxImpl(_ node: Syntax) {
     if visit(ThrowsClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5747,7 +5747,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTryExprSyntaxImpl(_ node: Syntax) {
+  private final func visitTryExprSyntaxImpl(_ node: Syntax) {
     if visit(TryExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5755,7 +5755,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTupleExprSyntaxImpl(_ node: Syntax) {
+  private final func visitTupleExprSyntaxImpl(_ node: Syntax) {
     if visit(TupleExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5763,7 +5763,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTuplePatternElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitTuplePatternElementListSyntaxImpl(_ node: Syntax) {
     if visit(TuplePatternElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5771,7 +5771,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTuplePatternElementSyntaxImpl(_ node: Syntax) {
+  private final func visitTuplePatternElementSyntaxImpl(_ node: Syntax) {
     if visit(TuplePatternElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5779,7 +5779,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTuplePatternSyntaxImpl(_ node: Syntax) {
+  private final func visitTuplePatternSyntaxImpl(_ node: Syntax) {
     if visit(TuplePatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5787,7 +5787,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTupleTypeElementListSyntaxImpl(_ node: Syntax) {
+  private final func visitTupleTypeElementListSyntaxImpl(_ node: Syntax) {
     if visit(TupleTypeElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5795,7 +5795,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTupleTypeElementSyntaxImpl(_ node: Syntax) {
+  private final func visitTupleTypeElementSyntaxImpl(_ node: Syntax) {
     if visit(TupleTypeElementSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5803,7 +5803,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTupleTypeSyntaxImpl(_ node: Syntax) {
+  private final func visitTupleTypeSyntaxImpl(_ node: Syntax) {
     if visit(TupleTypeSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5811,7 +5811,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTypeAliasDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitTypeAliasDeclSyntaxImpl(_ node: Syntax) {
     if visit(TypeAliasDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5819,7 +5819,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTypeAnnotationSyntaxImpl(_ node: Syntax) {
+  private final func visitTypeAnnotationSyntaxImpl(_ node: Syntax) {
     if visit(TypeAnnotationSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5827,7 +5827,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTypeEffectSpecifiersSyntaxImpl(_ node: Syntax) {
+  private final func visitTypeEffectSpecifiersSyntaxImpl(_ node: Syntax) {
     if visit(TypeEffectSpecifiersSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5835,7 +5835,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTypeExprSyntaxImpl(_ node: Syntax) {
+  private final func visitTypeExprSyntaxImpl(_ node: Syntax) {
     if visit(TypeExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5843,7 +5843,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTypeInitializerClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitTypeInitializerClauseSyntaxImpl(_ node: Syntax) {
     if visit(TypeInitializerClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5851,7 +5851,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitTypeSpecifierListSyntaxImpl(_ node: Syntax) {
+  private final func visitTypeSpecifierListSyntaxImpl(_ node: Syntax) {
     if visit(TypeSpecifierListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5859,7 +5859,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUnexpectedCodeDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitUnexpectedCodeDeclSyntaxImpl(_ node: Syntax) {
     if visit(UnexpectedCodeDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5867,7 +5867,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) {
+  private final func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) {
     if visit(UnexpectedNodesSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5875,7 +5875,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUnresolvedAsExprSyntaxImpl(_ node: Syntax) {
+  private final func visitUnresolvedAsExprSyntaxImpl(_ node: Syntax) {
     if visit(UnresolvedAsExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5883,7 +5883,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUnresolvedIsExprSyntaxImpl(_ node: Syntax) {
+  private final func visitUnresolvedIsExprSyntaxImpl(_ node: Syntax) {
     if visit(UnresolvedIsExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5891,7 +5891,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUnresolvedTernaryExprSyntaxImpl(_ node: Syntax) {
+  private final func visitUnresolvedTernaryExprSyntaxImpl(_ node: Syntax) {
     if visit(UnresolvedTernaryExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5899,7 +5899,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUnsafeExprSyntaxImpl(_ node: Syntax) {
+  private final func visitUnsafeExprSyntaxImpl(_ node: Syntax) {
     if visit(UnsafeExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5907,7 +5907,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) {
+  private final func visitValueBindingPatternSyntaxImpl(_ node: Syntax) {
     if visit(ValueBindingPatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5915,7 +5915,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitVariableDeclSyntaxImpl(_ node: Syntax) {
+  private final func visitVariableDeclSyntaxImpl(_ node: Syntax) {
     if visit(VariableDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5923,7 +5923,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitVersionComponentListSyntaxImpl(_ node: Syntax) {
+  private final func visitVersionComponentListSyntaxImpl(_ node: Syntax) {
     if visit(VersionComponentListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5931,7 +5931,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitVersionComponentSyntaxImpl(_ node: Syntax) {
+  private final func visitVersionComponentSyntaxImpl(_ node: Syntax) {
     if visit(VersionComponentSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5939,7 +5939,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitVersionTupleSyntaxImpl(_ node: Syntax) {
+  private final func visitVersionTupleSyntaxImpl(_ node: Syntax) {
     if visit(VersionTupleSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5947,7 +5947,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitWhereClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitWhereClauseSyntaxImpl(_ node: Syntax) {
     if visit(WhereClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5955,7 +5955,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitWhileStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitWhileStmtSyntaxImpl(_ node: Syntax) {
     if visit(WhileStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5963,7 +5963,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitWildcardPatternSyntaxImpl(_ node: Syntax) {
+  private final func visitWildcardPatternSyntaxImpl(_ node: Syntax) {
     if visit(WildcardPatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5971,7 +5971,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitYieldStmtSyntaxImpl(_ node: Syntax) {
+  private final func visitYieldStmtSyntaxImpl(_ node: Syntax) {
     if visit(YieldStmtSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5979,7 +5979,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitYieldedExpressionListSyntaxImpl(_ node: Syntax) {
+  private final func visitYieldedExpressionListSyntaxImpl(_ node: Syntax) {
     if visit(YieldedExpressionListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5987,7 +5987,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitYieldedExpressionSyntaxImpl(_ node: Syntax) {
+  private final func visitYieldedExpressionSyntaxImpl(_ node: Syntax) {
     if visit(YieldedExpressionSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -5995,7 +5995,7 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitYieldedExpressionsClauseSyntaxImpl(_ node: Syntax) {
+  private final func visitYieldedExpressionsClauseSyntaxImpl(_ node: Syntax) {
     if visit(YieldedExpressionsClauseSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
@@ -6026,7 +6026,7 @@ open class SyntaxVisitor {
   /// that determines the correct visitation function will be popped of the
   /// stack before the function is being called, making the switch's stack
   /// space transient instead of having it linger in the call stack.
-  private func visitationFunc(for node: Syntax) -> (Syntax) -> Void {
+  private final func visitationFunc(for node: Syntax) -> (Syntax) -> Void {
     switch node.raw.kind {
     case .token:
       return self.visitTokenSyntaxImpl(_:)
@@ -6624,11 +6624,11 @@ open class SyntaxVisitor {
       return self.visitYieldedExpressionsClauseSyntaxImpl(_:)
     }
   }
-  private func dispatchVisit(_ node: Syntax) {
+  private final func dispatchVisit(_ node: Syntax) {
     return visitationFunc(for: node)(node)
   }
   #else
-  private func dispatchVisit(_ node: Syntax) {
+  private final func dispatchVisit(_ node: Syntax) {
     switch node.raw.kind {
     case .token:
       self.visitTokenSyntaxImpl(node)
@@ -7228,7 +7228,7 @@ open class SyntaxVisitor {
   }
   #endif
 
-  private func visitChildren(_ node: Syntax) {
+  private final func visitChildren(_ node: Syntax) {
     for case let childDataRef? in node.layoutBuffer where viewMode.shouldTraverse(node: childDataRef.pointee.raw) {
       dispatchVisit(Syntax(arena: node.arena, dataRef: childDataRef))
     }

@@ -303,7 +303,7 @@ extension TypeGraph {
       dependencyTypeName: TypeGraph.GlobalTypeName,
       members: [(name: Identifier, decls: [Member])]
     ) {
-      TypeGraph.internalAssert(!members.isEmpty, .emptyDependencyMembers)
+      assert(!members.isEmpty, "`members` must be nonempty")
 
       self.baseTypeName = dependencyTypeName
       self.members = members
@@ -469,8 +469,7 @@ extension TypeGraph {
 // MARK: Invariants
 
 extension TypeGraph {
-  /// The first cases are spec invariants (see `_firstInvariantViolation`); the
-  /// rest are cheap, targeted mutation-primitive preconditions that pinpoint the failing caller.
+  /// Specification invariants (see `_firstInvariantViolation`)
   @_spi(_QualifiedLookupTests)
   public enum GraphFailure {
     /// A nominal-type declaration is admitted under more than one name.
@@ -506,82 +505,6 @@ extension TypeGraph {
     /// A bound extension's recursive dependencies rely on a member that the
     /// extension introduces.
     case dependencyCycle
-
-    /// In `_addType`, the given type is already admitted.
-    case typeReadmission
-    /// In `_addType`, the given type declaration isn't in the `SymbolTable`.
-    case unknownTypeFile
-    /// In `_addType`, the base declaration group is invalid. One of the
-    /// following happened:
-    /// 1. We have a nested name but `baseDeclGroup == nil`
-    /// 2. The base declaratin group is a nominal type that's not admitted.
-    /// 3. The base declaration group is an extension that's not admitted
-    ///    or not bound to the base type name.
-    case invalidBaseDeclGroup
-
-    /// In `_removeType`, the given type isn't admitted.
-    case invalidType
-    /// In `_removeType`, the given type still has bound extensions.
-    case remainingTypeExtensions
-    /// In `_removeType`, the given type still has dependents.
-    case remainingTypeDependents
-    /// In `_removeType`, the given type still has admitted nominal member types.
-    case remainingTypeMembers
-    /// In `_removeType`, the extracted file info for `nominalDecl` doesn't match
-    /// the type's main decl.
-    case invalidFileInfo
-
-    /// In `_addExtension`, the given extension is already admitted.
-    case extensionReadmission
-    /// In `_addExtension`, the given extension declaration isn't in the
-    /// `SymbolTable`.
-    case unknownExtensionFile
-    /// In `_addExtension`, the extension's resolved type isn't admitted.
-    case invalidExtendedType
-    /// In `_addExtension`, `QualifiedLookupDependency/extendedTypeName` refers to an unadmitted type.
-    case invalidDependencyType
-
-    /// In `_removeExtension`, the extension isn't admitted.
-    case invalidExtension
-    /// In `_removeExtension`, the given extension's type members still have dependents.
-    case remainingExtensionDependents
-    /// In `_removeExtension`, the given extension still has admitted nominal member types.
-    case remainingExtensionMembers
-
-    /// In `_evictDependents`, `dependencyTypeName` isn't admitted.
-    case evictedDependencyType
-
-    /// In `_CycleDetectorFrame/push`, the frame pushes an extension
-    /// right after a descent without advancing the index.
-    ///
-    /// Explanation: Without advancing, we'll infinitely descend into the same decl.
-    case cycleDetectorRedescent
-
-    /// In `ExtensionDependency.init(dependencyTypeName:members:)`, the given
-    /// `members` is empty.
-    case emptyDependencyMembers
-  }
-
-  private static func internalAssert(
-    _ condition: @autoclosure () -> Bool,
-    _ error: GraphFailure,
-    file: StaticString = #file,
-    line: UInt = #line
-  ) {
-    #if DEBUG
-    if !condition() {
-      Self.internalError(error, resultType: Never.self, file: file, line: line)
-    }
-    #endif
-  }
-
-  private static func internalError<T>(
-    _ error: GraphFailure,
-    resultType: T.Type = T.self,
-    file: StaticString = #file,
-    line: UInt = #line
-  ) -> T {
-    fatalError("[SwiftLexicalLookup] Internal error: \(error)", file: file, line: line)
   }
 }
 

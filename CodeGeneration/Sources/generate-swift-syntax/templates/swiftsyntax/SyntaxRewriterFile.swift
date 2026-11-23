@@ -64,7 +64,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       /// Rewrite `node`, keeping its parent unless `detach` is `true`.
-      public final func rewrite(_ node: some SyntaxProtocol, detach: Bool = false) -> Syntax {
+      public func rewrite(_ node: some SyntaxProtocol, detach: Bool = false) -> Syntax {
         let rewritten = self.visitImpl(Syntax(node))
         if detach {
           return rewritten
@@ -83,7 +83,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       ///   - Parameter node: the node that is being visited
       ///   - Returns: the rewritten node
       @available(*, deprecated, renamed: "rewrite(_:detach:)")
-      public final func visit(_ node: Syntax) -> Syntax {
+      public func visit(_ node: Syntax) -> Syntax {
         return visitImpl(node)
       }
       """
@@ -91,7 +91,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      public final func visit<T: SyntaxChildChoices>(_ node: T) -> T {
+      public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
         visitImpl(Syntax(node)).cast(T.self)
       }
       """
@@ -180,7 +180,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         ///   - Parameter node: the node that is being visited
         ///   - Returns: the rewritten node
         \(baseNode.apiAttributes())\
-        public final func visit(_ node: \(baseKind.syntaxType)) -> \(baseKind.syntaxType) {
+        public func visit(_ node: \(baseKind.syntaxType)) -> \(baseKind.syntaxType) {
           visitImpl(Syntax(node)).cast(\(baseKind.syntaxType).self)
         }
         """
@@ -193,7 +193,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       @inline(never)
-      private final func visitTokenSyntaxImpl(_ node: Syntax) -> Syntax {
+      private func visitTokenSyntaxImpl(_ node: Syntax) -> Syntax {
         Syntax(visit(TokenSyntax(unsafeCasting: node)))
       }
       """
@@ -203,7 +203,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         @inline(never)
-        private final func visit\(node.kind.syntaxType)Impl(_ node: Syntax) -> Syntax {
+        private func visit\(node.kind.syntaxType)Impl(_ node: Syntax) -> Syntax {
           Syntax(visit(\(node.kind.syntaxType)(unsafeCasting: node)))
         }
         """
@@ -246,7 +246,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 /// that determines the correct visitation function will be popped of the
                 /// stack before the function is being called, making the switch's stack
                 /// space transient instead of having it linger in the call stack.
-                private final func visitationFunc(for node: Syntax) -> (Syntax) -> Syntax
+                private func visitationFunc(for node: Syntax) -> (Syntax) -> Syntax
                 """
               ) {
                 try SwitchExprSyntax("switch node.raw.kind") {
@@ -264,7 +264,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
               DeclSyntax(
                 """
-                private final func dispatchVisit(_ node: Syntax) -> Syntax {
+                private func dispatchVisit(_ node: Syntax) -> Syntax {
                   visitationFunc(for: node)(node)
                 }
                 """
@@ -276,7 +276,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           poundKeyword: .poundElseToken(),
           elements: .statements(
             CodeBlockItemListSyntax {
-              try! FunctionDeclSyntax("private final func dispatchVisit(_ node: Syntax) -> Syntax") {
+              try! FunctionDeclSyntax("private func dispatchVisit(_ node: Syntax) -> Syntax") {
                 try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
                     StmtSyntax("return visitTokenSyntaxImpl(node)")
@@ -297,7 +297,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      private final func visitImpl(_ node: Syntax) -> Syntax {
+      private func visitImpl(_ node: Syntax) -> Syntax {
         visitPre(node)
         defer { visitPost(node) }
         return visitAny(node) ?? dispatchVisit(node)
@@ -307,7 +307,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      private final func visitChildren(_ node: Syntax) -> Syntax {
+      private func visitChildren(_ node: Syntax) -> Syntax {
         // Walk over all children of this node and rewrite them. Don't store any
         // rewritten nodes until the first non-`nil` value is encountered. When this
         // happens, retrieve all previous syntax nodes from the parent node to

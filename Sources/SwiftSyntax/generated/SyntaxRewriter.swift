@@ -44,7 +44,7 @@ open class SyntaxRewriter {
   }
 
   /// Rewrite `node`, keeping its parent unless `detach` is `true`.
-  public final func rewrite(_ node: some SyntaxProtocol, detach: Bool = false) -> Syntax {
+  public func rewrite(_ node: some SyntaxProtocol, detach: Bool = false) -> Syntax {
     let rewritten = self.visitImpl(Syntax(node))
     if detach {
       return rewritten
@@ -59,11 +59,11 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   @available(*, deprecated, renamed: "rewrite(_:detach:)")
-  public final func visit(_ node: Syntax) -> Syntax {
+  public func visit(_ node: Syntax) -> Syntax {
     return visitImpl(node)
   }
 
-  public final func visit<T: SyntaxChildChoices>(_ node: T) -> T {
+  public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
     visitImpl(Syntax(node)).cast(T.self)
   }
 
@@ -2188,1520 +2188,1520 @@ open class SyntaxRewriter {
   /// Visit any DeclSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public final func visit(_ node: DeclSyntax) -> DeclSyntax {
+  public func visit(_ node: DeclSyntax) -> DeclSyntax {
     visitImpl(Syntax(node)).cast(DeclSyntax.self)
   }
 
   /// Visit any ExprSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public final func visit(_ node: ExprSyntax) -> ExprSyntax {
+  public func visit(_ node: ExprSyntax) -> ExprSyntax {
     visitImpl(Syntax(node)).cast(ExprSyntax.self)
   }
 
   /// Visit any PatternSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public final func visit(_ node: PatternSyntax) -> PatternSyntax {
+  public func visit(_ node: PatternSyntax) -> PatternSyntax {
     visitImpl(Syntax(node)).cast(PatternSyntax.self)
   }
 
   /// Visit any StmtSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public final func visit(_ node: StmtSyntax) -> StmtSyntax {
+  public func visit(_ node: StmtSyntax) -> StmtSyntax {
     visitImpl(Syntax(node)).cast(StmtSyntax.self)
   }
 
   /// Visit any TypeSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  public final func visit(_ node: TypeSyntax) -> TypeSyntax {
+  public func visit(_ node: TypeSyntax) -> TypeSyntax {
     visitImpl(Syntax(node)).cast(TypeSyntax.self)
   }
 
   @inline(never)
-  private final func visitTokenSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTokenSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TokenSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitABIAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitABIAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ABIAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAccessorBlockFileSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAccessorBlockFileSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AccessorBlockFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAccessorBlockSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAccessorBlockSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AccessorBlockSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAccessorDeclListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAccessorDeclListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AccessorDeclListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAccessorDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAccessorDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AccessorDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAccessorEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAccessorEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AccessorEffectSpecifiersSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAccessorParametersSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAccessorParametersSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AccessorParametersSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitActorDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitActorDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ActorDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitArrayElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitArrayElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ArrayElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitArrayElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitArrayElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ArrayElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitArrayExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitArrayExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ArrayExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitArrayTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitArrayTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ArrayTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitArrowExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitArrowExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ArrowExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAsExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAsExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AsExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAssignmentExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAssignmentExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AssignmentExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAssociatedTypeDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAssociatedTypeDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AssociatedTypeDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAttributeClauseFileSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAttributeClauseFileSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AttributeClauseFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAttributeListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAttributeListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AttributeListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAttributeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAttributeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AttributeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAttributedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAttributedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AttributedTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAvailabilityArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAvailabilityArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AvailabilityArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAvailabilityArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAvailabilityArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AvailabilityArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAvailabilityConditionSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAvailabilityConditionSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AvailabilityConditionSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAvailabilityLabeledArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAvailabilityLabeledArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AvailabilityLabeledArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAvailabilityMacroDefinitionFileSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAvailabilityMacroDefinitionFileSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AvailabilityMacroDefinitionFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitAwaitExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitAwaitExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AwaitExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitBackDeployedAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitBackDeployedAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(BackDeployedAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitBinaryOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitBinaryOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(BinaryOperatorExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitBooleanLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitBooleanLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(BooleanLiteralExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitBorrowExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitBorrowExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(BorrowExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitBreakStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitBreakStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(BreakStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visit_CanImportExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visit_CanImportExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(_CanImportExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visit_CanImportVersionInfoSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visit_CanImportVersionInfoSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(_CanImportVersionInfoSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCatchClauseListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCatchClauseListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CatchClauseListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCatchClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCatchClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CatchClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCatchItemListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCatchItemListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CatchItemListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCatchItemSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCatchItemSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CatchItemSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClassDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClassDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClassDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClassRestrictionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClassRestrictionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClassRestrictionTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureCaptureClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureCaptureClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureCaptureClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureCaptureListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureCaptureListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureCaptureListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureCaptureSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureCaptureSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureCaptureSpecifierSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureCaptureSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureCaptureSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureCaptureSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureParameterClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureParameterListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureParameterSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureParameterSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureParameterSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureShorthandParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureShorthandParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureShorthandParameterListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureShorthandParameterSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureShorthandParameterSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureShorthandParameterSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitClosureSignatureSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitClosureSignatureSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureSignatureSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCodeBlockFileSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCodeBlockFileSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CodeBlockFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCodeBlockItemListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCodeBlockItemListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CodeBlockItemListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCodeBlockItemSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCodeBlockItemSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CodeBlockItemSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCodeBlockSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCodeBlockSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CodeBlockSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCompositionTypeElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCompositionTypeElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CompositionTypeElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCompositionTypeElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCompositionTypeElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CompositionTypeElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCompositionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCompositionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CompositionTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitConditionElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitConditionElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ConditionElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitConditionElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitConditionElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ConditionElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitConformanceRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitConformanceRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ConformanceRequirementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitConsumeExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitConsumeExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ConsumeExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitContinueStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitContinueStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ContinueStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitCopyExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitCopyExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CopyExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeclModifierDetailSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeclModifierDetailSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeclModifierDetailSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeclModifierListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeclModifierListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeclModifierListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeclModifierSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeclModifierSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeclModifierSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeclNameArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeclNameArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeclNameArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeclNameArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeclNameArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeclNameArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeclNameArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeclNameArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeclNameArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeclReferenceExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeclReferenceExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeclReferenceExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeferStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeferStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeferStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeinitializerDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeinitializerDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeinitializerDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDeinitializerEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDeinitializerEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DeinitializerEffectSpecifiersSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDerivativeAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDerivativeAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DerivativeAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDesignatedTypeListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDesignatedTypeListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DesignatedTypeListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDesignatedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDesignatedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DesignatedTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDictionaryElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDictionaryElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DictionaryElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDictionaryElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDictionaryElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DictionaryElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDictionaryExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDictionaryExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DictionaryExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDictionaryTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDictionaryTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DictionaryTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDifferentiabilityArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDifferentiabilityArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DifferentiabilityArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDifferentiabilityArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDifferentiabilityArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DifferentiabilityArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDifferentiabilityArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDifferentiabilityArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DifferentiabilityArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDifferentiabilityWithRespectToArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDifferentiabilityWithRespectToArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DifferentiabilityWithRespectToArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDifferentiableAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDifferentiableAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DifferentiableAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDiscardAssignmentExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDiscardAssignmentExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DiscardAssignmentExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDiscardStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDiscardStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DiscardStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDoExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDoExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DoExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDoStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDoStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DoStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDocumentationAttributeArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDocumentationAttributeArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DocumentationAttributeArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDocumentationAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDocumentationAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DocumentationAttributeArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitDynamicReplacementAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitDynamicReplacementAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(DynamicReplacementAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEditorPlaceholderDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEditorPlaceholderDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EditorPlaceholderDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEditorPlaceholderExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEditorPlaceholderExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EditorPlaceholderExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEffectsAttributeArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEffectsAttributeArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EffectsAttributeArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEnumCaseDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEnumCaseDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumCaseDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEnumCaseElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEnumCaseElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumCaseElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEnumCaseElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEnumCaseElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumCaseElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEnumCaseParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEnumCaseParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumCaseParameterClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEnumCaseParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEnumCaseParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumCaseParameterListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEnumCaseParameterSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEnumCaseParameterSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumCaseParameterSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitEnumDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitEnumDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitExprListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitExprListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ExprListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitExpressionPatternSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitExpressionPatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ExpressionPatternSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitExpressionSegmentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitExpressionSegmentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ExpressionSegmentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitExpressionStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitExpressionStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ExpressionStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitExtensionDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitExtensionDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ExtensionDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFallThroughStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFallThroughStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FallThroughStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFileDefaultDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFileDefaultDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FileDefaultDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFloatLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFloatLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FloatLiteralExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitForStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitForStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ForStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitForceUnwrapExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitForceUnwrapExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ForceUnwrapExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionCallExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionCallExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionCallExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionEffectSpecifiersSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionParameterClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionParameterListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionParameterSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionParameterSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionParameterSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionSignatureSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionSignatureSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionSignatureSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionYieldClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionYieldListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionYieldListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionYieldListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitFunctionYieldSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitFunctionYieldSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionYieldSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericArgumentClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericArgumentClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericArgumentClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericParameterClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericParameterClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericParameterListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericParameterListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericParameterSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericParameterSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericParameterSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericRequirementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericRequirementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericRequirementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericRequirementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericSpecializationExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericSpecializationExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericSpecializationExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGenericWhereClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGenericWhereClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GenericWhereClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitGuardStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitGuardStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(GuardStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIdentifierPatternSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIdentifierPatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IdentifierPatternSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIdentifierTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIdentifierTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IdentifierTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIfConfigClauseListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIfConfigClauseListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IfConfigClauseListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIfConfigClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIfConfigClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IfConfigClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIfConfigDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIfConfigDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IfConfigDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIfExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIfExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IfExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitImplementsAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitImplementsAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ImplementsAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitImplicitlyUnwrappedOptionalTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitImplicitlyUnwrappedOptionalTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ImplicitlyUnwrappedOptionalTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitImportDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitImportDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ImportDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitImportPathComponentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitImportPathComponentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ImportPathComponentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitImportPathComponentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitImportPathComponentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ImportPathComponentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInOutExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInOutExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InOutExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInfixOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInfixOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InfixOperatorExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInheritanceClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInheritanceClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InheritanceClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInheritedTypeListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInheritedTypeListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InheritedTypeListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInheritedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInheritedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InheritedTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInitializerClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInitializerClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InitializerClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInitializerDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInitializerDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InitializerDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitInlineArrayTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitInlineArrayTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(InlineArrayTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIntegerLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIntegerLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IntegerLiteralExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIsExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIsExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IsExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitIsTypePatternSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitIsTypePatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IsTypePatternSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitKeyPathComponentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitKeyPathComponentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(KeyPathComponentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitKeyPathComponentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitKeyPathComponentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(KeyPathComponentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitKeyPathExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitKeyPathExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(KeyPathExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitKeyPathMethodComponentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitKeyPathMethodComponentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(KeyPathMethodComponentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitKeyPathOptionalComponentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitKeyPathOptionalComponentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(KeyPathOptionalComponentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitKeyPathPropertyComponentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitKeyPathPropertyComponentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(KeyPathPropertyComponentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitKeyPathSubscriptComponentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitKeyPathSubscriptComponentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(KeyPathSubscriptComponentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLabeledExprListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLabeledExprListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LabeledExprListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLabeledExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLabeledExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LabeledExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLabeledSpecializeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLabeledSpecializeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LabeledSpecializeArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLabeledStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLabeledStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LabeledStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLayoutRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLayoutRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LayoutRequirementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLifetimeSpecifierArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLifetimeSpecifierArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LifetimeSpecifierArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLifetimeSpecifierArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLifetimeSpecifierArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LifetimeSpecifierArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitLifetimeTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitLifetimeTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(LifetimeTypeSpecifierSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMacroDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMacroDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MacroDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMacroExpansionDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMacroExpansionDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MacroExpansionDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMacroExpansionExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMacroExpansionExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MacroExpansionExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMatchingPatternConditionSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMatchingPatternConditionSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MatchingPatternConditionSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMemberAccessExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMemberAccessExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MemberAccessExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMemberBlockItemListFileSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMemberBlockItemListFileSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MemberBlockItemListFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMemberBlockItemListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMemberBlockItemListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MemberBlockItemListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMemberBlockItemSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMemberBlockItemSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MemberBlockItemSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMemberBlockSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMemberBlockSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MemberBlockSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMemberTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMemberTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MemberTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMetatypeTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMetatypeTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MetatypeTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMissingDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMissingDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MissingDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMissingExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMissingExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MissingExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMissingPatternSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMissingPatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MissingPatternSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMissingStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMissingStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MissingStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMissingSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMissingSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MissingSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMissingTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMissingTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MissingTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitModuleSelectorSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitModuleSelectorSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ModuleSelectorSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMultipleTrailingClosureElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMultipleTrailingClosureElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MultipleTrailingClosureElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitMultipleTrailingClosureElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitMultipleTrailingClosureElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MultipleTrailingClosureElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitNamedOpaqueReturnTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitNamedOpaqueReturnTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(NamedOpaqueReturnTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitNilLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitNilLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(NilLiteralExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(NonisolatedTypeSpecifierSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ObjCSelectorPieceListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitObjCSelectorPieceSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitObjCSelectorPieceSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ObjCSelectorPieceSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitOperatorDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitOperatorDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(OperatorDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitOperatorPrecedenceAndTypesSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitOperatorPrecedenceAndTypesSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(OperatorPrecedenceAndTypesSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitOptionalBindingConditionSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitOptionalBindingConditionSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(OptionalBindingConditionSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitOptionalChainingExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitOptionalChainingExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(OptionalChainingExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitOptionalTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitOptionalTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(OptionalTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitOriginallyDefinedInAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitOriginallyDefinedInAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(OriginallyDefinedInAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPackElementExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPackElementExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PackElementExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPackElementTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPackElementTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PackElementTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPackExpansionExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPackExpansionExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PackExpansionExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPackExpansionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPackExpansionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PackExpansionTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPatternBindingListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPatternBindingListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PatternBindingListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPatternBindingSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPatternBindingSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PatternBindingSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPatternExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPatternExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PatternExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPlatformVersionItemListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPlatformVersionItemListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PlatformVersionItemListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPlatformVersionItemSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPlatformVersionItemSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PlatformVersionItemSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPlatformVersionSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPlatformVersionSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PlatformVersionSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPostfixIfConfigExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPostfixIfConfigExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PostfixIfConfigExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPostfixOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPostfixOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PostfixOperatorExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPoundSourceLocationArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPoundSourceLocationArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PoundSourceLocationArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPoundSourceLocationSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPoundSourceLocationSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PoundSourceLocationSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrecedenceGroupAssignmentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrecedenceGroupAssignmentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrecedenceGroupAssignmentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrecedenceGroupAssociativitySyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrecedenceGroupAssociativitySyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrecedenceGroupAssociativitySyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrecedenceGroupAttributeListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrecedenceGroupAttributeListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrecedenceGroupAttributeListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrecedenceGroupDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrecedenceGroupDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrecedenceGroupDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrecedenceGroupNameListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrecedenceGroupNameListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrecedenceGroupNameListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrecedenceGroupNameSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrecedenceGroupNameSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrecedenceGroupNameSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrecedenceGroupRelationSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrecedenceGroupRelationSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrecedenceGroupRelationSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrefixOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrefixOperatorExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrefixOperatorExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrimaryAssociatedTypeClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrimaryAssociatedTypeClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrimaryAssociatedTypeClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrimaryAssociatedTypeListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrimaryAssociatedTypeListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrimaryAssociatedTypeListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitPrimaryAssociatedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitPrimaryAssociatedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(PrimaryAssociatedTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitProtocolDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitProtocolDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ProtocolDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitRegexLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitRegexLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(RegexLiteralExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitRepeatStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitRepeatStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(RepeatStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitReturnClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitReturnClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ReturnClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitReturnStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitReturnStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ReturnStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSameTypeRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSameTypeRequirementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SameTypeRequirementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSectionAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSectionAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SectionAttributeArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSequenceExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSequenceExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SequenceExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSimpleStringLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSimpleStringLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SimpleStringLiteralExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSimpleStringLiteralSegmentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSimpleStringLiteralSegmentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SimpleStringLiteralSegmentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSimpleTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSimpleTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SimpleTypeSpecifierSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSomeOrAnyTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSomeOrAnyTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SomeOrAnyTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSourceFileSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSourceFileSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SourceFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSpecializeAttributeArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSpecializeAttributeArgumentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SpecializeAttributeArgumentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSpecializeAvailabilityArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSpecializeAvailabilityArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SpecializeAvailabilityArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSpecializeTargetFunctionArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSpecializeTargetFunctionArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SpecializeTargetFunctionArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SpecializedAttributeArgumentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitStringLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitStringLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(StringLiteralExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitStringLiteralSegmentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitStringLiteralSegmentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(StringLiteralSegmentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitStringSegmentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitStringSegmentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(StringSegmentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitStructDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitStructDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(StructDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSubscriptCallExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSubscriptCallExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SubscriptCallExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSubscriptDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSubscriptDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SubscriptDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSuperExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSuperExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SuperExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSuppressedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSuppressedTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SuppressedTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSwitchCaseItemListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSwitchCaseItemListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SwitchCaseItemListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSwitchCaseItemSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSwitchCaseItemSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SwitchCaseItemSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSwitchCaseLabelSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSwitchCaseLabelSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SwitchCaseLabelSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSwitchCaseListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSwitchCaseListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SwitchCaseListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSwitchCaseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSwitchCaseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SwitchCaseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSwitchDefaultLabelSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSwitchDefaultLabelSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SwitchDefaultLabelSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitSwitchExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitSwitchExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SwitchExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTernaryExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTernaryExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TernaryExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitThenStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitThenStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ThenStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitThrowStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitThrowStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ThrowStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitThrowsClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitThrowsClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ThrowsClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTryExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTryExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TryExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTupleExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTupleExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TupleExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTuplePatternElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTuplePatternElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TuplePatternElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTuplePatternElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTuplePatternElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TuplePatternElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTuplePatternSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTuplePatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TuplePatternSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTupleTypeElementListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTupleTypeElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TupleTypeElementListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTupleTypeElementSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTupleTypeElementSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TupleTypeElementSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTupleTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTupleTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TupleTypeSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTypeAliasDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTypeAliasDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TypeAliasDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTypeAnnotationSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTypeAnnotationSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TypeAnnotationSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTypeEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTypeEffectSpecifiersSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TypeEffectSpecifiersSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTypeExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTypeExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TypeExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTypeInitializerClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTypeInitializerClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TypeInitializerClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitTypeSpecifierListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitTypeSpecifierListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(TypeSpecifierListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitUnexpectedCodeDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitUnexpectedCodeDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnexpectedCodeDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnexpectedNodesSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitUnresolvedAsExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitUnresolvedAsExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnresolvedAsExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitUnresolvedIsExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitUnresolvedIsExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnresolvedIsExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitUnresolvedTernaryExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitUnresolvedTernaryExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnresolvedTernaryExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitUnsafeExprSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitUnsafeExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnsafeExprSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitValueBindingPatternSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ValueBindingPatternSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitVariableDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitVariableDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(VariableDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitVersionComponentListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitVersionComponentListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(VersionComponentListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitVersionComponentSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitVersionComponentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(VersionComponentSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitVersionTupleSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitVersionTupleSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(VersionTupleSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitWhereClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitWhereClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(WhereClauseSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitWhileStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitWhileStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(WhileStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitWildcardPatternSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitWildcardPatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(WildcardPatternSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitYieldStmtSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitYieldStmtSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(YieldStmtSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitYieldedExpressionListSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitYieldedExpressionListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(YieldedExpressionListSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitYieldedExpressionSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitYieldedExpressionSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(YieldedExpressionSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
-  private final func visitYieldedExpressionsClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+  private func visitYieldedExpressionsClauseSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(YieldedExpressionsClauseSyntax(unsafeCasting: node)))
   }
 
@@ -3729,7 +3729,7 @@ open class SyntaxRewriter {
   /// that determines the correct visitation function will be popped of the
   /// stack before the function is being called, making the switch's stack
   /// space transient instead of having it linger in the call stack.
-  private final func visitationFunc(for node: Syntax) -> (Syntax) -> Syntax {
+  private func visitationFunc(for node: Syntax) -> (Syntax) -> Syntax {
     switch node.raw.kind {
     case .token:
       return self.visitTokenSyntaxImpl(_:)
@@ -4327,11 +4327,11 @@ open class SyntaxRewriter {
       return self.visitYieldedExpressionsClauseSyntaxImpl(_:)
     }
   }
-  private final func dispatchVisit(_ node: Syntax) -> Syntax {
+  private func dispatchVisit(_ node: Syntax) -> Syntax {
     visitationFunc(for: node)(node)
   }
   #else
-  private final func dispatchVisit(_ node: Syntax) -> Syntax {
+  private func dispatchVisit(_ node: Syntax) -> Syntax {
     switch node.raw.kind {
     case .token:
       return visitTokenSyntaxImpl(node)
@@ -4931,7 +4931,7 @@ open class SyntaxRewriter {
   }
   #endif
 
-  private final func visitImpl(_ node: Syntax) -> Syntax {
+  private func visitImpl(_ node: Syntax) -> Syntax {
     visitPre(node)
     defer {
       visitPost(node)
@@ -4939,7 +4939,7 @@ open class SyntaxRewriter {
     return visitAny(node) ?? dispatchVisit(node)
   }
 
-  private final func visitChildren(_ node: Syntax) -> Syntax {
+  private func visitChildren(_ node: Syntax) -> Syntax {
     // Walk over all children of this node and rewrite them. Don't store any
     // rewritten nodes until the first non-`nil` value is encountered. When this
     // happens, retrieve all previous syntax nodes from the parent node to

@@ -44,7 +44,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       /// Walk all nodes of the given syntax tree, calling the corresponding `visit`
       /// function for every node that is being visited.
-      public final func walk(_ node: some SyntaxProtocol) {
+      public func walk(_ node: some SyntaxProtocol) {
         dispatchVisit(Syntax(node))
       }
       """
@@ -98,7 +98,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       @inline(never)
-      private final func visitTokenSyntaxImpl(_ node: Syntax) {
+      private func visitTokenSyntaxImpl(_ node: Syntax) {
         _ = visit(TokenSyntax(unsafeCasting: node))
         // No children to visit.
         visitPost(TokenSyntax(unsafeCasting: node))
@@ -110,7 +110,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         @inline(never)
-        private final func visit\(node.kind.syntaxType)Impl(_ node: Syntax) {
+        private func visit\(node.kind.syntaxType)Impl(_ node: Syntax) {
           if visit(\(node.kind.syntaxType)(unsafeCasting: node)) == .visitChildren {
             visitChildren(node)
           }
@@ -156,7 +156,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 /// that determines the correct visitation function will be popped of the
                 /// stack before the function is being called, making the switch's stack
                 /// space transient instead of having it linger in the call stack.
-                private final func visitationFunc(for node: Syntax) -> (Syntax) -> Void
+                private func visitationFunc(for node: Syntax) -> (Syntax) -> Void
                 """
               ) {
                 try SwitchExprSyntax("switch node.raw.kind") {
@@ -176,7 +176,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
               DeclSyntax(
                 """
-                private final func dispatchVisit(_ node: Syntax) {
+                private func dispatchVisit(_ node: Syntax) {
                   return visitationFunc(for: node)(node)
                 }
                 """
@@ -190,7 +190,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             CodeBlockItemListSyntax {
               try! FunctionDeclSyntax(
                 """
-                private final func dispatchVisit(_ node: Syntax)
+                private func dispatchVisit(_ node: Syntax)
                 """
               ) {
                 try SwitchExprSyntax("switch node.raw.kind") {
@@ -213,7 +213,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      private final func visitChildren(_ node: Syntax) {
+      private func visitChildren(_ node: Syntax) {
         for case let childDataRef? in node.layoutBuffer where viewMode.shouldTraverse(node: childDataRef.pointee.raw) {
           dispatchVisit(Syntax(arena: node.arena, dataRef: childDataRef))
         }

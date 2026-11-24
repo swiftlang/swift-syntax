@@ -2881,6 +2881,20 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SectionAttributeArgumentSyntax) {
   }
 
+  /// Visiting `SendExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: SendExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `SendExprSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: SendExprSyntax) {
+  }
+
   /// Visiting ``SequenceExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5515,6 +5529,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitSendExprSyntaxImpl(_ node: Syntax) {
+    if visit(SendExprSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(SendExprSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitSequenceExprSyntaxImpl(_ node: Syntax) {
     if visit(SequenceExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6500,6 +6522,8 @@ open class SyntaxVisitor {
       return self.visitSameTypeRequirementSyntaxImpl(_:)
     case .sectionAttributeArgument:
       return self.visitSectionAttributeArgumentSyntaxImpl(_:)
+    case .sendExpr:
+      return self.visitSendExprSyntaxImpl(_:)
     case .sequenceExpr:
       return self.visitSequenceExprSyntaxImpl(_:)
     case .simpleStringLiteralExpr:
@@ -7102,6 +7126,8 @@ open class SyntaxVisitor {
       self.visitSameTypeRequirementSyntaxImpl(node)
     case .sectionAttributeArgument:
       self.visitSectionAttributeArgumentSyntaxImpl(node)
+    case .sendExpr:
+      self.visitSendExprSyntaxImpl(node)
     case .sequenceExpr:
       self.visitSequenceExprSyntaxImpl(node)
     case .simpleStringLiteralExpr:

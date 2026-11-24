@@ -189,6 +189,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case scoped
   case section
   case `self`
+  @_spi(ExperimentalLanguageFeatures)
+  case send
   case sending
   case `Self`
   case Sendable
@@ -373,6 +375,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       self = .safe
     case 0x666c6573:  // self
       self = .self
+    case 0x646e6573:  // send
+      self = .send
     case 0x666c6553:  // Self
       self = .Self
     case 0x656d6f73:  // some
@@ -1034,6 +1038,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "scoped",
     "section",
     "self",
+    "send",
     "sending",
     "Self",
     "Sendable",

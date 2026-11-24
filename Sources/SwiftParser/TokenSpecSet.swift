@@ -722,6 +722,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case any
   case some
   case unsafe
+  case send
 
   init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
     guard let keyword = lexeme.keyword else { return nil }
@@ -738,6 +739,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case .any: self = .any
     case .some: self = .some
     case .unsafe: self = .unsafe
+    case .send where languageFeatures.contains(.sendCalls): self = .send
     default: return nil
     }
   }
@@ -756,6 +758,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case .any: return .keyword(.any)
     case .some: return .keyword(.some)
     case .unsafe: return .keyword(.unsafe)
+    case .send: return .keyword(.send)
     }
   }
 }

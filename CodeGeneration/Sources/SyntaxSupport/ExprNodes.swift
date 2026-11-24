@@ -187,6 +187,26 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
+    kind: .sendExpr,
+    base: .expr,
+    experimentalFeature: .sendCalls,
+    nameForDiagnostics: "'send' expression",
+    documentation: """
+      A `send` call, a fire-and-forget alternative to `await`.
+      """,
+    children: [
+      Child(
+        name: "sendKeyword",
+        kind: .token(choices: [.keyword(.send)])
+      ),
+      Child(
+        name: "expression",
+        kind: .node(kind: .expr)
+      ),
+    ]
+  ),
+
+  Node(
     kind: .unsafeExpr,
     base: .expr,
     nameForDiagnostics: "'unsafe' expression",

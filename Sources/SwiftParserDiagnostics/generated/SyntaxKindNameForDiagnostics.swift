@@ -356,6 +356,8 @@ extension SyntaxKind {
       return "same type requirement"
     case .sectionAttributeArgument:
       return "'@section' argument"
+    case .sendExpr:
+      return "'send' expression"
     case .simpleStringLiteralExpr:
       return "simple string literal"
     case .simpleTypeSpecifier:

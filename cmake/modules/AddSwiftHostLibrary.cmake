@@ -48,12 +48,41 @@ function(add_swift_syntax_library name)
     set(module_interface_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.swiftinterface")
     set(module_private_interface_file "${module_base}/${SWIFT_HOST_MODULE_TRIPLE}.private.swiftinterface")
 
-    # Configure the emission of the Swift module files.
+    # Make sure the module directory exists before any build step writes
+    # the .swiftinterface files into it.
+    file(MAKE_DIRECTORY ${module_base})
+
+    # With CMP0157 NEW, CMake appends its own -emit-module-path after our
+    # compile options and it wins, so the explicit path below is only
+    # effective when CMake's own path agrees with it. The top-level
+    # CMakeLists sets CMP0195 NEW in that case (CMake 4+), which makes
+    # CMake's path module_base/<triple>.swiftmodule, identical to the
+    # explicit path. Where CMP0195 is not NEW (CMake 3.29-3.x, where the
+    # policy does not exist, or an explicit OLD setting), point CMake's
+    # module output into the module directory instead so
+    # the build still succeeds; the binary is then <name>.swiftmodule
+    # rather than triple-named. With CMP0157 OLD, CMake appends no
+    # -emit-module-path at all, so the explicit path is used as-is.
+    cmake_policy(GET CMP0157 _swift_syntax_cmp0157)
+    set(_swift_syntax_cmp0195 "")
+    if(POLICY CMP0195)
+      cmake_policy(GET CMP0195 _swift_syntax_cmp0195)
+    endif()
+    if(_swift_syntax_cmp0157 STREQUAL "NEW" AND NOT _swift_syntax_cmp0195 STREQUAL "NEW")
+      set(swift_module_directory ${module_base})
+    else()
+      set(swift_module_directory ${module_dir})
+      target_compile_options("${target}" PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:
+          -emit-module-path;${module_file}
+      >)
+    endif()
+
+    # Configure the emission of the Swift module interface files.
     target_compile_options("${target}" PRIVATE
       $<$<COMPILE_LANGUAGE:Swift>:
         -DRESILIENT_LIBRARIES;
         -enable-library-evolution;
-        -emit-module-path;${module_file};
         -emit-module-interface-path;${module_interface_file};
         -emit-private-module-interface-path;${module_private_interface_file}
     >)
@@ -77,11 +106,12 @@ function(add_swift_syntax_library name)
   else()
     set(module_dir ${CMAKE_CURRENT_BINARY_DIR})
     set(module_base "${module_dir}/${name}.swiftmodule")
+    set(swift_module_directory ${module_dir})
   endif()
 
   set_target_properties(${target} PROPERTIES
     Swift_MODULE_NAME ${name}
-    Swift_MODULE_DIRECTORY ${module_dir}
+    Swift_MODULE_DIRECTORY ${swift_module_directory}
     INTERFACE_INCLUDE_DIRECTORIES ${module_dir}
   )
 

@@ -839,6 +839,8 @@ extension TypeGraph {
   /// Preconditions:
   /// - Every extension introducing a member of `dependencies` recursively,
   ///   is admitted and bound (*Extensions depend on type members*)
+  /// Complexity: `O(n)` where `n` is the number of the given extension's
+  /// transitive-dependency declarations.
   fileprivate func _firstCycle(
     extensionDecl: Attached<ExtensionDeclSyntax>,
     extensionState: ExtensionState,
@@ -955,6 +957,46 @@ extension TypeGraph {
     /// References non-registered base type
     case invalidBase
     case unregisteredFileRoot(SourceFileSyntax)
+  }
+}
+
+// MARK: Test Hooks
+
+extension TypeGraph {
+  /// Creates a mock graph without checking for invariants; only use for tests.
+  @_spi(_QualifiedLookupTests)
+  public init(
+    _uncheckedNamesToTypes namesToTypes: [TypeGraph.GlobalTypeName: NominalType] = [:],
+    extensionsToState: [Attached<ExtensionDeclSyntax>: ExtensionState] = [:]
+  ) {
+    self.namesToTypes = namesToTypes
+    self.extensionsToState = extensionsToState
+  }
+}
+
+extension TypeGraph.NominalType {
+  /// Creates a mock nominal type without checking for invariants; only use
+  /// for tests.
+  ///
+  /// Note: Type tables ignore `#if` configurations.
+  @_spi(_QualifiedLookupTests)
+  public init(
+    _uncheckedMainDecl mainDecl: Attached<NominalTypeDeclSyntax>,
+    boundExtensions: [ModuleName: [Attached<ExtensionDeclSyntax>]] = [:],
+    dependents: [(memberType: Identifier, dependentExtension: Attached<ExtensionDeclSyntax>)] = []
+  ) {
+    self.mainDecl = mainDecl
+    self.mainDeclMembers = TypeGraph.TypeTable(typeMembersToDecls: mainDecl._groupTypeMembers(configuredRegions: nil))
+    self.boundExtensions = boundExtensions.mapValues({ extensions in
+      Dictionary(
+        uniqueKeysWithValues: extensions.map({
+          ($0, TypeGraph.TypeTable(typeMembersToDecls: $0._groupTypeMembers(configuredRegions: nil)))
+        })
+      )
+    })
+    self.dependents = dependents.map({
+      TypeGraph.TypeDependent(memberType: $0.memberType, dependentExtension: $0.dependentExtension)
+    })
   }
 }
 

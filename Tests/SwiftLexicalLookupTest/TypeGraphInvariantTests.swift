@@ -6,7 +6,7 @@ import XCTest
 
 // MARK: Helpers
 
-final class TypeGraphInvariantTests2: XCTestCase {
+final class TypeGraphInvariantTests: XCTestCase {
   // Common types
   typealias Name = TypeGraph.GlobalTypeName
   typealias Nominal = TypeGraph.NominalType
@@ -97,7 +97,7 @@ extension TypeGraph.ExtensionDependency {
 
 // MARK: Assertions
 
-extension TypeGraphInvariantTests2 {
+extension TypeGraphInvariantTests {
   func testDuplicateMainDecl() {
     assertInvariantViolation(
       expected: .duplicateMainDecl,

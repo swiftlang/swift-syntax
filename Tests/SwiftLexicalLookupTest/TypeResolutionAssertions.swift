@@ -441,15 +441,6 @@ struct IdentifierWrapper: ExpressibleByStringLiteral {
   }
 }
 
-extension TypeGraph.ExtensionDependency {
-  init(baseType: TypeGraph.GlobalTypeName, members: [IdentifierWrapper]) {
-    let mappedMembers: [(name: Identifier, decls: [Member])] = members.map({ member in
-      (name: member.identifier, decls: [])
-    })
-    self.init(dependencyTypeName: baseType, members: mappedMembers)
-  }
-}
-
 extension TypeGraph.ExtensionState {
   /// Creates a mock extension state to check an extension's dependencies,
   /// bound type, or failure to bind due to cycles.

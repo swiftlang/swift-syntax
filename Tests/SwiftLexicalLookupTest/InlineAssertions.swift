@@ -501,3 +501,44 @@ where
     self = .parse(string)
   }
 }
+
+// MARK: Finding Children
+
+/// Visitor class helper used in ``SyntaxProtocol/children``
+private class SyntaxAsTypeVisitor<T: SyntaxProtocol>: SyntaxAnyVisitor {
+  var collectedNodes = [T]()
+
+  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+    if let castNode = node.as(T.self) {
+      collectedNodes.append(castNode)
+    }
+    return .visitChildren
+  }
+}
+extension SyntaxProtocol {
+  /// Helper for tests that want to get a particular type of child nodes.
+  ///
+  /// This is particularly useful for tests that require that some syntax have
+  /// parent nodes for context. For instance, to determine if the name introduced
+  /// by an identifier pattern is accessible from a static context, we need to
+  /// see if the parent variable declaration is static. Here's an example:
+  ///   DeclSyntax("var myVar: Int").children(ofType: IdentifierPatternSyntax.self)[0]
+  func children<T: SyntaxProtocol>(ofType: T.Type) -> [T] {
+    let visitor = SyntaxAsTypeVisitor<T>(viewMode: .all)
+    visitor.walk(self)
+    return visitor.collectedNodes
+  }
+}
+
+extension SourceFileSyntax {
+  /// Helper for tests that want to get a particular type of child nodes of a
+  /// `SourceFileSyntax`.
+  ///
+  /// Like `SyntaxProtocol/children` but returns `Attached<T>` children.
+  func attachedChildren<T: SyntaxProtocol>(ofType syntaxType: T.Type) -> [Attached<T>] {
+    children(ofType: syntaxType).map({
+      // Children of a `SourceFileSyntax` are attached by definition.
+      Attached<T>($0)!
+    })
+  }
+}

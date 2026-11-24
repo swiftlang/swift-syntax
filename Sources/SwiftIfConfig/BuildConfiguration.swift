@@ -281,6 +281,26 @@ public protocol BuildConfiguration {
   /// ```
   var endianness: Endianness { get }
 
+  /// The minimum deployment target version for the module being compiled.
+  ///
+  /// A value of `nil` means that no meaningful deployment version is available
+  /// for the active platform.
+  /// The version can be queried with `deploymentTargetAtLeast`, e.g.,
+  ///
+  /// ```swift
+  /// #if deploymentTargetAtLeast(macOS 15, iOS 18, *)
+  /// // Implementation for the listed deployment targets or other platforms
+  /// #endif
+  /// ```
+  var deploymentTargetVersion: VersionTuple? { get }
+
+  /// Whether a deployment-target requirement applies to the active platform.
+  func isDeploymentTargetPlatformActive(name: String) throws -> Bool
+
+  /// Compare a requirement with the deployment target. Implementations that
+  /// have platform version mappings should use them before comparing.
+  func isDeploymentTargetAtLeast(platform: String, version: VersionTuple) -> Bool
+
   /// The effective language version, which can be set by the user (e.g., 5.0).
   ///
   /// The language version can be queried with the `swift` directive that checks
@@ -310,6 +330,35 @@ public protocol BuildConfiguration {
 /// Default implementation of BuildConfiguration, to avoid a revlock with the
 /// swift repo, and breaking clients with the new addition to the protocol.
 extension BuildConfiguration {
+  public var deploymentTargetVersion: VersionTuple? { nil }
+
+  public func isDeploymentTargetPlatformActive(name: String) throws -> Bool {
+    if name == "OSX" {
+      if try isActiveTargetOS(name: name) { return true }
+      return try isActiveTargetOS(name: "macOS")
+    }
+
+    if name == "xrOS" {
+      if try isActiveTargetOS(name: name) { return true }
+      return try isActiveTargetOS(name: "visionOS")
+    }
+
+    if name == "iOS", try isActiveTargetEnvironment(name: "macCatalyst") {
+      return true
+    }
+
+    if name == "macCatalyst" {
+      return try isActiveTargetEnvironment(name: name)
+    }
+
+    return try isActiveTargetOS(name: name)
+  }
+
+  public func isDeploymentTargetAtLeast(platform: String, version: VersionTuple) -> Bool {
+    guard let deploymentTargetVersion else { return false }
+    return deploymentTargetVersion >= version
+  }
+
   @available(*, deprecated, message: "`BuildConfiguration` conformance must implement `isActiveTargetObjectFormat`")
   public func isActiveTargetObjectFormat(name: String) throws -> Bool {
     throw BuildConfigurationError.notImplemented(name: "isActiveTargetObjectFormat")

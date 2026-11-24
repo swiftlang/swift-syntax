@@ -508,6 +508,402 @@ extension TypeGraph {
   }
 }
 
+extension TypeGraph {
+  /// Crashes in DEBUG if the graph breaks an invariant (see
+  /// `_firstInvariantViolation`).
+  fileprivate func _assertInvariants(
+    symbolTable: SymbolTable,
+    file: StaticString = #file,
+    line: UInt = #line,
+    function: StaticString = #function
+  ) {
+    #if DEBUG
+    if let violation = _firstInvariantViolation(symbolTable: symbolTable) {
+      assertionFailure("\(violation)", file: file, line: line)
+    }
+    #endif
+  }
+
+  /// Returns the first broken invariant (see TypeGraph.md), or `nil` if the
+  /// graph is valid.
+  ///
+  /// Invariants are checked one at a time across the whole graph, so the
+  /// returned failure doesn't depend on dictionary order. Later checks assume
+  /// earlier ones passed.
+  @_spi(_QualifiedLookupTests)
+  public func _firstInvariantViolation(symbolTable: SymbolTable) -> GraphFailure? {
+    // Each main decl is admitted under one name
+    var mainDecls = Set<Attached<NominalTypeDeclSyntax>>()
+    for type in namesToTypes.values {
+      guard mainDecls.insert(type.mainDecl).inserted else { return .duplicateMainDecl }
+    }
+
+    // Admitted types and extensions have registered file roots
+    for type in namesToTypes.values {
+      guard symbolTable.getFileInfo(type.mainDecl.fileRoot) != nil else { return .noFileInfo }
+    }
+    for extensionDecl in extensionsToState.keys {
+      guard symbolTable.getFileInfo(extensionDecl.fileRoot) != nil else { return .noFileInfo }
+    }
+
+    // Extensions resolve to a type iff that type binds them
+    for (extensionDecl, state) in extensionsToState {
+      guard case .success(let typeName) = state.resolvedType else { continue }
+      guard let type = namesToTypes[typeName] else { return .danglingExtension }
+      // Force-unwrap by file-root test above.
+      let module = symbolTable.getFileInfo(extensionDecl.fileRoot)!.module
+      guard type.boundExtensions[module]?[extensionDecl] != nil else { return .unboundExtension }
+    }
+    for (typeName, type) in namesToTypes {
+      for extensionDecl in type.boundExtensions.values.flatMap(\.keys) {
+        guard case .success(typeName) = extensionsToState[extensionDecl]?.resolvedType else {
+          return .misboundExtension
+        }
+      }
+    }
+
+    // Each extension has at most one dependency per base type
+    for state in extensionsToState.values {
+      var baseTypeNames = Set<GlobalTypeName>()
+      for dependency in state.dependencies {
+        guard baseTypeNames.insert(dependency.baseTypeName).inserted else { return .duplicateDependency }
+      }
+    }
+
+    // Dependencies and dependents match
+    for (extensionDecl, state) in extensionsToState {
+      for dependency in state.dependencies {
+        guard let type = namesToTypes[dependency.baseTypeName] else { return .danglingDependency }
+        for member in dependency.members {
+          let dependent = TypeDependent(memberType: member.name, dependentExtension: extensionDecl)
+          guard type.dependents.contains(dependent) else { return .missingDependent }
+        }
+      }
+    }
+    for (typeName, type) in namesToTypes {
+      for dependent in type.dependents {
+        let dependsOnMember = extensionsToState[dependent.dependentExtension]?.dependencies.contains(where: {
+          $0.baseTypeName == typeName && $0.members.contains(where: { $0.name == dependent.memberType })
+        })
+        guard dependsOnMember == true else { return .missingDependency }
+      }
+    }
+
+    // Dependencies match the type members in the graph
+    for state in extensionsToState.values {
+      for dependency in state.dependencies {
+        // Force-unwrap because we checked `dependency.baseTypeName`
+        // is valid in the previous step.
+        let type = namesToTypes[dependency.baseTypeName]!
+        for member in dependency.members {
+          var currentDecls = (type.mainDeclMembers.typeMembersToDecls[member.name] ?? []).map({
+            ExtensionDependency.Member(introducingExtensionOrMainDecl: nil, typeDecl: $0)
+          })
+          for (extensionDecl, typeTable) in type.boundExtensions.values.joined() {
+            currentDecls += (typeTable.typeMembersToDecls[member.name] ?? []).map({
+              ExtensionDependency.Member(introducingExtensionOrMainDecl: extensionDecl, typeDecl: $0)
+            })
+          }
+          // Lookup order depends on where the lookup happened, so compare
+          // the declarations regardless of order.
+          guard member.decls.count == currentDecls.count, Set(member.decls) == Set(currentDecls) else {
+            return .staleDependency
+          }
+        }
+      }
+    }
+
+    // Nested types are members of their parent's main decl or bound extensions
+    //
+    // Also, collect parented/nested types for next check.
+    var parentedTypes = Set<GlobalTypeName>()
+    for (typeName, type) in namesToTypes {
+      // Collect the type's main-type & extension declaration groups and type tables.
+      let declGroups =
+        [(declGroup: Attached<DeclGroupSyntaxType>(type.mainDecl), typeTable: type.mainDeclMembers)]
+        + type.boundExtensions.values.joined().map({
+          (declGroup: Attached<DeclGroupSyntaxType>($0.key), typeTable: $0.value)
+        })
+      for (declGroup, typeTable) in declGroups {
+        // Force-unwrap by file-root test above.
+        let declGroupFileInfo = symbolTable.getFileInfo(declGroup.fileRoot)!
+        for (memberName, memberDecls) in typeTable.typeMembersToDecls {
+          let memberTypeName = typeName.addingComponent(
+            GlobalTypeName.Component(
+              name: memberName,
+              file: declGroup.fileRoot,
+              fileInfo: declGroupFileInfo,
+              symbolTable: symbolTable
+            )
+          )
+          guard
+            let memberType = namesToTypes[memberTypeName],
+            memberDecls.contains(where: { $0.as(NominalTypeDeclSyntax.self) == memberType.mainDecl })
+          else { continue }
+          parentedTypes.insert(memberTypeName)
+        }
+      }
+    }
+    // Diagnose parentless nested types.
+    for typeName in namesToTypes.keys where typeName.base != nil {
+      guard parentedTypes.contains(typeName) else { return .parentlessType }
+    }
+
+    // No bound extension recursively depends on a member it introduces
+    for (extensionDecl, state) in extensionsToState {
+      // Get the extended-type name and the extension-decl module
+      guard case .success(let typeName) = state.resolvedType else { continue }
+      // Force-unwrap by file-root and bound-extension checks above.
+      let extensionModule = symbolTable.getFileInfo(extensionDecl.fileRoot)!.module
+      let cycle = _firstCycle(
+        extensionDecl: extensionDecl,
+        extensionState: state,
+        // Force-unwrap by `dependency.baseTypeName` check above
+        extensionMembers: namesToTypes[typeName]!.boundExtensions[extensionModule]![extensionDecl]!
+      )
+      guard cycle == nil else { return .dependencyCycle }
+    }
+
+    return nil
+  }
+}
+
+// MARK: TypeRef Helpers
+
+extension TypeGraph.GlobalTypeRef {
+  init(
+    name: TypeGraph.GlobalTypeName,
+    nominal: __shared TypeGraph.NominalType
+  ) {
+    self.init(name: name, mainDecl: nominal.mainDecl, _version: nominal.version)
+  }
+}
+
+extension TypeGraph {
+  /// Helper that forms a reference to the given `GlobalTypeName`, or returns
+  /// `nil` if it's not in the graph.
+  ///
+  /// Useful for getting the final version of a nominal type after binding extensions.
+  func getGlobalNominalTypeReference(name: GlobalTypeName) -> TypeGraph.GlobalTypeRef? {
+    namesToTypes[name].map({
+      TypeGraph.GlobalTypeRef(name: name, nominal: $0)
+    })
+  }
+}
+
+// MARK: - Cycle Detection
+
+extension TypeGraph {
+  /// Minimal data structure for DFS on extension dependencies
+  fileprivate struct _CycleDetectorFrame {
+    /// Identifies a specific dependency type declaration as:
+    /// ```
+    /// state.dependencies[index.dependency]
+    ///       .members[index.member]
+    ///       .decls[index.decl]
+    /// ```
+    typealias Index = (dependency: Int, member: Int, decl: Int)
+
+    let firstExtensionState: ExtensionState
+    /// The path to currently visited extension dependency. Note: `idx`
+    /// is initialized to `(0,0,0)`.
+    ///
+    /// Invariant: For all extensions, `extensionsToState[ext]?.dependents`
+    /// exists and is nonempty.
+    var stack: [(ext: Attached<ExtensionDeclSyntax>, idx: Index)]
+    private var descended: Bool = false
+  }
+}
+
+extension TypeGraph._CycleDetectorFrame {
+  fileprivate mutating func advance(newIndex: Index?) {
+    if let newIndex {
+      stack[stack.count - 1].idx = newIndex
+      descended = false
+    } else {
+      stack.removeLast()
+      descended = true
+    }
+  }
+  fileprivate mutating func push(_ extensionDecl: Attached<ExtensionDeclSyntax>, index: Index) {
+    assert(
+      !descended,
+      "Pushed an extension right after a descent without advancing (would descend infinitely)"
+    )
+    stack.append((extensionDecl, index))
+  }
+
+  /// Finds next dependency member given the `descended` and `stack` state.
+  ///
+  /// Returns: `nil` if no items are left, `Optional(nil)` if we just finished a descent and
+  /// need to skip, otherwise returns the next dependency member.
+  fileprivate mutating func nextDependencyMember(
+    graph: borrowing TypeGraph
+  ) -> (
+    index: Index?,
+    dependency: TypeGraph.ExtensionDependency, memberID: Identifier,
+    isFirstDecl: Bool, decl: TypeGraph.ExtensionDependency.Member?
+  )?? {
+    guard let (extensionDecl, index) = stack.last else { return nil }
+
+    // Use `firstExtensionState` for first stack entry, if provided
+    // Pushed extensions introduce a dependency's declaration, so they must be admitted
+    let state: TypeGraph.ExtensionState
+    if stack.count == 1 {
+      state = firstExtensionState
+    } else {
+      guard let pushedState = graph.extensionsToState[extensionDecl] else {
+        fatalError("\(TypeGraph.GraphFailure.staleDependency)")
+      }
+      state = pushedState
+    }
+    // Note: The initial access at index `(0,0,0)` is safe because `members` is
+    // nonempty according to `ExtensionDependency`, and `dependencies`
+    // is nonempty by the `stack` invariant. However, `decls` can be empty
+    // (we may depend on the type declarations being empty)
+    let dependency = state.dependencies[index.dependency]
+    let member = dependency.members[index.member]
+    let decl = member.decls.isEmpty ? nil : member.decls[index.decl]
+
+    let newIndex: Index?
+    if index.decl + 1 < member.decls.count {
+      // If available, move to next decl in the member
+      newIndex = (index.dependency, index.member, index.decl + 1)
+    } else if index.member + 1 < dependency.members.count {
+      // Else, move to next member in the dependency
+      newIndex = (index.dependency, index.member + 1, 0)
+    } else if index.dependency + 1 < state.dependencies.count {
+      // Else, move to next dependency in the extension
+      newIndex = (index.dependency + 1, 0, 0)
+    } else {
+      // Otherwise, we're done with the extension
+      newIndex = nil
+    }
+
+    // Advance we descended and just came back (we've already visited `memberDecl`)
+    guard !descended else {
+      advance(newIndex: newIndex)
+      return Optional(nil)
+    }
+
+    return (newIndex, dependency, member.name, index.decl == 0, decl)
+  }
+
+  fileprivate consuming func toCycle(
+    graph: borrowing TypeGraph
+  ) -> TypeResolver.ExtensionCycle {
+    var dependencyPath: [TypeResolver.ExtensionCycleElement] = []
+    // First extension is entrypoint; it only introduces the next element
+    var previousState = firstExtensionState
+    var previousIndex = stack[0].idx
+    for (ext, idx) in stack.dropFirst() {
+      // Extensions introducing a dependency's declarations must be admitted and bound
+      guard let state = graph.extensionsToState[ext], case .success(let extendedType) = state.resolvedType else {
+        fatalError("\(TypeGraph.GraphFailure.staleDependency)")
+      }
+      guard let boundType = graph.getGlobalNominalTypeReference(name: extendedType) else {
+        fatalError("\(TypeGraph.GraphFailure.danglingExtension)")
+      }
+      // The previous extension's current decl introduced this extension (so it exists)
+      let introducingDecl = previousState.dependencies[previousIndex.dependency].members[previousIndex.member]
+        .decls[previousIndex.decl]
+      dependencyPath.append(
+        TypeResolver.ExtensionCycleElement(
+          introducingTypeDecl: introducingDecl.typeDecl.node,
+          extensionDecl: ext.node,
+          boundType: boundType
+        )
+      )
+      (previousState, previousIndex) = (state, idx)
+    }
+
+    return TypeResolver.ExtensionCycle(
+      dependencyPath: dependencyPath,
+      // The last extension's current member conflicts with the entrypoint's members
+      dependencyMember: previousState.dependencies[previousIndex.dependency].members[previousIndex.member].name
+    )
+  }
+}
+
+extension TypeGraph {
+  /// Returns the dependency path through which `extensionDecl` with
+  /// state `extensionState`, recursively depends on one of `extensionMembers`.
+  /// Otherwise, returns `nil` (*No cycles*, see `TypeGraph.md` > Implementation).
+  ///
+  /// Used both before binding an extension (`admitExtension`) and to check
+  /// bound extensions (`_firstInvariantViolation`).
+  ///
+  /// Parameters:
+  /// - extensionState: The state to use for the given extension (admitted or
+  ///   about to be admitted).
+  /// Preconditions:
+  /// - Every extension introducing a member of `dependencies` recursively,
+  ///   is admitted and bound (*Extensions depend on type members*)
+  /// Complexity: `O(n)` where `n` is the number of the given extension's
+  /// transitive-dependency declarations.
+  fileprivate func _firstCycle(
+    extensionDecl: Attached<ExtensionDeclSyntax>,
+    extensionState: ExtensionState,
+    extensionMembers: TypeTable,
+  ) -> TypeResolver.ExtensionCycle? {
+    // Extensions without dependencies or that aren't bound, don't introduce cycles
+    guard !extensionState.dependencies.isEmpty,
+      case .success(let extendedTypeName) = extensionState.resolvedType
+    else {
+      return nil
+    }
+
+    // Track path to each dependency
+    // We checked `!dependencies.isEmpty` above, so the index `(0,0,0)` is valid.
+    var frame = _CycleDetectorFrame(firstExtensionState: extensionState, stack: [(extensionDecl, (0, 0, 0))])
+    var visitedExtensions: Set<Attached<ExtensionDeclSyntax>> = [extensionDecl]
+
+    // Visit next transitive dependency
+    while let next = frame.nextDependencyMember(
+      graph: self
+    ) {
+      // Skip if `nil` (i.e., when we just finished a descent and we had to call `frame.advance`)
+      guard let (newIndex, dependency, memberID, isFirstDecl, memberDecl) = next else { continue }
+
+      // Check if this dependency introduces a cycle
+      if isFirstDecl,  // Check only once per member (not every decl)
+        extendedTypeName == dependency.baseTypeName,
+        extensionMembers.typeMembersToDecls[memberID] != nil
+      {
+        // Map to the debug-friendly `ExtensionCycle` type
+        return frame.toCycle(graph: self)
+      }
+
+      // Then, find transitive dependencies
+      guard
+        // Nominal-type declarations don't introduce dependencies (though,
+        // their enclosing extensions might)
+        let dependencyExtension = memberDecl?.introducingExtensionOrMainDecl,
+        // Stop if we already have a cycle
+        visitedExtensions.insert(dependencyExtension).inserted
+      else {
+        // No transitive dependencies; just advance
+        frame.advance(newIndex: newIndex)
+        continue
+      }
+      guard let dependencyState = extensionsToState[dependencyExtension] else {
+        fatalError("\(GraphFailure.staleDependency)")
+      }
+      // Skip if it has no dependencies
+      guard !dependencyState.dependencies.isEmpty else {
+        frame.advance(newIndex: newIndex)
+        continue
+      }
+
+      // Push transitively depended-on extension
+      // We can assign `(0,0,0)` because we just checked `!dependencies.isEmpty`
+      frame.push(dependencyExtension, index: (0, 0, 0))
+    }
+
+    return nil
+  }
+}
+
 // MARK: Array Helpers
 
 extension Array {
@@ -539,15 +935,6 @@ extension Array {
 // MARK: Stubs
 
 extension TypeGraph {
-  fileprivate func _firstCycle(
-    extensionDecl: Attached<ExtensionDeclSyntax>,
-    extensionState: ExtensionState,
-    extensionMembers: TypeTable,
-  ) -> TypeResolver.ExtensionCycle? {
-    // TODO: Implement
-    nil
-  }
-
   enum TypeAdmissionFailure: Error {
     /// We don't allow admitting redeclarations. The type resolver should diagnose
     /// redeclarations and not request admitting them to the graph.
@@ -570,6 +957,46 @@ extension TypeGraph {
     /// References non-registered base type
     case invalidBase
     case unregisteredFileRoot(SourceFileSyntax)
+  }
+}
+
+// MARK: Test Hooks
+
+extension TypeGraph {
+  /// Creates a mock graph without checking for invariants; only use for tests.
+  @_spi(_QualifiedLookupTests)
+  public init(
+    _uncheckedNamesToTypes namesToTypes: [TypeGraph.GlobalTypeName: NominalType] = [:],
+    extensionsToState: [Attached<ExtensionDeclSyntax>: ExtensionState] = [:]
+  ) {
+    self.namesToTypes = namesToTypes
+    self.extensionsToState = extensionsToState
+  }
+}
+
+extension TypeGraph.NominalType {
+  /// Creates a mock nominal type without checking for invariants; only use
+  /// for tests.
+  ///
+  /// Note: Type tables ignore `#if` configurations.
+  @_spi(_QualifiedLookupTests)
+  public init(
+    _uncheckedMainDecl mainDecl: Attached<NominalTypeDeclSyntax>,
+    boundExtensions: [ModuleName: [Attached<ExtensionDeclSyntax>]] = [:],
+    dependents: [(memberType: Identifier, dependentExtension: Attached<ExtensionDeclSyntax>)] = []
+  ) {
+    self.mainDecl = mainDecl
+    self.mainDeclMembers = TypeGraph.TypeTable(typeMembersToDecls: mainDecl._groupTypeMembers(configuredRegions: nil))
+    self.boundExtensions = boundExtensions.mapValues({ extensions in
+      Dictionary(
+        uniqueKeysWithValues: extensions.map({
+          ($0, TypeGraph.TypeTable(typeMembersToDecls: $0._groupTypeMembers(configuredRegions: nil)))
+        })
+      )
+    })
+    self.dependents = dependents.map({
+      TypeGraph.TypeDependent(memberType: $0.memberType, dependentExtension: $0.dependentExtension)
+    })
   }
 }
 

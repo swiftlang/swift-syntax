@@ -309,16 +309,14 @@ extension TypeGraph.TypeRef: CustomDebugStringConvertible {
 
 // MARK: Test Hooks
 
-extension TypeGraph.GlobalTypeName {
-  /// Construct a `GlobalTypeName` whose `debugDescription` is the given string
+extension TypeGraph.GlobalTypeName.Component {
+  /// Construct a `Component` whose `debugDescription` is the given string
   /// for testing.
-  ///
-  /// Important: Any use outside of testing is unchecked and may result in
-  /// crashes. Namely, the resulting `GlobalTypeName` has a single mock
-  /// component responsible for generating the --potentially multi-component--
-  /// debug description.
-  @_spi(_QualifiedLookupTests)
-  public static func _mock(nameDescription string: String, file: StaticString = #file, line: UInt = #line) -> Self {
+  fileprivate static func _mock(
+    nameDescription string: String,
+    file: StaticString = #file,
+    line: UInt = #line
+  ) -> Self {
     // This is very hacky but basically an external module + a type name will
     // print verbatim with a '::' between them. So, split the string at '::'
     // (which every global name has), and use the first part as the qualifier
@@ -337,14 +335,46 @@ extension TypeGraph.GlobalTypeName {
       string[..<firstQualifierSeparatorIndex].description,
       string[string.index(firstQualifierSeparatorIndex, offsetBy: 2)...].description
     )
-    let instance = Self(
-      component: Component(qualifier: Qualifier.external(moduleName: firstQualifier), name: tail)
-    )
+    let instance = Self(qualifier: .external(moduleName: firstQualifier), name: tail)
 
     // Ensure we round-trip correctly
     precondition(
       instance.debugDescription == string,
       "Unexpectedly parsed global type name '\(string)' wrong (got '\(instance.debugDescription)' instead).",
+      file: file,
+      line: line
+    )
+
+    return instance
+  }
+}
+
+extension TypeGraph.GlobalTypeName {
+  /// Construct a `GlobalTypeName` whose `debugDescription` is the given string
+  /// for testing.
+  ///
+  /// Important: Any use outside of testing is unchecked and may result in
+  /// crashes. Note that passing a multi-component string in `base` will
+  /// produce the right debug description, but `TypeGraph` will only see
+  /// one component; thus, testing invariants like `parentlessType` requires
+  /// passing each member description separately.
+  @_spi(_QualifiedLookupTests)
+  public static func _mock(
+    nameDescription componentStrings: String...,
+    file: StaticString = #file,
+    line: UInt = #line
+  ) -> Self {
+    let mockComponents = componentStrings.map({
+      Component._mock(nameDescription: $0, file: file, line: line)
+    })
+    // Force unwrap because we have at least `string`
+    let instance = Self(_components: mockComponents)!
+
+    // Ensure we round-trip correctly
+    let expectedString = componentStrings.joined(separator: ".")
+    precondition(
+      instance.debugDescription == expectedString,
+      "Unexpectedly parsed global type name '\(expectedString)' wrong (got '\(instance.debugDescription)' instead).",
       file: file,
       line: line
     )

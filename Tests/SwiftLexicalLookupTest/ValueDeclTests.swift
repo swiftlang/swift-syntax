@@ -16,33 +16,6 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
 
-/// Visitor class helper used in ``SyntaxProtocol/children``
-private class SyntaxAsTypeVisitor<T: SyntaxProtocol>: SyntaxAnyVisitor {
-  var collectedNodes = [T]()
-
-  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    if let castNode = node.as(T.self) {
-      collectedNodes.append(castNode)
-    }
-    return .visitChildren
-  }
-}
-extension SyntaxProtocol {
-  /// Helper for tests that want to get the child nodes of a particular type.
-  ///
-  /// This is particularly useful for tests that require that some syntax have
-  /// parent nodes for context. For instance, to determine if the name introduced
-  /// by an identifier pattern is accessible from a static context, we need to
-  /// see if the parent variable declaration is static. Here's an example:
-  ///   DeclSyntax("var myVar: Int").children(ofType: IdentifierPatternSyntax.self)[0]
-  // TODO: Should this be moved into a 'Utilities' file?
-  func children<T: SyntaxProtocol>(ofType: T.Type) -> [T] {
-    let visitor = SyntaxAsTypeVisitor<T>(viewMode: .all)
-    visitor.walk(self)
-    return visitor.collectedNodes
-  }
-}
-
 final class ValueDeclTests: XCTestCase {
   /// Assert the given declaration syntax can be cast to a ``ValueDeclSyntax``,
   /// exhibiting the given properties.

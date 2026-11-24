@@ -121,16 +121,7 @@ extension UnqualifiedTypeLookupMatcher: LexicalMatcher {
         guard let definition = syntaxToDefinitions[scopeSyntax.node] else {
           // Most CodeBlockItemListSyntax are part of an actual `With[Optional]CodeBlockSyntax`
           // scope; we get the latter for nicer diagnostics.
-          let actualScope = scopeSyntax.node.parent?.parent
-          let scopeDescription: String
-          if let withCodeBlock = actualScope?.asProtocol((any WithCodeBlockSyntax).self) {
-            scopeDescription = withCodeBlock.with(\.body, CodeBlockSyntax(statements: [])).trimmedDescription
-          } else if let withCodeBlock = actualScope?.asProtocol((any WithOptionalCodeBlockSyntax).self) {
-            scopeDescription = withCodeBlock.with(\.body, CodeBlockSyntax(statements: [])).trimmedDescription
-          } else {
-            // Fallback descriptions
-            scopeDescription = actualScope?.trimmedDescription ?? "<no CodeBlockItemListSyntax grandparent>"
-          }
+          let (_, scopeDescription) = scopeSyntax.node._prettyScope
           failures.append(
             ExpectationFailure.resultReferencesUnmarkedSyntax(
               syntaxDescription: "'\(lookupResult)' references `\(scopeDescription)`"

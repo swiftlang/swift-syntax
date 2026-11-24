@@ -313,7 +313,7 @@ final class FileDefaultDeclarationTests: ParserTestCase {
         )
       ),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'private' before file-level default")
+        DiagnosticSpec(message: "attribute cannot be attached to a file-level default")
       ]
     )
 
@@ -335,7 +335,7 @@ final class FileDefaultDeclarationTests: ParserTestCase {
         specifier: .modifier(.identifier("nonisolated"))
       ),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '@MainActor' before file-level default")
+        DiagnosticSpec(message: "attribute cannot be attached to a file-level default")
       ]
     )
   }

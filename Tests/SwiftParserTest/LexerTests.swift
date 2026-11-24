@@ -709,6 +709,33 @@ class LexerTests: ParserTestCase {
     )
   }
 
+  func testConflictLexingTokenAfterPerforceMarker() {
+    // The line after the terminator must still be lexed.
+    assertLexemes(
+      """
+      1️⃣>>>> ORIGINAL
+      var a = 1
+      <<<<
+      print
+      """,
+      lexemes: [
+        LexemeSpec(
+          .identifier,
+          leading:
+            """
+            >>>> ORIGINAL
+            var a = 1
+            <<<<
+
+            """,
+          text: "print",
+          diagnostic: "source control conflict marker in source file",
+          flags: [.isAtStartOfLine]
+        )
+      ]
+    )
+  }
+
   func testUnicodeStringLiteralLexing() {
     assertLexemes(
       #"""
@@ -1027,6 +1054,31 @@ class LexerTests: ParserTestCase {
           diagnostic: "hexadecimal floating point literal must end with an exponent",
           flags: [.isAtStartOfLine]
         )
+      ]
+    )
+    // The literal is diagnosed even when more tokens follow it.
+    assertLexemes(
+      " 0x1.01️⃣ + 1",
+      lexemes: [
+        LexemeSpec(
+          .integerLiteral,
+          leading: " ",
+          text: "0x1.0",
+          trailing: " ",
+          diagnostic: "hexadecimal floating point literal must end with an exponent",
+          flags: [.isAtStartOfLine]
+        ),
+        LexemeSpec(.binaryOperator, text: "+", trailing: " "),
+        LexemeSpec(.integerLiteral, text: "1"),
+      ]
+    )
+    // A member access on a hexadecimal integer literal is not a float.
+    assertLexemes(
+      " 0xff.description",
+      lexemes: [
+        LexemeSpec(.integerLiteral, leading: " ", text: "0xff", flags: [.isAtStartOfLine]),
+        LexemeSpec(.period, text: "."),
+        LexemeSpec(.identifier, text: "description"),
       ]
     )
     assertLexemes(

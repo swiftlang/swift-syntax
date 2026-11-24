@@ -107,6 +107,21 @@ extension Parser {
     }
   }
 
+  /// Consume a `some` or `any` that appears in the middle of a protocol
+  /// composition, e.g., `P & some Q`, so that a diagnostic can be emitted for
+  /// it later. It is only recognized when a type follows.
+  mutating func consumeMisplacedSomeOrAnyInComposition() -> RawUnexpectedNodesSyntax? {
+    guard self.at(.keyword(.some), .keyword(.any)),
+      self.withLookahead({
+        $0.consumeAnyToken()
+        return $0.canParseType()
+      })
+    else {
+      return nil
+    }
+    return RawUnexpectedNodesSyntax([self.consumeAnyToken()], arena: self.arena)
+  }
+
   /// Parse a protocol composition involving at least one element.
   mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
@@ -161,6 +176,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
+        let misplacedSomeOrAny = self.consumeMisplacedSomeOrAnyInComposition()
         var elementType: RawTypeSyntax
         if someOrAny == nil {
           elementType = self.parseSimpleType()
@@ -190,6 +206,7 @@ extension Parser {
         keepGoing = self.consumeIfContextualPunctuator("&")
         elements.append(
           RawCompositionTypeElementSyntax(
+            misplacedSomeOrAny,
             type: elementType,
             ampersand: keepGoing,
             arena: self.arena
@@ -265,10 +282,12 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
+        let misplacedSomeOrAny = self.consumeMisplacedSomeOrAnyInComposition()
         let elementType = self.parseSimpleType()
         keepGoing = self.consumeIfContextualPunctuator("&")
         elements.append(
           RawCompositionTypeElementSyntax(
+            misplacedSomeOrAny,
             type: elementType,
             ampersand: keepGoing,
             arena: self.arena
@@ -366,7 +385,9 @@ extension Parser {
     }
 
     var base: RawTypeSyntax
-    switch self.isAtModuleSelector() ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec {
+    switch self.isAtModuleSelector() || self.atLegacyProtocolComposition()
+      ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec
+    {
     case .Self, .Any, .identifier:
       base = RawTypeSyntax(self.parseTypeIdentifier())
     case .leftParen:
@@ -434,6 +455,36 @@ extension Parser {
             break
           }
         }
+        continue
+      }
+
+      // `Int[0]` or `Int[]`: the old spelling of an array type. Parse it as an
+      // array type whose brackets are in the wrong place so that it can be
+      // diagnosed.
+      if allowMemberTypes,
+        self.at(TokenSpec(.leftSquare, allowAtStartOfLine: false)),
+        self.currentToken.leadingTriviaByteLength == 0,
+        base.raw.trailingTriviaByteLength == 0,
+        self.withLookahead({
+          $0.consumeAnyToken()
+          _ = $0.consume(if: .integerLiteral)
+          return $0.at(.rightSquare)
+        })
+      {
+        var misplaced: [RawSyntax] = [RawSyntax(self.consumeAnyToken())]
+        if let size = self.consume(if: .integerLiteral) {
+          misplaced.append(RawSyntax(size))
+        }
+        let rightSquare = self.consumeAnyToken()
+        base = RawTypeSyntax(
+          RawArrayTypeSyntax(
+            leftSquare: self.missingToken(.leftSquare),
+            element: base,
+            RawUnexpectedNodesSyntax(misplaced, arena: self.arena),
+            rightSquare: rightSquare,
+            arena: self.arena
+          )
+        )
         continue
       }
 
@@ -524,6 +575,18 @@ extension Parser {
   }
 
   /// Parse a type identifier.
+  /// Whether this is the start of a `protocol<...>` composition, which was
+  /// removed from the language.
+  mutating func atLegacyProtocolComposition() -> Bool {
+    guard self.at(.keyword(.protocol)) else {
+      return false
+    }
+    return self.withLookahead {
+      $0.consumeAnyToken()
+      return $0.at(prefix: "<")
+    }
+  }
+
   mutating func parseTypeIdentifier() -> RawIdentifierTypeSyntax {
     let (moduleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
 
@@ -533,7 +596,13 @@ extension Parser {
 
     let unexpectedBeforeName: RawUnexpectedNodesSyntax?
     let name: RawTokenSyntax
-    if moduleSelector == nil {
+    if moduleSelector == nil && self.atLegacyProtocolComposition() {
+      // `protocol<A, B>` was removed. Parse it as a generic type with an
+      // unexpected `protocol` keyword so that it can be diagnosed without losing
+      // the rest of the file.
+      unexpectedBeforeName = RawUnexpectedNodesSyntax([RawSyntax(self.consumeAnyToken())], arena: self.arena)
+      name = missingToken(.identifier)
+    } else if moduleSelector == nil {
       (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
     } else {
       unexpectedBeforeName = nil
@@ -726,6 +795,15 @@ extension Parser {
         }
         // Parse the type annotation.
         let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+        // A default argument is not allowed in a tuple type; parse it so that
+        // it can be diagnosed.
+        let unexpectedDefault: RawUnexpectedNodesSyntax?
+        if let equal = self.consume(if: .equal) {
+          let defaultValue = self.parseExpression(flavor: .basic, pattern: .none)
+          unexpectedDefault = RawUnexpectedNodesSyntax([equal.raw, defaultValue.raw], arena: self.arena)
+        } else {
+          unexpectedDefault = nil
+        }
         let ellipsis = self.consumeIfContextualPunctuator("...", remapping: .ellipsis)
         var trailingComma = self.consume(if: .comma)
         if trailingComma == nil && self.withLookahead({ $0.canParseType() }) {
@@ -743,6 +821,7 @@ extension Parser {
             unexpectedBeforeColon,
             colon: colon,
             type: type,
+            unexpectedDefault,
             ellipsis: ellipsis,
             trailingComma: trailingComma,
             arena: self.arena
@@ -1034,6 +1113,21 @@ extension Parser.Lookahead {
       self.consumeAnyToken()
     case TokenSpec(.repeat):
       return true
+    case TokenSpec(.protocol):
+      // The removed `protocol<A, B>` composition, which is still parsed (as a
+      // generic type) so that it can be diagnosed.
+      guard
+        self.withLookahead({
+          $0.consumeAnyToken()
+          return $0.at(prefix: "<")
+        })
+      else {
+        return false
+      }
+      self.consumeAnyToken()
+      guard self.consumeGenericArguments() else {
+        return false
+      }
     default:
       return false
     }

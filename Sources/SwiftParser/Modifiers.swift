@@ -236,7 +236,8 @@ extension Parser {
     let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
 
     let detail: RawDeclModifierDetailSyntax?
-    if self.at(.leftParen) {
+    // A '(' on the next line starts a new statement, not a detail.
+    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let (unexpectedBeforeDetailToken, detailToken) = self.expect(
         TokenSpec(.unsafe, remapping: .identifier),

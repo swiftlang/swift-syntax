@@ -133,7 +133,7 @@ extension SyntaxKind {
     case .differentiabilityArguments:
       return "differentiability arguments"
     case .differentiabilityWithRespectToArgument:
-      return "'@differentiable' argument"
+      return "differentiability argument"
     case .differentiableAttributeArguments:
       return "'@differentiable' arguments"
     case .discardStmt:

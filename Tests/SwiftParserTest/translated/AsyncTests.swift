@@ -278,4 +278,22 @@ final class AsyncTests: ParserTestCase {
       """
     )
   }
+
+  func testDuplicateAsyncBeforeThrows() {
+    assertParse(
+      """
+      func f() ℹ️async 1️⃣async throws {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'async' has already been specified",
+          notes: [NoteSpec(message: "'async' declared here")],
+          fixIts: ["remove redundant 'async'"]
+        )
+      ],
+      fixedSource: """
+        func f() async throws {}
+        """
+    )
+  }
 }

@@ -161,7 +161,9 @@ extension Parser.Lookahead {
       {
         hasModifier = true
         self.eat(handle)
-        if modifierKind != .open && self.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
+        if modifierKind != .open && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
+          && modifierKind.canHaveParenthesizedArgument
+        {
           // When determining whether we are at a declaration, don't consume anything in parentheses after 'open'
           // so we don't consider a function call to open as a decl modifier. This matches the C++ parser.
           self.consumeAnyToken()
@@ -1044,6 +1046,17 @@ extension Parser {
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    if lbrace.isMissing {
+      // Without a '{', whatever follows is not this declaration's members: don't
+      // let it swallow the rest of the file.
+      return RawMemberBlockSyntax(
+        unexpectedBeforeLBrace,
+        leftBrace: lbrace,
+        members: RawMemberBlockItemListSyntax(elements: .init(), arena: self.arena),
+        rightBrace: self.missingToken(.rightBrace),
+        arena: self.arena
+      )
+    }
     let members = parseMemberDeclList()
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
@@ -1163,6 +1176,14 @@ extension Parser {
     // Detect an attempt to use (early syntax) type parameter pack.
     let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis)
 
+    // Detect an attempt to give the associated type generic parameters.
+    let genericParameters: RawGenericParameterClauseSyntax?
+    if self.at(prefix: "<") {
+      genericParameters = self.parseGenericParameters()
+    } else {
+      genericParameters = nil
+    }
+
     // Parse optional inheritance clause.
     let inheritance: RawInheritanceClauseSyntax?
     if self.at(.colon) {
@@ -1199,7 +1220,7 @@ extension Parser {
       associatedtypeKeyword: assocKeyword,
       unexpectedBeforeName,
       name: name,
-      RawUnexpectedNodesSyntax([ellipsis], arena: self.arena),
+      RawUnexpectedNodesSyntax([ellipsis?.raw, genericParameters?.raw].compactMap { $0 }, arena: self.arena),
       inheritanceClause: inheritance,
       initializer: defaultType,
       genericWhereClause: whereClause,
@@ -1411,6 +1432,20 @@ extension Parser {
       parser.parseFunctionParameter()
     }
 
+    // Curried parameter lists, e.g., `func f(_ a: Int)(_ b: Int)`, are not
+    // supported; parse the extra lists so that they can be diagnosed.
+    var extraParameterClauses: [RawFunctionParameterClauseSyntax] = []
+    while !parameterClause.rightParen.isMissing, self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
+      extraParameterClauses.append(
+        self.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
+          parser.parseFunctionParameter()
+        }
+      )
+    }
+    let unexpectedAfterParameters: RawUnexpectedNodesSyntax? =
+      extraParameterClauses.isEmpty
+      ? nil : RawUnexpectedNodesSyntax(extraParameterClauses.map { $0.raw }, arena: self.arena)
+
     var (effectSpecifiers, yields) = self.parseFunctionEffectSpecifiers()
 
     var returnClause: RawReturnClauseSyntax?
@@ -1427,6 +1462,7 @@ extension Parser {
     }
     return RawFunctionSignatureSyntax(
       parameterClause: parameterClause,
+      unexpectedAfterParameters,
       effectSpecifiers: effectSpecifiers,
       yieldClause: yields,
       returnClause: returnClause,

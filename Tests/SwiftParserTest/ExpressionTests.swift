@@ -12,12 +12,41 @@
 
 import SwiftDiagnostics
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
+import SwiftParserDiagnostics
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
 
 final class ExpressionTests: ParserTestCase {
+  func testEditorPlaceholderAsTrailingClosureDoesNotSwallowFollowingStatements() {
+    assertParse(
+      """
+      func t() {
+        fn {} g: 1️⃣<#T##() -> Void#>
+        let a = 1
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "editor placeholder in source file")
+      ]
+    )
+  }
+
+  func testEditorPlaceholderAsClosureBody() {
+    // The diagnostic is on the placeholder, not on the closure around it.
+    assertParse(
+      """
+      fn { arg in
+        1️⃣<#FOO#>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "editor placeholder in source file")
+      ]
+    )
+  }
+
   func testTernary() {
     assertParse(
       "let a =1️⃣",
@@ -202,6 +231,17 @@ final class ExpressionTests: ParserTestCase {
       #imageLiteral(resourceName: "foo.png")
       #imageLiteral(resourceName: "foo/bar/baz/qux.png")
       #imageLiteral(resourceName: "foo/bar/baz/quux.png")
+      """
+    )
+
+    assertParse(
+      """
+      #colorLiteral
+        (red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+      #imageLiteral
+        (resourceName: "foo.png")
+      #fileLiteral
+        (resourceName: "foo.png")
       """
     )
   }
@@ -1810,6 +1850,164 @@ final class ExpressionTests: ParserTestCase {
       }
       """
     )
+
+    assertParse(
+      """
+      #selector
+        (foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("selector"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: DeclReferenceExprSyntax(baseName: .identifier("foo")))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #selector
+        (getter: foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("selector"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("getter"),
+            colon: .colonToken(),
+            expression: DeclReferenceExprSyntax(baseName: .identifier("foo"))
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #keyPath
+        (foo.bar)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("keyPath"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            expression: MemberAccessExprSyntax(
+              base: DeclReferenceExprSyntax(baseName: .identifier("foo")),
+              period: .periodToken(),
+              declName: DeclReferenceExprSyntax(baseName: .identifier("bar"))
+            )
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #colorLiteral
+        (red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("colorLiteral"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("red"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("1.0")),
+            trailingComma: .commaToken()
+          ),
+          LabeledExprSyntax(
+            label: .identifier("green"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("0.5")),
+            trailingComma: .commaToken()
+          ),
+          LabeledExprSyntax(
+            label: .identifier("blue"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("0.0")),
+            trailingComma: .commaToken()
+          ),
+          LabeledExprSyntax(
+            label: .identifier("alpha"),
+            colon: .colonToken(),
+            expression: FloatLiteralExprSyntax(literal: .floatLiteral("1.0"))
+          ),
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #imageLiteral
+        (resourceName: foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("imageLiteral"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("resourceName"),
+            colon: .colonToken(),
+            expression: DeclReferenceExprSyntax(baseName: .identifier("foo"))
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      #fileLiteral
+        (resourceName: foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("fileLiteral"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("resourceName"),
+            colon: .colonToken(),
+            expression: DeclReferenceExprSyntax(baseName: .identifier("foo"))
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      foo(
+        #selector
+          (bar)
+      )
+      """
+    )
+
+    assertParse(
+      """
+      1️⃣#myMacro
+        (foo)
+      """,
+      substructure: MacroExpansionExprSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("myMacro"),
+        arguments: LabeledExprListSyntax([])
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
   }
 
   func testMacroExpansionExpressionWithKeywordName() {
@@ -2187,6 +2385,27 @@ final class ExpressionTests: ParserTestCase {
       ],
       fixedSource: "a  + 2"
     )
+  }
+
+  func testNonBreakingSpaceFixItOnlyEditsTrivia() throws {
+    // The edit replaces the trivia that holds the non-breaking space and does
+    // not rewrite the neighboring token.
+    // The last line contains several consecutive non-breaking spaces, which
+    // are lexed as a single unexpected-text trivia piece.
+    let source = "let x\u{a0}= 3\n    \u{a0}_ = 42\n\u{a0}\u{a0}\u{a0}\u{a0}_ = 42"
+    let tree = Parser.parse(source: source)
+    let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
+    XCTAssertEqual(diagnostics.count, 3)
+    let utf8 = Array(source.utf8)
+    for diagnostic in diagnostics {
+      let edit = try XCTUnwrap(diagnostic.fixIts.first?.edits.first)
+      let replaced = String(
+        decoding: utf8[edit.range.lowerBound.utf8Offset..<edit.range.upperBound.utf8Offset],
+        as: UTF8.self
+      )
+      XCTAssertTrue(replaced.allSatisfy { $0.isWhitespace || $0 == "\u{a0}" }, "edit replaced '\(replaced)'")
+      XCTAssertFalse(edit.replacement.contains("\u{a0}"))
+    }
   }
 
   func testTabsIndentationInMultilineStringLiteral() {
@@ -4227,6 +4446,23 @@ final class StatementExpressionTests: ParserTestCase {
           ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("c"))),
         ])
       )
+    )
+  }
+
+  func testAsyncInsteadOfAwait() {
+    assertParse(
+      """
+      func g() async { 1️⃣async f() }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "found 'async' in expression; did you mean 'await'?",
+          fixIts: ["replace 'async' with 'await'"]
+        )
+      ],
+      fixedSource: """
+        func g() async { await f() }
+        """
     )
   }
 }

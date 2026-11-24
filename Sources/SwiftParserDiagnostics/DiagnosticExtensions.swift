@@ -165,12 +165,20 @@ class PresentMakingFormatter: BasicFormat {
 extension FixIt.MultiNodeChange {
   /// Make a node present. If `leadingTrivia` or `trailingTrivia` is specified,
   /// override the default leading/trailing trivia inferred from `BasicFormat`.
+  /// If `tokenKind` is specified and the node is a token, it gets that kind.
   static func makePresent(
     _ node: some SyntaxProtocol,
     leadingTrivia: Trivia? = nil,
-    trailingTrivia: Trivia? = nil
+    trailingTrivia: Trivia? = nil,
+    tokenKind: TokenKind? = nil,
+    carriesPreviousComment: Bool = true
   ) -> Self {
     var presentNode = PresentMakingFormatter().rewrite(node, detach: true)
+
+    // Spell a token differently from its missing placeholder.
+    if let tokenKind, let token = presentNode.as(TokenSyntax.self) {
+      presentNode = Syntax(token.with(\.tokenKind, tokenKind))
+    }
 
     if let leadingTrivia {
       presentNode = presentNode.with(\.leadingTrivia, leadingTrivia)
@@ -202,8 +210,12 @@ extension FixIt.MultiNodeChange {
       let previousToken = node.previousToken(viewMode: .fixedUp)
     {
       // If the previous token and this node don't need to be separated, remove
-      // the separation.
+      // the separation. A comment that follows the previous token stays after
+      // the inserted node, instead of ending up in front of it.
       changes.append(.replaceTrailingTrivia(token: previousToken, newTrivia: []))
+      if carriesPreviousComment, previousToken.trailingTrivia.contains(where: { $0.isComment }) {
+        presentNode = presentNode.with(\.trailingTrivia, previousToken.trailingTrivia)
+      }
     }
 
     changes.append(

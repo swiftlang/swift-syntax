@@ -260,22 +260,27 @@ extension SwiftSyntax.TokenDiagnostic {
     switch self.kind {
     case .nonBreakingSpace:
       let replaceNonBreakingSpace = { (piece: TriviaPiece) -> TriviaPiece in
-        if piece == .unexpectedText("\u{a0}") {
-          return .spaces(1)
+        if case .unexpectedText(let text) = piece, !text.isEmpty, text.unicodeScalars.allSatisfy({ $0 == "\u{a0}" }) {
+          return .spaces(text.unicodeScalars.count)
         } else {
           return piece
         }
       }
-      let fixedToken =
-        token
-        .with(\.leadingTrivia, Trivia(pieces: token.leadingTrivia.map(replaceNonBreakingSpace)))
-        .with(\.trailingTrivia, Trivia(pieces: token.trailingTrivia.map(replaceNonBreakingSpace)))
-      return [
-        FixIt(
-          message: .replaceNonBreakingSpaceBySpace,
-          changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]
-        )
-      ]
+      // Replace only the trivia that contains the non-breaking space, so that
+      // the edit does not touch the token's text.
+      var changes: [FixIt.Change] = []
+      let leadingTrivia = Trivia(pieces: token.leadingTrivia.map(replaceNonBreakingSpace))
+      if leadingTrivia != token.leadingTrivia {
+        changes.append(.replaceLeadingTrivia(token: token, newTrivia: leadingTrivia))
+      }
+      let trailingTrivia = Trivia(pieces: token.trailingTrivia.map(replaceNonBreakingSpace))
+      if trailingTrivia != token.trailingTrivia {
+        changes.append(.replaceTrailingTrivia(token: token, newTrivia: trailingTrivia))
+      }
+      if changes.isEmpty {
+        return []
+      }
+      return [FixIt(message: .replaceNonBreakingSpaceBySpace, changes: changes)]
     case .unicodeCurlyQuote:
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
       guard let text = text else {

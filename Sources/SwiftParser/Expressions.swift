@@ -185,6 +185,14 @@ extension Parser {
         break
       }
 
+      // In a statement condition, `&& let x = y` (or `var`/`case`) is a
+      // misspelled comma: leave the `&&` to the condition list.
+      if flavor == .stmtCondition, self.atContextualPunctuator("&&"),
+        self.peek(isAt: .keyword(.let), .keyword(.var), .keyword(.case))
+      {
+        break
+      }
+
       // Parse the operator.
       guard
         let (operatorExpr, rhsExpr) =
@@ -468,6 +476,23 @@ extension Parser {
     flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawExprSyntax? {
+    // `async f()` is most likely a misspelling of `await f()`.
+    if self.at(.keyword(.async)),
+      self.peek(isAt: .identifier, .keyword(.self), .dollarIdentifier),
+      !self.peek().isAtStartOfLine
+    {
+      let asyncTok = self.consumeAnyToken()
+      let sub = self.parseSequenceExpressionElement(flavor: flavor, pattern: pattern)
+      return RawExprSyntax(
+        RawAwaitExprSyntax(
+          RawUnexpectedNodesSyntax([asyncTok], arena: self.arena),
+          awaitKeyword: self.missingToken(.await),
+          expression: sub,
+          arena: self.arena
+        )
+      )
+    }
+
     switch self.at(anyIn: ExpressionModifierKeyword.self) {
     case (.await, let handle)?:
       let awaitTok = self.eat(handle)
@@ -1538,7 +1563,22 @@ extension Parser {
     }
 
     // Parse the optional parenthesized argument list.
-    let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
+    // Built-in '#selector', '#keyPath', and object literal ('#colorLiteral',
+    // '#imageLiteral', '#fileLiteral') expressions always require a
+    // parenthesized argument list, and the C++ parser permits a newline before
+    // the opening '(' for them.
+    let allowAtStartOfLine: Bool
+    if moduleSelector == nil && generics == nil {
+      switch macroName.tokenText {
+      case "selector", "keyPath", "colorLiteral", "imageLiteral", "fileLiteral":
+        allowAtStartOfLine = true
+      default:
+        allowAtStartOfLine = false
+      }
+    } else {
+      allowAtStartOfLine = false
+    }
+    let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: allowAtStartOfLine))
     let args: RawSyntaxNodeList<RawLabeledExprSyntax>
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
@@ -1952,6 +1992,26 @@ extension Parser {
 
     // Parse the opening left brace.
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+
+    // An editor placeholder stands in for the whole closure, braces included:
+    // don't let it swallow the statements that follow it.
+    if lbrace.isMissing && self.currentToken.isEditorPlaceholder {
+      let placeholder = self.parseExpression(flavor: .basic, pattern: .none)
+      let item = RawCodeBlockItemSyntax(
+        item: .init(expr: placeholder),
+        semicolon: nil,
+        arena: self.arena
+      )
+      return RawClosureExprSyntax(
+        unexpectedBeforeLBrace,
+        leftBrace: lbrace,
+        signature: nil,
+        statements: RawCodeBlockItemListSyntax(elements: self.nodeListAllocator.listOfOne(item), arena: self.arena),
+        rightBrace: self.missingToken(.rightBrace),
+        arena: self.arena
+      )
+    }
+
     // Parse the closure-signature, if present.
     let signature = self.parseClosureSignatureIfPresent()
 
@@ -2556,9 +2616,9 @@ extension Parser {
           ),
           allocator: self.nodeListAllocator
         )
-      } else if self.canRecoverTo(.poundIf) != nil {
+      } else if self.canRecoverTo(.poundIf) != nil && !self.withLookahead({ $0.endsSwitchCaseBodyBeforePoundIf() }) {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
-        // clauses.
+        // clauses. Recover to one further on only if no case is skipped.
         elements.append(
           .ifConfigDecl(
             self.parsePoundIfDirective({ parser in
@@ -2612,15 +2672,9 @@ extension Parser {
   }
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
-    parseCodeBlockItemList(until: {
-      if $0.at(.rightBrace, .keyword(.case), .keyword(.default)) || $0.atEndOfIfConfigClauseBody() {
-        return true
-      }
-      if $0.withLookahead({ $0.atStartOfConditionalSwitchCases() }) {
-        return true
-      }
-      return false
-    })
+    parseCodeBlockItemList {
+      $0.atEndOfIfConfigClauseBody() || $0.withLookahead { $0.atEndOfSwitchCaseBody() }
+    }
   }
 
   /// Parse a single switch case clause.

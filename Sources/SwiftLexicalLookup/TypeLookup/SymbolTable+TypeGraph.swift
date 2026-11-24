@@ -52,6 +52,39 @@ extension SymbolTable {
       }
     }
 
+    /// Complexity: O(n) where `n` is the number of extensions in `sourceFile`.
+    mutating func request(sourceFile: SourceFileSyntax) {
+      guard let sourceFileExtensions = unresolvedExtensions.removeValue(forKey: sourceFile) else {
+        // Return if already removed
+        return
+      }
+      append(contentsOf: sourceFileExtensions)
+    }
+
+    /// Complexity: O(n) where `n` is the number of extensions in `extensionDecl`
+    /// file root.
+    mutating func request(extensionDecl: Attached<ExtensionDeclSyntax>) {
+      // Return if the file is resolved
+      guard var sourceFileExtensions = unresolvedExtensions[extensionDecl.fileRoot] else { return }
+      // Return if the extension is resolved (in an unresolved file)
+      guard let unresolvedExtensionIndex = sourceFileExtensions.firstIndex(of: extensionDecl) else { return }
+      // Mark as resolved
+      sourceFileExtensions.remove(at: unresolvedExtensionIndex)
+      unresolvedExtensions[extensionDecl.fileRoot] = sourceFileExtensions
+
+      // Add the request
+      append(contentsOf: [extensionDecl])
+    }
+
+    /// Complexity: O(n) where `n` is the number of extensions.
+    fileprivate mutating func request(evictedExtensions: [Attached<ExtensionDeclSyntax>]) {
+      append(contentsOf: evictedExtensions)
+    }
+
+    fileprivate var alreadyProcessing: Bool {
+      current != nil
+    }
+
     /// Returns the last index and element of the requestedExtensions without
     /// popping; `nil` if empty.
     ///
@@ -122,7 +155,7 @@ extension SymbolTable {
     memberTypeName: Identifier,
     introducingTypeSyntax: Attached<TypeLikeSyntax>,
     introducingModule: ModuleName,
-    dependencyTracker: inout DependencyTracker
+    dependencyTracker: inout TypeGraph.DependencyTracker
   ) -> Result<
     [(declGroupParent: Attached<DeclGroupSyntaxType>, typeDecl: Attached<TypeDeclSyntax>)],
     TypeGraph.QualifiedTypeLookupFailure
@@ -131,28 +164,28 @@ extension SymbolTable {
   }
 }
 
-// MARK: Registration Requests
+// MARK: Admission Requests
 
 extension SymbolTable {
-  /// Registers nominal type by forwarding to `TypeGraph/registerNominalType`
-  func registerNominalType(
+  /// Admits a nominal type by forwarding to `TypeGraph/admitType`
+  func admitType(
     topScopeMainDecl: Attached<NominalTypeDeclSyntax>,
     declName: Identifier,
     declFileInfo: FileInfo,
     isGlobal: Bool,
     originatingSyntax: Attached<TypeLikeSyntax>
-  ) -> Result<TypeResolver.ResolvedTypeSyntax, TypeGraph.NominalRegistrationFailure> {
+  ) -> Result<TypeResolver.ResolvedTypeSyntax, TypeGraph.TypeAdmissionFailure> {
     fatalError("TODO")
   }
-  /// Registers nominal type by forwarding to `TypeGraph/registerNominalType`
-  func registerNominalType(
+  /// Admits a nominal type by forwarding to `TypeGraph/admitType`
+  func admitType(
     nestedMainDecl: Attached<NominalTypeDeclSyntax>,
     declName: Identifier,
     declFileInfo: FileInfo,
     baseDeclGroup: Attached<DeclGroupSyntaxType>,
     baseType: TypeResolver.ResolvedTypeSyntax,
     originatingSyntax: Attached<TypeLikeSyntax>
-  ) -> Result<TypeResolver.ResolvedTypeSyntax, TypeGraph.NestedNominalRegistrationFailure> {
+  ) -> Result<TypeResolver.ResolvedTypeSyntax, TypeGraph.NestedTypeAdmissionFailure> {
     fatalError("TODO")
   }
   /// Updates a registered nominal type by forwarding to `TypeGraph/updateNominalTypeReference`.

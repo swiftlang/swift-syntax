@@ -92,11 +92,47 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var allStatementsInSwitchMustBeCoveredByCase: Self {
     .init("all statements inside a switch must be covered by a 'case' or 'default' label")
   }
+  public static var legacyEmptyProtocolComposition: Self {
+    .init("'protocol<>' syntax has been removed; use 'Any' instead")
+  }
+  public static var legacyProtocolComposition: Self {
+    .init("'protocol<...>' composition syntax has been removed; join the type constraints using '&'")
+  }
+  public static var legacyProtocolCompositionSingle: Self {
+    .init("'protocol<...>' composition syntax has been removed and is not needed here")
+  }
   public static var ambiguousOptionalComposition: Self {
     .init("confusing use of optional after a 'some' or 'any' composition; use parentheses to clarify precedence")
   }
+  public static var expectedLeftBraceOrIfAfterElseDidYouMeanIf: Self {
+    .init("expected '{' or 'if' after 'else'; did you mean to write 'if'?")
+  }
+  public static var defaultArgumentInTupleType: Self {
+    .init("default argument not permitted in a tuple type")
+  }
+  public static var curriedParameterLists: Self {
+    .init("cannot have more than one parameter list")
+  }
+  public static var asyncInExpression: Self {
+    .init("found 'async' in expression; did you mean 'await'?")
+  }
+  public static var doKeywordSpecifiesCatchRegion: Self {
+    .init("the 'do' keyword is used to specify a 'catch' region")
+  }
+  public static var caseLabelOutsideOfSwitch: Self {
+    .init("'case' label can only appear inside a 'switch' statement")
+  }
+  public static var oldStyleArrayType: Self {
+    .init("array types are now written with the brackets around the element type")
+  }
+  public static var fileDefaultRejectsAttributes: Self {
+    .init("attribute cannot be attached to a file-level default")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
+  }
+  public static var associatedTypeCannotHaveGenericParameters: Self {
+    .init("associated types must not have a generic parameter list")
   }
   public static var caseOutsideOfSwitchOrEnum: Self {
     .init("'case' can only appear inside a 'switch' statement or 'enum' declaration")
@@ -175,6 +211,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   }
   public static var invalidPrecedenceGroupAssociativity: Self {
     .init("Expected 'none', 'left', or 'right' after 'associativity'")
+  }
+  public static var letCaseMisspelled: Self {
+    .init("pattern matching binding is spelled with 'case let', not 'let case'")
   }
   public static var joinConditionsUsingComma: Self {
     .init("expected ',' joining parts of a multi-clause condition")
@@ -362,7 +401,8 @@ public struct DuplicateEffectSpecifiers: ParserError {
   public let unexpectedSpecifier: TokenSyntax
 
   public var message: String {
-    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind {
+    if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind || correctSpecifier.text == unexpectedSpecifier.text
+    {
       return "\(nodesDescription([unexpectedSpecifier], format: false)) has already been specified"
     } else {
       return
@@ -481,7 +521,7 @@ public struct MissingAttributeArgument: ParserError {
   public let attributeName: TypeSyntax
 
   public var message: String {
-    return "expected argument for '@\(attributeName)' attribute"
+    return "expected argument for '@\(attributeName.trimmedDescription)' attribute"
   }
 }
 
@@ -527,6 +567,14 @@ public struct NegatedAvailabilityCondition: ParserError {
   }
 }
 
+public struct OpaqueMidComposition: ParserError {
+  public let keyword: TokenSyntax
+
+  public var message: String {
+    return "'\(keyword.text)' should appear at the beginning of a composition"
+  }
+}
+
 public struct SpaceSeparatedIdentifiersError: ParserError {
   public let firstToken: TokenSyntax
   public let additionalTokens: [TokenSyntax]
@@ -546,7 +594,8 @@ public struct SpecifierOnParameterName: ParserError {
   public let misplacedSpecifiers: [TokenSyntax]
 
   public var message: String {
-    return "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed"
+    return
+      "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed, place it before the parameter type instead"
   }
 }
 
@@ -595,6 +644,14 @@ public struct UnexpectedNodesError: ParserError {
       }
     }
     return message
+  }
+}
+
+public struct UnknownDifferentiabilityKind: ParserError {
+  public let kind: TokenSyntax
+
+  public var message: String {
+    return "unknown differentiability kind '\(kind.text)'; only 'reverse' is supported"
   }
 }
 
@@ -700,6 +757,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   public static var insertWhitespace: Self {
     .init("insert whitespace")
   }
+  public static var writeInlineArrayType: Self {
+    .init("write as an inline array type")
+  }
   public static var joinIdentifiers: Self {
     .init("join the identifiers together")
   }
@@ -714,6 +774,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var insertExtraClosingPounds: Self {
     .init("insert additional closing '#' delimiters")
+  }
+  public static var replaceLegacyProtocolComposition: Self {
+    .init("replace 'protocol<...>' with a composition using '&'")
   }
   public static var parenthesizeComposition: Self {
     .init("parenthesize composition")
@@ -743,6 +806,14 @@ public struct InsertFixIt: ParserFixIt {
 
   public var message: String {
     "insert '\(tokenToBeInserted.text)'"
+  }
+}
+
+public struct MoveToBeginningOfCompositionFixIt: ParserFixIt {
+  public let keyword: TokenSyntax
+
+  public var message: String {
+    "move '\(keyword.text)' to the beginning of the composition"
   }
 }
 

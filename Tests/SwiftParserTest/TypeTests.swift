@@ -30,6 +30,73 @@ final class TypeTests: ParserTestCase {
     )
   }
 
+  func testLegacyProtocolComposition() {
+    // `protocol<A, B>` was removed from the language. It is parsed as a generic
+    // type so the declarations that follow are not lost.
+    assertParse(
+      """
+      let a: 1️⃣protocol<P1, P2>?
+      let b: 2️⃣protocol<>
+      func f(_: 3️⃣protocol<P1>) {}
+      typealias T = 4️⃣protocol< >
+      let c = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'protocol<...>' composition syntax has been removed; join the type constraints using '&'",
+          highlight: "protocol<P1, P2>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'protocol<>' syntax has been removed; use 'Any' instead",
+          highlight: "protocol<>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "'protocol<...>' composition syntax has been removed and is not needed here",
+          highlight: "protocol<P1>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "'protocol<>' syntax has been removed; use 'Any' instead",
+          highlight: "protocol< >",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+      ],
+      fixedSource: """
+        let a: (P1 & P2)?
+        let b: Any
+        func f(_: P1) {}
+        typealias T = Any
+        let c = 0
+        """
+    )
+  }
+
+  func testLegacyProtocolCompositionInClosureResult() {
+    // The lookahead that recognizes a closure signature has to accept the
+    // removed composition too, or the closure is parsed as a body.
+    assertParse(
+      """
+      let f = { () -> 1️⃣protocol<P> in 1 }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'protocol<...>' composition syntax has been removed and is not needed here",
+          highlight: "protocol<P>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        )
+      ],
+      fixedSource: """
+        let f = { () -> P in 1 }
+        """
+    )
+  }
+
   func testClosureParsing() {
     assertParse("let a: (a, b) -> c")
 
@@ -1004,6 +1071,88 @@ final class InlineArrayTypeTests: ParserTestCase {
       some(1)
       _ = some + 1
       """
+    )
+  }
+
+  func testSomeOrAnyInMiddleOfComposition() {
+    assertParse(
+      """
+      let a: P & 1️⃣some Q = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'some' should appear at the beginning of a composition",
+          fixIts: ["move 'some' to the beginning of the composition"]
+        )
+      ],
+      fixedSource: """
+        let a: some P & Q = 1
+        """
+    )
+    assertParse(
+      """
+      let a: any P & 1️⃣any Q
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'any' should appear at the beginning of a composition",
+          fixIts: ["remove 'any'"]
+        )
+      ],
+      fixedSource: """
+        let a: any P & Q
+        """
+    )
+  }
+
+  func testDefaultArgumentInTupleType() {
+    assertParse(
+      """
+      let t: (Int 1️⃣= 3, Int) = (1, 2)
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "default argument not permitted in a tuple type",
+          fixIts: ["remove '=' and integer literal"]
+        )
+      ],
+      fixedSource: """
+        let t: (Int , Int) = (1, 2)
+        """
+    )
+  }
+
+  func testOldStyleArrayType() {
+    assertParse(
+      """
+      var v: Int1️⃣[] = []
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["insert '['"]
+        )
+      ],
+      fixedSource: """
+        var v: [Int] = []
+        """
+    )
+  }
+
+  func testOldStyleArrayTypeWithSize() {
+    assertParse(
+      """
+      var v: Int1️⃣[3] = []
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
+      ],
+      fixedSource: """
+        var v: [3 of Int] = []
+        """
     )
   }
 }

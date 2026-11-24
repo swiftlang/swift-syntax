@@ -560,6 +560,128 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testStatementInSwitchBeforeDistantPoundIf() {
+    // Recovering to a '#if' must not take the cases in between, and the rest of
+    // the file, as unexpected code before it.
+    assertParse(
+      """
+      switch x {
+        1️⃣x = 1
+      default:
+        x = 0
+      }
+      #if true
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          x = 1
+        default:
+          x = 0
+        }
+        #if true
+        #endif
+        """
+    )
+  }
+
+  func testStatementInSwitchBeforeDistantPoundIfWithNestedBrackets() {
+    // A '}' or 'default' inside nested braces doesn't end the case body.
+    assertParse(
+      """
+      switch x {
+        1️⃣if c {
+      #if A
+          foo()
+      #endif
+        }
+      default:
+        x = 0
+      }
+      #if B
+      #endif
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
+      ],
+      fixedSource: """
+        switch x {
+        case <#identifier#>:
+          if c {
+        #if A
+            foo()
+        #endif
+          }
+        default:
+          x = 0
+        }
+        #if B
+        #endif
+        """
+    )
+  }
+
+  func testMissingBodyOnNextLineDoesNotSwallowFollowingStatements() {
+    assertParse(
+      """
+      func f() {
+        if true1️⃣
+        let z = 1
+        while true2️⃣
+        let w = 2
+      }
+      func g() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected body in 'if' statement", fixIts: ["insert body"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected code block in 'while' statement",
+          fixIts: ["insert code block"]
+        ),
+      ],
+      fixedSource: """
+        func f() {
+          if true {
+        }
+          let z = 1
+          while true {
+        }
+          let w = 2
+        }
+        func g() {}
+        """
+    )
+  }
+
+  func testLetCaseIsMisspelledCaseLet() {
+    assertParse(
+      """
+      if 1️⃣let case 2️⃣(b?) = a, b != 42 {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "pattern matching binding is spelled with 'case let', not 'let case'",
+          fixIts: ["move 'let' after 'case'"]
+        )
+      ],
+      fixedSource: """
+        if case let (b?) = a, b != 42 {}
+        """
+    )
+  }
+
   func testBogusSwitchStatement() {
     assertParse(
       """
@@ -1252,6 +1374,69 @@ final class StatementTests: ParserTestCase {
 
     assertParse(
       "for unsafe: Int in e { }"
+    )
+  }
+
+  func testElseFollowedByConditionSuggestsIf() {
+    assertParse(
+      """
+      if a { } 1️⃣else b { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected '{' or 'if' after 'else'; did you mean to write 'if'?",
+          fixIts: ["insert 'if'"]
+        )
+      ],
+      fixedSource: """
+        if a { } else if b { }
+        """
+    )
+  }
+
+  func testAmpersandAmpersandBeforeBindingInCondition() {
+    assertParse(
+      """
+      if a 1️⃣&& let x = b { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' joining parts of a multi-clause condition",
+          fixIts: ["replace '&&' with ','"]
+        )
+      ],
+      fixedSource: """
+        if a, let x = b { }
+        """
+    )
+  }
+
+  func testTryInsteadOfDoBeforeCatch() {
+    assertParse(
+      """
+      func f() { 1️⃣try { g() } catch { } }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "the 'do' keyword is used to specify a 'catch' region",
+          fixIts: ["replace 'try' with 'do'"]
+        )
+      ],
+      fixedSource: """
+        func f() { do { g() } catch { } }
+        """
+    )
+  }
+
+  func testElseFollowedByConditionOnNextLineIsNotMisspelledIf() {
+    assertParse(
+      """
+      if a { } else 1️⃣b
+      { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '{' or 'if' after 'else'")
+      ]
     )
   }
 }

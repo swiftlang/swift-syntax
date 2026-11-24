@@ -174,12 +174,14 @@ extension Lexer {
     _ input: UnsafeBufferPointer<UInt8>,
     from startIndex: Int = 0,
     lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>,
-    stateAllocator: StateAllocator
+    stateAllocator: StateAllocator,
+    allowsBareSlashRegex: Bool = true
   ) -> LexemeSequence {
     precondition(input.isEmpty || startIndex < input.endIndex)
     let cursor = Cursor(
       input: UnsafeBufferPointer(rebasing: input[startIndex...]),
-      isAtStartOfInput: startIndex == input.startIndex
+      isAtStartOfInput: startIndex == input.startIndex,
+      allowsBareSlashRegex: allowsBareSlashRegex
     )
     return LexemeSequence(
       sourceBufferStart: input.baseAddress,

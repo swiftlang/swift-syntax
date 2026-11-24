@@ -422,13 +422,27 @@ extension ParseDiagnosticsGenerator {
       }
     }
 
-    let changes = missingNodes.map { node in
+    // When the nodes are inserted before a comment that follows the previous
+    // token, the comment ends up after the last of them.
+    var carriedTrivia: Trivia? = nil
+    if let first = missingNodes.first, first.shouldBeInsertedBeforePreviousTokenTrivia,
+      let previousToken = first.previousToken(viewMode: .sourceAccurate),
+      previousToken.trailingTrivia.contains(where: { $0.isComment })
+    {
+      carriedTrivia = previousToken.trailingTrivia
+    }
+    let changes = missingNodes.enumerated().map { (index, node) in
+      let trailing = index == missingNodes.count - 1 ? carriedTrivia : nil
       if let missing = node.asProtocol(MissingNodeSyntax.self) {
         // For missing nodes, only make the placeholder present. Don’t make any
         // missing nodes, e.g. in a malformed attribute, present.
-        return FixIt.MultiNodeChange.makePresent(missing.placeholder)
+        return FixIt.MultiNodeChange.makePresent(
+          missing.placeholder,
+          trailingTrivia: trailing,
+          carriesPreviousComment: false
+        )
       } else {
-        return FixIt.MultiNodeChange.makePresent(node)
+        return FixIt.MultiNodeChange.makePresent(node, trailingTrivia: trailing, carriesPreviousComment: false)
       }
     }
     let fixIt = FixIt(

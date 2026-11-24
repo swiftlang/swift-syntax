@@ -375,7 +375,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   Node(
     kind: .differentiabilityWithRespectToArgument,
     base: .syntax,
-    nameForDiagnostics: "'@differentiable' argument",
+    nameForDiagnostics: "differentiability argument",
     documentation: "A clause containing differentiability parameters.",
     children: [
       Child(

@@ -17,6 +17,30 @@ import SwiftSyntaxBuilder
 import XCTest
 
 final class AttributeTests: ParserTestCase {
+  func testMissingArgumentToAttributeFollowedByComment() {
+    // The attribute's name in the message does not include its trailing trivia.
+    assertParse(
+      """
+      @_specialize1️⃣ // comment
+      func foo() {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '()' in attribute", fixIts: ["insert '()'"]),
+        DiagnosticSpec(
+          message: "expected argument for '@_specialize' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+      ],
+      applyFixIts: ["insert '()'"],
+      fixedSource: """
+        @_specialize() // comment
+        func foo() {
+        }
+        """
+    )
+  }
+
   func testMissingArgumentToAttribute() {
     assertParse(
       """
@@ -77,7 +101,7 @@ final class AttributeTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected ':' and arguments in '@differentiable' argument",
+          message: "expected ':' and arguments in differentiability argument",
           fixIts: ["insert ':' and arguments"]
         ),
         DiagnosticSpec(
@@ -277,8 +301,38 @@ final class AttributeTests: ParserTestCase {
     assertParse(
       """
       func f(in: @differentiable(reverse) (Int) -> Int) { }
-      func f(in: @differentiable(reverse, wrt: a) (Int) -> Int) { }
       """
+    )
+  }
+
+  func testBareDifferentiableTypeAttribute() {
+    assertParse(
+      """
+      let a: @differentiable (Int) -> Int
+      func f(in: @differentiable (Int) -> Int) { }
+      let b: @differentiable(reverse) (Int) -> Int
+      let h: @differentiable (Float, Float) -> Float
+      """
+    )
+  }
+
+  func testDifferentiableTypeAttributeWithWrt() {
+    // Like the C++ parser, '(reverse, wrt: a)' is not parsed as the arguments of
+    // a '@differentiable' type attribute; it is the parameter list of a function type.
+    assertParse(
+      """
+      func f3️⃣(in: @differentiable(reverse, wrt: a)1️⃣ 2️⃣(Int) -> Int) { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(Int) -> Int)' in function"),
+      ],
+      fixedSource: "func f(in: @differentiable(reverse, wrt: a)) (Int) -> Int) { }"
     )
   }
 
@@ -940,28 +994,18 @@ final class AttributeTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected identifier in class",
-          fixIts: ["insert identifier"]
+          message: "expected identifier and member block in class",
+          fixIts: ["insert identifier and member block"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected '{' in class",
-          fixIts: ["insert '{'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "unexpected code '))' in class"
-        ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected '}' to end class",
-          fixIts: ["insert '}'"]
+          message: "unexpected code '))' in source file"
         ),
       ],
       fixedSource: """
-        @attached(member, names: named(<#expression#>)) class <#identifier#> {))
+        @attached(member, names: named(<#expression#>)) class <#identifier#> {
+        }))
         macro m()
-        }
         """
     )
   }
@@ -1561,6 +1605,21 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testSpaceBetweenAtAndTypeAttribute() {
+    assertParse(
+      "let x: @1️⃣ escaping () -> Void = {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace after '@' is not permitted; this is an error in Swift 6",
+          severity: .warning,
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: "let x: @escaping () -> Void = {}",
+      swiftVersion: .v5
+    )
+  }
+
   func testSpaceBetweenAttributeNameAndLeftParen() {
     assertParse(
       "@custom1️⃣ (1) func foo() {}",
@@ -1746,6 +1805,25 @@ final class AttributeTests: ParserTestCase {
       var _ = [@Sendable () -> Void]()
       """,
       swiftVersion: .v5
+    )
+  }
+
+  func testUnknownDifferentiabilityKind() {
+    assertParse(
+      """
+      @differentiable(1️⃣horse)
+      func f(_ x: Float) -> Float { x }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unknown differentiability kind 'horse'; only 'reverse' is supported",
+          fixIts: ["replace 'horse' with 'reverse'"]
+        )
+      ],
+      fixedSource: """
+        @differentiable(reverse)
+        func f(_ x: Float) -> Float { x }
+        """
     )
   }
 }

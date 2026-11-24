@@ -239,6 +239,27 @@ extension DeclGroupSyntax {
   }
 }
 
+// TODO: Consider simplifying/merging lookup methods
+extension Attached where Node: DeclGroupSyntax {
+  internal func _groupTypeMembers(
+    configuredRegions: ConfiguredRegions?
+  ) -> [Identifier: [Attached<TypeDeclSyntax>]] {
+    var result = [Identifier: [Attached<TypeDeclSyntax>]]()
+    node.visitDirectMembers(
+      configuredRegions: configuredRegions,
+      visit: { valueDecl in
+        guard let typeDecl = valueDecl.as(TypeDeclSyntax.self) else { return }
+        guard let typeIdentifier = Identifier(validating: typeDecl.name) else { return }
+        // Since these are our children, they will also be scope in the file,
+        // so we can force-unwrap.
+        let wrappedTypeDecl = Attached<TypeDeclSyntax>(typeDecl)!
+        result[typeIdentifier, default: []].append(wrappedTypeDecl)
+      }
+    )
+    return result
+  }
+}
+
 // MARK: Utilities
 
 extension DeclGroupSyntaxType {

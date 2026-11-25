@@ -224,6 +224,28 @@ public struct StaticBuildConfiguration: Codable {
   /// // Hooray, we can implicitly open existentials!
   /// #endif
   public var compilerVersion: VersionTuple
+
+  /// Encode the configuration with the elements of each set in sorted order,
+  /// so that equal configurations have equal encodings. For example, the
+  /// configuration is part of every macro expansion request to a compiler
+  /// plugin, and the requests should be the same in every compiler process.
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(customConditions.sorted(), forKey: .customConditions)
+    try container.encode(features.sorted(), forKey: .features)
+    try container.encode(attributes.sorted(), forKey: .attributes)
+    try container.encode(targetOSs.sorted(), forKey: .targetOSs)
+    try container.encode(targetArchitectures.sorted(), forKey: .targetArchitectures)
+    try container.encode(targetEnvironments.sorted(), forKey: .targetEnvironments)
+    try container.encode(targetRuntimes.sorted(), forKey: .targetRuntimes)
+    try container.encode(targetPointerAuthenticationSchemes.sorted(), forKey: .targetPointerAuthenticationSchemes)
+    try container.encode(targetObjectFileFormats.sorted(), forKey: .targetObjectFileFormats)
+    try container.encode(targetPointerBitWidth, forKey: .targetPointerBitWidth)
+    try container.encode(targetAtomicBitWidths, forKey: .targetAtomicBitWidths)
+    try container.encode(endianness, forKey: .endianness)
+    try container.encode(languageMode, forKey: .languageMode)
+    try container.encode(compilerVersion, forKey: .compilerVersion)
+  }
 }
 
 extension StaticBuildConfiguration: BuildConfiguration {

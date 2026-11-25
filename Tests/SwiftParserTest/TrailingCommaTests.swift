@@ -339,5 +339,20 @@ final class TrailingCommaTests: ParserTestCase {
       """,
       languageFeatures: .trailingComma
     )
+
+    assertParse(
+      """
+      func foo<T>() where T: P1, T: P2, 1️⃣{ }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected left-hand type, '==', and right-hand type in same type requirement",
+          fixIts: ["insert left-hand type, '==', and right-hand type"]
+        )
+      ],
+      fixedSource: """
+        func foo<T>() where T: P1, T: P2, <#type#> == <#type#> { }
+        """
+    )
   }
 }

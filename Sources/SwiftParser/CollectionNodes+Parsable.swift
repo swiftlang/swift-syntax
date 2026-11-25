@@ -137,3 +137,23 @@ extension MemberBlockItemListSyntax: SyntaxParseable {
 // IMPORTANT: If you are tempted to add a new conformances here please      //
 // insert in in alphabetical order above                                    //
 //==========================================================================//
+
+/// Every collection node that conforms to ``SyntaxParseable``.
+///
+/// ``syntaxParseableTypes`` combines this with the layout nodes that conform to
+/// ``SyntaxParseable``.
+@_spi(Testing)
+public var collectionNodeSyntaxParseableTypes: [SyntaxParseable.Type] {
+  [
+    AccessorDeclListSyntax.self,
+    AttributeListSyntax.self,
+    CodeBlockItemListSyntax.self,
+    MemberBlockItemListSyntax.self,
+  ]
+}
+
+/// Every syntax node that conforms to ``SyntaxParseable``.
+@_spi(Testing)
+public var syntaxParseableTypes: [SyntaxParseable.Type] {
+  layoutNodeSyntaxParseableTypes + collectionNodeSyntaxParseableTypes
+}

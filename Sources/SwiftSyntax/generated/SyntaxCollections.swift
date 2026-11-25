@@ -158,9 +158,11 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(AttributeSyntax.self), .node(IfConfigDeclSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``AttributeSyntax``.
     ///
@@ -1462,9 +1464,11 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(PrecedenceGroupRelationSyntax.self), .node(PrecedenceGroupAssignmentSyntax.self), .node(PrecedenceGroupAssociativitySyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``PrecedenceGroupRelationSyntax``.
     ///
@@ -1716,6 +1720,7 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([
         .node(LabeledSpecializeArgumentSyntax.self),
@@ -1724,6 +1729,7 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
         .node(GenericWhereClauseSyntax.self)
       ])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``LabeledSpecializeArgumentSyntax``.
     ///
@@ -1884,9 +1890,11 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(StringSegmentSyntax.self), .node(ExpressionSegmentSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``StringSegmentSyntax``.
     ///
@@ -2056,9 +2064,11 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(SwitchCaseSyntax.self), .node(IfConfigDeclSyntax.self), .node(MacroExpansionDeclSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``SwitchCaseSyntax``.
     ///
@@ -2272,9 +2282,11 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
 
+    #if !SWIFTSYNTAX_NO_STRUCTURE_REFLECTION
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(SimpleTypeSpecifierSyntax.self), .node(LifetimeTypeSpecifierSyntax.self), .node(NonisolatedTypeSpecifierSyntax.self)])
     }
+    #endif
 
     /// Checks if the current syntax node can be cast to ``SimpleTypeSpecifierSyntax``.
     ///

@@ -305,6 +305,28 @@ public protocol BuildConfiguration {
   /// #endif
   /// ```
   var compilerVersion: VersionTuple { get }
+
+  /// The deployment target version for the given target operating system.
+  ///
+  /// - Parameters:
+  ///   - targetOS: The name of the operating system being queried, as used by
+  ///     `os(...)`, such as `macOS`, `iOS`, or `Linux`. The aliases the compiler
+  ///     accepts for `os(...)` are accepted here as well, such as `OSX` for
+  ///     macOS. `anyAppleOS` yields a version only when the deployment target
+  ///     uses the unified version numbering introduced in the 26.0 releases.
+  /// - Returns: The minimum deployment version for the given operating system,
+  ///   if any.
+  ///
+  /// A macro implementation can use this to determine the minimum operating
+  /// system version its expansion will run on, and conditionally emit code that
+  /// uses newer APIs.
+  ///
+  /// The result is `nil` when the version is unknown or does not apply: when
+  /// `targetOS` is not (an alias of) an active target operating system; when the
+  /// target has no meaningful operating system version, as with many Linux or
+  /// bare-metal triples; or when the configuration was produced by a toolchain
+  /// that predates this query.
+  func minimumDeploymentVersion(forTargetOS targetOS: String) throws -> VersionTuple?
 }
 
 /// Default implementation of BuildConfiguration, to avoid a revlock with the
@@ -313,5 +335,14 @@ extension BuildConfiguration {
   @available(*, deprecated, message: "`BuildConfiguration` conformance must implement `isActiveTargetObjectFormat`")
   public func isActiveTargetObjectFormat(name: String) throws -> Bool {
     throw BuildConfigurationError.notImplemented(name: "isActiveTargetObjectFormat")
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "`BuildConfiguration` conformance must implement `minimumDeploymentVersion(forTargetOS:)`"
+  )
+  public func minimumDeploymentVersion(forTargetOS targetOS: String) throws -> VersionTuple? {
+    throw BuildConfigurationError.notImplemented(name: "minimumDeploymentVersion(forTargetOS:)")
   }
 }

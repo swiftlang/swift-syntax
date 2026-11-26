@@ -196,7 +196,7 @@ final class ExpressionMacroTests: XCTestCase {
         _ = ({ () -> Bool in
           print("hello")
           return true
-          }, #"{ () -> Bool in\\#n  print("hello")\\#n  return true\\#n}"#)
+        }, #"{ () -> Bool in\\#n  print("hello")\\#n  return true\\#n}"#)
         """,
       macros: ["stringify": StringifyMacro.self],
       indentationWidth: indentationWidth

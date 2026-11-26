@@ -174,14 +174,23 @@ public let EXPR_NODES: [Node] = [
     kind: .awaitExpr,
     base: .expr,
     nameForDiagnostics: "'await' expression",
+    documentation: """
+      An expression prefixed with `await` to suspend execution until an asynchronous operation completes.
+
+      ```swift
+      let data = await fetchData()
+      ```
+      """,
     children: [
       Child(
         name: "awaitKeyword",
-        kind: .token(choices: [.keyword(.await)])
+        kind: .token(choices: [.keyword(.await)]),
+        documentation: "The `await` keyword."
       ),
       Child(
         name: "expression",
-        kind: .node(kind: .expr)
+        kind: .node(kind: .expr),
+        documentation: "The expression that is being awaited."
       ),
     ]
   ),
@@ -353,24 +362,38 @@ public let EXPR_NODES: [Node] = [
     kind: .closureCaptureSpecifier,
     base: .syntax,
     nameForDiagnostics: "closure capture specifier",
+    documentation: """
+      The specifier that indicates the capture semantics of a closure capture item.
+
+      ```swift
+      { [weak self] in print(self) }
+      ```
+
+      In this example, `weak` is the capture specifier for `self`. \
+      The specifier can also include a detail such as `unowned(unsafe)`.
+      """,
     children: [
       Child(
         name: "specifier",
-        kind: .token(choices: [.keyword(.weak), .keyword(.unowned), .keyword(.sending)])
+        kind: .token(choices: [.keyword(.weak), .keyword(.unowned), .keyword(.sending)]),
+        documentation: "The capture specifier, either `weak`, `unowned`, or `sending`."
       ),
       Child(
         name: "leftParen",
         kind: .token(choices: [.token(.leftParen)]),
+        documentation: "The opening parenthesis for the detail, if present.",
         isOptional: true
       ),
       Child(
         name: "detail",
         kind: .token(choices: [.keyword(.safe), .keyword(.unsafe)]),
+        documentation: "The detail of the capture specifier, either `safe` or `unsafe`.",
         isOptional: true
       ),
       Child(
         name: "rightParen",
         kind: .token(choices: [.token(.rightParen)]),
+        documentation: "The closing parenthesis for the detail, if present.",
         isOptional: true
       ),
     ]
@@ -380,6 +403,15 @@ public let EXPR_NODES: [Node] = [
     kind: .closureCapture,
     base: .syntax,
     nameForDiagnostics: "closure capture",
+    documentation: """
+      A single captured value in a closure's capture list.
+
+      ```swift
+      { [weak self, x = 42] in }
+      ```
+
+      In this example, `weak self` and `x = 42` are each a closure capture.
+      """,
     traits: [
       "WithTrailingComma"
     ],
@@ -387,20 +419,24 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "specifier",
         kind: .node(kind: .closureCaptureSpecifier),
+        documentation: "The specifier that indicates the capture semantics, if any.",
         isOptional: true
       ),
       Child(
         name: "name",
-        kind: .token(choices: [.token(.identifier), .keyword(.self)])
+        kind: .token(choices: [.token(.identifier), .keyword(.self)]),
+        documentation: "The name of the captured variable."
       ),
       Child(
         name: "initializer",
         kind: .node(kind: .initializerClause),
+        documentation: "The initializer for the captured value, if any.",
         isOptional: true
       ),
       Child(
         name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
+        documentation: "A trailing comma if this capture is followed by another capture.",
         isOptional: true
       ),
     ]
@@ -410,18 +446,28 @@ public let EXPR_NODES: [Node] = [
     kind: .closureCaptureClause,
     base: .syntax,
     nameForDiagnostics: "closure capture clause",
+    documentation: """
+      The capture clause of a closure, containing a list of captured values enclosed in square brackets.
+
+      ```swift
+      { [weak self, unowned delegate] in }
+      ```
+      """,
     children: [
       Child(
         name: "leftSquare",
-        kind: .token(choices: [.token(.leftSquare)])
+        kind: .token(choices: [.token(.leftSquare)]),
+        documentation: "The `[` token that opens the capture list."
       ),
       Child(
         name: "items",
-        kind: .collection(kind: .closureCaptureList, collectionElementName: "Item")
+        kind: .collection(kind: .closureCaptureList, collectionElementName: "Item"),
+        documentation: "The list of capture items."
       ),
       Child(
         name: "rightSquare",
-        kind: .token(choices: [.token(.rightSquare)])
+        kind: .token(choices: [.token(.rightSquare)]),
+        documentation: "The `]` token that closes the capture list."
       ),
     ]
   ),
@@ -430,6 +476,18 @@ public let EXPR_NODES: [Node] = [
     kind: .closureParameter,
     base: .syntax,
     nameForDiagnostics: "parameter",
+    documentation: """
+      A parameter in a closure's parenthesized parameter list, which can include type annotations.
+
+      For example, in:
+      ```swift
+      { (x: Int, y: Int) -> Int in
+        return x + y
+      }
+      ```
+
+      `x: Int` and `y: Int` are each represented by a `ClosureParameterSyntax`.
+      """,
     parserFunction: "parseClosureParameter",
     traits: ["WithTrailingComma", "WithAttributes", "WithModifiers"],
     children: [
@@ -494,6 +552,16 @@ public let EXPR_NODES: [Node] = [
     kind: .closureParameterClause,
     base: .syntax,
     nameForDiagnostics: "parameter clause",
+    documentation: """
+      The parenthesized parameter clause of a closure, enclosing typed parameters.
+
+      For example, in:
+      ```swift
+      { (x: Int, y: Int) in x + y }
+      ```
+
+      `(x: Int, y: Int)` is represented by `ClosureParameterClauseSyntax`.
+      """,
     traits: [
       "Parenthesized"
     ],
@@ -526,6 +594,18 @@ public let EXPR_NODES: [Node] = [
     kind: .closureExpr,
     base: .expr,
     nameForDiagnostics: "closure",
+    documentation: """
+      A closure expression.
+
+      For example, in:
+      ```swift
+      let doubled = numbers.map { [weak self] x -> Int in
+        return x * 2
+      }
+      ```
+
+      `{ [weak self] x -> Int in return x * 2 }` is represented by `ClosureExprSyntax.`
+      """,
     traits: [
       "Braced",
       "WithStatements",
@@ -533,20 +613,24 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "leftBrace",
-        kind: .token(choices: [.token(.leftBrace)])
+        kind: .token(choices: [.token(.leftBrace)]),
+        documentation: "The `{` that opens the closure body."
       ),
       Child(
         name: "signature",
         kind: .node(kind: .closureSignature),
+        documentation: "The signature of the closure, including capture list, parameters, and return type.",
         isOptional: true
       ),
       Child(
         name: "statements",
-        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement")
+        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
+        documentation: "The statements that make up the body of the closure."
       ),
       Child(
         name: "rightBrace",
-        kind: .token(choices: [.token(.rightBrace)])
+        kind: .token(choices: [.token(.rightBrace)]),
+        documentation: "The `}` that closes the closure body."
       ),
     ]
   ),
@@ -576,6 +660,15 @@ public let EXPR_NODES: [Node] = [
     kind: .closureShorthandParameter,
     base: .syntax,
     nameForDiagnostics: "closure parameter",
+    documentation: """
+      A shorthand closure parameter without a type annotation or parentheses.
+
+      ```swift
+      let sum = numbers.reduce(0) { total, value in total + value }
+      ```
+
+      In this example, `total` and `value` are each a shorthand closure parameter.
+      """,
     traits: [
       "WithTrailingComma"
     ],
@@ -583,11 +676,13 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "name",
         kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
-        nameForDiagnostics: "name"
+        nameForDiagnostics: "name",
+        documentation: "The name of the parameter."
       ),
       Child(
         name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
+        documentation: "A trailing comma if this parameter is followed by another parameter.",
         isOptional: true
       ),
     ]
@@ -597,6 +692,17 @@ public let EXPR_NODES: [Node] = [
     kind: .closureSignature,
     base: .syntax,
     nameForDiagnostics: "closure signature",
+    documentation: """
+      The signature of a closure, which specifies its capture list, parameters, and return type.
+
+      ```swift
+      { [weak self] (x: Int) async throws -> Int in
+        return x * 2
+      }
+      ```
+
+      Everything after `{` and up to `in` keyword is part of the closure signature.
+      """,
     traits: [
       "WithAttributes"
     ],
@@ -604,11 +710,13 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
-        nameForDiagnostics: "attributes"
+        nameForDiagnostics: "attributes",
+        documentation: "Attributes attached to the closure signature."
       ),
       Child(
         name: "capture",
         kind: .node(kind: .closureCaptureClause),
+        documentation: "The capture list specifying how variables from the surrounding scope are captured.",
         isOptional: true
       ),
       Child(
@@ -630,11 +738,13 @@ public let EXPR_NODES: [Node] = [
             ]
           ]
         ),
+        documentation: "The parameters of the closure, either shorthand names or a full parameter clause.",
         isOptional: true
       ),
       Child(
         name: "effectSpecifiers",
         kind: .node(kind: .typeEffectSpecifiers),
+        documentation: "The `async` and/or `throws` specifiers of the closure.",
         isOptional: true
       ),
       Child(
@@ -646,11 +756,13 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "returnClause",
         kind: .node(kind: .returnClause),
+        documentation: "The return type of the closure, if specified.",
         isOptional: true
       ),
       Child(
         name: "inKeyword",
-        kind: .token(choices: [.keyword(.in)])
+        kind: .token(choices: [.keyword(.in)]),
+        documentation: "The `in` keyword that separates the signature from the closure body."
       ),
     ],
     childHistory: [

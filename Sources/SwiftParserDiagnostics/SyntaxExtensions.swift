@@ -10,15 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftBasicFormat
 @_spi(Diagnostics) internal import SwiftParser
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
-#else
-import SwiftBasicFormat
-@_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-#endif
 
 extension UnexpectedNodesSyntax {
   func presentTokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {
@@ -146,7 +140,7 @@ extension SyntaxProtocol {
     if let previousToken = self.previousToken(viewMode: .fixedUp),
       previousToken.isPresent,
       let firstToken = self.firstToken(viewMode: .all),
-      previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace }),
+      previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace || $0.isComment }),
       !BasicFormat().requiresWhitespace(between: previousToken, and: firstToken),
       !BasicFormat().requiresNewline(between: previousToken, and: firstToken)
     {

@@ -18,9 +18,12 @@
 // macros are invoked.                                                      //
 //==========================================================================//
 
+import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
+import SwiftSyntaxMacrosGenericTestSupport
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
@@ -330,6 +333,44 @@ final class ExpressionMacroTests: XCTestCase {
         DiagnosticSpec(message: "MyError()", line: 3, column: 9, severity: .error)
       ],
       macros: ["test": DiagnoseFirstArgument.self]
+    )
+  }
+
+  func testQualifiedExpressionMacroName() {
+    let specs = ["stringify": MacroSpec(type: StringifyMacro.self, moduleName: "MyModule")]
+
+    for name in ["MyModule::stringify", "stringify", "`MyModule`::stringify"] {
+      assertMacroExpansion(
+        """
+        let b = #\(name)(x + y)
+        """,
+        expandedSource: """
+          let b = (x + y, "x + y")
+          """,
+        macroSpecs: specs,
+        indentationWidth: indentationWidth
+      )
+    }
+
+    assertMacroExpansion(
+      """
+      let b = #OtherModule::stringify(x + y)
+      """,
+      expandedSource: """
+        let b = #OtherModule::stringify(x + y)
+        """,
+      macroSpecs: specs,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testQualifiedExpressionMacroWithoutModuleName() {
+    let source = "let b = #MyModule::stringify(x + y)"
+    assertMacroExpansion(
+      source,
+      expandedSource: source,
+      macros: ["stringify": StringifyMacro.self],
+      indentationWidth: indentationWidth
     )
   }
 

@@ -13,11 +13,7 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) public import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
-#endif
 
 // MARK: - AccessorDeclListBuilder
 
@@ -322,6 +318,20 @@ public struct FunctionParameterListBuilder: ListBuilder {
 
 extension FunctionParameterListSyntax {
   public init(@FunctionParameterListBuilder itemsBuilder: () throws -> FunctionParameterListSyntax) rethrows {
+    self = try itemsBuilder()
+  }
+}
+
+// MARK: - FunctionYieldListBuilder
+
+@_spi(ExperimentalLanguageFeatures)
+@resultBuilder
+public struct FunctionYieldListBuilder: ListBuilder {
+  public typealias FinalResult = FunctionYieldListSyntax
+}
+
+extension FunctionYieldListSyntax {
+  public init(@FunctionYieldListBuilder itemsBuilder: () throws -> FunctionYieldListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -647,6 +657,10 @@ public struct SwitchCaseListBuilder: ListBuilder {
   }
 
   public static func buildExpression(_ expression: IfConfigDeclSyntax) -> Component {
+    buildExpression(.init(expression))
+  }
+
+  public static func buildExpression(_ expression: MacroExpansionDeclSyntax) -> Component {
     buildExpression(.init(expression))
   }
 }

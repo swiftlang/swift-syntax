@@ -49,7 +49,7 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   @_spi(Testing) public func decorateMessage(
     _ message: String,
     basedOnSeverity severity: DiagnosticSeverity,
-    category: DiagnosticCategory? = nil
+    categoryChain: [DiagnosticCategory] = []
   ) -> String {
     let severityText: String
     let severityAnnotation: ANSIAnnotation
@@ -78,19 +78,18 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
       resetAfterApplication: false
     )
 
-    // Append the [#CategoryName] suffix when there is a category.
+    // Append the category chain suffix, e.g. [#Parent::Child].
     let categorySuffix: String
-    if let category {
-      // Make the category name a link to the documentation, if there is
-      // documentation.
-      let categoryName: String
-      if let documentationURL = category.documentationURL {
-        categoryName = ANSIAnnotation.hyperlink(category.name, to: "\(documentationURL)")
-      } else {
-        categoryName = category.name
-      }
-
-      categorySuffix = " [#\(categoryName)]"
+    if !categoryChain.isEmpty {
+      // Display root-first: reverse the leaf-first chain.
+      let formattedChain = categoryChain.reversed().map { cat in
+        if let url = cat.documentationURL {
+          return ANSIAnnotation.hyperlink(cat.name, to: url)
+        } else {
+          return cat.name
+        }
+      }.joined(separator: "::")
+      categorySuffix = " [#\(formattedChain)]"
     } else {
       categorySuffix = ""
     }

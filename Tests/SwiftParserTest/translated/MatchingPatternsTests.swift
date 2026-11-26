@@ -89,7 +89,7 @@ final class MatchingPatternsTests: ParserTestCase {
         ()
       }
       """#,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -122,7 +122,7 @@ final class MatchingPatternsTests: ParserTestCase {
         ()
       }
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -134,7 +134,7 @@ final class MatchingPatternsTests: ParserTestCase {
         ()
       }
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -146,7 +146,7 @@ final class MatchingPatternsTests: ParserTestCase {
         ()
       }
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -418,7 +418,7 @@ final class MatchingPatternsTests: ParserTestCase {
         acceptInt(x)
       }
       """#,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -503,7 +503,7 @@ final class MatchingPatternsTests: ParserTestCase {
         ()
       }
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -584,7 +584,7 @@ final class MatchingPatternsTests: ParserTestCase {
       if case _mutating x = y {}
       guard case _mutating z = y else {}
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -594,7 +594,7 @@ final class MatchingPatternsTests: ParserTestCase {
       if case _consuming x = y {}
       guard case _consuming z = y else {}
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -604,7 +604,7 @@ final class MatchingPatternsTests: ParserTestCase {
       if case _borrowing x = y {}
       guard case _borrowing z = y else {}
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 

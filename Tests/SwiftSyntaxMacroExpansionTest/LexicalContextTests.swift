@@ -19,6 +19,7 @@
 //==========================================================================//
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
@@ -147,6 +148,14 @@ extension SyntaxProtocol {
     // Pattern bindings.
     if let patternBinding = self.as(PatternBindingSyntax.self),
       let singleVarName = patternBinding.singleBindingName
+    {
+      return singleVarName
+    }
+
+    // Variable declarations with a single binding.
+    if let varDecl = self.as(VariableDeclSyntax.self),
+      varDecl.bindings.count == 1,
+      let singleVarName = varDecl.bindings.first?.singleBindingName
     {
       return singleVarName
     }
@@ -297,6 +306,21 @@ final class LexicalContextTests: XCTestCase {
       expandedSource: """
         extension A {
           static var staticProp: String = "staticProp"
+        }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      extension A {
+        static var staticProp = #function, secondProp = #function
+      }
+      """,
+      expandedSource: """
+        extension A {
+          static var staticProp = "staticProp", secondProp = "secondProp"
         }
         """,
       macros: ["function": FunctionMacro.self],
@@ -546,7 +570,7 @@ final class LexicalContextTests: XCTestCase {
               await _
               try _
               unsafe _
-              contextDescription: String
+              var contextDescription: String
               struct S {}
               { c in
               }

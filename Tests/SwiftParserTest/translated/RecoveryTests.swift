@@ -13,6 +13,7 @@
 // This test file has been translated from swift/test/Parse/recovery.swift
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class RecoveryTests: ParserTestCase {
@@ -90,10 +91,6 @@ final class RecoveryTests: ParserTestCase {
           locationMarker: "4️⃣",
           message: "expected expression after operator",
           fixIts: ["insert expression"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "unexpected code ', b : Int' in function"
         ),
       ],
       applyFixIts: ["insert '>'", "insert expression"],
@@ -757,24 +754,24 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       for 1️⃣
-        2️⃣;
-      }
+        ;
+      2️⃣}
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected pattern, 'in', and expression in 'for' statement",
-          fixIts: ["insert pattern, 'in', and expression"]
+          message: "expected pattern, 'in', expression, and body in 'for' statement",
+          fixIts: ["insert pattern, 'in', expression, and body"]
         ),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'for' statement", fixIts: ["insert '{'"]),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "standalone ';' statements are not allowed",
-          fixIts: ["remove ';'"]
+          message: "unexpected brace in source file"
         ),
       ],
       fixedSource: """
-        for   <#pattern#> in <#expression#> {
+        for <#pattern#> in <#expression#> {
+        }
+          ;
         }
         """
     )
@@ -975,16 +972,18 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery54() {
     assertParse(
       """
-      struct NoBracesStruct11️⃣()2️⃣
+      struct NoBracesStruct11️⃣()
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '()' in struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        )
       ],
       fixedSource: """
-        struct NoBracesStruct1 {()
-        }
+        struct NoBracesStruct1 {
+        }()
         """
     )
   }
@@ -995,31 +994,31 @@ final class RecoveryTests: ParserTestCase {
       enum NoBracesUnion11️⃣()
       class NoBracesClass12️⃣()
       protocol NoBracesProtocol13️⃣()
-      extension NoBracesStruct14️⃣()5️⃣
+      extension NoBracesStruct14️⃣()
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in enum", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '()' in enum"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in class", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' in class"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in protocol", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '()' in protocol"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '{' in extension", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '()' in extension"),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end extension", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end enum", fixIts: ["insert '}'"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in enum", fixIts: ["insert member block"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected member block in protocol",
+          fixIts: ["insert member block"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected member block in extension",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
-        enum NoBracesUnion1 {()
-        class NoBracesClass1 {()
-        protocol NoBracesProtocol1 {()
-        extension NoBracesStruct1 {()
-        }
-        }
-        }
-        }
+        enum NoBracesUnion1 {
+        }()
+        class NoBracesClass1 {
+        }()
+        protocol NoBracesProtocol1 {
+        }()
+        extension NoBracesStruct1 {
+        }()
         """
     )
   }
@@ -1034,30 +1033,34 @@ final class RecoveryTests: ParserTestCase {
       extension NoBracesStruct25️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in enum", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in class", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '{' in protocol", fixIts: ["insert '{'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum", fixIts: ["insert member block"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected member block in protocol",
+          fixIts: ["insert member block"]
+        ),
         DiagnosticSpec(
           locationMarker: "5️⃣",
           message: "expected member block in extension",
           fixIts: ["insert member block"]
         ),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end enum", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
       ],
       fixedSource: """
         struct NoBracesStruct2 {
+        }
         enum NoBracesUnion2 {
+        }
         class NoBracesClass2 {
+        }
         protocol NoBracesProtocol2 {
+        }
         extension NoBracesStruct2 {
-        }
-        }
-        }
-        }
         }
         """
     )
@@ -1878,8 +1881,18 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '[0]' in function")
-      ]
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
+      ],
+      fixedSource: """
+        struct ErrorInFunctionSignatureResultArrayType3 {
+          func foo() -> [0 of Int] {
+            return [0]
+          }
+        }
+        """
     )
   }
 
@@ -1893,8 +1906,18 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '[0_1]' in function")
-      ]
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
+      ],
+      fixedSource: """
+        struct ErrorInFunctionSignatureResultArrayType4 {
+          func foo() -> [0_1 of Int] {
+            return [0]
+          }
+        }
+        """
     )
   }
 
@@ -1908,8 +1931,18 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '[0b1]' in function")
-      ]
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
+      ],
+      fixedSource: """
+        struct ErrorInFunctionSignatureResultArrayType5 {
+          func foo() -> [0b1 of Int] {
+            return [0]
+          }
+        }
+        """
     )
   }
 
@@ -2407,18 +2440,19 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected '{' in class",
-          fixIts: ["insert '{'"]
+          message: "expected member block in class",
+          fixIts: ["insert member block"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "unexpected code '> {}' in switch case"
+          message: "unexpected code in source file"
         ),
       ],
       fixedSource: """
         switch esp {
         case let (jeb):
-          class Ceac< > {}> {}
+          class Ceac< > {
+        } }> {}
         }
         """
     )
@@ -3134,8 +3168,8 @@ final class RecoveryTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected expression, '=', and expression in pattern matching",
-          fixIts: ["insert expression, '=', and expression"]
+          message: "expected pattern, '=', and expression in pattern matching",
+          fixIts: ["insert pattern, '=', and expression"]
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -3151,7 +3185,7 @@ final class RecoveryTests: ParserTestCase {
       ],
       fixedSource: """
         func testSkipToFindOpenBrace1() {
-          do { if case <#expression#> = <#expression#> {}
+          do { if case <#pattern#> = <#expression#> {}
         }
         }
         """

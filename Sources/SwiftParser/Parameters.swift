@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 // MARK: - Traits
 
@@ -29,7 +25,7 @@ extension RawEnumCaseParameterSyntax: RawParameterTrait {}
 protocol RawParameterListTrait: RawSyntaxNodeProtocol {
   associatedtype ParameterSyntax: RawParameterTrait
 
-  init(elements: [ParameterSyntax], arena: __shared RawSyntaxArena)
+  init(elements: RawSyntaxNodeList<ParameterSyntax>, arena: __shared RawSyntaxArena)
 }
 
 extension RawFunctionParameterListSyntax: RawParameterListTrait {}
@@ -299,7 +295,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseParameterModifiers(isClosure: Bool) -> RawDeclModifierListSyntax {
-    var elements = [RawDeclModifierSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawDeclModifierSyntax>()
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
       guard let match = self.at(anyIn: ParameterModifier.self),
@@ -307,12 +303,15 @@ extension Parser {
       else {
         break
       }
-      elements.append(RawDeclModifierSyntax(name: self.eat(match.handle), detail: nil, arena: self.arena))
+      elements.append(
+        RawDeclModifierSyntax(name: self.eat(match.handle), detail: nil, arena: self.arena),
+        allocator: self.nodeListAllocator
+      )
     }
     if elements.isEmpty {
       return self.emptyCollection(RawDeclModifierListSyntax.self)
     } else {
-      return RawDeclModifierListSyntax(elements: elements, arena: self.arena)
+      return RawDeclModifierListSyntax(elements: elements.build(), arena: self.arena)
     }
   }
 
@@ -339,7 +338,7 @@ extension Parser {
     parseParameter: (inout Parser) -> ParameterClause.Parameters.ParameterSyntax
   ) -> ParameterClause {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    var elements = [ParameterClause.Parameters.ParameterSyntax]()
+    var elements = RawSyntaxNodeListBuilder<ParameterClause.Parameters.ParameterSyntax>()
     // If we are missing the left parenthesis and the next token doesn't appear
     // to be an argument label, don't parse any parameters.
     let shouldSkipParameterParsing =
@@ -357,7 +356,7 @@ extension Parser {
           keepGoing = false
         } else {
           keepGoing = parameter.trailingComma != nil
-          elements.append(parameter)
+          elements.append(parameter, allocator: self.nodeListAllocator)
         }
       }
     }
@@ -365,9 +364,9 @@ extension Parser {
 
     let parameters: ParameterClause.Parameters
     if elements.isEmpty && (lparen.isMissing || rparen.isMissing) {
-      parameters = ParameterClause.Parameters(elements: [], arena: self.arena)
+      parameters = ParameterClause.Parameters(elements: .init(), arena: self.arena)
     } else {
-      parameters = ParameterClause.Parameters(elements: elements, arena: self.arena)
+      parameters = ParameterClause.Parameters(elements: elements.build(), arena: self.arena)
     }
 
     return ParameterClause(
@@ -378,6 +377,20 @@ extension Parser {
       unexpectedBeforeRParen,
       rightParen: rparen,
       nil,
+      arena: self.arena
+    )
+  }
+}
+
+// MARK: Parsing yield type
+extension Parser {
+  mutating func parseFunctionYield() -> RawFunctionYieldSyntax {
+    let type = self.parseType()
+    let trailingComma = self.consume(if: .comma)
+
+    return RawFunctionYieldSyntax(
+      type: type,
+      trailingComma: trailingComma,
       arena: self.arena
     )
   }

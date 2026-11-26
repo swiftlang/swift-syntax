@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 fileprivate extension SyntaxProtocol {
   var contextualClassification: (SyntaxClassification, Bool)? {
@@ -190,7 +186,7 @@ private struct ClassificationVisitor {
     // Trailing trivia.
     byteOffset += classify(triviaPieces: tokenView.trailingRawTriviaPieces, at: byteOffset)
 
-    precondition(byteOffset == descriptor.byteOffset + descriptor.node.byteLength)
+    precondition(byteOffset == descriptor.byteOffset + Int(descriptor.node.byteLength))
     return .continue
   }
 
@@ -214,7 +210,8 @@ private struct ClassificationVisitor {
           byteOffset += classify(triviaPieces: leadingTriviaPieces, at: byteOffset)
         }
         // Layout node text.
-        let layoutNodeTextLength = child.byteLength - child.leadingTriviaByteLength - child.trailingTriviaByteLength
+        let layoutNodeTextLength =
+          Int(child.byteLength) - child.leadingTriviaByteLength - child.trailingTriviaByteLength
         let range = SyntaxClassifiedRange(
           kind: classification.classification,
           range: AbsolutePosition(
@@ -241,7 +238,7 @@ private struct ClassificationVisitor {
       if result == .break {
         return .break
       }
-      byteOffset += child.byteLength
+      byteOffset += Int(child.byteLength)
     }
     return .continue
   }
@@ -250,7 +247,7 @@ private struct ClassificationVisitor {
     guard descriptor.byteOffset < targetRange.upperBound.utf8Offset else {
       return .break
     }
-    guard descriptor.byteOffset + descriptor.node.byteLength > targetRange.lowerBound.utf8Offset else {
+    guard descriptor.byteOffset + Int(descriptor.node.byteLength) > targetRange.lowerBound.utf8Offset else {
       return .continue
     }
     guard SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: descriptor.node) else {

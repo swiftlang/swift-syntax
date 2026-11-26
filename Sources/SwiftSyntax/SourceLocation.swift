@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Represents a source location in a Swift file.
-public struct SourceLocation: Hashable, Codable, Sendable {
+public struct SourceLocation: Hashable, Sendable {
 
   /// The line in the file where this location resides. 1-based.
   ///
@@ -82,7 +82,7 @@ public struct SourceLocation: Hashable, Codable, Sendable {
 }
 
 /// Represents a half-open range in a Swift file.
-public struct SourceRange: Hashable, Codable, Sendable {
+public struct SourceRange: Hashable, Sendable {
 
   /// The beginning location of the source range.
   ///
@@ -181,7 +181,7 @@ public final class SourceLocationConverter: Sendable {
   ///   - tree: The root of the syntax tree to convert positions to line/columns for.
   @available(*, deprecated, message: "Use init(fileName:tree:) instead")
   public convenience init(file: String, tree: SyntaxProtocol) {
-    self.init(fileName: file, tree: tree)
+    self.init(fileName: file, tree: Syntax(fromProtocol: tree))
   }
 
   /// - Important: This initializer does not take `#sourceLocation` directives
@@ -814,22 +814,27 @@ fileprivate extension RawSyntax {
     handleSourceLocationDirective: (_ position: AbsolutePosition, _ rawSyntax: RawSyntax) -> Void
   ) -> AbsolutePosition {
     var position = position
-    switch self.rawData.payload {
-    case .parsedToken(let dat):
-      position = dat.wholeText.forEachEndOfLine(position: position, body: body)
-    case .materializedToken(let dat):
-      position = dat.leadingTrivia.forEachEndOfLine(position: position, body: body)
-      position = dat.tokenText.forEachEndOfLine(position: position, body: body)
-      position = dat.trailingTrivia.forEachEndOfLine(position: position, body: body)
-    case .layout(let dat):
+    switch self.header {
+    case .smolParsedToken:
+      position = self.asSmolParsedToken.wholeText
+        .forEachEndOfLine(position: position, body: body)
+    case .parsedToken:
+      position = self.asParsedToken.wholeText
+        .forEachEndOfLine(position: position, body: body)
+    case .materializedToken:
+      position = self.asMaterializedToken.leadingTrivia.forEachEndOfLine(position: position, body: body)
+      position = self.asMaterializedToken.tokenText.forEachEndOfLine(position: position, body: body)
+      position = self.asMaterializedToken.trailingTrivia.forEachEndOfLine(position: position, body: body)
+    case .layout:
       // Handle '#sourceLocation' directive.
-      if dat.kind == .poundSourceLocation {
+      if self.asLayout.kind == .poundSourceLocation {
         // Do this before `node.forEachEndOfLine` call below so the caller can
         // know the exact position of the directive.
         handleSourceLocationDirective(position, self)
       }
 
-      for case let node? in dat.layout where SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) {
+      self.forEachChildInSourceOrder { node in
+        guard SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) else { return }
         position = node.forEachEndOfLine(
           position: position,
           body: body,
@@ -839,4 +844,32 @@ fileprivate extension RawSyntax {
     }
     return position
   }
+}
+
+@_unavailableInEmbedded
+extension SourceLocation: Codable {
+  // TODO: Fix when compiler can synthesize `Codable` conformance in `Embedded` mode (#93688)
+  #if hasFeature(Embedded)
+  @_unavailableInEmbedded
+  public func encode(to encoder: any Encoder) throws {}
+
+  @_unavailableInEmbedded
+  public init(from decoder: any Decoder) throws {
+    fatalError()
+  }
+  #endif
+}
+
+@_unavailableInEmbedded
+extension SourceRange: Codable {
+  // TODO: Fix when compiler can synthesize `Codable` conformance in `Embedded` mode (#93688)
+  #if hasFeature(Embedded)
+  @_unavailableInEmbedded
+  public func encode(to encoder: any Encoder) throws {}
+
+  @_unavailableInEmbedded
+  public init(from decoder: any Decoder) throws {
+    fatalError()
+  }
+  #endif
 }

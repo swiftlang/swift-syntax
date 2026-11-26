@@ -308,6 +308,43 @@ final class VariableTests: XCTestCase {
       }
       """
     )
+
+    guard case .accessors(let accessors) = buildable.bindings.first?.accessorBlock?.accessors else {
+      XCTFail("Expected .accessors case in accessorBlock")
+      return
+    }
+    XCTAssertEqual(accessors.count, 2)
+  }
+
+  func testMultipleAccessorsWithGetAndSet() throws {
+    let buildable = try VariableDeclSyntax("var x: Int") {
+      AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+        StmtSyntax("return origin.x")
+      }
+      AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
+        ExprSyntax("origin.x = newValue")
+      }
+    }
+
+    assertBuildResult(
+      buildable,
+      """
+      var x: Int {
+          get {
+              return origin.x
+          }
+          set {
+              origin.x = newValue
+          }
+      }
+      """
+    )
+
+    guard case .accessors(let accessors) = buildable.bindings.first?.accessorBlock?.accessors else {
+      XCTFail("Expected .accessors case in accessorBlock")
+      return
+    }
+    XCTAssertEqual(accessors.count, 2)
   }
 
   func testAccessorWithEffectSpecifier() throws {

@@ -38,11 +38,11 @@ struct SwiftPMBuilder {
   /// no round-trip or assertion failures.
   let enableTestFuzzing: Bool
 
-  /// A flag indicating whether to use local dependencies during the build process.
-  let useLocalDeps: Bool
-
   /// Enable verbose logging.
   let verbose: Bool
+
+  /// Additional flags to pass to every `swift build` / `swift test` invocation.
+  let extraSwiftPMFlags: [String]
 
   init(
     toolchain: URL,
@@ -51,8 +51,8 @@ struct SwiftPMBuilder {
     release: Bool = false,
     enableRawSyntaxValidation: Bool = false,
     enableTestFuzzing: Bool = false,
-    useLocalDeps: Bool = true,
-    verbose: Bool = false
+    verbose: Bool = false,
+    extraSwiftPMFlags: [String] = []
   ) {
     self.toolchain = toolchain
     self.buildDir = buildDir
@@ -60,8 +60,8 @@ struct SwiftPMBuilder {
     self.release = release
     self.enableRawSyntaxValidation = enableRawSyntaxValidation
     self.enableTestFuzzing = enableTestFuzzing
-    self.useLocalDeps = useLocalDeps
     self.verbose = verbose
+    self.extraSwiftPMFlags = extraSwiftPMFlags
   }
 
   func buildTarget(packageDir: URL, targetName: String, warningsAsErrors: Bool = false) throws {
@@ -105,6 +105,8 @@ struct SwiftPMBuilder {
       args += ["--verbose"]
     }
 
+    args += extraSwiftPMFlags
+
     args += additionalArguments
 
     let processRunner = ProcessRunner(
@@ -134,11 +136,6 @@ struct SwiftPMBuilder {
 
     if enableTestFuzzing {
       additionalEnvironment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
-    }
-
-    if useLocalDeps {
-      // Tell other projects in the unified build to use local dependencies
-      additionalEnvironment["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     }
 
     return additionalEnvironment

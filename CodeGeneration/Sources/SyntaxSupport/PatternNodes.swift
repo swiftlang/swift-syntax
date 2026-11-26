@@ -47,8 +47,8 @@ public let PATTERN_NODES: [Node] = [
 
       ### Examples
 
-      ``IdentifierPatternSyntax`` can be used in simplple variable declarations.
-      For example `a` in the exmaple:
+      ``IdentifierPatternSyntax`` can be used in simple variable declarations.
+      For example `a` in the example:
 
       ```swift
       let a = 1
@@ -181,6 +181,23 @@ public let PATTERN_NODES: [Node] = [
     kind: .typeAnnotation,
     base: .syntax,
     nameForDiagnostics: "type annotation",
+    documentation: """
+      A type annotation that explicitly specifies the type of a value or pattern.
+
+      Written as a colon followed by a type:
+      ```swift
+      <pattern>: <type>
+      ```
+
+      ### Examples
+
+      ```swift
+      let count: Int
+      ```
+      ```swift
+      let point: (x: Int, y: Int)
+      ```
+      """,
     children: [
       Child(
         name: "colon",

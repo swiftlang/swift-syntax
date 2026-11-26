@@ -30,7 +30,8 @@ struct Test: ParsableCommand {
         release: arguments.release,
         enableRawSyntaxValidation: arguments.enableRawSyntaxValidation,
         enableTestFuzzing: arguments.enableTestFuzzing,
-        verbose: arguments.verbose
+        verbose: arguments.verbose,
+        extraSwiftPMFlags: arguments.extraSwiftpmFlag
       ),
       warningsAsErrors: arguments.warningsAsErrors
     )

@@ -129,6 +129,11 @@ public let ATTRIBUTE_NODES: [Node] = [
             // Special arguments for declaration syntax. e.g. @abi(func abiName() -> Int)
             kind: .node(kind: .abiAttributeArguments)
           ),
+          Child(
+            name: "sectionArguments",
+            // Special arguments for the section name. e.g. @section(default)
+            kind: .node(kind: .sectionAttributeArgument)
+          ),
         ]),
         documentation: """
           The arguments of the attribute.
@@ -370,7 +375,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   Node(
     kind: .differentiabilityWithRespectToArgument,
     base: .syntax,
-    nameForDiagnostics: "'@differentiable' argument",
+    nameForDiagnostics: "differentiability argument",
     documentation: "A clause containing differentiability parameters.",
     children: [
       Child(
@@ -712,6 +717,44 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
+    kind: .sectionAttributeArgument,
+    base: .syntax,
+    nameForDiagnostics: "'@section' argument",
+    documentation: """
+      The argument of the `@section` attribute.
+
+      The section is either specified by the `default` keyword, which places the declaration in the
+      default section for its kind, or by an expression that describes the name of the section.
+
+      ```swift
+      @section("__DATA,__mysection")
+      let x = 42
+
+      @section(default)
+      let y = 42
+      ```
+      """,
+    children: [
+      Child(
+        name: "section",
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "defaultKeyword",
+            kind: .token(choices: [.keyword(.default)]),
+            documentation: "The `default` keyword, describing the default section for the declaration."
+          ),
+          Child(
+            name: "expression",
+            kind: .node(kind: .expr),
+            documentation: "An expression describing the name of the section."
+          ),
+        ]),
+        nameForDiagnostics: "section"
+      )
+    ]
+  ),
+
+  Node(
     kind: .specializeAttributeArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "argument to '@_specialize",
@@ -726,12 +769,21 @@ public let ATTRIBUTE_NODES: [Node] = [
     kind: .specializedAttributeArgument,
     base: .syntax,
     nameForDiagnostics: "argument to '@specialized",
-    documentation: "The generic where clause for the `@specialized` attribute",
+    documentation: "The arguments for the `@specialized` attribute",
     children: [
+      // Reuses '@_specialize''s labeled argument node, but the parser only
+      // accepts the 'exported' label here.
+      Child(
+        name: "exportedArgument",
+        kind: .node(kind: .labeledSpecializeArgument),
+        experimentalFeature: .extendedSpecializedAttribute,
+        documentation: "The optional `exported:` argument.",
+        isOptional: true
+      ),
       Child(
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause)
-      )
+      ),
     ]
   ),
 

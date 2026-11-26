@@ -26,6 +26,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// Don’t access this. Use `Syntax(token)` instead.
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    kind == .token
+  }
+
   /// The ``RawSyntaxTokenView`` of this token that allows accessing raw
   /// properties of the token.
   @_spi(RawSyntax)
@@ -208,6 +212,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   }
 }
 
+#if !hasFeature(Embedded)
 extension TokenSyntax: CustomReflectable {
   /// A custom mirror that shows the token properties in a simpler form, making
   /// the debug output of the token easier to read.
@@ -223,3 +228,4 @@ extension TokenSyntax: CustomReflectable {
     )
   }
 }
+#endif

@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 import SwiftBasicFormat
 public import SwiftSyntax
-#else
-import SwiftBasicFormat
-import SwiftSyntax
-#endif
 
 /// Convert a call with inline closures to one that uses trailing closure
 /// syntax. Returns `nil` if there's already trailing closures or there are no

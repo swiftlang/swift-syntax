@@ -26,7 +26,7 @@ final class BorrowExprTests: ParserTestCase {
         useString(_borrow global)
       }
       """,
-      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+      languageFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 
@@ -40,7 +40,7 @@ final class BorrowExprTests: ParserTestCase {
           useString(_borrow t)
       }
       """,
-      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+      languageFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 

@@ -11,11 +11,11 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftLexicalLookup
+@_spi(Experimental) import SwiftLexicalLookup
 import SwiftSyntax
 import XCTest
 
-final class TestNameLookup: XCTestCase {
+final class NameLookupTests: XCTestCase {
   func testCodeBlockSimpleCase() {
     assertLexicalNameLookup(
       source: """
@@ -332,7 +332,7 @@ final class TestNameLookup: XCTestCase {
 
           func foo() {
             let 3️⃣a = 4️⃣a
-          
+
             if let 5️⃣a = 6️⃣a {
               let (a, b) = 8️⃣a
             }
@@ -364,6 +364,40 @@ final class TestNameLookup: XCTestCase {
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
       )
+    )
+  }
+
+  func testSimpleLookupInProtocol() {
+    // We don't look for members when triggered within an inheritance clause.
+    //
+    // Also, `Self` always appears, matching ASTScope behavior. Related to:
+    // https://github.com/swiftlang/swift-syntax/pull/2852#discussion_r1775049671
+    assertLexicalNameLookup(
+      source: """
+        protocol P48a { associatedtype A = Int }
+        protocol P48b { associatedtype B }
+        1️⃣protocol P48c: 2️⃣P48a, 3️⃣P48b where 4️⃣A == 5️⃣B {}
+        """,
+      references: [
+        "2️⃣": [
+          .fromScope(ProtocolDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))])
+        ],
+        "3️⃣": [
+          .fromScope(ProtocolDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))])
+        ],
+        "4️⃣": [
+          .fromScope(ProtocolDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))]),
+          .lookForMembers(ProtocolDeclSyntax.self),
+        ],
+        "5️⃣": [
+          .fromScope(ProtocolDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))]),
+          .lookForMembers(ProtocolDeclSyntax.self),
+        ],
+      ],
+      expectedResultTypes: .none,
+      // We don't filter names by an identifier. This allows us to get `Self`
+      // in the results.
+      useNilAsTheParameter: true
     )
   }
 
@@ -402,10 +436,10 @@ final class TestNameLookup: XCTestCase {
           3️⃣func foo() {
             let 4️⃣a = 0
             let 5️⃣c = 0
-          
+
             if let 6️⃣a = 7️⃣x {
               let (8️⃣a, 9️⃣b) = (0, 0)
-              
+
               0️⃣x
             }
           }
@@ -447,7 +481,7 @@ final class TestNameLookup: XCTestCase {
       source: """
         func foo() {
           let 1️⃣a = 0
-          
+
           guard let 2️⃣a, let 3️⃣b = c else {
             print(4️⃣a, 5️⃣b)
             return
@@ -756,6 +790,44 @@ final class TestNameLookup: XCTestCase {
     )
   }
 
+  func testTypeDeclAvailabilityInTopLevel() {
+    let declExpectation: [ResultExpectation] = [
+      .fromScope(
+        SourceFileSyntax.self,
+        expectedNames: [
+          NameExpectation.declaration("2️⃣"),
+          NameExpectation.declaration("5️⃣"),
+          NameExpectation.declaration("8️⃣"),
+        ]
+      )
+    ]
+
+    assertLexicalNameLookup(
+      source: """
+        1️⃣a
+        2️⃣class a {}
+        3️⃣a
+        guard let x else { return }
+        4️⃣a
+        5️⃣actor a {}
+        6️⃣a
+        guard let x else { return }
+        7️⃣a
+        8️⃣struct a {}
+        9️⃣a
+        """,
+      references: [
+        "1️⃣": declExpectation,
+        "3️⃣": declExpectation,
+        "4️⃣": declExpectation,
+        "6️⃣": declExpectation,
+        "7️⃣": declExpectation,
+        "9️⃣": declExpectation,
+      ],
+      config: LookupConfig(_lookupTopScope: true, _dontFindGenericParametersForExtendedType: true)
+    )
+  }
+
   func testNonMatchingGuardScopeDoesntPartitionResult() {
     assertLexicalNameLookup(
       source: """
@@ -853,7 +925,7 @@ final class TestNameLookup: XCTestCase {
 
           class B<5️⃣T1> {
             let z: 6️⃣T1 = v
-            
+
             func test() {
               print(8️⃣x)
             }
@@ -1062,7 +1134,7 @@ final class TestNameLookup: XCTestCase {
 
           let 3️⃣c = 4️⃣x
           5️⃣class B {}
-          
+
           #if DEBUG
 
           let d = 6️⃣x
@@ -1074,9 +1146,9 @@ final class TestNameLookup: XCTestCase {
           9️⃣class D {}
 
           #endif
-          
+
           #endif
-          
+
           🔟class E {}
         }
         """,

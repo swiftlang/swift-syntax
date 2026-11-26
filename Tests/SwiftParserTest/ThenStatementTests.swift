@@ -12,11 +12,12 @@
 
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class ThenStatementTests: ParserTestCase {
   // Enable then statements by default.
-  override var experimentalFeatures: Parser.ExperimentalFeatures {
+  override var languageFeatures: Parser.LanguageFeatures {
     return .thenStatements
   }
 
@@ -721,7 +722,7 @@ final class ThenStatementTests: ParserTestCase {
         then
         0
         """,
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 
@@ -746,7 +747,7 @@ final class ThenStatementTests: ParserTestCase {
         ),
       ],
       fixedSource: "<#statement#>then 0",
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 }

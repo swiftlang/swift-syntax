@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 private import Foundation
-#else
-import Foundation
-#endif
 
 public var longTestsDisabled: Bool {
   if let value = ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] {

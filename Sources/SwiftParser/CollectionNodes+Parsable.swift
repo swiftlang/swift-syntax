@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension SyntaxCollection where Self: SyntaxParseable {
   fileprivate static func parse(
@@ -39,19 +35,18 @@ extension SyntaxCollection where Self: SyntaxParseable {
     }
 
     let layoutView = node.raw.layoutView!
+    let elements = layoutView.elements
 
-    if layoutView.children.isEmpty {
+    if elements.isEmpty {
       let remainingTokens = parser.consumeRemainingTokens()
       assert(!remainingTokens.isEmpty)
       let missing = makeMissing(remainingTokens, parser.arena)
-      let raw = layoutView.insertingChild(missing.raw, at: node.raw.layoutView!.children.count, arena: parser.arena)
+      let raw = layoutView.insertingChild(missing.raw, at: elements.count, arena: parser.arena)
       return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
     } else {
-      // First unwrap: We know that children.last exists because children is not empty
-      // Second unwrap: This is a collection and collections never have optional children. Thus the last child can’t be nil.
-      let lastWithRemainder = parser.parseRemainder(into: layoutView.children[layoutView.children.count - 1]!)
+      let lastWithRemainder = parser.parseRemainder(into: elements[elements.count - 1])
       let raw = layoutView.replacingChild(
-        at: layoutView.children.count - 1,
+        at: elements.count - 1,
         with: lastWithRemainder,
         arena: parser.arena
       )
@@ -65,7 +60,7 @@ extension AccessorDeclListSyntax: SyntaxParseable {
     let emptyAttributes = parser.emptyCollection(RawAttributeListSyntax.self)
     let emptyModifiers = parser.emptyCollection(RawDeclModifierListSyntax.self)
     return parse(from: &parser) { parser in
-      return parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: [], arena: parser.arena)
+      return parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: .init(), arena: parser.arena)
     } makeMissing: { remainingTokens, arena in
       return RawAccessorDeclSyntax(
         attributes: emptyAttributes,
@@ -121,8 +116,8 @@ extension MemberBlockItemListSyntax: SyntaxParseable {
       return parser.parseMemberDeclList(until: { _ in false })
     } makeMissing: { remainingTokens, arena in
       let missingDecl = RawMissingDeclSyntax(
-        attributes: RawAttributeListSyntax(elements: [], arena: arena),
-        modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
+        attributes: RawAttributeListSyntax(elements: .init(), arena: arena),
+        modifiers: RawDeclModifierListSyntax(elements: .init(), arena: arena),
         placeholder: RawTokenSyntax(missing: .identifier, text: "<#declaration#>", arena: arena),
         RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena

@@ -10,31 +10,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension Parser {
   /// Parse the source code in the given string as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(
-    source: String
-  ) -> SourceFileSyntax {
-    var parser = Parser(source)
-    return SourceFileSyntax.parse(from: &parser)
-  }
-
-  /// A compiler interface that allows the enabling of experimental features.
-  @_spi(ExperimentalLanguageFeatures)
-  public static func parse(
-    source: UnsafeBufferPointer<UInt8>,
+    source: String,
+    maximumNestingLevel: Int? = nil,
     swiftVersion: SwiftVersion? = nil,
-    experimentalFeatures: ExperimentalFeatures
+    languageFeatures: LanguageFeatures = []
   ) -> SourceFileSyntax {
-    var parser = Parser(source, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
-    return SourceFileSyntax.parse(from: &parser)
+    return withParser(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: nil,
+      swiftVersion: swiftVersion,
+      languageFeatures: languageFeatures
+    ) { SourceFileSyntax.parse(from: &$0) }
   }
 
   /// Parse the source code in the given buffer as Swift source file. See
@@ -42,10 +35,16 @@ extension Parser {
   public static func parse(
     source: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int? = nil,
-    swiftVersion: SwiftVersion? = nil
+    swiftVersion: SwiftVersion? = nil,
+    languageFeatures: LanguageFeatures = []
   ) -> SourceFileSyntax {
-    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel, swiftVersion: swiftVersion)
-    return SourceFileSyntax.parse(from: &parser)
+    return withParser(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: nil,
+      swiftVersion: swiftVersion,
+      languageFeatures: languageFeatures
+    ) { SourceFileSyntax.parse(from: &$0) }
   }
 
   /// Parse the source code in the given string as Swift source file with support
@@ -120,8 +119,16 @@ extension Parser {
     source: String,
     parseTransition: IncrementalParseTransition?
   ) -> IncrementalParseResult {
-    var parser = Parser(source, parseTransition: parseTransition)
-    return IncrementalParseResult(tree: SourceFileSyntax.parse(from: &parser), lookaheadRanges: parser.lookaheadRanges)
+    // Drop the transition (forcing a full reparse) when the previous tree is
+    // fragmented enough that this parse would reach its compaction threshold.
+    let parseTransition = (parseTransition?.shouldCompact ?? false) ? nil : parseTransition
+    return withParser(
+      source: source,
+      maximumNestingLevel: nil,
+      parseTransition: parseTransition,
+      swiftVersion: nil,
+      languageFeatures: []
+    ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 
   /// Parse the source code in the given buffer as Swift source file with support
@@ -133,8 +140,14 @@ extension Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition?
   ) -> IncrementalParseResult {
-    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel, parseTransition: parseTransition)
-    return IncrementalParseResult(tree: SourceFileSyntax.parse(from: &parser), lookaheadRanges: parser.lookaheadRanges)
+    let parseTransition = (parseTransition?.shouldCompact ?? false) ? nil : parseTransition
+    return withParser(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      swiftVersion: nil,
+      languageFeatures: []
+    ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 }
 
@@ -174,7 +187,8 @@ extension Parser {
     } else {
       existingUnexpected = []
     }
-    let unexpected = RawUnexpectedNodesSyntax(elements: existingUnexpected + remainingTokens, arena: self.arena)
+    // Not empty, since `remainingTokens` is not.
+    let unexpected = RawUnexpectedNodesSyntax(existingUnexpected + remainingTokens, arena: self.arena)!
 
     let withUnexpected = layout.replacingChild(at: layout.children.count - 1, with: unexpected.raw, arena: self.arena)
 

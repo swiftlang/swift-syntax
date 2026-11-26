@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftDiagnostics
-#else
-import SwiftDiagnostics
-#endif
 
 private let diagnosticDomain: String = "SwiftSyntaxMacros"
 

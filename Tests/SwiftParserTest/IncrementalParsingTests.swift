@@ -11,11 +11,35 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftParser
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
 class IncrementalParsingTests: ParserTestCase {
+  private func replacing(
+    _ oldText: String,
+    with newText: String,
+    in source: String
+  ) -> (String, SourceEdit) {
+    let range = source.range(of: oldText)!
+    let lowerBound = source.utf8.distance(
+      from: source.utf8.startIndex,
+      to: range.lowerBound.samePosition(in: source.utf8)!
+    )
+    let upperBound = source.utf8.distance(
+      from: source.utf8.startIndex,
+      to: range.upperBound.samePosition(in: source.utf8)!
+    )
+    var editedSource = source
+    editedSource.replaceSubrange(range, with: newText)
+    return (
+      editedSource,
+      SourceEdit(
+        range: AbsolutePosition(utf8Offset: lowerBound)..<AbsolutePosition(utf8Offset: upperBound),
+        replacement: newText
+      )
+    )
+  }
 
   public func testBrokenMemberFunction() {
     assertIncrementalParse(
@@ -38,6 +62,128 @@ class IncrementalParsingTests: ParserTestCase {
         ReusedNodeSpec("struct B {}", kind: .codeBlockItem)
       ]
     )
+  }
+
+  public func testLookaheadRangeDoesNotShrinkWhenNodeIsReused() {
+    let originalSource = """
+      foo() {}
+      label: switch x {
+        default: break
+      }
+      bar() {}
+      """
+    let originalResult = Parser.parseIncrementally(source: originalSource, parseTransition: nil)
+
+    // Reuse `foo() {}` while applying an unrelated edit. Its original parse
+    // looked through `label: switch` to rule out a labeled trailing closure.
+    let (intermediateSource, unrelatedEdit) = replacing("bar", with: "baz", in: originalSource)
+    var initiallyReusedNodes: [Syntax] = []
+    let intermediateResult = Parser.parseIncrementally(
+      source: intermediateSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: originalResult,
+        edits: ConcurrentEdits(unrelatedEdit),
+        reusedNodeCallback: { initiallyReusedNodes.append($0) }
+      )
+    )
+    XCTAssertTrue(initiallyReusedNodes.contains(where: { $0.trimmedDescription == "foo() {}" }))
+
+    // Changing `switch ...` to a closure makes `label: {}` a labeled trailing
+    // closure of `foo()`. The reused node must therefore be invalidated.
+    let (finalSource, lookaheadEdit) = replacing(
+      "switch x {\n  default: break\n}",
+      with: "{}",
+      in: intermediateSource
+    )
+    let incrementalTree = Parser.parseIncrementally(
+      source: finalSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: intermediateResult,
+        edits: ConcurrentEdits(lookaheadEdit)
+      )
+    ).tree
+    let fullyParsedTree = Parser.parse(source: finalSource)
+
+    let subtreeMatcher = SubtreeMatcher(incrementalTree, markers: [:])
+    do {
+      try subtreeMatcher.assertSameStructure(fullyParsedTree, includeTrivia: true)
+    } catch {
+      XCTFail("Matching for a subtree failed with error: \(error)")
+    }
+  }
+
+  public func testLookaheadRangesForChildrenOfReusedNodeArePreserved() {
+    let originalSource = """
+      struct A {
+        func f() {}
+        func abc() {}
+        let value = 1
+      }
+      struct B {}
+      struct D {}
+      """
+    let originalResult = Parser.parseIncrementally(source: originalSource, parseTransition: nil)
+
+    // Reuse `struct A` while applying an unrelated edit. Because reusing the
+    // struct skips parsing its members, their lookahead ranges must be preserved.
+    let (intermediateSource, unrelatedEdit) = replacing("struct D", with: "struct E", in: originalSource)
+    var initiallyReusedNodes: [Syntax] = []
+    let intermediateResult = Parser.parseIncrementally(
+      source: intermediateSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: originalResult,
+        edits: ConcurrentEdits(unrelatedEdit),
+        reusedNodeCallback: { initiallyReusedNodes.append($0) }
+      )
+    )
+    XCTAssertTrue(initiallyReusedNodes.contains(where: { $0.trimmedDescription.hasPrefix("struct A") }))
+
+    // This invalidates the reused struct item. The unchanged function precedes
+    // the edit, so reusing it requires preserving the skipped child's range.
+    let (finalSource, memberEdit) = replacing("let value = 1", with: "let value = 2", in: intermediateSource)
+    var reusedNodes: [Syntax] = []
+    _ = Parser.parseIncrementally(
+      source: finalSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: intermediateResult,
+        edits: ConcurrentEdits(memberEdit),
+        reusedNodeCallback: { reusedNodes.append($0) }
+      )
+    )
+
+    XCTAssertTrue(reusedNodes.contains(where: { $0.trimmedDescription == "func f() {}" }))
+  }
+
+  /// The parser records how far it looked ahead only for the items it parses.
+  /// An item it rebuilds afterwards, such as one given a missing semicolon
+  /// because another statement follows on the same line, has no recorded
+  /// range, so an incremental parse must not reuse it across a later edit.
+  public func testItemWithoutRecordedLookaheadIsNotReused() {
+    let originalSource = """
+      let a = 1 let b = 2
+      let c = 3
+      """
+    let originalResult = Parser.parseIncrementally(source: originalSource, parseTransition: nil)
+
+    let (editedSource, edit) = replacing("3", with: "4", in: originalSource)
+    var reusedNodes: [Syntax] = []
+    let incrementalTree = Parser.parseIncrementally(
+      source: editedSource,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: originalResult,
+        edits: ConcurrentEdits(edit),
+        reusedNodeCallback: { reusedNodes.append($0) }
+      )
+    ).tree
+
+    XCTAssertFalse(reusedNodes.contains(where: { $0.trimmedDescription == "let a = 1" }))
+    XCTAssertTrue(reusedNodes.contains(where: { $0.trimmedDescription == "let b = 2" }))
+    let subtreeMatcher = SubtreeMatcher(incrementalTree, markers: [:])
+    do {
+      try subtreeMatcher.assertSameStructure(Parser.parse(source: editedSource), includeTrivia: true)
+    } catch {
+      XCTFail("Matching for a subtree failed with error: \(error)")
+    }
   }
 
   public func testAddElse() {
@@ -465,5 +611,116 @@ class IncrementalParsingTests: ParserTestCase {
         ReusedNodeSpec("class foo {}", kind: .codeBlockItem)
       ]
     )
+  }
+
+  // MARK: - Arena compaction
+
+  /// A source file of `count` distinct top-level functions. Editing one function
+  /// reuses the others from earlier arenas, so editing distinct functions in
+  /// turn accumulates retained arenas.
+  private func manyFunctions(_ count: Int) -> String {
+    return (0..<count).map { "func f\($0)() -> Int { return \($0) }\n" }.joined()
+  }
+
+  /// Insert `text` at the start of `needle` in `source`, returning the new
+  /// source and the corresponding edit.
+  private func insert(
+    _ text: String,
+    before needle: String,
+    in source: String
+  ) -> (newSource: String, edit: SourceEdit) {
+    let range = source.range(of: needle)!
+    let offset = source.utf8.distance(from: source.utf8.startIndex, to: range.lowerBound.samePosition(in: source.utf8)!)
+    var utf8 = Array(source.utf8)
+    utf8.insert(contentsOf: Array(text.utf8), at: offset)
+    let edit = SourceEdit(
+      range: AbsolutePosition(utf8Offset: offset)..<AbsolutePosition(utf8Offset: offset),
+      replacement: text
+    )
+    return (String(decoding: utf8, as: UTF8.self), edit)
+  }
+
+  /// Edits distinct functions in turn and returns the peak retained arena count
+  /// observed across the edit sequence. Asserts every intermediate tree
+  /// round-trips.
+  private func peakRetainedArenas(functionCount: Int, edits: Int, compactArenaThreshold: Int?) throws -> Int {
+    var source = manyFunctions(functionCount)
+    var result = Parser.parseIncrementally(source: source, parseTransition: nil)
+    var peak = result.tree.raw.arena.retainedArenaCount
+    for i in 0..<edits {
+      let (newSource, edit) = insert("  ", before: "return \(i % functionCount) ", in: source)
+      let transition = IncrementalParseTransition(
+        previousIncrementalParseResult: result,
+        edits: try ConcurrentEdits(concurrent: [edit]),
+        compactArenaThreshold: compactArenaThreshold
+      )
+      result = Parser.parseIncrementally(source: newSource, parseTransition: transition)
+      XCTAssertEqual(result.tree.description, newSource, "tree did not round-trip after edit \(i)")
+      peak = max(peak, result.tree.raw.arena.retainedArenaCount)
+      source = newSource
+    }
+    return peak
+  }
+
+  /// With compaction disabled, editing distinct functions accumulates arenas
+  /// well beyond a small bound — this validates that the compaction test below
+  /// is actually exercising arena accumulation.
+  public func testArenaCountAccumulatesWithoutCompaction() throws {
+    let peak = try peakRetainedArenas(functionCount: 16, edits: 16, compactArenaThreshold: nil)
+    // Each edit reuses the other functions from earlier arenas, so the retained
+    // count grows by roughly one per edit (peak here is near `1 + edits` ≈ 17).
+    // This is only a control asserting that accumulation happens at all, so use
+    // a loose lower bound: comfortably above the compaction-bounded regime (the
+    // test below caps at 4) yet well under the true peak, so it stays robust to
+    // small variations in how nodes are pinned across arenas.
+    XCTAssertGreaterThan(peak, 8, "expected arenas to accumulate without compaction")
+  }
+
+  /// With a low threshold, compaction keeps the retained arena count bounded by
+  /// the threshold across a long edit sequence, while every tree still
+  /// round-trips.
+  public func testArenaCompactionBoundsRetainedArenaCount() throws {
+    let threshold = 4
+    let peak = try peakRetainedArenas(functionCount: 16, edits: 32, compactArenaThreshold: threshold)
+    XCTAssertLessThanOrEqual(peak, threshold, "compaction should keep retained arenas at or below the threshold")
+  }
+
+  /// A tree produced by a compaction (full reparse) can still be used as the
+  /// basis for a subsequent incremental parse that reuses nodes.
+  public func testIncrementalParseAfterCompaction() throws {
+    let source = manyFunctions(16)
+    var result = Parser.parseIncrementally(source: source, parseTransition: nil)
+
+    // Force a compaction on the next parse with threshold 1 (any incremental
+    // parse's previous tree retains >= 1 arena, so `previous + 1 > 1` always
+    // holds and forces a compaction).
+    let (afterFirst, edit1) = insert("  ", before: "return 0 ", in: source)
+    result = Parser.parseIncrementally(
+      source: afterFirst,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: result,
+        edits: try ConcurrentEdits(concurrent: [edit1]),
+        compactArenaThreshold: 1
+      )
+    )
+    XCTAssertEqual(result.tree.raw.arena.retainedArenaCount, 1, "compaction should collapse to a single arena")
+    XCTAssertEqual(result.tree.description, afterFirst)
+
+    // The compacted tree drives a normal incremental parse that reuses nodes.
+    var reusedCodeBlockItems = 0
+    let (afterSecond, edit2) = insert("  ", before: "return 5 ", in: afterFirst)
+    let result2 = Parser.parseIncrementally(
+      source: afterSecond,
+      parseTransition: IncrementalParseTransition(
+        previousIncrementalParseResult: result,
+        edits: try ConcurrentEdits(concurrent: [edit2]),
+        reusedNodeCallback: { node in
+          if node.kind == .codeBlockItem { reusedCodeBlockItems += 1 }
+        },
+        compactArenaThreshold: nil
+      )
+    )
+    XCTAssertEqual(result2.tree.description, afterSecond)
+    XCTAssertGreaterThan(reusedCodeBlockItems, 0, "incremental parse after compaction should reuse nodes")
   }
 }

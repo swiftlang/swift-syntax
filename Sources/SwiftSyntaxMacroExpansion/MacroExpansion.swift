@@ -10,15 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
-import SwiftBasicFormat
+internal import SwiftBasicFormat
+import SwiftDiagnostics
+import SwiftIfConfig
 public import SwiftSyntax
-@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) public import SwiftSyntaxMacros
-#else
-import SwiftBasicFormat
-import SwiftSyntax
-@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
-#endif
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntaxMacros
 
 public enum MacroRole: Sendable {
   case expression
@@ -30,8 +26,8 @@ public enum MacroRole: Sendable {
   case conformance
   case codeItem
   case `extension`
-  @_spi(ExperimentalLanguageFeature) case preamble
-  @_spi(ExperimentalLanguageFeature) case body
+  @_spi(ExperimentalLanguageFeatures) case preamble
+  case body
 }
 
 extension MacroRole {
@@ -394,6 +390,38 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
           providingBodyFor: declToPass,
           in: context
         )
+      } else if let varDecl = node.as(VariableDeclSyntax.self),
+        varDecl.bindings.count == 1,
+        let binding = varDecl.bindings.first,
+        let accessorBlock = binding.accessorBlock,
+        case .getter(let stmts) = accessorBlock.accessors
+      {
+        // Create an implicit `AccessorDeclSyntax` to use for the macro expansion
+        // of this computed var decl
+        let getterDecl = AccessorDeclSyntax(
+          accessorSpecifier: .keyword(.get, presence: .missing),
+          body: CodeBlockSyntax(
+            leftBrace: accessorBlock.leftBrace,
+            statements: stmts,
+            rightBrace: accessorBlock.rightBrace
+          )
+        )
+
+        // Insert the enclosing `PatternBindingSyntax`'s var decl context
+        // into the lexical context
+        var context: MacroExpansionContext = context
+        if let varDeclLexicalContext = binding.asMacroLexicalContext() {
+          context = PrependLexicalContextWrapperContext(
+            prependLexicalContext: [varDeclLexicalContext],
+            wrapping: context
+          )
+        }
+
+        body = try attachedMacro.expansion(
+          of: attributeNode,
+          providingBodyFor: getterDecl,
+          in: context
+        )
       } else {
         // Compiler error: declaration must have a body.
         throw MacroExpansionError.declarationHasNoBody
@@ -634,4 +662,40 @@ public func collapse<Node: SyntaxProtocol>(
   }
 
   return collapsed
+}
+
+/// Wrapper context that prepends additional `lexicalContext`
+/// to an existing `MacroExpansionContext`
+final class PrependLexicalContextWrapperContext: MacroExpansionContext {
+  init(prependLexicalContext: [Syntax], wrapping wrappedContext: MacroExpansionContext) {
+    self.prependLexicalContext = prependLexicalContext
+    self.wrappedContext = wrappedContext
+  }
+
+  let prependLexicalContext: [Syntax]
+  let wrappedContext: MacroExpansionContext
+
+  var lexicalContext: [Syntax] {
+    prependLexicalContext + wrappedContext.lexicalContext
+  }
+
+  func makeUniqueName(_ name: String) -> TokenSyntax {
+    wrappedContext.makeUniqueName(name)
+  }
+
+  func diagnose(_ diagnostic: Diagnostic) {
+    wrappedContext.diagnose(diagnostic)
+  }
+
+  func location(
+    of node: some SyntaxProtocol,
+    at position: PositionInSyntaxNode,
+    filePathMode: SourceLocationFilePathMode
+  ) -> AbstractSourceLocation? {
+    wrappedContext.location(of: node, at: position, filePathMode: filePathMode)
+  }
+
+  var buildConfiguration: (any BuildConfiguration)? {
+    wrappedContext.buildConfiguration
+  }
 }

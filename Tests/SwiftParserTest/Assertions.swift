@@ -10,12 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(FixItApplier) import SwiftIDEUtils
 @_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftParserDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
+import _SwiftSyntaxGenericTestSupport
 import _SwiftSyntaxTestSupport
 
 // MARK: Lexing Assertions
@@ -153,7 +155,7 @@ private func assertTokens(
         tokenDiagnostic: actualLexeme.diagnostic,
         arena: arena
       )
-      let token = Syntax(raw: RawSyntax(rawToken), rawNodeArena: arena).cast(TokenSyntax.self)
+      let token = Syntax(raw: rawToken.raw, rawNodeArena: arena).cast(TokenSyntax.self)
       assertStringsEqualWithDiff(
         actualError.diagnosticMessage(in: token).message,
         expectedError,
@@ -190,7 +192,6 @@ private func assertTokens(
 func assertLexemes(
   _ markedSource: String,
   lexemes expectedLexemes: [LexemeSpec],
-  experimentalFeatures: Parser.ExperimentalFeatures = [],
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
@@ -205,21 +206,25 @@ func assertLexemes(
     lookaheadTracker.deallocate()
   }
   lookaheadTracker.initialize(to: LookaheadTracker())
-  source.withUTF8 { buf in
-    var lexemes = [Lexer.Lexeme]()
-    for token in Lexer.tokenize(
-      buf,
-      from: 0,
-      lookaheadTracker: lookaheadTracker,
-      experimentalFeatures: experimentalFeatures
-    ) {
-      lexemes.append(token)
+  // Outlives the lexeme sequence, which refers to it without owning it.
+  let stateAllocator = Lexer.StateAllocator()
+  withExtendedLifetime(stateAllocator) {
+    source.withUTF8 { buf in
+      var lexemes = [Lexer.Lexeme]()
+      for token in Lexer.tokenize(
+        buf,
+        from: 0,
+        lookaheadTracker: lookaheadTracker,
+        stateAllocator: stateAllocator
+      ) {
+        lexemes.append(token)
 
-      if token.rawTokenKind == .endOfFile {
-        break
+        if token.rawTokenKind == .endOfFile {
+          break
+        }
       }
+      assertTokens(lexemes, expectedLexemes, markerLocations: markerLocations, file: file, line: line)
     }
-    assertTokens(lexemes, expectedLexemes, markerLocations: markerLocations, file: file, line: line)
   }
 }
 
@@ -501,7 +506,7 @@ extension ParserTestCase {
     source: [UInt8],
     _ parse: (inout Parser) -> some SyntaxProtocol,
     swiftVersion: Parser.SwiftVersion?,
-    experimentalFeatures: Parser.ExperimentalFeatures,
+    languageFeatures: Parser.LanguageFeatures,
     file: StaticString,
     line: UInt
   ) {
@@ -509,7 +514,7 @@ extension ParserTestCase {
       let mutatedSource = String(decoding: buf, as: UTF8.self)
       // Check that we don't hit any assertions in the parser while parsing
       // the mutated source and that it round-trips
-      var mutatedParser = Parser(buf, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
+      var mutatedParser = Parser(buf, swiftVersion: swiftVersion, languageFeatures: languageFeatures)
       let mutatedTree = parse(&mutatedParser)
       // Run the diagnostic generator to make sure it doesn’t crash
       _ = ParseDiagnosticsGenerator.diagnostics(for: mutatedTree)
@@ -579,7 +584,7 @@ extension ParserTestCase {
     fixedSource expectedFixedSource: String? = nil,
     options: AssertParseOptions = [],
     swiftVersion: Parser.SwiftVersion? = nil,
-    experimentalFeatures: Parser.ExperimentalFeatures? = nil,
+    languageFeatures: Parser.LanguageFeatures? = nil,
     file: StaticString = #filePath,
     line: UInt = #line
   ) {
@@ -594,7 +599,7 @@ extension ParserTestCase {
       } ?? [],
       options: options,
       swiftVersion: swiftVersion,
-      experimentalFeatures: experimentalFeatures,
+      languageFeatures: languageFeatures,
       file: file,
       line: line
     )
@@ -638,7 +643,7 @@ extension ParserTestCase {
   ///     will generate a certain expected fixed source. An empty list means no fix-its are expected.
   ///   - swiftVersion: The version of Swift using which the file should be parsed.
   ///      Defaults to the latest version.
-  ///   - experimentalFeatures: A list of experimental features to enable, or
+  ///   - languageFeatures: A list of experimental features to enable, or
   ///     `nil` to enable the default set of features provided by the test case.
   func assertParse(
     _ markedSource: String,
@@ -649,17 +654,17 @@ extension ParserTestCase {
     fixItsApplications: [FixItsApplication] = [],
     options: AssertParseOptions = [],
     swiftVersion: Parser.SwiftVersion? = nil,
-    experimentalFeatures: Parser.ExperimentalFeatures? = nil,
+    languageFeatures: Parser.LanguageFeatures? = nil,
     file: StaticString = #filePath,
     line: UInt = #line
   ) {
-    let experimentalFeatures = experimentalFeatures ?? self.experimentalFeatures
+    let languageFeatures = languageFeatures ?? self.languageFeatures
 
     // Verify the parser can round-trip the source
     var (markerLocations, source) = extractMarkers(markedSource)
     markerLocations["START"] = 0
 
-    var parser = Parser(source, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
+    var parser = Parser(source, swiftVersion: swiftVersion, languageFeatures: languageFeatures)
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
     if !longTestsDisabled {
       parser.enableAlternativeTokenChoices()
@@ -750,21 +755,21 @@ extension ParserTestCase {
         source: source,
         parse: parse,
         swiftVersion: swiftVersion,
-        experimentalFeatures: experimentalFeatures,
+        languageFeatures: languageFeatures,
         file: file,
         line: line
       )
     }
 
     if !longTestsDisabled {
-      DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
+      performConcurrentIfPossible(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
         let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
         _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)
         Self.assertMutationRoundTrip(
           source: flippedTokenTree.syntaxTextBytes,
           parse,
           swiftVersion: swiftVersion,
-          experimentalFeatures: experimentalFeatures,
+          languageFeatures: languageFeatures,
           file: file,
           line: line
         )
@@ -776,7 +781,7 @@ extension ParserTestCase {
         replacements in
         return replacements.map { (offset, $0) }
       }
-      DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
+      performConcurrentIfPossible(iterations: mutations.count) { index in
         let mutation = mutations[index]
         let alternateSource = MutatedTreePrinter.print(
           tree: Syntax(tree),
@@ -786,7 +791,7 @@ extension ParserTestCase {
           source: alternateSource,
           parse,
           swiftVersion: swiftVersion,
-          experimentalFeatures: experimentalFeatures,
+          languageFeatures: languageFeatures,
           file: file,
           line: line
         )
@@ -828,11 +833,11 @@ func assertBasicFormat(
   source: String,
   parse: (inout Parser) -> some SyntaxProtocol,
   swiftVersion: Parser.SwiftVersion?,
-  experimentalFeatures: Parser.ExperimentalFeatures,
+  languageFeatures: Parser.LanguageFeatures,
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
-  var parser = Parser(source, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
+  var parser = Parser(source, swiftVersion: swiftVersion, languageFeatures: languageFeatures)
   let sourceTree = parse(&parser)
   let withoutTrivia = TriviaRemover(viewMode: .sourceAccurate).rewrite(sourceTree)
   let formatted = withoutTrivia.formatted()
@@ -840,7 +845,7 @@ func assertBasicFormat(
   var formattedParser = Parser(
     formatted.description,
     swiftVersion: swiftVersion,
-    experimentalFeatures: experimentalFeatures
+    languageFeatures: languageFeatures
   )
   let formattedReparsed = Syntax(parse(&formattedParser))
 

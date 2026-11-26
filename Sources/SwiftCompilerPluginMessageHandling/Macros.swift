@@ -10,25 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftBasicFormat
 internal import SwiftDiagnostics
 @_spi(ExperimentalLanguageFeatures) internal import SwiftIfConfig
 internal import SwiftOperators
 @_spi(ExperimentalLanguageFeatures) internal import SwiftParser
 internal import SwiftSyntax
-@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacroExpansion
-@_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacros
-#else
-import SwiftBasicFormat
-import SwiftDiagnostics
-@_spi(ExperimentalLanguageFeatures) import SwiftIfConfig
-import SwiftOperators
-@_spi(ExperimentalLanguageFeatures) import SwiftParser
-import SwiftSyntax
-@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
-@_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
-#endif
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntaxMacroExpansion
+@_spi(ExperimentalLanguageFeatures) internal import SwiftSyntaxMacros
 
 extension PluginProviderMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.
@@ -41,7 +30,7 @@ extension PluginProviderMessageHandler {
     _ lexicalContext: [PluginMessage.Syntax]?,
     sourceManager: SourceManager,
     swiftVersion: Parser.SwiftVersion?,
-    experimentalFeatures: Parser.ExperimentalFeatures?,
+    languageFeatures: Parser.LanguageFeatures?,
     operatorTable: OperatorTable,
     fallbackSyntax: some SyntaxProtocol
   ) -> [Syntax] {
@@ -55,7 +44,7 @@ extension PluginProviderMessageHandler {
       sourceManager.add(
         $0,
         swiftVersion: swiftVersion,
-        experimentalFeatures: experimentalFeatures,
+        languageFeatures: languageFeatures,
         foldingWith: operatorTable
       )
     }
@@ -72,11 +61,11 @@ extension PluginProviderMessageHandler {
   ) -> PluginToHostMessage {
     let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
     let swiftVersion = staticBuildConfiguration?.parserSwiftVersion
-    let experimentalFeatures = staticBuildConfiguration?.experimentalFeatures
+    let languageFeatures = staticBuildConfiguration?.parserLanguageFeatures
     let syntax = sourceManager.add(
       expandingSyntax,
       swiftVersion: swiftVersion,
-      experimentalFeatures: experimentalFeatures,
+      languageFeatures: languageFeatures,
       foldingWith: .standardOperators
     )
 
@@ -86,7 +75,7 @@ extension PluginProviderMessageHandler {
         lexicalContext,
         sourceManager: sourceManager,
         swiftVersion: swiftVersion,
-        experimentalFeatures: experimentalFeatures,
+        languageFeatures: languageFeatures,
         operatorTable: .standardOperators,
         fallbackSyntax: syntax
       ),
@@ -147,13 +136,13 @@ extension PluginProviderMessageHandler {
   ) -> PluginToHostMessage {
     let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
     let swiftVersion = staticBuildConfiguration?.parserSwiftVersion
-    let experimentalFeatures = staticBuildConfiguration?.experimentalFeatures
+    let languageFeatures = staticBuildConfiguration?.parserLanguageFeatures
 
     func addToSourceManager(_ syntax: PluginMessage.Syntax, foldOperators: Bool) -> Syntax {
       sourceManager.add(
         syntax,
         swiftVersion: swiftVersion,
-        experimentalFeatures: experimentalFeatures,
+        languageFeatures: languageFeatures,
         foldingWith: foldOperators ? .standardOperators : nil
       )
     }
@@ -178,7 +167,7 @@ extension PluginProviderMessageHandler {
         lexicalContext,
         sourceManager: sourceManager,
         swiftVersion: swiftVersion,
-        experimentalFeatures: experimentalFeatures,
+        languageFeatures: languageFeatures,
         operatorTable: .standardOperators,
         fallbackSyntax: declarationNode
       ),

@@ -142,9 +142,9 @@ of a syntax tree always appear in order and the associated `viewMode` allows
 the client to express their intent to process missing and unexpected syntax. 
 
 Syntax nodes also contain strongly-typed APIs to access those same child nodes
-individually. For example, ``ClassDeclSyntax`` provides an 
-``ClassDeclSyntax/identifier`` to get the name of the class, as well as
-``ClassDeclSyntax/members`` to get the syntax node representing the braced block 
+individually. For example, ``ClassDeclSyntax`` provides a 
+``ClassDeclSyntax/name`` to get the name of the class, as well as
+``ClassDeclSyntax/memberBlock`` to get the syntax node representing the braced block 
 with its members.
 
 Most syntax analyzers want to work with more than one kind of syntax at a time,
@@ -169,11 +169,11 @@ The syntax trees provided by the SwiftSyntax library are immutable. All
 modifications of the syntax tree are expressed as in-place updates to an 
 existing syntax tree, and return new syntax trees. SwiftSyntax provides a set
 of high-level APIs for expressing these modifications. In general, data in
-syntax nodes can be accessed via a getter and updated with a corresponding
-`with*` method. For example, the name of a class can be retrieved with the
-``ClassDeclSyntax/identifier`` accessor, and replaced with the 
-``ClassDeclSyntax/with(_:_:)-3exln`` update function. This method returns
-a new ``ClassDeclSyntax`` value.
+syntax nodes can be accessed via a getter and updated by assigning to the
+corresponding settable property on a copy of the node. For example, the name
+of a class can be retrieved with the ``ClassDeclSyntax/name`` accessor, and
+replaced by assigning a new value to that property. The modified copy is a
+new ``ClassDeclSyntax`` value; the original node is unchanged.
 
 ## Building Syntax Trees
 
@@ -205,17 +205,20 @@ functions.
 ```swift
 import SwiftSyntax
 import SwiftParser
+import SwiftSyntaxBuilder
 
-func createClass(named name: String) -> ClassDeclSyntax {
-  return """
-         class \(raw: name) {}
-         """
+func createClass(named name: String) throws -> ClassDeclSyntax {
+  return try ClassDeclSyntax(
+    """
+    class \(raw: name) {}
+    """
+  )
 }
 ```
 
 Using string literals and interpolation to build up syntax provides a fluid
 and natural API for building up complex syntax trees. This is generally 
-preferred to transforming syntax trees via a chain of `with*` calls.
+preferred to transforming syntax trees via a series of property assignments.
 
 [BOM]: https://unicode.org/faq/utf_bom.html
 [PersistentDataStructure]: https://en.wikipedia.org/wiki/Persistent_data_structure

@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension Parser {
   /// Consumes and returns all remaining tokens in the source file.
@@ -44,9 +40,20 @@ extension Parser {
   /// ``Parser/parse(source:parseTransition:filenameForDiagnostics:languageVersion:enableBareSlashRegexLiteral:)-7tndx``
   /// API calls.
   mutating func parseSourceFile() -> RawSourceFileSyntax {
-    let shebang = self.consume(if: .shebang)
-    let items = self.parseTopLevelCodeBlockItems()
+    let shebang: RawTokenSyntax?
+    let items: RawCodeBlockItemListSyntax
+
+    if !self.languageFeatures.contains(._test_EverythingUnexpected) {
+      shebang = self.consume(if: .shebang)
+      items = self.parseTopLevelCodeBlockItems()
+    } else {
+      // For testing purposes, parse everything as 'unexpectedBeforeEndOfFileToken'.
+      shebang = nil
+      items = RawCodeBlockItemListSyntax(elements: .init(), arena: self.arena)
+    }
+
     let (unexpectedBeforeEndOfFileToken, endOfFile) = self.expectEndOfFile()
+
     return .init(
       shebang: shebang,
       statements: items,
@@ -70,7 +77,7 @@ extension Parser {
     allowInitDecl: Bool = true,
     until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) || $0.atEndOfIfConfigClauseBody() }
   ) -> RawCodeBlockItemListSyntax {
-    var elements = [RawCodeBlockItemSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawCodeBlockItemSyntax>()
     var loopProgress = LoopProgressCondition()
     while !stopCondition(&self), !self.at(.endOfFile), self.hasProgressed(&loopProgress) {
       let newItemAtStartOfLine = self.atStartOfLine
@@ -91,9 +98,9 @@ extension Parser {
           arena: self.arena
         )
       }
-      elements.append(newItem)
+      elements.append(newItem, allocator: self.nodeListAllocator)
     }
-    return .init(elements: elements, arena: self.arena)
+    return .init(elements: elements.build(), arena: self.arena)
   }
 
   /// Parse the top level items in a source file.
@@ -120,6 +127,20 @@ extension Parser {
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    // If the '{' is missing and what follows starts a new line, don't take the
+    // following lines as the body: they are most likely ordinary statements, and
+    // taking them would make the block swallow the rest of its scope. This is
+    // what the C++ parser does. (On the same line, `for x in y foo()` keeps
+    // `foo()` as the body, which the fix-it can then wrap in braces.)
+    if lbrace.isMissing && introducer != nil && (self.atStartOfLine || self.at(.endOfFile)) {
+      return .init(
+        unexpectedBeforeLBrace,
+        leftBrace: lbrace,
+        statements: RawCodeBlockItemListSyntax(elements: .init(), arena: self.arena),
+        rightBrace: self.missingToken(.rightBrace),
+        arena: self.arena
+      )
+    }
     let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl)
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
@@ -143,7 +164,6 @@ extension Parser {
   ) -> RawCodeBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .codeBlockItem) {
-      self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
       return RawCodeBlockItemSyntax(syntax.raw)
     }
 
@@ -180,7 +200,12 @@ extension Parser {
       item = self.parseStatementItem()
       attachSemi = true
     } else if self.atStartOfExpression() {
-      item = .expr(self.parseExpression(flavor: .basic, pattern: .none))
+      let expr = self.parseExpression(flavor: .basic, pattern: .none)
+      if self.at(.keyword(.catch)), let doStmt = self.reinterpretTryClosureAsDoStatement(expr) {
+        item = .stmt(RawStmtSyntax(doStmt))
+      } else {
+        item = .expr(expr)
+      }
       attachSemi = true
     } else if self.withLookahead({ $0.atStartOfSwitchCase() }) {
       // 'case' and 'default' are invalid in code block items.
@@ -248,11 +273,12 @@ extension Parser {
         let (op, rhs) = parseUnresolvedAsExpr(
           handle: .init(spec: .keyword(.as))
         )
+        var elements = RawSyntaxNodeListBuilder<RawExprSyntax>(initialCapacity: 3)
+        elements.append(expr, allocator: self.nodeListAllocator)
+        elements.append(op, allocator: self.nodeListAllocator)
+        elements.append(rhs, allocator: self.nodeListAllocator)
         let sequence = RawSequenceExprSyntax(
-          elements: RawExprListSyntax(
-            elements: [expr, op, rhs],
-            arena: self.arena
-          ),
+          elements: RawExprListSyntax(elements: elements.build(), arena: self.arena),
           arena: self.arena
         )
         return .init(expr: sequence)

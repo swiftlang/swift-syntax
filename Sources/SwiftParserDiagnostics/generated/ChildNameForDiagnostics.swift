@@ -13,11 +13,7 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
-#endif
 
 private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
@@ -169,6 +165,10 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "type"
   case \FunctionParameterSyntax.defaultValue:
     return "default value"
+  case \FunctionYieldClauseSyntax.yields:
+    return "yielded types"
+  case \FunctionYieldSyntax.type:
+    return "type"
   case \GenericParameterSyntax.specifier:
     return "specifier"
   case \GenericParameterSyntax.name:
@@ -315,6 +315,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "left-hand type"
   case \SameTypeRequirementSyntax.rightType:
     return "right-hand type"
+  case \SectionAttributeArgumentSyntax.section:
+    return "section"
   case \SpecializeAvailabilityArgumentSyntax.availabilityLabel:
     return "label"
   case \SpecializeTargetFunctionArgumentSyntax.targetLabel:

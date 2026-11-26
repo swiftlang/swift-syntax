@@ -10,12 +10,18 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if hasFeature(Embedded)
+public typealias _CustomReflectableIfAvailable = Sendable
+#else
+public typealias _CustomReflectableIfAvailable = CustomReflectable
+#endif
+
 /// Provide common functionality for specialized syntax nodes. Extend this
 /// protocol to provide common functionality for all syntax nodes.
 ///
 /// - Important: Do not conform to this protocol yourself.
 public protocol SyntaxProtocol: CustomStringConvertible,
-  CustomDebugStringConvertible, TextOutputStreamable, CustomReflectable, Sendable
+  CustomDebugStringConvertible, TextOutputStreamable, _CustomReflectableIfAvailable, Sendable
 {
 
   /// Retrieve the generic syntax node that is represented by this node.
@@ -331,7 +337,7 @@ extension SyntaxProtocol {
       if i == indexInTree {
         return node
       }
-      guard i < indexInTree, indexInTree < i &+ UInt32(truncatingIfNeeded: node.raw.totalNodes) else {
+      guard i < indexInTree, indexInTree < i &+ node.raw.totalNodes else {
         return nil
       }
       for child in node.children(viewMode: .all) {
@@ -592,7 +598,7 @@ extension SyntaxProtocol {
   /// underlying tokens, e.g. an empty CodeBlockItemList.
   @available(*, deprecated, message: "Check children(viewMode: .all).isEmpty instead")
   public var isImplicit: Bool {
-    return raw.isEmpty
+    return raw.byteLength == 0
   }
 
   /// Returns a value representing the unique identity of the node.
@@ -610,11 +616,13 @@ extension SyntaxProtocol {
     debugDescription()
   }
 
+  #if !hasFeature(Embedded)
   public var customMirror: Mirror {
     // Suppress printing of children when doing `po node` in the debugger.
     // `debugDescription` already prints them in a nicer way.
     return Mirror(self, children: [:])
   }
+  #endif
 
   /// Returns a summarized dump of this node.
   /// - Parameters:
@@ -637,7 +645,7 @@ extension SyntaxProtocol {
       to: &str,
       includeTrivia: includeTrivia,
       converter: converter,
-      mark: mark,
+      mark: Syntax(fromProtocol: mark),
       indentString: indentString
     )
     return str
@@ -647,7 +655,7 @@ extension SyntaxProtocol {
     to target: inout Target,
     includeTrivia: Bool,
     converter: SourceLocationConverter? = nil,
-    mark: SyntaxProtocol? = nil,
+    mark: Syntax? = nil,
     indentString: String
   ) {
     if let mark, self.id == mark.id {
@@ -655,7 +663,7 @@ extension SyntaxProtocol {
     }
 
     if let token = Syntax(self).as(TokenSyntax.self) {
-      target.write(String(describing: token.tokenKind))
+      target.write(token.tokenKind.debugDescription)
       if includeTrivia {
         if !leadingTrivia.isEmpty {
           target.write(" leadingTrivia=\(leadingTrivia.debugDescription)")
@@ -665,7 +673,7 @@ extension SyntaxProtocol {
         }
       }
     } else {
-      target.write(String(describing: syntaxNodeType))
+      target.write(raw.kind.syntaxNodeTypeName)
     }
 
     let allChildren = children(viewMode: .all)

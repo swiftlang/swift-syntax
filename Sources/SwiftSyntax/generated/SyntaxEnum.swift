@@ -129,6 +129,7 @@ public enum SyntaxEnum: Sendable {
   case expressionStmt(ExpressionStmtSyntax)
   case extensionDecl(ExtensionDeclSyntax)
   case fallThroughStmt(FallThroughStmtSyntax)
+  case fileDefaultDecl(FileDefaultDeclSyntax)
   case floatLiteralExpr(FloatLiteralExprSyntax)
   case forStmt(ForStmtSyntax)
   case forceUnwrapExpr(ForceUnwrapExprSyntax)
@@ -140,6 +141,12 @@ public enum SyntaxEnum: Sendable {
   case functionParameter(FunctionParameterSyntax)
   case functionSignature(FunctionSignatureSyntax)
   case functionType(FunctionTypeSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYieldClause(FunctionYieldClauseSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYieldList(FunctionYieldListSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case functionYield(FunctionYieldSyntax)
   case genericArgumentClause(GenericArgumentClauseSyntax)
   case genericArgumentList(GenericArgumentListSyntax)
   case genericArgument(GenericArgumentSyntax)
@@ -256,6 +263,7 @@ public enum SyntaxEnum: Sendable {
   case returnClause(ReturnClauseSyntax)
   case returnStmt(ReturnStmtSyntax)
   case sameTypeRequirement(SameTypeRequirementSyntax)
+  case sectionAttributeArgument(SectionAttributeArgumentSyntax)
   case sequenceExpr(SequenceExprSyntax)
   case simpleStringLiteralExpr(SimpleStringLiteralExprSyntax)
   case simpleStringLiteralSegmentList(SimpleStringLiteralSegmentListSyntax)
@@ -306,8 +314,6 @@ public enum SyntaxEnum: Sendable {
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case unsafeExpr(UnsafeExprSyntax)
-  @_spi(ExperimentalLanguageFeatures)
-  case usingDecl(UsingDeclSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
   case versionComponentList(VersionComponentListSyntax)
@@ -544,6 +550,8 @@ extension Syntax {
       return .extensionDecl(ExtensionDeclSyntax(self)!)
     case .fallThroughStmt:
       return .fallThroughStmt(FallThroughStmtSyntax(self)!)
+    case .fileDefaultDecl:
+      return .fileDefaultDecl(FileDefaultDeclSyntax(self)!)
     case .floatLiteralExpr:
       return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
     case .forStmt:
@@ -566,6 +574,12 @@ extension Syntax {
       return .functionSignature(FunctionSignatureSyntax(self)!)
     case .functionType:
       return .functionType(FunctionTypeSyntax(self)!)
+    case .functionYieldClause:
+      return .functionYieldClause(FunctionYieldClauseSyntax(self)!)
+    case .functionYieldList:
+      return .functionYieldList(FunctionYieldListSyntax(self)!)
+    case .functionYield:
+      return .functionYield(FunctionYieldSyntax(self)!)
     case .genericArgumentClause:
       return .genericArgumentClause(GenericArgumentClauseSyntax(self)!)
     case .genericArgumentList:
@@ -788,6 +802,8 @@ extension Syntax {
       return .returnStmt(ReturnStmtSyntax(self)!)
     case .sameTypeRequirement:
       return .sameTypeRequirement(SameTypeRequirementSyntax(self)!)
+    case .sectionAttributeArgument:
+      return .sectionAttributeArgument(SectionAttributeArgumentSyntax(self)!)
     case .sequenceExpr:
       return .sequenceExpr(SequenceExprSyntax(self)!)
     case .simpleStringLiteralExpr:
@@ -886,8 +902,6 @@ extension Syntax {
       return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
     case .unsafeExpr:
       return .unsafeExpr(UnsafeExprSyntax(self)!)
-    case .usingDecl:
-      return .usingDecl(UsingDeclSyntax(self)!)
     case .valueBindingPattern:
       return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
     case .variableDecl:
@@ -927,6 +941,7 @@ public enum DeclSyntaxEnum {
   case enumCaseDecl(EnumCaseDeclSyntax)
   case enumDecl(EnumDeclSyntax)
   case extensionDecl(ExtensionDeclSyntax)
+  case fileDefaultDecl(FileDefaultDeclSyntax)
   case functionDecl(FunctionDeclSyntax)
   case ifConfigDecl(IfConfigDeclSyntax)
   case importDecl(ImportDeclSyntax)
@@ -942,8 +957,6 @@ public enum DeclSyntaxEnum {
   case subscriptDecl(SubscriptDeclSyntax)
   case typeAliasDecl(TypeAliasDeclSyntax)
   case unexpectedCodeDecl(UnexpectedCodeDeclSyntax)
-  @_spi(ExperimentalLanguageFeatures)
-  case usingDecl(UsingDeclSyntax)
   case variableDecl(VariableDeclSyntax)
 }
 
@@ -969,6 +982,8 @@ extension DeclSyntax {
       return .enumDecl(EnumDeclSyntax(self)!)
     case .extensionDecl:
       return .extensionDecl(ExtensionDeclSyntax(self)!)
+    case .fileDefaultDecl:
+      return .fileDefaultDecl(FileDefaultDeclSyntax(self)!)
     case .functionDecl:
       return .functionDecl(FunctionDeclSyntax(self)!)
     case .ifConfigDecl:
@@ -999,8 +1014,6 @@ extension DeclSyntax {
       return .typeAliasDecl(TypeAliasDeclSyntax(self)!)
     case .unexpectedCodeDecl:
       return .unexpectedCodeDecl(UnexpectedCodeDeclSyntax(self)!)
-    case .usingDecl:
-      return .usingDecl(UsingDeclSyntax(self)!)
     case .variableDecl:
       return .variableDecl(VariableDeclSyntax(self)!)
     default:

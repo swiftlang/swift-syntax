@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 /// Prefabricated operator precedence graphs.
 extension OperatorTable {

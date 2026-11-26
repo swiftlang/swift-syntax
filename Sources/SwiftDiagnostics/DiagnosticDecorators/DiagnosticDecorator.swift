@@ -42,7 +42,7 @@ protocol DiagnosticDecorator {
   func decorateMessage(
     _ message: String,
     basedOnSeverity severity: DiagnosticSeverity,
-    category: DiagnosticCategory?
+    categoryChain: [DiagnosticCategory]
   ) -> String
 
   /// Decorates the outline of a source code buffer to visually enhance its structure.
@@ -76,7 +76,7 @@ extension DiagnosticDecorator {
     decorateMessage(
       diagnosticMessage.message,
       basedOnSeverity: diagnosticMessage.severity,
-      category: diagnosticMessage.category
+      categoryChain: diagnosticMessage.categoryChain
     )
   }
 }

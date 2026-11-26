@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-#endif
 
 /// Describes how distinctive a token is for parser recovery.
 ///
@@ -201,7 +197,7 @@ enum TokenPrecedence: Comparable {
       .await, .each, .copy,
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
-      .rethrows, .throws, .reasync, .async,
+      .rethrows, .throws, .reasync, .async, .yields,
       // Consider 'any' a prefix operator to a type and a type is expression-like.
       .Any,
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
@@ -239,7 +235,7 @@ enum TokenPrecedence: Comparable {
       .get, .set, .didSet, .willSet, .unsafeAddress, .addressWithOwner, .addressWithNativeOwner, .unsafeMutableAddress,
       .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, .read, ._modify, .modify, .mutate, .yielding,
       // Misc
-      .import, .using:
+      .import:
       self = .declKeyword
 
     case  // `TypeAttribute`
@@ -254,7 +250,8 @@ enum TokenPrecedence: Comparable {
       .preconcurrency,
       .Sendable,
       .retroactive,
-      .unchecked:
+      .unchecked,
+      .yield_once:
       // Note that .isolated is preferred as a decl keyword
       self = .exprKeyword
 
@@ -265,6 +262,7 @@ enum TokenPrecedence: Comparable {
       ._effects,
       ._implements,
       ._originallyDefinedIn,
+      .section,
       .specialized,
       ._specialize,
       ._spi_available,

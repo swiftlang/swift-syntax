@@ -94,7 +94,7 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
 
     var fileSpecs: [GeneratedFileSpec] = [
       // SwiftParser
-      GeneratedFileSpec(swiftParserGeneratedDir + ["ExperimentalFeatures.swift"], experimentalFeaturesFile),
+      GeneratedFileSpec(swiftParserGeneratedDir + ["LanguageFeatures.swift"], languageFeaturesFile),
       GeneratedFileSpec(swiftParserGeneratedDir + ["IsLexerClassified.swift"], isLexerClassifiedFile),
       GeneratedFileSpec(swiftParserGeneratedDir + ["LayoutNodes+Parsable.swift"], layoutNodesParsableFile),
       GeneratedFileSpec(swiftParserGeneratedDir + ["Parser+TokenSpecSet.swift"], parserTokenSpecSetFile),
@@ -162,7 +162,11 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
           syntaxNode(nodesStartingWith: Array(letters))
         ),
         GeneratedFileSpec(
-          swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes\(letters).swift"],
+          swiftSyntaxGeneratedDir + ["raw", "RawSyntaxFactories\(letters).swift"],
+          rawSyntaxFactoriesFile(nodesStartingWith: Array(letters))
+        ),
+        GeneratedFileSpec(
+          swiftParserGeneratedDir + ["raw", "RawSyntaxNodes\(letters).swift"],
           rawSyntaxNodesFile(nodesStartingWith: Array(letters))
         ),
       ]

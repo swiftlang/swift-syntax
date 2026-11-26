@@ -10,21 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftDiagnostics
 internal import SwiftIfConfig
 internal import SwiftOperators
-@_spi(ExperimentalLanguageFeatures) internal import SwiftParser
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftParser
 internal import SwiftSyntax
 internal import SwiftSyntaxMacros
-#else
-import SwiftDiagnostics
-import SwiftIfConfig
-import SwiftOperators
-@_spi(ExperimentalLanguageFeatures) import SwiftParser
-import SwiftSyntax
-import SwiftSyntaxMacros
-#endif
 
 /// Caching parser for PluginMessage.Syntax
 class ParsedSyntaxRegistry {
@@ -32,7 +23,7 @@ class ParsedSyntaxRegistry {
     let source: String
     let kind: PluginMessage.Syntax.Kind
     let swiftVersion: Parser.SwiftVersion
-    let experimentalFeatures: Parser.ExperimentalFeatures
+    let languageFeatures: Parser.LanguageFeatures
   }
 
   private var storage: LRUCache<Key, Syntax>
@@ -45,26 +36,31 @@ class ParsedSyntaxRegistry {
     source: String,
     kind: PluginMessage.Syntax.Kind,
     swiftVersion: Parser.SwiftVersion,
-    experimentalFeatures: Parser.ExperimentalFeatures
+    languageFeatures: Parser.LanguageFeatures
   ) -> Syntax {
-    var parser = Parser(
-      source,
+    // The parse runs entirely within `withParser`, so lex directly over the
+    // source without copying it into a parser-owned buffer.
+    return Parser.withParser(
+      source: source,
       swiftVersion: swiftVersion,
-      experimentalFeatures: experimentalFeatures
-    )
-    switch kind {
-    case .declaration:
-      return Syntax(DeclSyntax.parse(from: &parser))
-    case .statement:
-      return Syntax(StmtSyntax.parse(from: &parser))
-    case .expression:
-      return Syntax(ExprSyntax.parse(from: &parser))
-    case .type:
-      return Syntax(TypeSyntax.parse(from: &parser))
-    case .pattern:
-      return Syntax(PatternSyntax.parse(from: &parser))
-    case .attribute:
-      return Syntax(AttributeSyntax.parse(from: &parser))
+      languageFeatures: languageFeatures
+    ) { parser in
+      switch kind {
+      case .declaration:
+        return Syntax(DeclSyntax.parse(from: &parser))
+      case .statement:
+        return Syntax(StmtSyntax.parse(from: &parser))
+      case .expression:
+        return Syntax(ExprSyntax.parse(from: &parser))
+      case .type:
+        return Syntax(TypeSyntax.parse(from: &parser))
+      case .pattern:
+        return Syntax(PatternSyntax.parse(from: &parser))
+      case .attribute:
+        return Syntax(AttributeSyntax.parse(from: &parser))
+      case .accessor:
+        return Syntax(AccessorDeclSyntax.parse(from: &parser))
+      }
     }
   }
 
@@ -72,15 +68,15 @@ class ParsedSyntaxRegistry {
     source: String,
     kind: PluginMessage.Syntax.Kind,
     swiftVersion: Parser.SwiftVersion?,
-    experimentalFeatures: Parser.ExperimentalFeatures?
+    languageFeatures: Parser.LanguageFeatures?
   ) -> Syntax {
     let swiftVersion = swiftVersion ?? Parser.defaultSwiftVersion
-    let experimentalFeatures = experimentalFeatures ?? Parser.ExperimentalFeatures()
+    let languageFeatures = languageFeatures ?? Parser.LanguageFeatures()
     let key = Key(
       source: source,
       kind: kind,
       swiftVersion: swiftVersion,
-      experimentalFeatures: experimentalFeatures
+      languageFeatures: languageFeatures
     )
     if let cached = storage[key] {
       return cached
@@ -90,7 +86,7 @@ class ParsedSyntaxRegistry {
       source: source,
       kind: kind,
       swiftVersion: swiftVersion,
-      experimentalFeatures: experimentalFeatures
+      languageFeatures: languageFeatures
     )
     storage[key] = node
     return node
@@ -155,14 +151,14 @@ class SourceManager {
   func add(
     _ syntaxInfo: PluginMessage.Syntax,
     swiftVersion: Parser.SwiftVersion?,
-    experimentalFeatures: Parser.ExperimentalFeatures?,
+    languageFeatures: Parser.LanguageFeatures?,
     foldingWith operatorTable: OperatorTable?
   ) -> Syntax {
     var node = syntaxRegistry.get(
       source: syntaxInfo.source,
       kind: syntaxInfo.kind,
       swiftVersion: swiftVersion,
-      experimentalFeatures: experimentalFeatures
+      languageFeatures: languageFeatures
     )
     if let operatorTable {
       node = operatorTable.foldAll(node, errorHandler: { _ in /*ignore*/ })

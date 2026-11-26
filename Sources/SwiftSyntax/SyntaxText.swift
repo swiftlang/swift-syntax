@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 #if canImport(Darwin)
 private import Darwin
 #elseif canImport(Glibc)
@@ -19,15 +18,6 @@ private import Glibc
 private import Bionic
 #elseif canImport(Musl)
 private import Musl
-#endif
-#else
-#if canImport(Darwin)
-import Darwin
-#elseif canImport(Glibc)
-import Glibc
-#elseif canImport(Musl)
-import Musl
-#endif
 #endif
 
 /// Represent a string.

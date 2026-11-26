@@ -204,9 +204,44 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
       }
     }
+
+    try! VariableDeclSyntax(
+      """
+      /// The name of this case, without using reflection.
+      var debugDescription: String
+      """
+    ) {
+      try! SwitchExprSyntax("switch self") {
+        for tokenSpec in Token.allCases.map(\.spec) {
+          SwitchCaseSyntax("case .\(tokenSpec.enumCaseCallName):") {
+            StmtSyntax("return \(literal: tokenSpec.identifier.text)")
+          }
+        }
+      }
+    }
   }
 
   try! ExtensionDeclSyntax("extension TokenKind") {
+    DeclSyntax(
+      """
+      /// A description like `String(describing:)` that doesn't use reflection.
+      var debugDescription: String {
+        // There are three kinds of payloads...
+        switch decomposeToRaw() {
+        case (.keyword, let text?):
+          // 1. A `Keyword` payload, e.g., `.keyword(.func)`
+          return "keyword(SwiftSyntax.Keyword.\\(text))"
+        case (let rawKind, let text?):
+          // 2. A `String` payload, e.g., `.identifier("x")`
+          return "\\(rawKind.debugDescription)(\\(text.debugDescription))"
+        case (let rawKind, nil):
+          // 3. No payload, e.g., `.arrow`
+          return rawKind.debugDescription
+        }
+      }
+      """
+    )
+
     try! FunctionDeclSyntax(
       """
       /// If the `rawKind` has a `defaultText`, `text` can be empty.

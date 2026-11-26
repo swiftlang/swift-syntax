@@ -46,10 +46,10 @@ struct LocalPrPrecheckExecutor {
     self.verbose = verbose
     self.generateSourceCodeExecutor = GenerateSourceCodeExecutor(toolchain: toolchain, verbose: verbose)
     self.buildExecutor = BuildExecutor(
-      swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, useLocalDeps: false, verbose: verbose)
+      swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, verbose: verbose)
     )
     self.testExecutor = TestExecutor(
-      swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, useLocalDeps: false, verbose: verbose)
+      swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, verbose: verbose)
     )
   }
 

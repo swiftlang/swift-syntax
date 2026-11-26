@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 protocol NominalTypeDeclarationTrait {
   associatedtype PrimaryOrGenerics
@@ -228,7 +224,7 @@ extension Parser {
         genericWhereClause: nil,
         memberBlock: RawMemberBlockSyntax(
           leftBrace: missingToken(.leftBrace),
-          members: RawMemberBlockItemListSyntax(elements: [], arena: self.arena),
+          members: RawMemberBlockItemListSyntax(elements: .init(), arena: self.arena),
           rightBrace: missingToken(.rightBrace),
           arena: self.arena
         ),
@@ -290,7 +286,7 @@ extension Parser {
       isPythonStyleInheritanceClause = false
     }
 
-    var elements = [RawInheritedTypeSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawInheritedTypeSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -313,7 +309,8 @@ extension Parser {
             type: type,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && !self.atInheritanceListTerminator() && self.hasProgressed(&loopProgress)
     }
@@ -333,19 +330,19 @@ extension Parser {
     return RawInheritanceClauseSyntax(
       unexpectedBeforeColon,
       colon: colon,
-      inheritedTypes: RawInheritedTypeListSyntax(elements: elements, arena: self.arena),
+      inheritedTypes: RawInheritedTypeListSyntax(elements: elements.build(), arena: self.arena),
       unexpectedAfterInheritedTypeCollection,
       arena: self.arena
     )
   }
 
   mutating func atInheritanceListTerminator() -> Bool {
-    return self.experimentalFeatures.contains(.trailingComma) && (self.at(.leftBrace) || self.at(.keyword(.where)))
+    return self.languageFeatures.contains(.trailingComma) && (self.at(.leftBrace) || self.at(.keyword(.where)))
   }
 
   mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {
     let langle = self.consumePrefix("<", as: .leftAngle)
-    var associatedTypes = [RawPrimaryAssociatedTypeSyntax]()
+    var associatedTypes = RawSyntaxNodeListBuilder<RawPrimaryAssociatedTypeSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -359,7 +356,8 @@ extension Parser {
             name: name,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
 
         // If this was a trailing comma, there are no more elements
@@ -371,7 +369,7 @@ extension Parser {
     let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)
     return RawPrimaryAssociatedTypeClauseSyntax(
       leftAngle: langle,
-      primaryAssociatedTypes: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
+      primaryAssociatedTypes: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes.build(), arena: self.arena),
       rightAngle: rangle,
       arena: self.arena
     )

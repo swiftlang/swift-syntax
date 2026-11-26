@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 /// Describes a macro that is explicitly expanded as an expression.
 public protocol ExpressionMacro: FreestandingMacro {

@@ -130,6 +130,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case exprList
   case extensionDecl
   case fallThroughStmt
+  case fileDefaultDecl
   case floatLiteralExpr
   case forceUnwrapExpr
   case forStmt
@@ -140,6 +141,9 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case functionParameterClause
   case functionParameterList
   case functionSignature
+  case functionYield
+  case functionYieldClause
+  case functionYieldList
   case functionType
   case genericArgument
   case genericArgumentClause
@@ -254,6 +258,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case returnClause
   case returnStmt
   case sameTypeRequirement
+  case sectionAttributeArgument
   case sequenceExpr
   case simpleTypeSpecifier
   case simpleStringLiteralExpr
@@ -307,7 +312,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case unresolvedIsExpr
   case unresolvedTernaryExpr
   case unsafeExpr
-  case usingDecl
   case valueBindingPattern
   case variableDecl
   case versionComponent

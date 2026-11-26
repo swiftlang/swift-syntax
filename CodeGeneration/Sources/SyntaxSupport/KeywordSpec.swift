@@ -241,6 +241,7 @@ public enum Keyword: CaseIterable {
   case right
   case safe
   case scoped
+  case section
   case `self`
   case sending
   case `Self`
@@ -270,7 +271,6 @@ public enum Keyword: CaseIterable {
   case unsafe
   case unsafeAddress
   case unsafeMutableAddress
-  case using
   case `var`
   case visibility
   case weak
@@ -280,6 +280,8 @@ public enum Keyword: CaseIterable {
   case wrt
   case yield
   case yielding
+  case `yields`
+  case `yield_once`
 
   public var spec: KeywordSpec {
     switch self {
@@ -621,6 +623,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("safe")
     case .scoped:
       return KeywordSpec("scoped", experimentalFeature: .nonescapableTypes)
+    case .section:
+      return KeywordSpec("section")
     case .self:
       return KeywordSpec("self", isLexerClassified: true)
     case .Self:
@@ -681,8 +685,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("unsafeAddress")
     case .unsafeMutableAddress:
       return KeywordSpec("unsafeMutableAddress")
-    case .using:
-      return KeywordSpec("using")
     case .var:
       return KeywordSpec("var", isLexerClassified: true)
     case .visibility:
@@ -701,6 +703,10 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("yield")
     case .yielding:
       return KeywordSpec("yielding")
+    case .yield_once:
+      return KeywordSpec("yield_once", experimentalFeature: .coroutineFunctions)
+    case .yields:
+      return KeywordSpec("yields", experimentalFeature: .coroutineFunctions)
     }
   }
 }

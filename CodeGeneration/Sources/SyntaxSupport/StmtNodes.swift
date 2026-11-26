@@ -360,7 +360,8 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "conditions",
         kind: .collection(kind: .conditionElementList, collectionElementName: "Condition"),
-        nameForDiagnostics: "condition"
+        nameForDiagnostics: "condition",
+        documentation: "The comma-separated conditions of the guard statement."
       ),
       Child(
         name: "elseKeyword",
@@ -369,7 +370,8 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "body",
         kind: .node(kind: .codeBlock),
-        nameForDiagnostics: "body"
+        nameForDiagnostics: "body",
+        documentation: "The code block executed if any of the conditions is not satisfied."
       ),
     ]
   ),
@@ -493,6 +495,18 @@ public let STMT_NODES: [Node] = [
     kind: .returnStmt,
     base: .stmt,
     nameForDiagnostics: "'return' statement",
+    documentation: """
+      A statement that exits a function or closure and optionally returns a value.
+
+      Written as:
+      ```swift
+      return
+      ```
+
+      ```swift
+      return <expr>
+      ```
+      """,
     children: [
       Child(
         name: "returnKeyword",
@@ -510,6 +524,15 @@ public let STMT_NODES: [Node] = [
     kind: .throwStmt,
     base: .stmt,
     nameForDiagnostics: "'throw' statement",
+    documentation: """
+      A statement that throws an error.
+
+      Written as:
+
+      ```swift
+      throw <expr>
+      ```
+      """,
     children: [
       Child(
         name: "throwKeyword",

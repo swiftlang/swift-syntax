@@ -10,20 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftIfConfig
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 public import SwiftSyntaxMacros
 @_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosGenericTestSupport
 private import XCTest
-#else
-import SwiftIfConfig
-import SwiftSyntax
-import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacros
-@_spi(XCTestFailureLocation) import SwiftSyntaxMacrosGenericTestSupport
-import XCTest
+
+#if canImport(Testing)
+private import Testing
 #endif
 
 // Re-export the spec types from `SwiftSyntaxMacrosGenericTestSupport`.
@@ -48,7 +43,7 @@ public typealias DiagnosticSpec = SwiftSyntaxMacrosGenericTestSupport.Diagnostic
 ///   - indentationWidth: The indentation width used in the expansion.
 ///   - buildConfiguration: a build configuration that will be made available
 ///     to the macro implementation
-/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:file:line:)``
+/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:fileID:file:line:column:)``
 ///   to also specify the list of conformances passed to the macro expansion.
 public func assertMacroExpansion(
   _ originalSource: String,
@@ -61,8 +56,10 @@ public func assertMacroExpansion(
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
   buildConfiguration: (any BuildConfiguration)? = nil,
+  fileID: StaticString = #fileID,
   file: StaticString = #filePath,
-  line: UInt = #line
+  line: UInt = #line,
+  column: UInt = #column
 ) {
   let specs = macros.mapValues { MacroSpec(type: $0) }
   assertMacroExpansion(
@@ -76,8 +73,10 @@ public func assertMacroExpansion(
     testFileName: testFileName,
     indentationWidth: indentationWidth,
     buildConfiguration: buildConfiguration,
+    fileID: fileID,
     file: file,
-    line: line
+    line: line,
+    column: column
   )
 }
 
@@ -92,8 +91,8 @@ public func assertMacroExpansion(
 ///   - diagnostics: The diagnostics when expanding any macro
 ///   - macroSpecs: The macros that should be expanded, provided as a dictionary
 ///     mapping macro names (e.g., `"CodableMacro"`) to specification with macro type
-///     (e.g., `CodableMacro.self`) and a list of conformances macro provides
-///     (e.g., `["Decodable", "Encodable"]`).
+///     (e.g., `CodableMacro.self`), optional module name, and a list of conformances
+///     the macro provides (e.g., `["Decodable", "Encodable"]`).
 ///   - applyFixIts: If specified, filters the Fix-Its that are applied to generate `fixedSource` to only those whose message occurs in this array. If `nil`, all Fix-Its from the diagnostics are applied.
 ///   - fixedSource: If specified, asserts that the source code after applying Fix-Its matches this string.
 ///   - testModuleName: The name of the test module to use.
@@ -110,8 +109,10 @@ public func assertMacroExpansion(
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
   buildConfiguration: (any BuildConfiguration)? = nil,
+  fileID: StaticString = #fileID,
   file: StaticString = #filePath,
-  line: UInt = #line
+  line: UInt = #line,
+  column: UInt = #column
 ) {
   SwiftSyntaxMacrosGenericTestSupport.assertMacroExpansion(
     originalSource,
@@ -125,11 +126,32 @@ public func assertMacroExpansion(
     indentationWidth: indentationWidth,
     buildConfiguration: buildConfiguration,
     failureHandler: {
+      #if canImport(Testing)
+      // Record a Swift Testing issue.
+      Issue.record(
+        Comment(rawValue: $0.message),
+        sourceLocation: .init(
+          fileID: $0.location.fileID,
+          filePath: $0.location.filePath,
+          line: $0.location.line,
+          column: $0.location.column
+        )
+      )
+      #endif
+
+      #if compiler(<6.4)
+      // Record an XCTest failure.
+      //
+      // Only do this in pre-6.4 toolchains. In 6.4 and later toolchains,
+      // ST-0021: Targeted Interoperability between Swift Testing and XCTest
+      // means that the call to `Issue.record()` above will be propagated to
+      // XCTest as well.
       XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
+      #endif
     },
-    fileID: "",  // Not used in the failure handler
+    fileID: fileID,
     filePath: file,
     line: line,
-    column: 0  // Not used in the failure handler
+    column: column
   )
 }

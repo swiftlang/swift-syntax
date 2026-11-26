@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
-import SwiftParser
+@_spi(RawSyntax) import SwiftParser
 public import SwiftSyntax
-#else
-import SwiftParser
-import SwiftSyntax
-#endif
 
 /// Given a set of positions in a source file, resolve the names of the
 /// declarations that are referenced at these locations and, if they refer to
@@ -227,8 +222,9 @@ public class NameMatcher: SyntaxAnyVisitor {
       let triviaRangeEndOffsetInToken = triviaRange.upperBound.utf8Offset - token.position.utf8Offset
       let commentTree = token.syntaxTextBytes[positionOffsetInToken..<triviaRangeEndOffsetInToken]
         .withUnsafeBufferPointer { (buffer) -> ExprSyntax in
-          var parser = Parser(buffer)
-          return ExprSyntax.parse(from: &parser)
+          // The parse runs entirely within this scope, so lex directly over
+          // `buffer` without copying it.
+          Parser.withParser(source: buffer) { ExprSyntax.parse(from: &$0) }
         }
       // Run a new `NameMatcher`. Since the input of that name matcher is the text after the position to resolve, we
       // want to resolve the position at offset 0.

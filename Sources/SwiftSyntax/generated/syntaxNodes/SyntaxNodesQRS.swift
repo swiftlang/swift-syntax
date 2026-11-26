@@ -25,8 +25,12 @@
 public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .regexLiteralExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .regexLiteralExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -234,8 +238,12 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .repeatStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .repeatStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -399,6 +407,13 @@ public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
 
 // MARK: - ReturnClauseSyntax
 
+/// A clause that specifies the return type, typically of a function or subscript.
+/// 
+/// For example, the `-> Int` part in  
+/// ```swift
+/// func f() -> Int { }
+/// ```
+///
 /// ### Children
 /// 
 ///  - `arrow`: `->`
@@ -413,8 +428,12 @@ public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
 public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .returnClause
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .returnClause else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -528,6 +547,17 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 
 // MARK: - ReturnStmtSyntax
 
+/// A statement that exits a function or closure and optionally returns a value.
+/// 
+/// Written as:
+/// ```swift
+/// return
+/// ```
+/// 
+/// ```swift
+/// return <expr>
+/// ```
+///
 /// ### Children
 /// 
 ///  - `returnKeyword`: `return`
@@ -535,8 +565,12 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .returnStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .returnStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -668,6 +702,10 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
       }
     }
 
+    static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      TypeSyntax.isKindOf(kind) || ExprSyntax.isKindOf(kind)
+    }
+
     public init(_ node: some TypeSyntaxProtocol) {
       self = .type(TypeSyntax(node))
     }
@@ -748,6 +786,10 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
       }
     }
 
+    static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      TypeSyntax.isKindOf(kind) || ExprSyntax.isKindOf(kind)
+    }
+
     public init(_ node: some TypeSyntaxProtocol) {
       self = .type(TypeSyntax(node))
     }
@@ -817,8 +859,12 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .sameTypeRequirement
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .sameTypeRequirement else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -958,6 +1004,192 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
   ])
 }
 
+// MARK: - SectionAttributeArgumentSyntax
+
+/// The argument of the `@section` attribute.
+/// 
+/// The section is either specified by the `default` keyword, which places the declaration in the
+/// default section for its kind, or by an expression that describes the name of the section.
+/// 
+/// ```swift
+/// @section("__DATA,__mysection")
+/// let x = 42
+/// 
+/// @section(default)
+/// let y = 42
+/// ```
+///
+/// ### Children
+/// 
+///  - `section`: (`default` | ``ExprSyntax``)
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+public struct SectionAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public enum Section: SyntaxChildChoices, SyntaxHashable {
+    /// The `default` keyword, describing the default section for the declaration.
+    ///
+    /// ### Tokens
+    /// 
+    /// For syntax trees generated by the parser, this is guaranteed to be `default`.
+    case defaultKeyword(TokenSyntax)
+    /// An expression describing the name of the section.
+    case expression(ExprSyntax)
+
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .defaultKeyword(let node):
+        return node._syntaxNode
+      case .expression(let node):
+        return node._syntaxNode
+      }
+    }
+
+    static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      TokenSyntax.isKindOf(kind) || ExprSyntax.isKindOf(kind)
+    }
+
+    public init(_ node: TokenSyntax) {
+      self = .defaultKeyword(node)
+    }
+
+    public init(_ node: some ExprSyntaxProtocol) {
+      self = .expression(ExprSyntax(node))
+    }
+
+    public init?(_ node: __shared some SyntaxProtocol) {
+      if let node = node.as(TokenSyntax.self) {
+        self = .defaultKeyword(node)
+      } else if let node = node.as(ExprSyntax.self) {
+        self = .expression(node)
+      } else {
+        return nil
+      }
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([.node(TokenSyntax.self), .node(ExprSyntax.self)])
+    }
+
+    /// Checks if the current syntax node can be cast to ``TokenSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: TokenSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: TokenSyntax.Type) -> TokenSyntax? {
+      return TokenSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: TokenSyntax.Type) -> TokenSyntax {
+      return self.as(TokenSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+  }
+
+  public let _syntaxNode: Syntax
+
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .sectionAttributeArgument
+  }
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard Self.isKindOf(node.raw.kind) else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSection: UnexpectedNodesSyntax? = nil,
+    section: Section,
+    _ unexpectedAfterSection: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (unexpectedBeforeSection, section, unexpectedAfterSection))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeSection?.raw, section.raw, unexpectedAfterSection?.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.sectionAttributeArgument,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeSection: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SectionAttributeArgumentSyntax.self)
+    }
+  }
+
+  public var section: Section {
+    get {
+      return Syntax(self).child(at: 1)!.cast(Section.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SectionAttributeArgumentSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterSection: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SectionAttributeArgumentSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeSection, \Self.section, \Self.unexpectedAfterSection])
+}
+
 // MARK: - SequenceExprSyntax
 
 /// A flat list of expressions before operator folding using the `SwiftOperators` library.
@@ -974,8 +1206,12 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .sequenceExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .sequenceExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1040,7 +1276,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprS
   public func addElement(_ element: ExprSyntax) -> SequenceExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
@@ -1085,8 +1321,12 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprS
 public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .simpleStringLiteralExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .simpleStringLiteralExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1200,7 +1440,7 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable,
   public func addSegment(_ element: StringSegmentSyntax) -> SimpleStringLiteralExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.simpleStringLiteralSegmentList,
@@ -1275,8 +1515,12 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable,
 public struct SimpleTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .simpleTypeSpecifier
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .simpleTypeSpecifier else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1365,8 +1609,12 @@ public struct SimpleTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 public struct SomeOrAnyTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .someOrAnyType
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .someOrAnyType else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1485,8 +1733,12 @@ public struct SomeOrAnyTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafType
 public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .sourceFile
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .sourceFile else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1595,7 +1847,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
   public func addStatement(_ element: CodeBlockItemSyntax) -> SourceFileSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
@@ -1669,8 +1921,12 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
 public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .specializeAvailabilityArgument
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .specializeAvailabilityArgument else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1809,7 +2065,7 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> SpecializeAvailabilityArgumentSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilityArgumentList,
@@ -1885,8 +2141,12 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
 public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .specializeTargetFunctionArgument
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .specializeTargetFunctionArgument else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2064,10 +2324,11 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
 
 // MARK: - SpecializedAttributeArgumentSyntax
 
-/// The generic where clause for the `@specialized` attribute
+/// The arguments for the `@specialized` attribute
 ///
 /// ### Children
 /// 
+///  - `exportedArgument`: ``LabeledSpecializeArgumentSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``
 ///
 /// ### Contained in
@@ -2076,8 +2337,12 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
 public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .specializedAttributeArgument
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .specializedAttributeArgument else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2090,18 +2355,33 @@ public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable
 
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - exportedArgument: The optional `exported:` argument.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeExportedArgument: UnexpectedNodesSyntax? = nil,
+    exportedArgument: LabeledSpecializeArgumentSyntax? = nil,
+    _ unexpectedBetweenExportedArgumentAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax,
     _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((RawSyntaxArena(), (unexpectedBeforeGenericWhereClause, genericWhereClause, unexpectedAfterGenericWhereClause))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeGenericWhereClause?.raw, genericWhereClause.raw, unexpectedAfterGenericWhereClause?.raw]
+    self = withExtendedLifetime((RawSyntaxArena(), (
+      unexpectedBeforeExportedArgument,
+      exportedArgument,
+      unexpectedBetweenExportedArgumentAndGenericWhereClause,
+      genericWhereClause,
+      unexpectedAfterGenericWhereClause
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeExportedArgument?.raw,
+        exportedArgument?.raw,
+        unexpectedBetweenExportedArgumentAndGenericWhereClause?.raw,
+        genericWhereClause.raw,
+        unexpectedAfterGenericWhereClause?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.specializedAttributeArgument,
         from: layout,
@@ -2113,7 +2393,8 @@ public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
 
-  public var unexpectedBeforeGenericWhereClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBeforeExportedArgument: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2122,16 +2403,19 @@ public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
 
-  public var genericWhereClause: GenericWhereClauseSyntax {
+  /// The optional `exported:` argument.
+  @_spi(ExperimentalLanguageFeatures)
+  public var exportedArgument: LabeledSpecializeArgumentSyntax? {
     get {
-      return Syntax(self).child(at: 1)!.cast(GenericWhereClauseSyntax.self)
+      return Syntax(self).child(at: 1)?.cast(LabeledSpecializeArgumentSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SpecializedAttributeArgumentSyntax.self)
     }
   }
 
-  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenExportedArgumentAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2140,7 +2424,31 @@ public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
 
-  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeGenericWhereClause, \Self.genericWhereClause, \Self.unexpectedAfterGenericWhereClause])
+  public var genericWhereClause: GenericWhereClauseSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(GenericWhereClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SpecializedAttributeArgumentSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SpecializedAttributeArgumentSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeExportedArgument,
+    \Self.exportedArgument,
+    \Self.unexpectedBetweenExportedArgumentAndGenericWhereClause,
+    \Self.genericWhereClause,
+    \Self.unexpectedAfterGenericWhereClause
+  ])
 }
 
 // MARK: - StringLiteralExprSyntax
@@ -2168,8 +2476,12 @@ public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .stringLiteralExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .stringLiteralExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2311,7 +2623,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
   public func addSegment(_ element: Syntax) -> StringLiteralExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegmentList,
@@ -2413,8 +2725,12 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .stringSegment
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .stringSegment else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2556,8 +2872,12 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .structDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .structDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2681,7 +3001,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
   public func addAttribute(_ element: Syntax) -> StructDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -2727,7 +3047,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
   public func addModifier(_ element: DeclModifierSyntax) -> StructDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -2908,8 +3228,12 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
 public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .subscriptCallExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .subscriptCallExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3051,7 +3375,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
   public func addArgument(_ element: LabeledExprSyntax) -> SubscriptCallExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -3135,7 +3459,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptCallExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[11] {
+    if let col = raw.layoutView!.realChild(at: 5) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
@@ -3186,6 +3510,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 ///  - `subscriptKeyword`: `subscript`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `accessorBlock`: ``AccessorBlockSyntax``?
@@ -3196,8 +3521,12 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .subscriptDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .subscriptDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3213,7 +3542,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   ///   - genericParameterClause: The parameter clause that defines the generic parameters.
   ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
@@ -3225,7 +3554,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndParameterClause: UnexpectedNodesSyntax? = nil,
     parameterClause: FunctionParameterClauseSyntax,
-    _ unexpectedBetweenParameterClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenParameterClauseAndYieldClause: UnexpectedNodesSyntax? = nil,
+    yieldClause: FunctionYieldClauseSyntax? = nil,
+    _ unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax,
     _ unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
@@ -3247,7 +3578,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       genericParameterClause,
       unexpectedBetweenGenericParameterClauseAndParameterClause,
       parameterClause,
-      unexpectedBetweenParameterClauseAndReturnClause,
+      unexpectedBetweenParameterClauseAndYieldClause,
+      yieldClause,
+      unexpectedBetweenYieldClauseAndReturnClause,
       returnClause,
       unexpectedBetweenReturnClauseAndGenericWhereClause,
       genericWhereClause,
@@ -3266,7 +3599,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         genericParameterClause?.raw,
         unexpectedBetweenGenericParameterClauseAndParameterClause?.raw,
         parameterClause.raw,
-        unexpectedBetweenParameterClauseAndReturnClause?.raw,
+        unexpectedBetweenParameterClauseAndYieldClause?.raw,
+        yieldClause?.raw,
+        unexpectedBetweenYieldClauseAndReturnClause?.raw,
         returnClause.raw,
         unexpectedBetweenReturnClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
@@ -3314,7 +3649,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   public func addAttribute(_ element: Syntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -3359,7 +3694,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   public func addModifier(_ element: DeclModifierSyntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -3433,7 +3768,8 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var unexpectedBetweenParameterClauseAndReturnClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenParameterClauseAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3442,16 +3778,18 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var returnClause: ReturnClauseSyntax {
+  @_spi(ExperimentalLanguageFeatures)
+  public var yieldClause: FunctionYieldClauseSyntax? {
     get {
-      return Syntax(self).child(at: 11)!.cast(ReturnClauseSyntax.self)
+      return Syntax(self).child(at: 11)?.cast(FunctionYieldClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
-  public var unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3460,17 +3798,16 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
-  public var genericWhereClause: GenericWhereClauseSyntax? {
+  public var returnClause: ReturnClauseSyntax {
     get {
-      return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
+      return Syntax(self).child(at: 13)!.cast(ReturnClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3479,21 +3816,40 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var accessorBlock: AccessorBlockSyntax? {
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
+  public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      return Syntax(self).child(at: 15)?.cast(AccessorBlockSyntax.self)
+      return Syntax(self).child(at: 15)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
-  public var unexpectedAfterAccessorBlock: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 16, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
+    }
+  }
+
+  public var accessorBlock: AccessorBlockSyntax? {
+    get {
+      return Syntax(self).child(at: 17)?.cast(AccessorBlockSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 17, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterAccessorBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 18)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 18, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
@@ -3508,7 +3864,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     \Self.genericParameterClause,
     \Self.unexpectedBetweenGenericParameterClauseAndParameterClause,
     \Self.parameterClause,
-    \Self.unexpectedBetweenParameterClauseAndReturnClause,
+    \Self.unexpectedBetweenParameterClauseAndYieldClause,
+    \Self.yieldClause,
+    \Self.unexpectedBetweenYieldClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedBetweenReturnClauseAndGenericWhereClause,
     \Self.genericWhereClause,
@@ -3526,8 +3884,12 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 public struct SuperExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .superExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .superExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3605,8 +3967,12 @@ public struct SuperExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .suppressedType
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .suppressedType else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3727,8 +4093,12 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
 public struct SwitchCaseItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .switchCaseItem
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .switchCaseItem else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3863,6 +4233,23 @@ public struct SwitchCaseItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 
 // MARK: - SwitchCaseLabelSyntax
 
+/// A label that introduces one or more cases in a switch statement.
+/// 
+/// Written as:
+/// ```swift
+/// case <items>:
+/// ```
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// case 1:
+/// ```
+/// 
+/// ```swift
+/// case 1, 2, 3:
+/// ```
+///
 /// ### Children
 /// 
 ///  - `caseKeyword`: `case`
@@ -3875,8 +4262,12 @@ public struct SwitchCaseItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .switchCaseLabel
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .switchCaseLabel else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3982,7 +4373,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
   public func addCaseItem(_ element: SwitchCaseItemSyntax) -> SwitchCaseLabelSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseItemList,
@@ -4041,6 +4432,24 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 
 // MARK: - SwitchCaseSyntax
 
+/// A single case within a `switch` statement.
+/// 
+/// A switch case consists of a label (`case` or `default`),
+/// an optional `@unknown` attribute, and the statements
+/// that are executed when the case is matched.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// case 1:
+///   print("one")
+/// ```
+/// 
+/// ```swift
+/// default:
+///   print("other")
+/// ```
+///
 /// ### Children
 /// 
 ///  - `attribute`: ``AttributeSyntax``?
@@ -4062,6 +4471,10 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
       case .case(let node):
         return node._syntaxNode
       }
+    }
+
+    static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      SwitchDefaultLabelSyntax.isKindOf(kind) || SwitchCaseLabelSyntax.isKindOf(kind)
     }
 
     public init(_ node: SwitchDefaultLabelSyntax) {
@@ -4133,8 +4546,12 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
 
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .switchCase
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .switchCase else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4257,7 +4674,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
   public func addStatement(_ element: CodeBlockItemSyntax) -> SwitchCaseSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
@@ -4295,6 +4712,14 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
 
 // MARK: - SwitchDefaultLabelSyntax
 
+/// The default label is executed when none of the `case` patterns
+/// match the value being switched over.
+/// 
+/// Written as:
+/// ```swift
+/// default:
+/// ```
+///
 /// ### Children
 /// 
 ///  - `defaultKeyword`: `default`
@@ -4306,8 +4731,12 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
 public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .switchDefaultLabel
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .switchDefaultLabel else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4442,8 +4871,12 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .switchExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .switchExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4611,7 +5044,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyn
   public func addCase(_ element: Syntax) -> SwitchExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[7] {
+    if let col = raw.layoutView!.realChild(at: 3) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,

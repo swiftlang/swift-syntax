@@ -145,9 +145,9 @@ final class TriviaParserTests: ParserTestCase {
           var a : String = "a"
           var b : String = "B"
           <<<<
-
           """
         ),
+        .newlines(1),
       ]
     )
   }

@@ -34,11 +34,9 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(le
     DeclSyntax("extension \(type): SyntaxExpressibleByStringInterpolation {}")
     DeclSyntax(
       """
-      #if compiler(>=6)
       extension \(type): Swift.ExpressibleByStringInterpolation {}
       // Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
       extension \(type): Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
-      #endif
       """
     )
   }

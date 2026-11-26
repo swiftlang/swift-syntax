@@ -25,7 +25,7 @@ final class MoveExprTests: ParserTestCase {
           let _ = _move global
       }
       """,
-      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+      languageFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 
@@ -37,7 +37,7 @@ final class MoveExprTests: ParserTestCase {
           let _ = _move t
       }
       """,
-      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+      languageFeatures: [.oldOwnershipOperatorSpellings]
 
     )
   }
@@ -51,7 +51,7 @@ final class MoveExprTests: ParserTestCase {
           let _ = _move t
       }
       """,
-      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+      languageFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 
@@ -66,7 +66,7 @@ final class MoveExprTests: ParserTestCase {
         arguments: [.init(expression: DeclReferenceExprSyntax(baseName: .identifier("t")))],
         rightParen: .rightParenToken()
       ),
-      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+      languageFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 
@@ -81,7 +81,7 @@ final class MoveExprTests: ParserTestCase {
         arguments: [.init(expression: DeclReferenceExprSyntax(baseName: .identifier("t")))],
         rightParen: .rightParenToken()
       ),
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 
@@ -101,7 +101,7 @@ final class MoveExprTests: ParserTestCase {
         _move
         t
         """,
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 

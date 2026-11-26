@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 class IdentifierTests: XCTestCase {
@@ -34,6 +35,23 @@ class IdentifierTests: XCTestCase {
 
     let unicodeNormalizedToken = TokenSyntax(stringLiteral: "\u{e0}")  // "a`"
     XCTAssertEqual(Identifier(unicodeNormalizedToken)?.name, "\u{61}\u{300}")  // "à"
+  }
+
+  public func testHashable() throws {
+    let canonical = Identifier(canonicalName: "\u{e0}")  // à, LATIN SMALL LETTER A WITH GRAVE
+    // Use separate arenas, backticks, and canonically equivalent Unicode spellings.
+    let tokens: [TokenSyntax] = [
+      .identifier("\u{e0}"),  // à, LATIN SMALL LETTER A WITH GRAVE
+      .identifier("`\u{e0}`"),  // à, LATIN SMALL LETTER A WITH GRAVE with backticks
+      .identifier("\u{61}\u{300}"),  // à, decomposed a + COMBINING GRAVE ACCENT
+    ]
+    try withExtendedLifetime(tokens) {
+      for token in tokens {
+        let identifier = try XCTUnwrap(token.identifier)
+        XCTAssertEqual(identifier, canonical)
+        XCTAssertEqual(identifier.hashValue, canonical.hashValue)
+      }
+    }
   }
 
   public func testIdentifier() {

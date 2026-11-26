@@ -20,12 +20,14 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
+import SwiftSyntaxMacrosGenericTestSupport
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-private struct ConstantOneGetter: AccessorMacro {
+struct ConstantOneGetter: AccessorMacro {
   static func expansion(
     of node: AttributeSyntax,
     providingAccessorsOf declaration: some DeclSyntaxProtocol,
@@ -564,5 +566,77 @@ final class AccessorMacroTests: XCTestCase {
         """,
       macros: ["TestWrapper": PropertyWrapperMacro.self]
     )
+  }
+
+  func testQualifiedAccessorMacroName() {
+    let specs = ["constantOne": MacroSpec(type: ConstantOneGetter.self, moduleName: "MyModule")]
+    let expandedSource = """
+      var x: Int {
+        get {
+          return 1
+        }
+      }
+      """
+
+    for name in [
+      "MyModule.constantOne", "MyModule::constantOne", "constantOne",
+      "`MyModule`.constantOne", "`MyModule`::constantOne",
+    ] {
+      assertMacroExpansion(
+        """
+        @\(name)
+        var x: Int
+        """,
+        expandedSource: expandedSource,
+        macroSpecs: specs,
+        indentationWidth: indentationWidth
+      )
+    }
+
+    for name in ["OtherModule.constantOne", "OtherModule::constantOne"] {
+      let source = """
+        @\(name)
+        var x: Int
+        """
+      assertMacroExpansion(
+        source,
+        expandedSource: source,
+        macroSpecs: specs,
+        indentationWidth: indentationWidth
+      )
+    }
+
+    for name in ["MyModule.constantOne", "MyModule::constantOne"] {
+      let source = """
+        @\(name)
+        var x: Int
+        """
+      assertMacroExpansion(
+        source,
+        expandedSource: source,
+        macros: ["constantOne": ConstantOneGetter.self],
+        indentationWidth: indentationWidth
+      )
+    }
+  }
+
+  func testNestedAttributeDoesNotMatchTopLevelMacro() {
+    for name in [
+      "MyModule.Nested.constantOne",
+      "OtherModule::MyModule.constantOne",
+      "Nested.MyModule::constantOne",
+      "MyModule<Int>.constantOne",
+    ] {
+      let source = """
+        @\(name)
+        var x: Int
+        """
+      assertMacroExpansion(
+        source,
+        expandedSource: source,
+        macroSpecs: ["constantOne": MacroSpec(type: ConstantOneGetter.self, moduleName: "MyModule")],
+        indentationWidth: indentationWidth
+      )
+    }
   }
 }

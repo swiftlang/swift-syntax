@@ -25,7 +25,7 @@ final class PatternWithoutVariablesTests: ParserTestCase {
       _borrowing _ = 1
       _consuming _ = 1
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -40,7 +40,7 @@ final class PatternWithoutVariablesTests: ParserTestCase {
         _consuming _ = 1
       }
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 
@@ -59,7 +59,7 @@ final class PatternWithoutVariablesTests: ParserTestCase {
         _consuming (_, _) = (1, 2)
       }
       """,
-      experimentalFeatures: .referenceBindings
+      languageFeatures: .referenceBindings
     )
   }
 

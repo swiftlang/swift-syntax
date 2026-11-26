@@ -15,6 +15,7 @@ import SwiftParser
 import SwiftSyntax
 @_spi(Testing) import SwiftSyntaxBuilder
 import XCTest
+import _SwiftSyntaxGenericTestSupport
 import _SwiftSyntaxTestSupport
 
 class TwoSpacesFormat: BasicFormat {
@@ -110,11 +111,13 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
 
-  func testSourceFile() {
-    let _: SourceFileSyntax =
+  func testSourceFile() throws {
+    let sourceFile: SourceFileSyntax =
       """
       print("Hello, world!")
       """
+    let expr = try XCTUnwrap(sourceFile.statements.first?.item.as(ExprSyntax.self))
+    XCTAssertTrue(expr.is(FunctionCallExprSyntax.self))
   }
 
   func testInterpolationLiteralString() {

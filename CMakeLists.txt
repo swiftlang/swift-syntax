@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-cmake_minimum_required(VERSION 3.19.6)
+cmake_minimum_required(VERSION 3.29)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
@@ -37,10 +37,6 @@ endif()
 
 set(CMAKE_MACOSX_RPATH YES)
 
-option(SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26
-       "Enable Whole Module Optimization (WMO) - requires swift-driver"
-       $<IF:$<AND:$<NOT:$<CONFIG:Debug>>,$<PLATFORM_ID:Darwin>>,YES,NO>)
-
 include(AddSwiftHostLibrary)
 include(SwiftCompilerCapability)
 
@@ -50,12 +46,20 @@ if(SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
   add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -disable-implicit-string-processing-module-import>")
 endif()
 
+# Require every file to import the modules that define the members it uses.
+# Keep in sync with Package.swift.
+add_compile_options(
+  "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-enable-upcoming-feature MemberImportVisibility>"
+)
+
 if(NOT DEFINED Swift_COMPILER_PACKAGE_CMO_SUPPORT AND SWIFTSYNTAX_EMIT_MODULE)
   swift_get_package_cmo_support(Swift_COMPILER_PACKAGE_CMO_SUPPORT)
 endif()
 if(NOT DEFINED SWIFTSYNTAX_PACKAGE_NAME)
   set(SWIFTSYNTAX_PACKAGE_NAME "${SWIFT_MODULE_ABI_NAME_PREFIX}${PROJECT_NAME}")
 endif()
+
+add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-package-name ${SWIFTSYNTAX_PACKAGE_NAME}>")
 
 # Determine the module triple.
 if("${SWIFT_HOST_MODULE_TRIPLE}" STREQUAL "")

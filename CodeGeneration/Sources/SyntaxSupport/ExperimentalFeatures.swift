@@ -21,8 +21,12 @@ public enum ExperimentalFeature: String, CaseIterable {
   case coroutineAccessors
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
-  case defaultIsolationPerFile
   case borrowAndMutateAccessors
+  case literalExpressions
+  case onceFunctions
+  case _test_EverythingUnexpected
+  case coroutineFunctions
+  case extendedSpecializedAttribute
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -43,10 +47,18 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "KeypathWithMethodMembers"
     case .oldOwnershipOperatorSpellings:
       return "OldOwnershipOperatorSpellings"
-    case .defaultIsolationPerFile:
-      return "DefaultIsolationPerFile"
     case .borrowAndMutateAccessors:
       return "BorrowAndMutateAccessors"
+    case .literalExpressions:
+      return "LiteralExpressions"
+    case .onceFunctions:
+      return "OnceFunctions"
+    case ._test_EverythingUnexpected:
+      return "_test_EverythingUnexpected"
+    case .coroutineFunctions:
+      return "CoroutineFunctions"
+    case .extendedSpecializedAttribute:
+      return "ExtendedSpecializedAttribute"
     }
   }
 
@@ -69,14 +81,42 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "keypaths with method members"
     case .oldOwnershipOperatorSpellings:
       return "`_move` and `_borrow` as ownership operators"
-    case .defaultIsolationPerFile:
-      return "set default actor isolation for a file"
     case .borrowAndMutateAccessors:
       return "borrow and mutate accessors"
+    case .literalExpressions:
+      return "constant-foldable literal expressions"
+    case .onceFunctions:
+      return "`@once` and `@callable(once)` function types"
+    case ._test_EverythingUnexpected:
+      return "a test feature that parses everything as unexpected"
+    case .coroutineFunctions:
+      return "functions as coroutines"
+    case .extendedSpecializedAttribute:
+      return "`exported:` argument of the `@specialized` attribute"
     }
   }
 
   /// The token that represents the experimental feature case name.
+  public var token: TokenSyntax {
+    .identifier(rawValue)
+  }
+}
+
+/// Parser language features that the compiler sets for its own use. They are
+/// `@_spi(Compiler)`, are not part of the feature names the compiler knows, and
+/// change the parser's defaults for clients of the compiler's parser only.
+public enum CompilerOnlyLanguageFeature: String, CaseIterable {
+  case disableBareSlashRegexLiterals
+
+  /// A brief description of the feature that is used in the doc comment.
+  public var documentationDescription: String {
+    switch self {
+    case .disableBareSlashRegexLiterals:
+      return "bare slash regex literals; `#/.../#` literals are still parsed"
+    }
+  }
+
+  /// The token that represents the feature case name.
   public var token: TokenSyntax {
     .identifier(rawValue)
   }

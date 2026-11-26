@@ -931,6 +931,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: FileDefaultDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: FileDefaultDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1016,6 +1024,36 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: FunctionTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: FunctionYieldClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: FunctionYieldClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: FunctionYieldListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: FunctionYieldListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: FunctionYieldSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: FunctionYieldSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
@@ -1917,6 +1955,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: SectionAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: SectionAttributeArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -2308,16 +2354,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: UnsafeExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
-  @_spi(ExperimentalLanguageFeatures)
-  override open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  @_spi(ExperimentalLanguageFeatures)
-  override open func visitPost(_ node: UsingDeclSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 

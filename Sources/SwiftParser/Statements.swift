@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-#endif
 
 extension TokenConsumer {
   /// Returns `true` if the current token represents the start of a statement
@@ -68,7 +64,7 @@ extension Parser {
     case (.do, let handle)?:
       // If we have 'do' expressions enabled, we parse a DoExprSyntax, and wrap
       // it in an ExpressionStmtSyntax.
-      if self.experimentalFeatures.contains(.doExpressions) {
+      if self.languageFeatures.contains(.doExpressions) {
         let doExpr = self.parseDoExpression(doHandle: handle)
         let doStmt = RawExpressionStmtSyntax(
           expression: doExpr,
@@ -147,7 +143,7 @@ extension Parser {
     // We have a simple comma separated list of clauses, but also need to handle
     // a variety of common errors situations (including migrating from Swift 2
     // syntax).
-    var elements = [RawConditionElementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawConditionElementSyntax>()
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
@@ -170,16 +166,17 @@ extension Parser {
           unexpectedBeforeKeepGoing,
           trailingComma: keepGoing,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     } while keepGoing != nil && !atConditionListTerminator(isGuardStatement: isGuardStatement)
       && self.hasProgressed(&loopProgress)
 
-    return RawConditionElementListSyntax(elements: elements, arena: self.arena)
+    return RawConditionElementListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   mutating func atConditionListTerminator(isGuardStatement: Bool) -> Bool {
-    guard experimentalFeatures.contains(.trailingComma) else {
+    guard languageFeatures.contains(.trailingComma) else {
       return false
     }
     // Condition terminator is `else` for `guard` statements.
@@ -223,14 +220,32 @@ extension Parser {
 
     // We're parsing a conditional binding.
     enum BindingKind {
-      case pattern(RawTokenSyntax, RawPatternSyntax)
+      case pattern(RawUnexpectedNodesSyntax?, RawTokenSyntax, RawPatternSyntax)
       case optional(RawUnexpectedNodesSyntax?, RawTokenSyntax, RawPatternSyntax)
     }
 
     let kind: BindingKind
     if let caseKeyword = self.consume(if: .keyword(.case)) {
       let pattern = self.parseMatchingPattern(context: .matching)
-      kind = .pattern(caseKeyword, pattern)
+      kind = .pattern(nil, caseKeyword, pattern)
+    } else if self.at(.keyword(.let), .keyword(.var)) && self.peek(isAt: .keyword(.case)) {
+      // `let case` is a misspelling of `case let`: parse it as the latter, with
+      // the misplaced 'let' or 'var' reported as unexpected.
+      let isVar = self.at(.keyword(.var))
+      let letOrVar = self.consumeAnyToken()
+      let caseKeyword = self.eat(.keyword(.case))
+      let pattern = self.parseMatchingPattern(context: .bindingIntroducer)
+      kind = .pattern(
+        RawUnexpectedNodesSyntax([letOrVar], arena: self.arena),
+        caseKeyword,
+        RawPatternSyntax(
+          RawValueBindingPatternSyntax(
+            bindingSpecifier: self.missingToken(isVar ? .var : .let),
+            pattern: pattern,
+            arena: self.arena
+          )
+        )
+      )
     } else {
       let unexpectedBeforeBindingKeyword: RawUnexpectedNodesSyntax?
       let letOrVar: RawTokenSyntax
@@ -290,9 +305,10 @@ extension Parser {
           arena: self.arena
         )
       )
-    case let .pattern(caseKeyword, pattern):
+    case let .pattern(unexpectedBeforeCaseKeyword, caseKeyword, pattern):
       return .matchingPattern(
         RawMatchingPatternConditionSyntax(
+          unexpectedBeforeCaseKeyword,
           caseKeyword: caseKeyword,
           pattern: pattern,
           typeAnnotation: annotation,
@@ -313,7 +329,7 @@ extension Parser {
     precondition(self.at(.poundAvailable, .poundUnavailable))
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let arguments = self.parseAvailabilitySpecList()
+    let arguments = self.parseAvailabilitySpecList(allowTrailingComma: keyword.tokenKind == .poundUnavailable)
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     let unexpectedAfterRParen: RawUnexpectedNodesSyntax?
     if let (equalOperator, falseKeyword) = self.consume(
@@ -401,6 +417,43 @@ extension Parser {
 // MARK: Do-Catch Statements
 
 extension Parser {
+  /// If `expr` is `try { ... }` and a `catch` follows, the user wrote `try`
+  /// where `do` was meant: parse the `catch` clauses and produce a `do`
+  /// statement whose `do` keyword is missing and whose `try` is unexpected.
+  mutating func reinterpretTryClosureAsDoStatement(_ expr: RawExprSyntax) -> RawDoStmtSyntax? {
+    assert(self.at(.keyword(.catch)))
+    guard let tryExpr = expr.as(RawTryExprSyntax.self),
+      tryExpr.questionOrExclamationMark == nil,
+      let closure = tryExpr.expression.as(RawClosureExprSyntax.self),
+      closure.signature == nil,
+      closure.unexpectedBeforeLeftBrace == nil,
+      closure.unexpectedBetweenLeftBraceAndSignature == nil,
+      closure.unexpectedBetweenSignatureAndStatements == nil,
+      closure.unexpectedBetweenStatementsAndRightBrace == nil
+    else {
+      return nil
+    }
+    let body = RawCodeBlockSyntax(
+      leftBrace: closure.leftBrace,
+      statements: closure.statements,
+      rightBrace: closure.rightBrace,
+      arena: self.arena
+    )
+    var elements = RawSyntaxNodeListBuilder<RawCatchClauseSyntax>()
+    var loopProgress = LoopProgressCondition()
+    while self.at(.keyword(.catch)) && self.hasProgressed(&loopProgress) {
+      elements.append(self.parseCatchClause(), allocator: self.nodeListAllocator)
+    }
+    return RawDoStmtSyntax(
+      RawUnexpectedNodesSyntax([tryExpr.tryKeyword], arena: self.arena),
+      doKeyword: self.missingToken(.do),
+      throwsClause: nil,
+      body: body,
+      catchClauses: RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena),
+      arena: self.arena
+    )
+  }
+
   /// Parse a do statement.
   mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawDoStmtSyntax {
     let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(doHandle)
@@ -416,11 +469,11 @@ extension Parser {
     let body = self.parseCodeBlock(introducer: doKeyword)
 
     // If the next token is 'catch', this is a 'do'/'catch' statement.
-    var elements = [RawCatchClauseSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawCatchClauseSyntax>()
     var loopProgress = LoopProgressCondition()
     while self.at(.keyword(.catch)) && self.hasProgressed(&loopProgress) {
       // Parse 'catch' clauses
-      elements.append(self.parseCatchClause())
+      elements.append(self.parseCatchClause(), allocator: self.nodeListAllocator)
     }
 
     return RawDoStmtSyntax(
@@ -428,7 +481,7 @@ extension Parser {
       doKeyword: doKeyword,
       throwsClause: throwsClause,
       body: body,
-      catchClauses: RawCatchClauseListSyntax(elements: elements, arena: self.arena),
+      catchClauses: RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena),
       arena: self.arena
     )
   }
@@ -439,7 +492,7 @@ extension Parser {
   /// following a 'do' statement.
   mutating func parseCatchClause() -> RawCatchClauseSyntax {
     let (unexpectedBeforeCatchKeyword, catchKeyword) = self.expect(.keyword(.catch))
-    var catchItems = [RawCatchItemSyntax]()
+    var catchItems = RawSyntaxNodeListBuilder<RawCatchItemSyntax>()
     if !self.at(.leftBrace) {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
@@ -452,7 +505,8 @@ extension Parser {
             whereClause: whereClause,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
@@ -460,7 +514,7 @@ extension Parser {
     return RawCatchClauseSyntax(
       unexpectedBeforeCatchKeyword,
       catchKeyword: catchKeyword,
-      catchItems: RawCatchItemListSyntax(elements: catchItems, arena: self.arena),
+      catchItems: RawCatchItemListSyntax(elements: catchItems.build(), arena: self.arena),
       body: body,
       arena: self.arena
     )
@@ -503,13 +557,13 @@ extension Parser {
     let conditions: RawConditionElementListSyntax
     if self.at(.leftBrace) {
       conditions = RawConditionElementListSyntax(
-        elements: [
+        elements: self.nodeListAllocator.listOfOne(
           RawConditionElementSyntax(
             condition: .init(expression: RawMissingExprSyntax(arena: self.arena)),
             trailingComma: nil,
             arena: self.arena
           )
-        ],
+        ),
         arena: self.arena
       )
     } else {
@@ -559,7 +613,7 @@ extension Parser {
     let unsafeKeyword: RawTokenSyntax?
     if let modifierKeyword = ExpressionModifierKeyword(
       lexeme: self.currentToken,
-      experimentalFeatures: self.experimentalFeatures
+      languageFeatures: self.languageFeatures
     ), modifierKeyword == .unsafe, !self.peek(isAt: .keyword(.in), .colon) {
       unsafeKeyword = self.expectWithoutRecovery(.keyword(.unsafe))
     } else {
@@ -649,19 +703,35 @@ extension Parser {
       case poundElseif
       case endOfFile
 
-      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.rightBrace): self = .rightBrace
-        case TokenSpec(.case): self = .case
-        case TokenSpec(.default): self = .default
-        case TokenSpec(.semicolon): self = .semicolon
-        case TokenSpec(.poundIf): self = .poundIf
-        case TokenSpec(.poundEndif): self = .poundEndif
-        case TokenSpec(.poundElse): self = .poundElse
-        case TokenSpec(.poundElseif): self = .poundElseif
-        case TokenSpec(.endOfFile): self = .endOfFile
-        default: return nil
+      init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+        func token() -> Self? {
+          return switch lexeme.rawTokenKind {
+          case .rightBrace: .rightBrace
+          case .semicolon: .semicolon
+          case .poundIf: .poundIf
+          case .poundEndif: .poundEndif
+          case .poundElse: .poundElse
+          case .poundElseif: .poundElseif
+          case .endOfFile: .endOfFile
+          default: nil
+          }
         }
+
+        func keyword() -> Self? {
+          guard let keyword = lexeme.keyword else {
+            return nil
+          }
+          return switch keyword {
+          case .case: .case
+          case .default: .default
+          default: nil
+          }
+        }
+
+        guard let match = token() ?? keyword() else {
+          return nil
+        }
+        self = match
       }
 
       var spec: TokenSpec {
@@ -742,7 +812,7 @@ extension Parser {
       let exprList: RawYieldedExpressionListSyntax
       do {
         var keepGoing = true
-        var elementList = [RawYieldedExpressionSyntax]()
+        var elementList = RawSyntaxNodeListBuilder<RawYieldedExpressionSyntax>()
         var loopProgress = LoopProgressCondition()
         while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
           let expr = self.parseExpression(flavor: .basic, pattern: .none)
@@ -752,12 +822,13 @@ extension Parser {
               expression: expr,
               comma: comma,
               arena: self.arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
 
           keepGoing = (comma != nil)
         }
-        exprList = RawYieldedExpressionListSyntax(elements: elementList, arena: self.arena)
+        exprList = RawYieldedExpressionListSyntax(elements: elementList.build(), arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       yieldedExpressions = .multiple(
@@ -785,7 +856,7 @@ extension Parser {
 extension Parser {
   /// Parse a `then` statement.
   mutating func parseThenStatement(handle: RecoveryConsumptionHandle) -> RawStmtSyntax {
-    assert(experimentalFeatures.contains(.thenStatements))
+    assert(languageFeatures.contains(.thenStatements))
 
     let (unexpectedBeforeThen, then) = self.eat(handle)
     let hasMisplacedTry = unexpectedBeforeThen?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
@@ -937,7 +1008,7 @@ extension TokenConsumer {
         return true
       case .if, .switch:
         return true
-      case .do where self.experimentalFeatures.contains(.doExpressions):
+      case .do where self.languageFeatures.contains(.doExpressions):
         return true
 
       default:
@@ -1091,6 +1162,28 @@ extension Parser.Lookahead {
     }
 
     return lookahead.at(anyIn: SwitchCaseStart.self) != nil
+  }
+
+  /// Whether the statements of a switch case end here: at the next case, at the
+  /// end of the `switch` or of an `#if` clause, or at an `#if` that encloses more
+  /// cases.
+  mutating func atEndOfSwitchCaseBody() -> Bool {
+    if self.at(.rightBrace, .keyword(.case), .keyword(.default)) || self.at(.poundElseif, .poundElse, .poundEndif) {
+      return true
+    }
+    return self.withLookahead { $0.atStartOfConditionalSwitchCases() }
+  }
+
+  /// Whether the statements of a switch case would end before the next `#if`.
+  /// Only tokens outside of any nested brackets are considered.
+  mutating func endsSwitchCaseBodyBeforePoundIf() -> Bool {
+    while !self.at(.endOfFile, .poundIf) {
+      if self.atEndOfSwitchCaseBody() {
+        return true
+      }
+      self.skipSingle()
+    }
+    return false
   }
 
   mutating func atStartOfConditionalSwitchCases() -> Bool {

@@ -15,11 +15,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 public enum DifferenceReason {
   case nodeType, presence, missingNode, additionalNode, trivia, token

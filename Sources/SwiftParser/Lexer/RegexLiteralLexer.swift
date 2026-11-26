@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(BumpPtrAllocator) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(BumpPtrAllocator) import SwiftSyntax
-#endif
 
 /// A separate lexer specifically for regex literals.
 private struct RegexLiteralLexer {
@@ -395,15 +391,13 @@ extension RegexLiteralLexemes {
     private(set) var patternByteLength: Int = 0
     private(set) var numClosePounds: Int = 0
 
-    // The start position is split into its component input buffer and
-    // previous char to allow for a more optimized layout.
-    private let _startInput: UnsafeBufferPointer<UInt8>
+    /// Where the literal begins: its first opening `#`, or its opening `/` if it
+    /// has no pounds.
+    let start: Lexer.Cursor.Position
 
     // The pattern diagnostic is split for a more optimized layout.
     private var _patternErrorOffset: Int?
     private var _patternErrorKind: TokenDiagnostic.Kind?
-
-    private let _startPrevious: UInt8
 
     /// The number of lexemes. This is a UInt8 as there can only be a maximum
     /// of 5 lexemes for a regex literal (open pounds, open slash, pattern,
@@ -411,11 +405,7 @@ extension RegexLiteralLexemes {
     private(set) var lexemeCount: UInt8 = 0
 
     init(startingAt start: Lexer.Cursor.Position) {
-      self._startInput = start.input
-      self._startPrevious = start.previous
-    }
-    var start: Lexer.Cursor.Position {
-      .init(input: _startInput, previous: _startPrevious)
+      self.start = start
     }
 
     private(set) var patternError: Lexer.Cursor.LexingDiagnostic? {
@@ -535,13 +525,13 @@ extension RegexLiteralLexemes.Builder {
         guard hasPounds && byteLength > 0 else { return nil }
 
         // If the last characeter is '/', we can use that.
-        if UnicodeScalar(end.previous) == "/" {
+        if end.previous == UInt8(ascii: "/") {
           return (end, numPounds: 0)
         }
         // If the last character is '#', scan from the candidate last slash to
         // see if we only have '#' characters until the end. In such a case,
         // we can claim those characters as part of the delimiter.
-        if UnicodeScalar(end.previous) == "#",
+        if end.previous == UInt8(ascii: "#"),
           let candidateCloseSlashEnd = candidateCloseSlashEnd
         {
           var poundScan = candidateCloseSlashEnd
@@ -684,7 +674,7 @@ extension Lexer.Cursor {
   fileprivate func tryScanOperatorAsRegexLiteral(
     operatorStart: Lexer.Cursor,
     operatorEnd: Lexer.Cursor,
-    sourceBufferStart: Lexer.Cursor,
+    sourceBufferStart: UnsafePointer<UInt8>?,
     preferRegexOverBinaryOperator: Bool
   ) -> RegexLiteralLexemes? {
     precondition(self.pointer >= operatorStart.pointer, "lexing before the operator?")
@@ -766,7 +756,7 @@ extension Lexer.Cursor {
     at regexStart: Lexer.Cursor,
     operatorStart: Lexer.Cursor,
     operatorEnd: Lexer.Cursor,
-    sourceBufferStart: Lexer.Cursor,
+    sourceBufferStart: UnsafePointer<UInt8>?,
     preferRegexOverBinaryOperator: Bool
   ) -> Lexer.Result? {
     guard
@@ -819,7 +809,7 @@ extension Lexer.Cursor {
     // Compute the new transition.
     let transition: Lexer.StateTransition?
     if let existingPtr {
-      transition = lexemes.isEmpty ? .pop : .replace(newState: .inRegexLiteral(index: index, lexemes: existingPtr))
+      transition = lexemes.isEmpty ? .pop : .replace(newState: .inRegexLiteral(lexemes: existingPtr, index: index))
     } else {
       transition = lexemes.isEmpty ? nil : .pushRegexLexemes(index: index, lexemes: lexemes.base)
     }

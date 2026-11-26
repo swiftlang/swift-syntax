@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 // MARK: Lookahead
 
@@ -127,30 +123,48 @@ extension Parser.Lookahead {
     anyIn specSet: SpecSet.Type,
     overrideRecoveryPrecedence: TokenPrecedence? = nil
   ) -> (match: SpecSet, handle: RecoveryConsumptionHandle)? {
+    // `allCases` builds a fresh array on every call, so fetch it once.
+    let allCases = specSet.allCases
+
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
     if shouldRecordAlternativeTokenChoices {
-      recordAlternativeTokenChoice(for: self.currentToken, choices: specSet.allCases.map(\.spec))
+      recordAlternativeTokenChoice(for: self.currentToken, choices: allCases.map(\.spec))
     }
     #endif
 
-    if specSet.allCases.isEmpty {
+    if allCases.isEmpty {
       return nil
     }
 
     let recoveryPrecedence =
-      overrideRecoveryPrecedence ?? specSet.allCases.map({
+      overrideRecoveryPrecedence ?? allCases.lazy.map({
+        // FIXME: Use `\.spec.recoveryPrecedence` (rdar://186588859).
         return $0.spec.recoveryPrecedence
       }).min()!
 
     return self.canRecoverToImpl(
       recoveryPrecedence: recoveryPrecedence,
-      allowAtStartOfLine: specSet.allCases.allSatisfy(\.spec.allowAtStartOfLine),
+      allowAtStartOfLine: allCases.allSatisfy(\.spec.allowAtStartOfLine),
       recursionDepth: 1,
       matchesSpec: { lookahead in
         guard let (specSet, _) = lookahead.at(anyIn: specSet) else { return nil }
         return (specSet, specSet.spec)
       }
     )
+  }
+
+  /// The recovery precedence of the current token, taking contextual keywords
+  /// into account.
+  private mutating func currentContextualTokenPrecedence() -> TokenPrecedence {
+    let precedence = TokenPrecedence(self.currentToken)
+
+    // `actor` is lexed as an identifier, but an `actor` followed
+    /// by a name starts a declaration, just like `class`.
+    if precedence < .declKeyword, self.at(.keyword(.actor)), self.peek(isAt: .identifier) {
+      return TokenPrecedence(.actor)
+    }
+
+    return precedence
   }
 
   @inline(__always)
@@ -183,7 +197,7 @@ extension Parser.Lookahead {
         )
         return (matchedSpec, handle)
       }
-      let currentTokenPrecedence = TokenPrecedence(self.currentToken)
+      let currentTokenPrecedence = self.currentContextualTokenPrecedence()
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }

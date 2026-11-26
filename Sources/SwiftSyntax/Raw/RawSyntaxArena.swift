@@ -10,14 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6) && RESILIENT_LIBRARIES
+#if RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
-#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+#else
 private import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && RESILIENT_LIBRARIES
-@_implementationOnly import _SwiftSyntaxCShims
-#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
-import _SwiftSyntaxCShims
 #endif
 
 /// A syntax arena owns the memory for all syntax nodes within it.
@@ -92,12 +88,6 @@ public class RawSyntaxArena {
     #endif
   }
 
-  /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
-  /// uninitialized memory range as a `UnsafeMutableBufferPointer<RawSyntax?>`.
-  func allocateRawSyntaxBuffer(count: Int) -> UnsafeMutableBufferPointer<RawSyntax?> {
-    return allocator.allocate(RawSyntax?.self, count: count)
-  }
-
   /// Allocates a buffer of ``RawTriviaPiece`` with the given count, then returns
   /// the uninitialized memory range as a `UnsafeMutableBufferPointer<RawTriviaPiece>`.
   func allocateRawTriviaPieceBuffer(
@@ -137,13 +127,19 @@ public class RawSyntaxArena {
     }
   }
 
-  /// Copies a `RawSyntaxData` to the memory this arena manages, and returns the
-  /// pointer to the destination.
-  func intern(_ value: RawSyntaxData) -> UnsafePointer<RawSyntaxData> {
-    let allocated = allocator.allocate(RawSyntaxData.self, count: 1).baseAddress!
-    allocated.initialize(to: value)
-    return UnsafePointer(allocated)
+  /// Allocates `byteCount` bytes for one node, aligned for a node's header and
+  /// for anything its tail can hold, and returns the uninitialized memory.
+  ///
+  /// A node is a header followed by a tail whose shape and size depend on which
+  /// of the three kinds of node it is, so its size is not a type's size.
+  func allocateNode(byteCount: Int) -> UnsafeMutableRawPointer {
+    return allocator.allocate(byteCount: byteCount, alignment: Self.nodeAlignment).baseAddress!
   }
+
+  /// The alignment of every node, and so the most that a node's header or the
+  /// fields in its tail may ask for.
+  @inline(__always)
+  static var nodeAlignment: Int { 8 }
 
   /// Adds an ``RawSyntaxArena`` to this arena as a "child". Do nothing if `arenaRef`
   /// refers `self`.
@@ -177,60 +173,79 @@ public class RawSyntaxArena {
   func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty || allocator.contains(address: text.baseAddress!))
   }
+
+  /// Number of distinct arenas (this one plus retained child arenas) that the
+  /// tree rooted in this arena keeps alive.
+  public var retainedArenaCount: Int {
+    var seen: Set<RawSyntaxArenaRef> = [RawSyntaxArenaRef(self)]
+    var stack: [RawSyntaxArena] = [self]
+    while let arena = stack.popLast() {
+      for childRef in arena.childRefs where seen.insert(childRef).inserted {
+        stack.append(childRef.value)
+      }
+    }
+    return seen.count
+  }
 }
 
 /// RawSyntaxArena for parsing.
 @_spi(RawSyntax)
-public class ParsingRawSyntaxArena: RawSyntaxArena {
+public final class ParsingRawSyntaxArena: RawSyntaxArena {
   public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
-
-  /// Source file buffer the Syntax tree represents.
-  private var sourceBuffer: UnsafeBufferPointer<UInt8>
 
   /// Function to parse trivia.
   ///
   /// - Important: Must never be changed to a mutable value. See `RawSyntaxArenaRef.parseTrivia`.
   private let parseTriviaFunction: ParseTriviaFunction
 
-  public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
-    self.sourceBuffer = .init(start: nil, count: 0)
-    self.parseTriviaFunction = parseTriviaFunction
-    super.init(slabSize: 4096)
-  }
-
-  /// Copies a source buffer in to the memory this arena manages, and returns
-  /// the interned buffer.
+  /// For each node in this arena that the parser recorded for reuse by an
+  /// incremental parse, the number of UTF-8 bytes the parser looked ahead to
+  /// parse the node, measured from the start of the node's leading trivia.
   ///
-  /// The interned buffer is guaranteed to be null-terminated.
-  /// `contains(address _:)` is faster if the address is inside the memory
-  /// range this function returned.
-  public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
-    let allocated = allocator.allocate(
-      UInt8.self,
-      count: buffer.count + /* for NULL */ 1
-    )
-    precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
-    _ = allocated.initialize(from: buffer)
+  /// Only the parser allocating into this arena writes to it; after the parse
+  /// it is only read. Keeping the lengths here ties each entry's lifetime to the
+  /// node it describes, so no entry can outlive its node and be mistaken for a
+  /// node allocated at the same address.
+  @_spi(RawSyntax)
+  public var lookaheadLengths: [RawSyntax.ID: Int] = [:]
 
-    // NULL terminate.
-    allocated.baseAddress!.advanced(by: buffer.count).initialize(to: 0)
+  /// The size of slab to take when nothing is known about what will be
+  /// allocated.
+  private static let defaultSlabSize = 4096
 
-    sourceBuffer = UnsafeBufferPointer(start: allocated.baseAddress!, count: buffer.count)
-    return sourceBuffer
-  }
+  /// The largest slab to take, so that a large file does not ask the system for
+  /// one enormous block.
+  private static let maximumSlabSize = 4 << 20
 
-  public override func contains(text: SyntaxText) -> Bool {
-    if let addr = text.baseAddress, self.sourceBufferContains(addr) {
-      return true
+  /// The size of slab to take while parsing a source file of `sourceByteCount`
+  /// bytes.
+  ///
+  /// A full parse allocates roughly 26 times the source here, in nodes, text and
+  /// trivia — measured between 19 and 28 times across the parser's own sources
+  /// and the performance test inputs. A slab the size of the source therefore
+  /// fills in about twenty allocations, where the 4 KB a parse starts with
+  /// otherwise takes hundreds of them, doubling only every 128.
+  ///
+  /// Doubled up from the default rather than computed, so that a slab is always a
+  /// power of two, and bounded at both ends: a small file is no worse off than it
+  /// was, and what a large one wastes is bounded by one slab, measured at 4.4% of
+  /// the memory a parse takes. Sizing the slab at twice the source instead saves
+  /// no measurable time and wastes twice as much.
+  private static func slabSize(forSourceOf sourceByteCount: Int) -> Int {
+    var size = Self.defaultSlabSize
+    while size < Self.maximumSlabSize, size < sourceByteCount {
+      size *= 2
     }
-    return super.contains(text: text)
+    return size
   }
 
-  /// Checks if the given memory address is inside the memory range returned
-  /// from `internSourceBuffer(_:)` method.
-  func sourceBufferContains(_ address: UnsafePointer<UInt8>) -> Bool {
-    guard let sourceStart = sourceBuffer.baseAddress else { return false }
-    return sourceStart <= address && address < sourceStart.advanced(by: sourceBuffer.count)
+  /// - Parameter sourceByteCount: The size of the source that this arena will
+  ///   hold a full parse of, if that is known, so that the slabs can be sized for
+  ///   it. `nil` for an incremental reparse, where what gets allocated bears no
+  ///   relation to the size of the source, and for any other use.
+  public init(parseTriviaFunction: @escaping ParseTriviaFunction, sourceByteCount: Int? = nil) {
+    self.parseTriviaFunction = parseTriviaFunction
+    super.init(slabSize: sourceByteCount.map(Self.slabSize(forSourceOf:)) ?? Self.defaultSlabSize)
   }
 
   /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.
@@ -254,6 +269,11 @@ public struct RetainedRawSyntaxArena: @unchecked Sendable {
   fileprivate func arenaRef() -> RawSyntaxArenaRef {
     return RawSyntaxArenaRef(arena)
   }
+
+  /// Number of arenas (self + retained children) kept alive by this tree.
+  public var retainedArenaCount: Int {
+    arena.retainedArenaCount
+  }
 }
 
 /// Unsafely unowned reference to ``RawSyntaxArena``. The user is responsible to
@@ -270,7 +290,7 @@ struct RawSyntaxArenaRef: Hashable, @unchecked Sendable {
   }
 
   /// Returns the ``RawSyntaxArena``
-  private var value: RawSyntaxArena {
+  fileprivate var value: RawSyntaxArena {
     self._value.takeUnretainedValue()
   }
 
@@ -334,5 +354,14 @@ struct RawSyntaxArenaRef: Hashable, @unchecked Sendable {
 
   static func == (lhs: RetainedRawSyntaxArena, rhs: RawSyntaxArenaRef) -> Bool {
     return rhs == lhs
+  }
+}
+
+extension RawSyntax {
+  /// The lookahead length the parser recorded for this node in its arena, or
+  /// `nil` if it recorded none. See ``ParsingRawSyntaxArena/lookaheadLengths``.
+  @_spi(RawSyntax)
+  public var lookaheadLength: Int? {
+    return (arenaReference.value as? ParsingRawSyntaxArena)?.lookaheadLengths[id]
   }
 }

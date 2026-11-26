@@ -10,15 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension Parser {
   mutating func parseDeclModifierList() -> RawDeclModifierListSyntax {
-    var elements = [RawDeclModifierSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawDeclModifierSyntax>()
     var modifierLoopProgress = LoopProgressCondition()
     MODIFIER_LOOP: while self.hasProgressed(&modifierLoopProgress) {
       switch self.canRecoverTo(anyIn: DeclarationStart.self) {
@@ -26,11 +22,11 @@ extension Parser {
         (.declarationModifier(.fileprivate), _)?,
         (.declarationModifier(.internal), _)?,
         (.declarationModifier(.public), _)?:
-        elements.append(parseAccessLevelModifier())
+        elements.append(parseAccessLevelModifier(), allocator: self.nodeListAllocator)
       case (.declarationModifier(.package), _)?:
-        elements.append(parsePackageAccessLevelModifier())
+        elements.append(parsePackageAccessLevelModifier(), allocator: self.nodeListAllocator)
       case (.declarationModifier(.open), _)?:
-        elements.append(parseOpenAccessLevelModifier())
+        elements.append(parseOpenAccessLevelModifier(), allocator: self.nodeListAllocator)
       case (.declarationModifier(.static), let handle)?:
         let (unexpectedBeforeKeyword, staticKeyword) = self.eat(handle)
         elements.append(
@@ -39,7 +35,8 @@ extension Parser {
             name: staticKeyword,
             detail: nil,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       case (.declarationModifier(.class), let handle)?:
         var lookahead = self.lookahead()
@@ -56,16 +53,17 @@ extension Parser {
               name: classKeyword,
               detail: nil,
               arena: self.arena
-            )
+            ),
+            allocator: self.nodeListAllocator
           )
           continue
         } else {
           break MODIFIER_LOOP
         }
       case (.declarationModifier(.unowned), let handle)?:
-        elements.append(self.parseUnownedModifier(handle))
+        elements.append(self.parseUnownedModifier(handle), allocator: self.nodeListAllocator)
       case (.declarationModifier(.nonisolated), let handle)?:
-        elements.append(parseNonisolatedModifier(handle))
+        elements.append(parseNonisolatedModifier(handle), allocator: self.nodeListAllocator)
       case (.declarationModifier(.final), let handle)?,
         (.declarationModifier(.required), let handle)?,
         (.declarationModifier(.optional), let handle)?,
@@ -90,9 +88,12 @@ extension Parser {
         (.declarationModifier(._local), let handle)?,
         (.declarationModifier(.__setter_access), let handle)?,
         (.declarationModifier(.reasync), let handle)?
-      where experimentalFeatures.contains(.nonescapableTypes):
+      where languageFeatures.contains(.nonescapableTypes):
         let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
-        elements.append(RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena))
+        elements.append(
+          RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena),
+          allocator: self.nodeListAllocator
+        )
       case (.declarationModifier(.rethrows), _)?:
         fallthrough
       default:
@@ -101,7 +102,7 @@ extension Parser {
     }
     return elements.isEmpty
       ? self.emptyCollection(RawDeclModifierListSyntax.self)
-      : RawDeclModifierListSyntax(elements: elements, arena: arena)
+      : RawDeclModifierListSyntax(elements: elements.build(), arena: arena)
   }
 }
 
@@ -181,12 +182,13 @@ extension Parser {
         }
       }
 
-      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.private): self = .private
-        case TokenSpec(.fileprivate): self = .fileprivate
-        case TokenSpec(.internal): self = .internal
-        case TokenSpec(.public): self = .public
+      init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+        let keyword = lexeme.keyword
+        switch keyword {
+        case .private: self = .private
+        case .fileprivate: self = .fileprivate
+        case .internal: self = .internal
+        case .public: self = .public
         default: return nil
         }
       }
@@ -234,7 +236,8 @@ extension Parser {
     let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
 
     let detail: RawDeclModifierDetailSyntax?
-    if self.at(.leftParen) {
+    // A '(' on the next line starts a new statement, not a detail.
+    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let (unexpectedBeforeDetailToken, detailToken) = self.expect(
         TokenSpec(.unsafe, remapping: .identifier),

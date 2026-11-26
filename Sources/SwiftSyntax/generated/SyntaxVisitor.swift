@@ -1341,6 +1341,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: FallThroughStmtSyntax) {
   }
 
+  /// Visiting ``FileDefaultDeclSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: FileDefaultDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``FileDefaultDeclSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: FileDefaultDeclSyntax) {
+  }
+
   /// Visiting ``FloatLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1471,6 +1483,48 @@ open class SyntaxVisitor {
   /// The function called after visiting ``FunctionTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionTypeSyntax) {
+  }
+
+  /// Visiting `FunctionYieldClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `FunctionYieldClauseSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: FunctionYieldClauseSyntax) {
+  }
+
+  /// Visiting `FunctionYieldListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `FunctionYieldListSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: FunctionYieldListSyntax) {
+  }
+
+  /// Visiting `FunctionYieldSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `FunctionYieldSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: FunctionYieldSyntax) {
   }
 
   /// Visiting ``GenericArgumentClauseSyntax`` specifically.
@@ -2815,6 +2869,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SameTypeRequirementSyntax) {
   }
 
+  /// Visiting ``SectionAttributeArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SectionAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``SectionAttributeArgumentSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SectionAttributeArgumentSyntax) {
+  }
+
   /// Visiting ``SequenceExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3403,20 +3469,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``UnsafeExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnsafeExprSyntax) {
-  }
-
-  /// Visiting `UsingDeclSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
-  open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `UsingDeclSyntax` and its descendants.
-  ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
-  open func visitPost(_ node: UsingDeclSyntax) {
   }
 
   /// Visiting ``ValueBindingPatternSyntax`` specifically.
@@ -4447,6 +4499,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitFileDefaultDeclSyntaxImpl(_ node: Syntax) {
+    if visit(FileDefaultDeclSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(FileDefaultDeclSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitFloatLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(FloatLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -4532,6 +4592,30 @@ open class SyntaxVisitor {
       visitChildren(node)
     }
     visitPost(FunctionTypeSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) {
+    if visit(FunctionYieldClauseSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(FunctionYieldClauseSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldListSyntaxImpl(_ node: Syntax) {
+    if visit(FunctionYieldListSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(FunctionYieldListSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldSyntaxImpl(_ node: Syntax) {
+    if visit(FunctionYieldSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(FunctionYieldSyntax(unsafeCasting: node))
   }
 
   @inline(never)
@@ -5423,6 +5507,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitSectionAttributeArgumentSyntaxImpl(_ node: Syntax) {
+    if visit(SectionAttributeArgumentSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(SectionAttributeArgumentSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitSequenceExprSyntaxImpl(_ node: Syntax) {
     if visit(SequenceExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -5815,14 +5907,6 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUsingDeclSyntaxImpl(_ node: Syntax) {
-    if visit(UsingDeclSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(UsingDeclSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
   private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) {
     if visit(ValueBindingPatternSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6162,6 +6246,8 @@ open class SyntaxVisitor {
       return self.visitExtensionDeclSyntaxImpl(_:)
     case .fallThroughStmt:
       return self.visitFallThroughStmtSyntaxImpl(_:)
+    case .fileDefaultDecl:
+      return self.visitFileDefaultDeclSyntaxImpl(_:)
     case .floatLiteralExpr:
       return self.visitFloatLiteralExprSyntaxImpl(_:)
     case .forStmt:
@@ -6184,6 +6270,12 @@ open class SyntaxVisitor {
       return self.visitFunctionSignatureSyntaxImpl(_:)
     case .functionType:
       return self.visitFunctionTypeSyntaxImpl(_:)
+    case .functionYieldClause:
+      return self.visitFunctionYieldClauseSyntaxImpl(_:)
+    case .functionYieldList:
+      return self.visitFunctionYieldListSyntaxImpl(_:)
+    case .functionYield:
+      return self.visitFunctionYieldSyntaxImpl(_:)
     case .genericArgumentClause:
       return self.visitGenericArgumentClauseSyntaxImpl(_:)
     case .genericArgumentList:
@@ -6406,6 +6498,8 @@ open class SyntaxVisitor {
       return self.visitReturnStmtSyntaxImpl(_:)
     case .sameTypeRequirement:
       return self.visitSameTypeRequirementSyntaxImpl(_:)
+    case .sectionAttributeArgument:
+      return self.visitSectionAttributeArgumentSyntaxImpl(_:)
     case .sequenceExpr:
       return self.visitSequenceExprSyntaxImpl(_:)
     case .simpleStringLiteralExpr:
@@ -6504,8 +6598,6 @@ open class SyntaxVisitor {
       return self.visitUnresolvedTernaryExprSyntaxImpl(_:)
     case .unsafeExpr:
       return self.visitUnsafeExprSyntaxImpl(_:)
-    case .usingDecl:
-      return self.visitUsingDeclSyntaxImpl(_:)
     case .valueBindingPattern:
       return self.visitValueBindingPatternSyntaxImpl(_:)
     case .variableDecl:
@@ -6756,6 +6848,8 @@ open class SyntaxVisitor {
       self.visitExtensionDeclSyntaxImpl(node)
     case .fallThroughStmt:
       self.visitFallThroughStmtSyntaxImpl(node)
+    case .fileDefaultDecl:
+      self.visitFileDefaultDeclSyntaxImpl(node)
     case .floatLiteralExpr:
       self.visitFloatLiteralExprSyntaxImpl(node)
     case .forStmt:
@@ -6778,6 +6872,12 @@ open class SyntaxVisitor {
       self.visitFunctionSignatureSyntaxImpl(node)
     case .functionType:
       self.visitFunctionTypeSyntaxImpl(node)
+    case .functionYieldClause:
+      self.visitFunctionYieldClauseSyntaxImpl(node)
+    case .functionYieldList:
+      self.visitFunctionYieldListSyntaxImpl(node)
+    case .functionYield:
+      self.visitFunctionYieldSyntaxImpl(node)
     case .genericArgumentClause:
       self.visitGenericArgumentClauseSyntaxImpl(node)
     case .genericArgumentList:
@@ -7000,6 +7100,8 @@ open class SyntaxVisitor {
       self.visitReturnStmtSyntaxImpl(node)
     case .sameTypeRequirement:
       self.visitSameTypeRequirementSyntaxImpl(node)
+    case .sectionAttributeArgument:
+      self.visitSectionAttributeArgumentSyntaxImpl(node)
     case .sequenceExpr:
       self.visitSequenceExprSyntaxImpl(node)
     case .simpleStringLiteralExpr:
@@ -7098,8 +7200,6 @@ open class SyntaxVisitor {
       self.visitUnresolvedTernaryExprSyntaxImpl(node)
     case .unsafeExpr:
       self.visitUnsafeExprSyntaxImpl(node)
-    case .usingDecl:
-      self.visitUsingDeclSyntaxImpl(node)
     case .valueBindingPattern:
       self.visitValueBindingPatternSyntaxImpl(node)
     case .variableDecl:

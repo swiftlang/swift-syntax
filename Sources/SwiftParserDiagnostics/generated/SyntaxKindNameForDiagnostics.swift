@@ -13,11 +13,7 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
-#endif
 
 extension SyntaxKind {
   var nameForDiagnostics: String? {
@@ -137,7 +133,7 @@ extension SyntaxKind {
     case .differentiabilityArguments:
       return "differentiability arguments"
     case .differentiabilityWithRespectToArgument:
-      return "'@differentiable' argument"
+      return "differentiability argument"
     case .differentiableAttributeArguments:
       return "'@differentiable' arguments"
     case .discardStmt:
@@ -176,6 +172,8 @@ extension SyntaxKind {
       return "extension"
     case .fallThroughStmt:
       return "'fallthrough' statement"
+    case .fileDefaultDecl:
+      return "file-level default"
     case .floatLiteralExpr:
       return "floating literal"
     case .forStmt:
@@ -198,6 +196,12 @@ extension SyntaxKind {
       return "function signature"
     case .functionType:
       return "function type"
+    case .functionYieldClause:
+      return "yields clause"
+    case .functionYieldList:
+      return "yield list"
+    case .functionYield:
+      return "yield"
     case .genericArgumentClause:
       return "generic argument clause"
     case .genericArgument:
@@ -350,6 +354,8 @@ extension SyntaxKind {
       return "'return' statement"
     case .sameTypeRequirement:
       return "same type requirement"
+    case .sectionAttributeArgument:
+      return "'@section' argument"
     case .simpleStringLiteralExpr:
       return "simple string literal"
     case .simpleTypeSpecifier:
@@ -410,8 +416,6 @@ extension SyntaxKind {
       return "ternary operator"
     case .unsafeExpr:
       return "'unsafe' expression"
-    case .usingDecl:
-      return "using"
     case .valueBindingPattern:
       return "value binding pattern"
     case .variableDecl:

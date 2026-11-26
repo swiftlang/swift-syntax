@@ -23,13 +23,19 @@ struct AbsoluteSyntaxInfo: Sendable {
   /// This skips `nil` children in the parent's layout.
   let indexInTree: UInt32
 
+  /// - Important: `@inline(__always)` because this runs once per slot of every node a
+  ///   client visits, and it is small enough that a caller of any size should take it.
+  ///   Left to the inliner it is dropped as soon as the caller grows, which cost 3%
+  ///   of a tree walk once.
+  @inline(__always)
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
     if let raw {
-      // '&+' operations are safe because we have the preconditions in 'forRoot(_:)'.
+      // '&+' cannot overflow: a node's length and node count are sums `makeLayout`
+      // checks as it builds them, in the same width.
       return AbsoluteSyntaxInfo(
-        offset: offset &+ UInt32(truncatingIfNeeded: raw.totalLength.utf8Length),
+        offset: offset &+ raw.byteLength,
         layoutIndexInParent: layoutIndexInParent &+ 1,
-        indexInTree: indexInTree &+ UInt32(truncatingIfNeeded: raw.totalNodes)
+        indexInTree: indexInTree &+ raw.totalNodes
       )
     } else {
       return AbsoluteSyntaxInfo(
@@ -49,9 +55,6 @@ struct AbsoluteSyntaxInfo: Sendable {
   }
 
   static func forRoot(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
-    // These checks ensure the safety of the unchecked arithmetic operations in 'advancedBySibling(_:)'.
-    precondition(raw.totalLength.utf8Length <= UInt32.max, "too long")
-    precondition(raw.totalNodes <= UInt32.max, "too many nodes")
     return AbsoluteSyntaxInfo(
       offset: 0,
       layoutIndexInParent: 0,

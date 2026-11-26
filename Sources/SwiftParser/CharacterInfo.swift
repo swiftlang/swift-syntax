@@ -64,41 +64,55 @@ extension Unicode.Scalar {
   }
 }
 
-extension Unicode.Scalar {
-  private func testCharacterInfo(
+extension UInt8 {
+  /// A Boolean value indicating whether this byte is an ASCII character which is
+  /// recommended to be allowed to appear in a non-starting position in a
+  /// programming language identifier.
+  var isAsciiIdentifierContinue: Bool {
+    self.testCharacterInfo(.IDENT_CONT)
+  }
+
+  /// The classification of a byte, which is what a scalar's classification
+  /// reduces to: a scalar outside ASCII belongs to none of these sets, and one
+  /// inside it is this byte.
+  fileprivate func testCharacterInfo(
     _ match: Character.Info
   ) -> Bool {
     let info: Character.Info
-    switch self.value {
-    case  // '0'-'9'
-    48, 49, 50, 51, 52, 53, 54, 55, 56, 57:
+    switch self {
+    case UInt8(ascii: "0")...UInt8(ascii: "9"):
       info = [.IDENT_CONT, .DECIMAL, .HEX]
 
-    case  // 'A'-'F'
-    65, 66, 67, 68, 69, 70,
-      // 'a'-'f'
-      97, 98, 99, 100, 101, 102:
+    case UInt8(ascii: "A")...UInt8(ascii: "F"),
+      UInt8(ascii: "a")...UInt8(ascii: "f"):
       info = [.IDENT_START, .IDENT_CONT, .HEX, .LETTER]
 
-    case  // 'G'-'Z'
-    71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88,
-      89, 90,
-      // 'g'-'z'
-      103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117,
-      118, 119, 120, 121, 122:
+    case UInt8(ascii: "G")...UInt8(ascii: "Z"),
+      UInt8(ascii: "g")...UInt8(ascii: "z"):
       info = [.IDENT_START, .IDENT_CONT, .LETTER]
 
-    case  // '_'
-    95:
+    case UInt8(ascii: "_"):
       info = [.IDENT_START, .IDENT_CONT]
 
-    case  // '$'
-    36:
+    case UInt8(ascii: "$"):
       info = [.IDENT_CONT]
 
     default:
       info = []
     }
     return info.contains(match)
+  }
+}
+
+extension Unicode.Scalar {
+  private func testCharacterInfo(
+    _ match: Character.Info
+  ) -> Bool {
+    guard self.isASCII else {
+      return false
+    }
+    // `isASCII` has established the range, so the conversion need not check it
+    // again.
+    return UInt8(truncatingIfNeeded: self.value).testCharacterInfo(match)
   }
 }

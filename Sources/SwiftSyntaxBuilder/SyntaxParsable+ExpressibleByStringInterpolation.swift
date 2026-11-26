@@ -10,37 +10,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftDiagnostics
-public import SwiftParser
+@_spi(RawSyntax) public import SwiftParser
 internal import SwiftParserDiagnostics
 internal import SwiftSyntax
+
 // Don't introduce a dependency on OSLog when building SwiftSyntax using CMake
 // for the compiler.
 #if canImport(os) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
 private import os
 #endif
 
-#else
-import SwiftDiagnostics
-import SwiftParser
-import SwiftParserDiagnostics
-import SwiftSyntax
-
-// Don't introduce a dependency on OSLog when building SwiftSyntax using CMake
-// for the compiler.
-#if canImport(os) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
-import os
-#endif
-#endif
-
 /// Only set from `withStringInterpolationParsingErrorsSuppressed`, which is only intended for testing purposes that are
 /// single-threaded.
-#if swift(>=6)
 private nonisolated(unsafe) var suppressStringInterpolationParsingErrors = false
-#else
-private var suppressStringInterpolationParsingErrors = false
-#endif
 
 /// Run the body, disabling any runtime warnings about syntax error in string
 /// interpolation inside the body.
@@ -89,9 +72,7 @@ extension SyntaxParseable {
   ///              be logged using OSLog on Darwin platforms.
   public init(stringInterpolation: SyntaxStringInterpolation) {
     self = stringInterpolation.sourceText.withUnsafeBufferPointer { buffer in
-      var parser = Parser(buffer)
-      let result = Self.parse(from: &parser)
-      return result
+      Parser.withParser(source: buffer) { Self.parse(from: &$0) }
     }
     if self.hasError {
       self.logStringInterpolationParsingError()

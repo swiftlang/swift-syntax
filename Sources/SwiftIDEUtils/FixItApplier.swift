@@ -10,13 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftDiagnostics
 public import SwiftSyntax
-#else
-import SwiftDiagnostics
-import SwiftSyntax
-#endif
 
 @_spi(FixItApplier)
 public enum FixItApplier {

@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-#endif
 
 extension Parser {
   /// Parse a pattern.
@@ -25,12 +21,12 @@ extension Parser {
       case identifier
       case dollarIdentifier  // For recovery
 
-      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.leftParen): self = .leftParen
-        case TokenSpec(.wildcard): self = .wildcard
-        case TokenSpec(.identifier): self = .identifier
-        case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
+      init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+        switch lexeme.rawTokenKind {
+        case .leftParen: self = .leftParen
+        case .wildcard: self = .wildcard
+        case .identifier: self = .identifier
+        case .dollarIdentifier: self = .dollarIdentifier
         default: return nil
         }
       }
@@ -159,7 +155,7 @@ extension Parser {
   mutating func parsePatternTupleElements() -> RawTuplePatternElementListSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawTuplePatternElementListSyntax(
-        elements: [
+        elements: self.nodeListAllocator.listOfOne(
           RawTuplePatternElementSyntax(
             remainingTokens,
             label: nil,
@@ -168,11 +164,11 @@ extension Parser {
             trailingComma: nil,
             arena: self.arena
           )
-        ],
+        ),
         arena: self.arena
       )
     }
-    var elements = [RawTuplePatternElementSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawTuplePatternElementSyntax>()
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
@@ -205,11 +201,12 @@ extension Parser {
             pattern: pattern,
             trailingComma: trailingComma,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       }
     }
-    return RawTuplePatternElementListSyntax(elements: elements, arena: self.arena)
+    return RawTuplePatternElementListSyntax(elements: elements.build(), arena: self.arena)
   }
 }
 
@@ -243,6 +240,16 @@ extension Parser {
     case (.rhs(_), _)?,
       nil:
       break
+    }
+
+    // If the current token can start neither a pattern nor an expression, this
+    // is a pattern position with no recoverable content. Return a missing
+    // pattern directly so diagnostics describe the missing node as a pattern
+    // rather than an expression wrapped in an expression-pattern.
+    if !self.atStartOfExpression()
+      && !self.withLookahead({ $0.canParsePattern() })
+    {
+      return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
     }
 
     // Fall back to expression parsing for ambiguous forms. Name lookup will
@@ -288,11 +295,11 @@ extension Parser.Lookahead {
       case wildcard
       case leftParen
 
-      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.identifier): self = .identifier
-        case TokenSpec(.wildcard): self = .wildcard
-        case TokenSpec(.leftParen): self = .leftParen
+      init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+        switch lexeme.rawTokenKind {
+        case .identifier: self = .identifier
+        case .wildcard: self = .wildcard
+        case .leftParen: self = .leftParen
         default: return nil
         }
       }

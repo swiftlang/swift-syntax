@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class VariadicGenericsTests: ParserTestCase {

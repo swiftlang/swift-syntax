@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 @_spi(Testing) @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
 
@@ -274,6 +274,20 @@ final class DeclarationTests: ParserTestCase {
           nonisolated(<#identifier#>) let d = 0
         }
         """
+    )
+  }
+
+  func testNonisolatedFollowedByParenOnNextLine() {
+    // The '(' is not on the same line, so `nonisolated` is not a modifier, even
+    // though a declaration follows the parenthesized expression.
+    assertParse(
+      """
+      func f() {
+        nonisolated
+        (42)
+        nonisolated(nonsending) func g() async {}
+      }
+      """
     )
   }
 
@@ -1253,6 +1267,29 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testYields() {
+    assertParse(
+      "func test() yields(Int) -> Int { }"
+    )
+
+    assertParse(
+      "func test() yields(inout Int) -> Int { }"
+    )
+
+    assertParse(
+      "func test() throws(MyError) yields(inout Int) -> Int { }"
+    )
+
+    assertParse(
+      "func test() yields(inout Int) 1️⃣throws(MyError) -> Int { }",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'throws(MyError) -> Int' in function")
+      ]
+      // TODO: Enable after fixits would be added
+      // fixedSource: "func test() throws(MyError) yields(inout Int) -> Int { }"
+    )
+  }
+
   func testExtraneousRightBraceRecovery() {
     assertParse(
       """
@@ -1667,6 +1704,33 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testMissingMemberBlockDoesNotSwallowFollowingDeclarations() {
+    assertParse(
+      """
+      class C1️⃣
+      func f() {}
+      struct S: P2️⃣
+      let y = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
+      ],
+      fixedSource: """
+        class C {
+        }
+        func f() {}
+        struct S: P {
+        }
+        let y = 1
+        """
+    )
+  }
+
   func testMalforedStruct() {
     assertParse(
       """
@@ -1677,8 +1741,8 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected '{' in struct",
-          fixIts: ["insert '{'"]
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1696,19 +1760,13 @@ final class DeclarationTests: ParserTestCase {
           message: "expected '#endif' in conditional compilation block",
           fixIts: ["insert '#endif'"]
         ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected '}' to end struct",
-          fixIts: ["insert '}'"]
-        ),
-
       ],
       fixedSource: """
         struct n {
+        }
         #if <#expression#>
         @<#type#> <#declaration#>
         #endif
-        }
         """
     )
   }
@@ -3382,7 +3440,7 @@ final class DeclarationTests: ParserTestCase {
   func testInitializerWithReturnType() {
     assertParse(
       "init(_ ptr: UnsafeRawBufferPointer, _ a: borrowing Array<Int>) -> dependsOn(a) Self",
-      experimentalFeatures: .nonescapableTypes
+      languageFeatures: .nonescapableTypes
     )
 
     // Not actually valid, needs to be diagnosed during type checking
@@ -3474,7 +3532,7 @@ final class DeclarationTests: ParserTestCase {
         }
       }
       """,
-      experimentalFeatures: .coroutineAccessors
+      languageFeatures: .coroutineAccessors
     )
     assertParse(
       """
@@ -3493,7 +3551,7 @@ final class DeclarationTests: ParserTestCase {
         }
       }
       """,
-      experimentalFeatures: .coroutineAccessors
+      languageFeatures: .coroutineAccessors
     )
     assertParse(
       """
@@ -3673,238 +3731,86 @@ final class DeclarationTests: ParserTestCase {
       """
     )
   }
-}
 
-final class UsingDeclarationTests: ParserTestCase {
-  override var experimentalFeatures: Parser.ExperimentalFeatures {
-    [.defaultIsolationPerFile]
-  }
-
-  func testUsing() {
-    assertParse(
-      "using @MainActor",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
-        specifier: .attribute(
-          AttributeSyntax(
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("MainActor")
-            )
-          )
-        )
-      )
-    )
-    assertParse(
-      "using nonisolated",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
-        specifier: .modifier(.identifier("nonisolated"))
-      )
-    )
-
-    assertParse(
-      "using @Test",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
-        specifier: .attribute(
-          AttributeSyntax(
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("Test")
-            )
-          )
-        )
-      )
-    )
-
-    assertParse(
-      "using test",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
-        specifier: .modifier(.identifier("test"))
-      )
-    )
-
-    assertParse(
-      "using @warn(DiagGroupID, as: warning)",
-      substructure: UsingDeclSyntax(
-        usingKeyword: .keyword(.using),
-        specifier: .attribute(
-          AttributeSyntax(
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("warn")
-            ),
-            leftParen: .leftParenToken(),
-            arguments: .argumentList(
-              LabeledExprListSyntax([
-                LabeledExprSyntax(
-                  expression: DeclReferenceExprSyntax(
-                    baseName: .identifier("DiagGroupID")
-                  ),
-                  trailingComma: .commaToken()
-                ),
-                LabeledExprSyntax(
-                  label: .identifier("as"),
-                  colon: .colonToken(),
-                  expression: DeclReferenceExprSyntax(
-                    baseName: .identifier("warning")
-                  )
-                ),
-              ])
-            ),
-            rightParen: .rightParenToken()
-          )
-        )
-      )
-    )
-
+  func testAssociatedTypeGenericParameterList() {
     assertParse(
       """
-      nonisolated
-      using
-      """,
-      substructure: CodeBlockSyntax(
-        DeclReferenceExprSyntax(baseName: .identifier("using"))
-      )
-    )
-
-    assertParse(
-      """
-      1️⃣@MainActor
-      using2️⃣
-      """,
-      substructure: CodeBlockItemSyntax(
-        item: CodeBlockItemSyntax.Item(
-          UsingDeclSyntax(
-            UnexpectedNodesSyntax([
-              Syntax(
-                AttributeSyntax(
-                  atSign: .atSignToken(),
-                  attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("MainActor")))
-                )
-              )
-            ]),
-            usingKeyword: .keyword(.using),
-            specifier: UsingDeclSyntax.Specifier(.identifier("", presence: .missing))
-          )
-        )
-      ),
-      diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@MainActor' before using"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in using", fixIts: ["insert identifier"]),
-      ],
-      fixedSource: """
-        @MainActor
-        using <#identifier#>
-        """
-    )
-
-    assertParse(
-      """
-      using
-      @MainActor 1️⃣
+      protocol P {
+        associatedtype X1️⃣<T>: Equatable
+      }
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected declaration after attribute",
-          fixIts: ["insert declaration"]
+          message: "associated types must not have a generic parameter list",
+          fixIts: ["remove generic parameter clause"]
         )
       ],
-      fixedSource:
+      fixedSource: """
+        protocol P {
+          associatedtype X: Equatable
+        }
         """
-        using
-        @MainActor <#declaration#>
-        """
-    )
-
-    assertParse(
-      """
-      using
-      nonisolated
-      """,
-      substructure: CodeBlockSyntax(
-        DeclReferenceExprSyntax(baseName: .identifier("using"))
-      )
-    )
-
-    assertParse(
-      """
-      func
-      using (x: Int) {}
-      """
-    )
-
-    assertParse(
-      """
-      func
-      using
-      (x: Int) {}
-      """
-    )
-
-    assertParse(
-      """
-      let
-        using = 42
-      """
-    )
-
-    assertParse("let (x: Int, using: String) = (x: 42, using: \"\")")
-
-    assertParse(
-      """
-      do {
-        using @MainActor
-      }
-      """
     )
   }
 
-  func testAccessorBlockDisambiguationMarker() {
+  func testReasyncMustPrecedeRethrows() {
     assertParse(
       """
-      var value = initialValue { @_accessorBlock
-        get
-      }
+      func f(_: () async throws -> ()) rethrows 1️⃣reasync {}
       """,
-      substructure: VariableDeclSyntax(
-        bindingSpecifier: .keyword(.var),
-        bindings: [
-          PatternBindingSyntax(
-            pattern: IdentifierPatternSyntax(identifier: .identifier("value")),
-            initializer: InitializerClauseSyntax(
-              value: DeclReferenceExprSyntax(baseName: .identifier("initialValue"))
-            ),
-            accessorBlock: AccessorBlockSyntax(
-              leftBrace: .leftBraceToken(),
-              accessors: .accessors([
-                AccessorDeclSyntax(
-                  attributes: [
-                    .attribute(
-                      AttributeSyntax(
-                        atSign: .atSignToken(),
-                        attributeName: IdentifierTypeSyntax(name: .identifier("_accessorBlock"))
-                      )
-                    )
-                  ],
-                  accessorSpecifier: .keyword(.get)
-                )
-              ])
-            )
-          )
-        ]
-      )
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'reasync' must precede 'rethrows'",
+          fixIts: ["move 'reasync' in front of 'rethrows'"]
+        )
+      ],
+      fixedSource: """
+        func f(_: () async throws -> ()) reasync rethrows {}
+        """
     )
   }
 
-  func testAccessorBlockAfterPatternBindingDeclWithAttribute() {
+  func testCurriedParameterLists() {
     assertParse(
       """
-      var x: Int = foo()
-      {
-        @available(*, deprecated)
-        didSet {}
-      }
+      func f1️⃣(_ x: Int)(y: Int) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "cannot have more than one parameter list")
+      ]
+    )
+  }
+
+  func testBraceLessActorFollowedByActor() {
+    assertParse(
       """
+      actor A11️⃣
+
+      actor A2 { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected member block in actor", fixIts: ["insert member block"])
+      ],
+      fixedSource: """
+        actor A1 {
+        }
+
+        actor A2 { }
+        """
+    )
+  }
+
+  func testCaseLabelInEnum() {
+    assertParse(
+      """
+      enum E {
+        1️⃣case a:
+        case b
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'case' label can only appear inside a 'switch' statement")
+      ]
     )
   }
 }

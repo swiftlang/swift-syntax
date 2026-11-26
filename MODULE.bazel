@@ -17,10 +17,12 @@ module(
 )
 
 bazel_dep(name = "apple_support", version = "1.13.0", repo_name = "build_bazel_apple_support")
-bazel_dep(name = "rules_apple", version = "4.0.1", repo_name = "build_bazel_rules_apple")
+bazel_dep(name = "rules_apple", version = "4.5.0", repo_name = "build_bazel_rules_apple")
+bazel_dep(name = "rules_cc", version = "0.0.17")
+bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(
-  name = "rules_swift",
-  version = "2.9.0",
-  max_compatibility_level = 3,
-  repo_name = "build_bazel_rules_swift",
+    name = "rules_swift",
+    version = "2.9.0",
+    max_compatibility_level = 3,
+    repo_name = "build_bazel_rules_swift",
 )

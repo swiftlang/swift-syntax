@@ -35,7 +35,7 @@ extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
   @_spi(Testing) public func decorateMessage(
     _ message: String,
     basedOnSeverity severity: DiagnosticSeverity,
-    category: DiagnosticCategory? = nil
+    categoryChain: [DiagnosticCategory] = []
   ) -> String {
     let severityText: String
 
@@ -50,8 +50,14 @@ extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
       severityText = "remark"
     }
 
-    // Append the [#CategoryName] suffix when there is a category.
-    let categorySuffix: String = category.map { category in " [#\(category.name)]" } ?? ""
+    // Append the category chain suffix, e.g. [#Parent::Child].
+    let categorySuffix: String
+    if !categoryChain.isEmpty {
+      let chainStr = categoryChain.reversed().map(\.name).joined(separator: "::")
+      categorySuffix = " [#\(chainStr)]"
+    } else {
+      categorySuffix = ""
+    }
 
     return severityText + ": " + message + categorySuffix
   }

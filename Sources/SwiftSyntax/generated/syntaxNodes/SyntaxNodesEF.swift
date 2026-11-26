@@ -27,8 +27,12 @@
 public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .editorPlaceholderDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .editorPlaceholderDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -117,7 +121,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
   public func addAttribute(_ element: Syntax) -> EditorPlaceholderDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -163,7 +167,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
   public func addModifier(_ element: DeclModifierSyntax) -> EditorPlaceholderDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -232,8 +236,12 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
 public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .editorPlaceholderExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .editorPlaceholderExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -319,8 +327,12 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -416,7 +428,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addAttribute(_ element: Syntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -462,7 +474,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -531,7 +543,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addElement(_ element: EnumCaseElementSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[7] {
+    if let col = raw.layoutView!.realChild(at: 3) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
@@ -586,8 +598,12 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseElement
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseElement else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -773,8 +789,12 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseParameterClause
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseParameterClause else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -886,7 +906,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
   public func addParameter(_ element: EnumCaseParameterSyntax) -> EnumCaseParameterClauseSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList,
@@ -963,8 +983,12 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
 public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumCaseParameter
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumCaseParameter else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1077,7 +1101,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseParameterSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -1268,8 +1292,12 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .enumDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1393,7 +1421,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
   public func addAttribute(_ element: Syntax) -> EnumDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -1439,7 +1467,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
   public func addModifier(_ element: DeclModifierSyntax) -> EnumDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -1629,8 +1657,12 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
 public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .expressionPattern
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .expressionPattern else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1716,8 +1748,12 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
 public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .expressionSegment
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .expressionSegment else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1877,7 +1913,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   public func addExpression(_ element: LabeledExprSyntax) -> ExpressionSegmentSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[7] {
+    if let col = raw.layoutView!.realChild(at: 3) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -1946,8 +1982,12 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .expressionStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .expressionStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2039,8 +2079,12 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .extensionDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .extensionDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2165,7 +2209,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   public func addAttribute(_ element: Syntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -2211,7 +2255,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   public func addModifier(_ element: DeclModifierSyntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -2362,8 +2406,12 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .fallThroughStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .fallThroughStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2432,6 +2480,227 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeFallthroughKeyword, \Self.fallthroughKeyword, \Self.unexpectedAfterFallthroughKeyword])
 }
 
+// MARK: - FileDefaultDeclSyntax
+
+/// A file-level default isolation (`@MainActor`, `nonisolated`) or attribute (`@available`, `@diagnose`).
+/// 
+/// An example of a file-level default is
+/// 
+/// ```swift
+/// default @MainActor
+/// ```
+///
+/// ### Children
+/// 
+///  - `defaultKeyword`: `default`
+///  - `specifier`: (``AttributeSyntax`` | `<identifier>`)
+public struct FileDefaultDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+  public enum Specifier: SyntaxChildChoices, SyntaxHashable {
+    case attribute(AttributeSyntax)
+    /// ### Tokens
+    /// 
+    /// For syntax trees generated by the parser, this is guaranteed to be `<identifier>`.
+    case modifier(TokenSyntax)
+
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .attribute(let node):
+        return node._syntaxNode
+      case .modifier(let node):
+        return node._syntaxNode
+      }
+    }
+
+    static func isKindOf(_ kind: SyntaxKind) -> Bool {
+      AttributeSyntax.isKindOf(kind) || TokenSyntax.isKindOf(kind)
+    }
+
+    public init(_ node: AttributeSyntax) {
+      self = .attribute(node)
+    }
+
+    public init(_ node: TokenSyntax) {
+      self = .modifier(node)
+    }
+
+    public init?(_ node: __shared some SyntaxProtocol) {
+      if let node = node.as(AttributeSyntax.self) {
+        self = .attribute(node)
+      } else if let node = node.as(TokenSyntax.self) {
+        self = .modifier(node)
+      } else {
+        return nil
+      }
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([.node(AttributeSyntax.self), .node(TokenSyntax.self)])
+    }
+
+    /// Checks if the current syntax node can be cast to ``AttributeSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AttributeSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``AttributeSyntax``.
+    ///
+    /// - Returns: An instance of ``AttributeSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AttributeSyntax.Type) -> AttributeSyntax? {
+      return AttributeSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``AttributeSyntax``.
+    ///
+    /// - Returns: An instance of ``AttributeSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AttributeSyntax.Type) -> AttributeSyntax {
+      return self.as(AttributeSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``TokenSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: TokenSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: TokenSyntax.Type) -> TokenSyntax? {
+      return TokenSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: TokenSyntax.Type) -> TokenSyntax {
+      return self.as(TokenSyntax.self)!
+    }
+  }
+
+  public let _syntaxNode: Syntax
+
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .fileDefaultDecl
+  }
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard Self.isKindOf(node.raw.kind) else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - defaultKeyword: The `default` keyword for this declaration.
+  ///   - specifier: The file-default specifier that could either be an attribute like `@available` or a modifier like `nonisolated`
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil,
+    defaultKeyword: TokenSyntax = .keyword(.default),
+    _ unexpectedBetweenDefaultKeywordAndSpecifier: UnexpectedNodesSyntax? = nil,
+    specifier: Specifier,
+    _ unexpectedAfterSpecifier: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (
+      unexpectedBeforeDefaultKeyword,
+      defaultKeyword,
+      unexpectedBetweenDefaultKeywordAndSpecifier,
+      specifier,
+      unexpectedAfterSpecifier
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeDefaultKeyword?.raw,
+        defaultKeyword.raw,
+        unexpectedBetweenDefaultKeywordAndSpecifier?.raw,
+        specifier.raw,
+        unexpectedAfterSpecifier?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.fileDefaultDecl,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FileDefaultDeclSyntax.self)
+    }
+  }
+
+  /// The `default` keyword for this declaration.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `default`.
+  public var defaultKeyword: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FileDefaultDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenDefaultKeywordAndSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FileDefaultDeclSyntax.self)
+    }
+  }
+
+  /// The file-default specifier that could either be an attribute like `@available` or a modifier like `nonisolated`
+  public var specifier: Specifier {
+    get {
+      return Syntax(self).child(at: 3)!.cast(Specifier.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FileDefaultDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterSpecifier: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FileDefaultDeclSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeDefaultKeyword,
+    \Self.defaultKeyword,
+    \Self.unexpectedBetweenDefaultKeywordAndSpecifier,
+    \Self.specifier,
+    \Self.unexpectedAfterSpecifier
+  ])
+}
+
 // MARK: - FloatLiteralExprSyntax
 
 /// ### Children
@@ -2440,8 +2709,12 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
 public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .floatLiteralExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .floatLiteralExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2528,8 +2801,12 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .forStmt
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .forStmt else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2894,8 +3171,12 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
 public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .forceUnwrapExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .forceUnwrapExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3015,8 +3296,12 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionCallExpr
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionCallExpr else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3158,7 +3443,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
   public func addArgument(_ element: LabeledExprSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.realChild(at: 2) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
@@ -3242,7 +3527,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[11] {
+    if let col = raw.layoutView!.realChild(at: 5) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
@@ -3323,8 +3608,12 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionDecl
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionDecl else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3448,7 +3737,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addAttribute(_ element: Syntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -3494,7 +3783,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public func addModifier(_ element: DeclModifierSyntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -3679,8 +3968,12 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionEffectSpecifiers
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionEffectSpecifiers else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3809,8 +4102,12 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
 public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionParameterClause
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionParameterClause else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -3916,7 +4213,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
   public func addParameter(_ element: FunctionParameterSyntax) -> FunctionParameterClauseSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
@@ -3995,8 +4292,12 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
 public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionParameter
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionParameter else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4127,7 +4428,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   public func addAttribute(_ element: Syntax) -> FunctionParameterSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.realChild(at: 0) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -4173,7 +4474,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   public func addModifier(_ element: DeclModifierSyntax) -> FunctionParameterSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
@@ -4386,6 +4687,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// 
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
 ///  - `effectSpecifiers`: ``FunctionEffectSpecifiersSyntax``?
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``?
 ///
 /// ### Contained in
@@ -4396,8 +4698,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionSignature
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionSignature else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4414,13 +4720,15 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   ///   - effectSpecifiers: The effect indicators of the function, like `async` or `throws`
   ///   - returnClause: The return type of the function.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeParameterClause: UnexpectedNodesSyntax? = nil,
     parameterClause: FunctionParameterClauseSyntax,
     _ unexpectedBetweenParameterClauseAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? = nil,
+    yieldClause: FunctionYieldClauseSyntax? = nil,
+    _ unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax? = nil,
     _ unexpectedAfterReturnClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -4432,7 +4740,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       parameterClause,
       unexpectedBetweenParameterClauseAndEffectSpecifiers,
       effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndReturnClause,
+      unexpectedBetweenEffectSpecifiersAndYieldClause,
+      yieldClause,
+      unexpectedBetweenYieldClauseAndReturnClause,
       returnClause,
       unexpectedAfterReturnClause
     ))) { (arena, _) in
@@ -4441,7 +4751,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
         parameterClause.raw,
         unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw,
         effectSpecifiers?.raw,
-        unexpectedBetweenEffectSpecifiersAndReturnClause?.raw,
+        unexpectedBetweenEffectSpecifiersAndYieldClause?.raw,
+        yieldClause?.raw,
+        unexpectedBetweenYieldClauseAndReturnClause?.raw,
         returnClause?.raw,
         unexpectedAfterReturnClause?.raw
       ]
@@ -4494,7 +4806,8 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -4503,17 +4816,18 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
-  /// The return type of the function.
-  public var returnClause: ReturnClauseSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var yieldClause: FunctionYieldClauseSyntax? {
     get {
-      return Syntax(self).child(at: 5)?.cast(ReturnClauseSyntax.self)
+      return Syntax(self).child(at: 5)?.cast(FunctionYieldClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
-  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -4522,12 +4836,33 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  /// The return type of the function.
+  public var returnClause: ReturnClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 7)?.cast(ReturnClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+    }
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeParameterClause,
     \Self.parameterClause,
     \Self.unexpectedBetweenParameterClauseAndEffectSpecifiers,
     \Self.effectSpecifiers,
-    \Self.unexpectedBetweenEffectSpecifiersAndReturnClause,
+    \Self.unexpectedBetweenEffectSpecifiersAndYieldClause,
+    \Self.yieldClause,
+    \Self.unexpectedBetweenYieldClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedAfterReturnClause
   ])
@@ -4541,12 +4876,17 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - `parameters`: ``TupleTypeElementListSyntax``
 ///  - `rightParen`: `)`
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
+///  - `yieldClause`: `FunctionYieldClauseSyntax`?
 ///  - `returnClause`: ``ReturnClauseSyntax``
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionType
+  }
+
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .functionType else {
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4560,7 +4900,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax = .leftParenToken(),
@@ -4570,7 +4910,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     rightParen: TokenSyntax = .rightParenToken(),
     _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? = nil,
+    yieldClause: FunctionYieldClauseSyntax? = nil,
+    _ unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax,
     _ unexpectedAfterReturnClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -4586,7 +4928,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       rightParen,
       unexpectedBetweenRightParenAndEffectSpecifiers,
       effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndReturnClause,
+      unexpectedBetweenEffectSpecifiersAndYieldClause,
+      yieldClause,
+      unexpectedBetweenYieldClauseAndReturnClause,
       returnClause,
       unexpectedAfterReturnClause
     ))) { (arena, _) in
@@ -4599,7 +4943,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
         rightParen.raw,
         unexpectedBetweenRightParenAndEffectSpecifiers?.raw,
         effectSpecifiers?.raw,
-        unexpectedBetweenEffectSpecifiersAndReturnClause?.raw,
+        unexpectedBetweenEffectSpecifiersAndYieldClause?.raw,
+        yieldClause?.raw,
+        unexpectedBetweenYieldClauseAndReturnClause?.raw,
         returnClause.raw,
         unexpectedAfterReturnClause?.raw
       ]
@@ -4664,7 +5010,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
   public func addParameter(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
     var collection: RawSyntax
     let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
+    if let col = raw.layoutView!.realChild(at: 1) {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
@@ -4719,7 +5065,8 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -4728,21 +5075,41 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
 
-  public var returnClause: ReturnClauseSyntax {
+  @_spi(ExperimentalLanguageFeatures)
+  public var yieldClause: FunctionYieldClauseSyntax? {
     get {
-      return Syntax(self).child(at: 9)!.cast(ReturnClauseSyntax.self)
+      return Syntax(self).child(at: 9)?.cast(FunctionYieldClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
-  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+    }
+  }
+
+  public var returnClause: ReturnClauseSyntax {
+    get {
+      return Syntax(self).child(at: 11)!.cast(ReturnClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4755,8 +5122,377 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     \Self.rightParen,
     \Self.unexpectedBetweenRightParenAndEffectSpecifiers,
     \Self.effectSpecifiers,
-    \Self.unexpectedBetweenEffectSpecifiersAndReturnClause,
+    \Self.unexpectedBetweenEffectSpecifiersAndYieldClause,
+    \Self.yieldClause,
+    \Self.unexpectedBetweenYieldClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedAfterReturnClause
+  ])
+}
+
+// MARK: - FunctionYieldClauseSyntax
+
+/// - Note: Requires experimental feature `coroutineFunctions`.
+///
+/// ### Children
+/// 
+///  - `yieldsKeyword`: (`<identifier>` | `yields`)
+///  - `leftParen`: `(`
+///  - `yields`: `FunctionYieldListSyntax`
+///  - `rightParen`: `)`
+///
+/// ### Contained in
+/// 
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/yieldClause``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/yieldClause``
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/yieldClause``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/yieldClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/yieldClause``
+@_spi(ExperimentalLanguageFeatures)
+public struct FunctionYieldClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionYieldClause
+  }
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard Self.isKindOf(node.raw.kind) else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - yieldsKeyword: The `yields` keyword.
+  ///   - leftParen: The '(' to open the yielded type list specification.
+  ///   - yields: The yielded types.
+  ///   - rightParen: The ')' to close the yielded type list specification.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeYieldsKeyword: UnexpectedNodesSyntax? = nil,
+    yieldsKeyword: TokenSyntax,
+    _ unexpectedBetweenYieldsKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax = .leftParenToken(),
+    _ unexpectedBetweenLeftParenAndYields: UnexpectedNodesSyntax? = nil,
+    yields: FunctionYieldListSyntax,
+    _ unexpectedBetweenYieldsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (
+      unexpectedBeforeYieldsKeyword,
+      yieldsKeyword,
+      unexpectedBetweenYieldsKeywordAndLeftParen,
+      leftParen,
+      unexpectedBetweenLeftParenAndYields,
+      yields,
+      unexpectedBetweenYieldsAndRightParen,
+      rightParen,
+      unexpectedAfterRightParen
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeYieldsKeyword?.raw,
+        yieldsKeyword.raw,
+        unexpectedBetweenYieldsKeywordAndLeftParen?.raw,
+        leftParen.raw,
+        unexpectedBetweenLeftParenAndYields?.raw,
+        yields.raw,
+        unexpectedBetweenYieldsAndRightParen?.raw,
+        rightParen.raw,
+        unexpectedAfterRightParen?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.functionYieldClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeYieldsKeyword: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  /// The `yields` keyword.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
+  ///  - `<identifier>`
+  ///  - `yields`
+  public var yieldsKeyword: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenYieldsKeywordAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  /// The '(' to open the yielded type list specification.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `(`.
+  public var leftParen: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenLeftParenAndYields: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  /// The yielded types.
+  public var yields: FunctionYieldListSyntax {
+    get {
+      return Syntax(self).child(at: 5)!.cast(FunctionYieldListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `yields`
+  /// collection.
+  ///
+  /// - param element: The new `Yield` to add to the node's
+  ///                  `yields` collection.
+  /// - returns: A copy of the receiver with the provided `Yield`
+  ///            appended to its `yields` collection.
+  @available(*, deprecated, message: "Use node.yields.append(newElement) instead")
+  public func addYield(_ element: FunctionYieldSyntax) -> FunctionYieldClauseSyntax {
+    var collection: RawSyntax
+    let arena = RawSyntaxArena()
+    if let col = raw.layoutView!.realChild(at: 2) {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.functionYieldList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        rawAllocationArena: arena
+      )
+      .cast(FunctionYieldClauseSyntax.self)
+  }
+
+  public var unexpectedBetweenYieldsAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  /// The ')' to close the yielded type list specification.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `)`.
+  public var rightParen: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldClauseSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeYieldsKeyword,
+    \Self.yieldsKeyword,
+    \Self.unexpectedBetweenYieldsKeywordAndLeftParen,
+    \Self.leftParen,
+    \Self.unexpectedBetweenLeftParenAndYields,
+    \Self.yields,
+    \Self.unexpectedBetweenYieldsAndRightParen,
+    \Self.rightParen,
+    \Self.unexpectedAfterRightParen
+  ])
+}
+
+// MARK: - FunctionYieldSyntax
+
+/// A function yield type
+///
+/// - Note: Requires experimental feature `coroutineFunctions`.
+///
+/// ### Children
+/// 
+///  - `type`: ``TypeSyntax``
+///  - `trailingComma`: `,`?
+///
+/// ### Contained in
+/// 
+///  - `FunctionYieldListSyntax`
+@_spi(ExperimentalLanguageFeatures)
+public struct FunctionYieldSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    return kind == .functionYield
+  }
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard Self.isKindOf(node.raw.kind) else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - type: The yield's type.
+  ///   - trailingComma: If the yield is followed by another yield, the comma separating them.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
+    type: some TypeSyntaxProtocol,
+    _ unexpectedBetweenTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (
+      unexpectedBeforeType,
+      type,
+      unexpectedBetweenTypeAndTrailingComma,
+      trailingComma,
+      unexpectedAfterTrailingComma
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeType?.raw,
+        type.raw,
+        unexpectedBetweenTypeAndTrailingComma?.raw,
+        trailingComma?.raw,
+        unexpectedAfterTrailingComma?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.functionYield,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeType: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldSyntax.self)
+    }
+  }
+
+  /// The yield's type.
+  public var type: TypeSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(TypeSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenTypeAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldSyntax.self)
+    }
+  }
+
+  /// If the yield is followed by another yield, the comma separating them.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `,`.
+  public var trailingComma: TokenSyntax? {
+    get {
+      return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionYieldSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeType,
+    \Self.type,
+    \Self.unexpectedBetweenTypeAndTrailingComma,
+    \Self.trailingComma,
+    \Self.unexpectedAfterTrailingComma
   ])
 }

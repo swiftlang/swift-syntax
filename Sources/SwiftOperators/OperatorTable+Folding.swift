@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
-#else
-@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-#endif
 
 extension ExprSyntax {
   // Is this an unresolved explicit cast?

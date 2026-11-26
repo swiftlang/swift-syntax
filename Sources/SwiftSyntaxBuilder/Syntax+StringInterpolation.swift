@@ -10,17 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftBasicFormat
 internal import SwiftDiagnostics
 @_spi(RawSyntax) @_spi(Testing) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-import SwiftBasicFormat
-import SwiftDiagnostics
-@_spi(RawSyntax) @_spi(Testing) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -463,7 +456,6 @@ extension TokenSyntax: SyntaxExpressibleByStringInterpolation {
   }
 }
 
-#if compiler(>=6)
 // Silence warning that TokenSyntax has a retroactive conformance to `ExpressibleByStringInterpolation` through
 // `SyntaxExpressibleByStringInterpolation`.
 extension TokenSyntax: Swift.ExpressibleByStringInterpolation {}
@@ -471,7 +463,6 @@ extension TokenSyntax: Swift.ExpressibleByStringInterpolation {}
 extension TokenSyntax: Swift.ExpressibleByStringLiteral {}
 extension TokenSyntax: Swift.ExpressibleByExtendedGraphemeClusterLiteral {}
 extension TokenSyntax: Swift.ExpressibleByUnicodeScalarLiteral {}
-#endif
 
 // MARK: - Trivia expressible as string
 
@@ -518,7 +509,6 @@ extension Trivia {
   }
 }
 
-#if compiler(>=6)
 // Silence warning that Trivia has a retroactive conformance to `ExpressibleByStringInterpolation` through
 // `SyntaxExpressibleByStringInterpolation`.
 extension Trivia: Swift.ExpressibleByStringInterpolation {}
@@ -526,6 +516,3 @@ extension Trivia: Swift.ExpressibleByStringInterpolation {}
 extension Trivia: Swift.ExpressibleByStringLiteral {}
 extension Trivia: Swift.ExpressibleByExtendedGraphemeClusterLiteral {}
 extension Trivia: Swift.ExpressibleByUnicodeScalarLiteral {}
-#else
-extension Trivia: ExpressibleByStringInterpolation {}
-#endif

@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 public struct GroupedDiagnostics {
   /// A unique identifier for a source file.
@@ -110,6 +106,20 @@ public struct GroupedDiagnostics {
   /// Find the ID of the source file containing this syntax node.
   func findSourceFileContaining(_ node: Syntax) -> SourceFileID? {
     return rootIndexes[node.root]
+  }
+
+  /// The IDs of the source files that have been added, in the order they were
+  /// added.
+  @_spi(Compiler)
+  public var sourceFileIDs: [SourceFileID] {
+    sourceFiles.map { $0.id }
+  }
+
+  /// The diagnostics that have been added for the given source file, in the
+  /// order they were added.
+  @_spi(Compiler)
+  public func diagnostics(in sourceFileID: SourceFileID) -> [Diagnostic] {
+    sourceFiles[sourceFileID.id].diagnostics
   }
 
   /// Add a diagnostic to the set of grouped diagnostics.
@@ -228,7 +238,7 @@ extension GroupedDiagnostics {
             let decoratedMessage = diagnosticDecorator.decorateMessage(
               "expanded code originates here",
               basedOnSeverity: .note,
-              category: nil
+              categoryChain: []
             )
             prefixString += "`- \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
           }

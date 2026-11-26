@@ -13,11 +13,7 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) public import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
-#endif
 
 extension AccessorDeclSyntax {
   @_spi(Diagnostics)
@@ -42,45 +38,54 @@ extension AccessorDeclSyntax {
     case borrow
     case mutate
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.get):
-        self = .get
-      case TokenSpec(.set):
-        self = .set
-      case TokenSpec(.didSet):
-        self = .didSet
-      case TokenSpec(.willSet):
-        self = .willSet
-      case TokenSpec(.unsafeAddress):
-        self = .unsafeAddress
-      case TokenSpec(.addressWithOwner):
-        self = .addressWithOwner
-      case TokenSpec(.addressWithNativeOwner):
-        self = .addressWithNativeOwner
-      case TokenSpec(.unsafeMutableAddress):
-        self = .unsafeMutableAddress
-      case TokenSpec(.mutableAddressWithOwner):
-        self = .mutableAddressWithOwner
-      case TokenSpec(.mutableAddressWithNativeOwner):
-        self = .mutableAddressWithNativeOwner
-      case TokenSpec(._read):
-        self = ._read
-      case TokenSpec(.read) where experimentalFeatures.contains(.coroutineAccessors):
-        self = .read
-      case TokenSpec(._modify):
-        self = ._modify
-      case TokenSpec(.modify) where experimentalFeatures.contains(.coroutineAccessors):
-        self = .modify
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.borrow):
-        self = .borrow
-      case TokenSpec(.mutate):
-        self = .mutate
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .get:
+          .get
+        case .set:
+          .set
+        case .didSet:
+          .didSet
+        case .willSet:
+          .willSet
+        case .unsafeAddress:
+          .unsafeAddress
+        case .addressWithOwner:
+          .addressWithOwner
+        case .addressWithNativeOwner:
+          .addressWithNativeOwner
+        case .unsafeMutableAddress:
+          .unsafeMutableAddress
+        case .mutableAddressWithOwner:
+          .mutableAddressWithOwner
+        case .mutableAddressWithNativeOwner:
+          .mutableAddressWithNativeOwner
+        case ._read:
+          ._read
+        case .read where languageFeatures.contains(.coroutineAccessors):
+          .read
+        case ._modify:
+          ._modify
+        case .modify where languageFeatures.contains(.coroutineAccessors):
+          .modify
+        case .`init`:
+          .`init`
+        case .borrow:
+          .borrow
+        case .mutate:
+          .mutate
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -214,15 +219,21 @@ extension AsExprSyntax {
     case postfixQuestionMark
     case exclamationMark
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.postfixQuestionMark):
-        self = .postfixQuestionMark
-      case TokenSpec(.exclamationMark):
-        self = .exclamationMark
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .postfixQuestionMark:
+          .postfixQuestionMark
+        case .exclamationMark:
+          .exclamationMark
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -266,15 +277,21 @@ extension AvailabilityConditionSyntax {
     case poundAvailable
     case poundUnavailable
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.poundAvailable):
-        self = .poundAvailable
-      case TokenSpec(.poundUnavailable):
-        self = .poundUnavailable
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .poundAvailable:
+          .poundAvailable
+        case .poundUnavailable:
+          .poundUnavailable
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -321,21 +338,30 @@ extension AvailabilityLabeledArgumentSyntax {
     case obsoleted
     case deprecated
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.message):
-        self = .message
-      case TokenSpec(.renamed):
-        self = .renamed
-      case TokenSpec(.introduced):
-        self = .introduced
-      case TokenSpec(.obsoleted):
-        self = .obsoleted
-      case TokenSpec(.deprecated):
-        self = .deprecated
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .message:
+          .message
+        case .renamed:
+          .renamed
+        case .introduced:
+          .introduced
+        case .obsoleted:
+          .obsoleted
+        case .deprecated:
+          .deprecated
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -397,15 +423,24 @@ extension BooleanLiteralExprSyntax {
     case `true`
     case `false`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.true):
-        self = .true
-      case TokenSpec(.false):
-        self = .false
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .true:
+          .true
+        case .false:
+          .false
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -449,15 +484,24 @@ extension BorrowExprSyntax {
     case _borrow
     case borrow
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._borrow):
-        self = ._borrow
-      case TokenSpec(.borrow):
-        self = .borrow
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case ._borrow:
+          ._borrow
+        case .borrow:
+          .borrow
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -501,15 +545,24 @@ extension _CanImportVersionInfoSyntax {
     case _version
     case _underlyingVersion
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._version):
-        self = ._version
-      case TokenSpec(._underlyingVersion):
-        self = ._underlyingVersion
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case ._version:
+          ._version
+        case ._underlyingVersion:
+          ._underlyingVersion
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -552,16 +605,28 @@ extension ClosureCaptureSpecifierSyntax {
   public enum SpecifierOptions: TokenSpecSet {
     case weak
     case unowned
+    case sending
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.weak):
-        self = .weak
-      case TokenSpec(.unowned):
-        self = .unowned
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .weak:
+          .weak
+        case .unowned:
+          .unowned
+        case .sending:
+          .sending
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -570,6 +635,8 @@ extension ClosureCaptureSpecifierSyntax {
         self = .weak
       case TokenSpec(.unowned):
         self = .unowned
+      case TokenSpec(.sending):
+        self = .sending
       default:
         return nil
       }
@@ -581,6 +648,8 @@ extension ClosureCaptureSpecifierSyntax {
         return .keyword(.weak)
       case .unowned:
         return .keyword(.unowned)
+      case .sending:
+        return .keyword(.sending)
       }
     }
 
@@ -594,6 +663,8 @@ extension ClosureCaptureSpecifierSyntax {
         return .keyword(.weak)
       case .unowned:
         return .keyword(.unowned)
+      case .sending:
+        return .keyword(.sending)
       }
     }
   }
@@ -605,15 +676,24 @@ extension ClosureCaptureSpecifierSyntax {
     case safe
     case unsafe
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.safe):
-        self = .safe
-      case TokenSpec(.unsafe):
-        self = .unsafe
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .safe:
+          .safe
+        case .unsafe:
+          .unsafe
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -657,15 +737,30 @@ extension ClosureCaptureSyntax {
     case identifier
     case `self`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.self):
-        self = .self
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .self:
+          .self
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -709,15 +804,21 @@ extension ClosureParameterSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -761,15 +862,21 @@ extension ClosureParameterSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -813,15 +920,21 @@ extension ClosureShorthandParameterSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -865,15 +978,24 @@ extension ConsumeExprSyntax {
     case _move
     case consume
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._move):
-        self = ._move
-      case TokenSpec(.consume):
-        self = .consume
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case ._move:
+          ._move
+        case .consume:
+          .consume
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -952,85 +1074,94 @@ extension DeclModifierSyntax {
     case sending
     case yielding
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.__consuming):
-        self = .__consuming
-      case TokenSpec(.__setter_access):
-        self = .__setter_access
-      case TokenSpec(._const):
-        self = ._const
-      case TokenSpec(._local):
-        self = ._local
-      case TokenSpec(.actor):
-        self = .actor
-      case TokenSpec(.async):
-        self = .async
-      case TokenSpec(.borrowing):
-        self = .borrowing
-      case TokenSpec(.class):
-        self = .class
-      case TokenSpec(.consuming):
-        self = .consuming
-      case TokenSpec(.convenience):
-        self = .convenience
-      case TokenSpec(.distributed):
-        self = .distributed
-      case TokenSpec(.dynamic):
-        self = .dynamic
-      case TokenSpec(.fileprivate):
-        self = .fileprivate
-      case TokenSpec(.final):
-        self = .final
-      case TokenSpec(.indirect):
-        self = .indirect
-      case TokenSpec(.infix):
-        self = .infix
-      case TokenSpec(.internal):
-        self = .internal
-      case TokenSpec(.isolated):
-        self = .isolated
-      case TokenSpec(.lazy):
-        self = .lazy
-      case TokenSpec(.mutating):
-        self = .mutating
-      case TokenSpec(.nonisolated):
-        self = .nonisolated
-      case TokenSpec(.nonmutating):
-        self = .nonmutating
-      case TokenSpec(.open):
-        self = .open
-      case TokenSpec(.optional):
-        self = .optional
-      case TokenSpec(.override):
-        self = .override
-      case TokenSpec(.package):
-        self = .package
-      case TokenSpec(.postfix):
-        self = .postfix
-      case TokenSpec(.prefix):
-        self = .prefix
-      case TokenSpec(.private):
-        self = .private
-      case TokenSpec(.public):
-        self = .public
-      case TokenSpec(.reasync):
-        self = .reasync
-      case TokenSpec(.required):
-        self = .required
-      case TokenSpec(.static):
-        self = .static
-      case TokenSpec(.unowned):
-        self = .unowned
-      case TokenSpec(.weak):
-        self = .weak
-      case TokenSpec(.sending):
-        self = .sending
-      case TokenSpec(.yielding):
-        self = .yielding
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .__consuming:
+          .__consuming
+        case .__setter_access:
+          .__setter_access
+        case ._const:
+          ._const
+        case ._local:
+          ._local
+        case .actor:
+          .actor
+        case .async:
+          .async
+        case .borrowing:
+          .borrowing
+        case .class:
+          .class
+        case .consuming:
+          .consuming
+        case .convenience:
+          .convenience
+        case .distributed:
+          .distributed
+        case .dynamic:
+          .dynamic
+        case .fileprivate:
+          .fileprivate
+        case .final:
+          .final
+        case .indirect:
+          .indirect
+        case .infix:
+          .infix
+        case .internal:
+          .internal
+        case .isolated:
+          .isolated
+        case .lazy:
+          .lazy
+        case .mutating:
+          .mutating
+        case .nonisolated:
+          .nonisolated
+        case .nonmutating:
+          .nonmutating
+        case .open:
+          .open
+        case .optional:
+          .optional
+        case .override:
+          .override
+        case .package:
+          .package
+        case .postfix:
+          .postfix
+        case .prefix:
+          .prefix
+        case .private:
+          .private
+        case .public:
+          .public
+        case .reasync:
+          .reasync
+        case .required:
+          .required
+        case .static:
+          .static
+        case .unowned:
+          .unowned
+        case .weak:
+          .weak
+        case .sending:
+          .sending
+        case .yielding:
+          .yielding
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1291,29 +1422,44 @@ extension DeclReferenceExprSyntax {
     case binaryOperator
     case integerLiteral
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.self):
-        self = .self
-      case TokenSpec(.Self):
-        self = .Self
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.deinit):
-        self = .deinit
-      case TokenSpec(.subscript):
-        self = .subscript
-      case TokenSpec(.dollarIdentifier):
-        self = .dollarIdentifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.integerLiteral):
-        self = .integerLiteral
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .dollarIdentifier:
+          .dollarIdentifier
+        case .binaryOperator:
+          .binaryOperator
+        case .integerLiteral:
+          .integerLiteral
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .self:
+          .self
+        case .Self:
+          .Self
+        case .`init`:
+          .`init`
+        case .deinit:
+          .deinit
+        case .subscript:
+          .subscript
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1400,17 +1546,26 @@ extension DerivativeAttributeArgumentsSyntax {
     case set
     case _modify
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.get):
-        self = .get
-      case TokenSpec(.set):
-        self = .set
-      case TokenSpec(._modify):
-        self = ._modify
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .get:
+          .get
+        case .set:
+          .set
+        case ._modify:
+          ._modify
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1461,17 +1616,32 @@ extension DifferentiabilityArgumentSyntax {
     case integerLiteral
     case `self`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.integerLiteral):
-        self = .integerLiteral
-      case TokenSpec(.self):
-        self = .self
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .integerLiteral:
+          .integerLiteral
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .self:
+          .self
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1522,17 +1692,26 @@ extension DifferentiableAttributeArgumentsSyntax {
     case reverse
     case _linear
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._forward):
-        self = ._forward
-      case TokenSpec(.reverse):
-        self = .reverse
-      case TokenSpec(._linear):
-        self = ._linear
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case ._forward:
+          ._forward
+        case .reverse:
+          .reverse
+        case ._linear:
+          ._linear
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1582,15 +1761,24 @@ extension DocumentationAttributeArgumentSyntax {
     case visibility
     case metadata
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.visibility):
-        self = .visibility
-      case TokenSpec(.metadata):
-        self = .metadata
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .visibility:
+          .visibility
+        case .metadata:
+          .metadata
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1634,15 +1822,21 @@ extension EnumCaseParameterSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1686,15 +1880,21 @@ extension EnumCaseParameterSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1740,19 +1940,25 @@ extension FunctionDeclSyntax {
     case prefixOperator
     case postfixOperator
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.prefixOperator):
-        self = .prefixOperator
-      case TokenSpec(.postfixOperator):
-        self = .postfixOperator
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .binaryOperator:
+          .binaryOperator
+        case .prefixOperator:
+          .prefixOperator
+        case .postfixOperator:
+          .postfixOperator
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1808,15 +2014,24 @@ extension FunctionEffectSpecifiersSyntax {
     case async
     case reasync
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.async):
-        self = .async
-      case TokenSpec(.reasync):
-        self = .reasync
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .async:
+          .async
+        case .reasync:
+          .reasync
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1860,15 +2075,21 @@ extension FunctionParameterSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1912,15 +2133,21 @@ extension FunctionParameterSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -1958,21 +2185,98 @@ extension FunctionParameterSyntax {
   }
 }
 
+extension FunctionYieldClauseSyntax {
+  @_spi(Diagnostics)
+  public enum YieldsKeywordOptions: TokenSpecSet {
+    case identifier
+    @_spi(ExperimentalLanguageFeatures)
+    case yields
+
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .yields where languageFeatures.contains(.coroutineFunctions):
+          .yields
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
+        return nil
+      }
+      self = match
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.identifier):
+        self = .identifier
+      case TokenSpec(.yields):
+        self = .yields
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .identifier:
+        return .identifier
+      case .yields:
+        return .keyword(.yields)
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .yields:
+        return .keyword(.yields)
+      }
+    }
+  }
+}
+
 extension GenericParameterSyntax {
   @_spi(Diagnostics)
   public enum SpecifierOptions: TokenSpecSet {
     case each
     case `let`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.each):
-        self = .each
-      case TokenSpec(.let):
-        self = .let
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .each:
+          .each
+        case .let:
+          .let
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2019,21 +2323,36 @@ extension IdentifierPatternSyntax {
     case `deinit`
     case `subscript`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.self):
-        self = .self
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.deinit):
-        self = .deinit
-      case TokenSpec(.subscript):
-        self = .subscript
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .self:
+          .self
+        case .`init`:
+          .`init`
+        case .deinit:
+          .deinit
+        case .subscript:
+          .subscript
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2097,19 +2416,34 @@ extension IdentifierTypeSyntax {
     case `Any`
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.Self):
-        self = .Self
-      case TokenSpec(.Any):
-        self = .Any
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .Self:
+          .Self
+        case .Any:
+          .Any
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2166,17 +2500,23 @@ extension IfConfigClauseSyntax {
     case poundElseif
     case poundElse
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.poundIf):
-        self = .poundIf
-      case TokenSpec(.poundElseif):
-        self = .poundElseif
-      case TokenSpec(.poundElse):
-        self = .poundElse
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .poundIf:
+          .poundIf
+        case .poundElseif:
+          .poundElseif
+        case .poundElse:
+          .poundElse
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2233,29 +2573,38 @@ extension ImportDeclSyntax {
     case `func`
     case `inout`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.typealias):
-        self = .typealias
-      case TokenSpec(.struct):
-        self = .struct
-      case TokenSpec(.class):
-        self = .class
-      case TokenSpec(.enum):
-        self = .enum
-      case TokenSpec(.protocol):
-        self = .protocol
-      case TokenSpec(.var):
-        self = .var
-      case TokenSpec(.let):
-        self = .let
-      case TokenSpec(.func):
-        self = .func
-      case TokenSpec(.inout):
-        self = .inout
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .typealias:
+          .typealias
+        case .struct:
+          .struct
+        case .class:
+          .class
+        case .enum:
+          .enum
+        case .protocol:
+          .protocol
+        case .var:
+          .var
+        case .let:
+          .let
+        case .func:
+          .func
+        case .inout:
+          .inout
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2343,19 +2692,25 @@ extension ImportPathComponentSyntax {
     case prefixOperator
     case postfixOperator
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.prefixOperator):
-        self = .prefixOperator
-      case TokenSpec(.postfixOperator):
-        self = .postfixOperator
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .binaryOperator:
+          .binaryOperator
+        case .prefixOperator:
+          .prefixOperator
+        case .postfixOperator:
+          .postfixOperator
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2411,15 +2766,21 @@ extension ImportPathComponentSyntax {
     case period
     case colonColon
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.period):
-        self = .period
-      case TokenSpec(.colonColon):
-        self = .colonColon
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .period:
+          .period
+        case .colonColon:
+          .colonColon
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2463,15 +2824,21 @@ extension InitializerDeclSyntax {
     case postfixQuestionMark
     case exclamationMark
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.postfixQuestionMark):
-        self = .postfixQuestionMark
-      case TokenSpec(.exclamationMark):
-        self = .exclamationMark
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .postfixQuestionMark:
+          .postfixQuestionMark
+        case .exclamationMark:
+          .exclamationMark
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2515,15 +2882,21 @@ extension KeyPathOptionalComponentSyntax {
     case postfixQuestionMark
     case exclamationMark
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.postfixQuestionMark):
-        self = .postfixQuestionMark
-      case TokenSpec(.exclamationMark):
-        self = .exclamationMark
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .postfixQuestionMark:
+          .postfixQuestionMark
+        case .exclamationMark:
+          .exclamationMark
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2567,15 +2940,21 @@ extension LabeledExprSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2623,23 +3002,32 @@ extension LabeledSpecializeArgumentSyntax {
     case spi
     case spiModule
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.target):
-        self = .target
-      case TokenSpec(.availability):
-        self = .availability
-      case TokenSpec(.exported):
-        self = .exported
-      case TokenSpec(.kind):
-        self = .kind
-      case TokenSpec(.spi):
-        self = .spi
-      case TokenSpec(.spiModule):
-        self = .spiModule
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .target:
+          .target
+        case .availability:
+          .availability
+        case .exported:
+          .exported
+        case .kind:
+          .kind
+        case .spi:
+          .spi
+        case .spiModule:
+          .spiModule
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2714,29 +3102,38 @@ extension LayoutRequirementSyntax {
     case _BridgeObject
     case _TrivialStride
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._Trivial):
-        self = ._Trivial
-      case TokenSpec(._TrivialAtMost):
-        self = ._TrivialAtMost
-      case TokenSpec(._UnknownLayout):
-        self = ._UnknownLayout
-      case TokenSpec(._RefCountedObject):
-        self = ._RefCountedObject
-      case TokenSpec(._NativeRefCountedObject):
-        self = ._NativeRefCountedObject
-      case TokenSpec(._Class):
-        self = ._Class
-      case TokenSpec(._NativeClass):
-        self = ._NativeClass
-      case TokenSpec(._BridgeObject):
-        self = ._BridgeObject
-      case TokenSpec(._TrivialStride):
-        self = ._TrivialStride
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case ._Trivial:
+          ._Trivial
+        case ._TrivialAtMost:
+          ._TrivialAtMost
+        case ._UnknownLayout:
+          ._UnknownLayout
+        case ._RefCountedObject:
+          ._RefCountedObject
+        case ._NativeRefCountedObject:
+          ._NativeRefCountedObject
+        case ._Class:
+          ._Class
+        case ._NativeClass:
+          ._NativeClass
+        case ._BridgeObject:
+          ._BridgeObject
+        case ._TrivialStride:
+          ._TrivialStride
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2823,17 +3220,32 @@ extension LifetimeSpecifierArgumentSyntax {
     case `self`
     case integerLiteral
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.self):
-        self = .self
-      case TokenSpec(.integerLiteral):
-        self = .integerLiteral
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .integerLiteral:
+          .integerLiteral
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .self:
+          .self
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2883,15 +3295,30 @@ extension MemberTypeSyntax {
     case identifier
     case `self`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.self):
-        self = .self
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        default:
+          nil
+        }
+      }
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .self:
+          .self
+        default:
+          nil
+        }
+      }
+      guard let match = token() ?? keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2935,15 +3362,24 @@ extension MetatypeTypeSyntax {
     case `Type`
     case `Protocol`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.Type):
-        self = .Type
-      case TokenSpec(.Protocol):
-        self = .Protocol
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .Type:
+          .Type
+        case .Protocol:
+          .Protocol
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -2987,15 +3423,21 @@ extension MultipleTrailingClosureElementSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3040,17 +3482,26 @@ extension OperatorDeclSyntax {
     case postfix
     case infix
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.prefix):
-        self = .prefix
-      case TokenSpec(.postfix):
-        self = .postfix
-      case TokenSpec(.infix):
-        self = .infix
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .prefix:
+          .prefix
+        case .postfix:
+          .postfix
+        case .infix:
+          .infix
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3101,17 +3552,23 @@ extension OperatorDeclSyntax {
     case prefixOperator
     case postfixOperator
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.prefixOperator):
-        self = .prefixOperator
-      case TokenSpec(.postfixOperator):
-        self = .postfixOperator
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .binaryOperator:
+          .binaryOperator
+        case .prefixOperator:
+          .prefixOperator
+        case .postfixOperator:
+          .postfixOperator
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3167,23 +3624,32 @@ extension OptionalBindingConditionSyntax {
     @_spi(ExperimentalLanguageFeatures)
     case _consuming
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.let):
-        self = .let
-      case TokenSpec(.var):
-        self = .var
-      case TokenSpec(.inout):
-        self = .inout
-      case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
-        self = ._mutating
-      case TokenSpec(._borrowing):
-        self = ._borrowing
-      case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
-        self = ._consuming
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .let:
+          .let
+        case .var:
+          .var
+        case .inout:
+          .inout
+        case ._mutating where languageFeatures.contains(.referenceBindings):
+          ._mutating
+        case ._borrowing:
+          ._borrowing
+        case ._consuming where languageFeatures.contains(.referenceBindings):
+          ._consuming
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3251,15 +3717,24 @@ extension PrecedenceGroupAssignmentSyntax {
     case `true`
     case `false`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.true):
-        self = .true
-      case TokenSpec(.false):
-        self = .false
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .true:
+          .true
+        case .false:
+          .false
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3304,17 +3779,26 @@ extension PrecedenceGroupAssociativitySyntax {
     case right
     case none
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.left):
-        self = .left
-      case TokenSpec(.right):
-        self = .right
-      case TokenSpec(.none):
-        self = .none
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .left:
+          .left
+        case .right:
+          .right
+        case .none:
+          ValueOptions.none
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3364,15 +3848,24 @@ extension PrecedenceGroupRelationSyntax {
     case higherThan
     case lowerThan
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.higherThan):
-        self = .higherThan
-      case TokenSpec(.lowerThan):
-        self = .lowerThan
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .higherThan:
+          .higherThan
+        case .lowerThan:
+          .lowerThan
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3417,17 +3910,23 @@ extension SameTypeRequirementSyntax {
     case prefixOperator
     case postfixOperator
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.prefixOperator):
-        self = .prefixOperator
-      case TokenSpec(.postfixOperator):
-        self = .postfixOperator
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .binaryOperator:
+          .binaryOperator
+        case .prefixOperator:
+          .prefixOperator
+        case .postfixOperator:
+          .postfixOperator
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3477,15 +3976,21 @@ extension SimpleStringLiteralExprSyntax {
     case stringQuote
     case multilineStringQuote
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.stringQuote):
-        self = .stringQuote
-      case TokenSpec(.multilineStringQuote):
-        self = .multilineStringQuote
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .stringQuote:
+          .stringQuote
+        case .multilineStringQuote:
+          .multilineStringQuote
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3529,15 +4034,21 @@ extension SimpleStringLiteralExprSyntax {
     case stringQuote
     case multilineStringQuote
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.stringQuote):
-        self = .stringQuote
-      case TokenSpec(.multilineStringQuote):
-        self = .multilineStringQuote
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .stringQuote:
+          .stringQuote
+        case .multilineStringQuote:
+          .multilineStringQuote
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3587,27 +4098,36 @@ extension SimpleTypeSpecifierSyntax {
     case consuming
     case sending
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.inout):
-        self = .inout
-      case TokenSpec(.__shared):
-        self = .__shared
-      case TokenSpec(.__owned):
-        self = .__owned
-      case TokenSpec(.isolated):
-        self = .isolated
-      case TokenSpec(._const):
-        self = ._const
-      case TokenSpec(.borrowing):
-        self = .borrowing
-      case TokenSpec(.consuming):
-        self = .consuming
-      case TokenSpec(.sending):
-        self = .sending
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .inout:
+          .inout
+        case .__shared:
+          .__shared
+        case .__owned:
+          .__owned
+        case .isolated:
+          .isolated
+        case ._const:
+          ._const
+        case .borrowing:
+          .borrowing
+        case .consuming:
+          .consuming
+        case .sending:
+          .sending
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3687,15 +4207,24 @@ extension SomeOrAnyTypeSyntax {
     case some
     case any
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.some):
-        self = .some
-      case TokenSpec(.any):
-        self = .any
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .some:
+          SomeOrAnySpecifierOptions.some
+        case .any:
+          .any
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3740,17 +4269,23 @@ extension StringLiteralExprSyntax {
     case multilineStringQuote
     case singleQuote
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.stringQuote):
-        self = .stringQuote
-      case TokenSpec(.multilineStringQuote):
-        self = .multilineStringQuote
-      case TokenSpec(.singleQuote):
-        self = .singleQuote
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .stringQuote:
+          .stringQuote
+        case .multilineStringQuote:
+          .multilineStringQuote
+        case .singleQuote:
+          .singleQuote
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3801,17 +4336,23 @@ extension StringLiteralExprSyntax {
     case multilineStringQuote
     case singleQuote
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.stringQuote):
-        self = .stringQuote
-      case TokenSpec(.multilineStringQuote):
-        self = .multilineStringQuote
-      case TokenSpec(.singleQuote):
-        self = .singleQuote
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .stringQuote:
+          .stringQuote
+        case .multilineStringQuote:
+          .multilineStringQuote
+        case .singleQuote:
+          .singleQuote
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3861,15 +4402,24 @@ extension ThrowsClauseSyntax {
     case `throws`
     case `rethrows`
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.throws):
-        self = .throws
-      case TokenSpec(.rethrows):
-        self = .rethrows
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .throws:
+          .throws
+        case .rethrows:
+          .rethrows
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3913,15 +4463,21 @@ extension TryExprSyntax {
     case postfixQuestionMark
     case exclamationMark
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.postfixQuestionMark):
-        self = .postfixQuestionMark
-      case TokenSpec(.exclamationMark):
-        self = .exclamationMark
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .postfixQuestionMark:
+          .postfixQuestionMark
+        case .exclamationMark:
+          .exclamationMark
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -3965,15 +4521,21 @@ extension TupleTypeElementSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -4017,15 +4579,21 @@ extension TupleTypeElementSyntax {
     case identifier
     case wildcard
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .identifier:
+          .identifier
+        case .wildcard:
+          .wildcard
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -4069,15 +4637,21 @@ extension UnresolvedAsExprSyntax {
     case postfixQuestionMark
     case exclamationMark
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.postfixQuestionMark):
-        self = .postfixQuestionMark
-      case TokenSpec(.exclamationMark):
-        self = .exclamationMark
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .postfixQuestionMark:
+          .postfixQuestionMark
+        case .exclamationMark:
+          .exclamationMark
+        default:
+          nil
+        }
+      }
+      guard let match = token() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -4128,25 +4702,34 @@ extension ValueBindingPatternSyntax {
     case _consuming
     case borrowing
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.let):
-        self = .let
-      case TokenSpec(.var):
-        self = .var
-      case TokenSpec(.inout):
-        self = .inout
-      case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
-        self = ._mutating
-      case TokenSpec(._borrowing):
-        self = ._borrowing
-      case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
-        self = ._consuming
-      case TokenSpec(.borrowing):
-        self = .borrowing
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .let:
+          .let
+        case .var:
+          .var
+        case .inout:
+          .inout
+        case ._mutating where languageFeatures.contains(.referenceBindings):
+          ._mutating
+        case ._borrowing:
+          ._borrowing
+        case ._consuming where languageFeatures.contains(.referenceBindings):
+          ._consuming
+        case .borrowing:
+          .borrowing
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {
@@ -4226,23 +4809,32 @@ extension VariableDeclSyntax {
     @_spi(ExperimentalLanguageFeatures)
     case _consuming
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.let):
-        self = .let
-      case TokenSpec(.var):
-        self = .var
-      case TokenSpec(.inout):
-        self = .inout
-      case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
-        self = ._mutating
-      case TokenSpec(._borrowing):
-        self = ._borrowing
-      case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
-        self = ._consuming
-      default:
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .let:
+          .let
+        case .var:
+          .var
+        case .inout:
+          .inout
+        case ._mutating where languageFeatures.contains(.referenceBindings):
+          ._mutating
+        case ._borrowing:
+          ._borrowing
+        case ._consuming where languageFeatures.contains(.referenceBindings):
+          ._consuming
+        default:
+          nil
+        }
+      }
+      guard let match = keyword() else {
         return nil
       }
+      self = match
     }
 
     public init?(token: TokenSyntax) {

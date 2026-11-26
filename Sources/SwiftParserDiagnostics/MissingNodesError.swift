@@ -10,15 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftBasicFormat
 internal import SwiftDiagnostics
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-import SwiftBasicFormat
-import SwiftDiagnostics
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 // MARK: - Shared code
 
@@ -152,8 +146,9 @@ func nodesDescriptionAndCommonParent(
     isOnlyTokenWithNonMissingText = false
   }
 
-  // If all tokens in the parent are missing, return the parent type name unless
-  // we are replacing by a single token that has explicit text, in which case we
+  // If all tokens in the common ancestor are missing, describe it by the name
+  // in the parent if available, otherwise by its type name. Unless we are
+  // replacing by a single token that has explicit text, in which case we
   // return that explicit text.
   if let commonAncestor = findCommonAncestor(missingSyntaxNodes),
     commonAncestor.isMissingAllTokens,
@@ -163,9 +158,9 @@ func nodesDescriptionAndCommonParent(
     missingSyntaxNodes.contains(Syntax(lastToken)),
     !isOnlyTokenWithNonMissingText
   {
-    if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
-      return (commonAncestor, nodeTypeName)
-    } else if let nodeTypeName = commonAncestor.childNameInParent {
+    if let childName = commonAncestor.childNameInParent {
+      return (commonAncestor, childName)
+    } else if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
       return (commonAncestor, nodeTypeName)
     }
   }
@@ -427,13 +422,27 @@ extension ParseDiagnosticsGenerator {
       }
     }
 
-    let changes = missingNodes.map { node in
+    // When the nodes are inserted before a comment that follows the previous
+    // token, the comment ends up after the last of them.
+    var carriedTrivia: Trivia? = nil
+    if let first = missingNodes.first, first.shouldBeInsertedBeforePreviousTokenTrivia,
+      let previousToken = first.previousToken(viewMode: .sourceAccurate),
+      previousToken.trailingTrivia.contains(where: { $0.isComment })
+    {
+      carriedTrivia = previousToken.trailingTrivia
+    }
+    let changes = missingNodes.enumerated().map { (index, node) in
+      let trailing = index == missingNodes.count - 1 ? carriedTrivia : nil
       if let missing = node.asProtocol(MissingNodeSyntax.self) {
         // For missing nodes, only make the placeholder present. Don’t make any
         // missing nodes, e.g. in a malformed attribute, present.
-        return FixIt.MultiNodeChange.makePresent(missing.placeholder)
+        return FixIt.MultiNodeChange.makePresent(
+          missing.placeholder,
+          trailingTrivia: trailing,
+          carriesPreviousComment: false
+        )
       } else {
-        return FixIt.MultiNodeChange.makePresent(node)
+        return FixIt.MultiNodeChange.makePresent(node, trailingTrivia: trailing, carriesPreviousComment: false)
       }
     }
     let fixIt = FixIt(

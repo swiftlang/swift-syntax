@@ -860,6 +860,13 @@ open class SyntaxRewriter {
     return StmtSyntax(FallThroughStmtSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a ``FileDefaultDeclSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: FileDefaultDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(FileDefaultDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
   /// Visit a ``FloatLiteralExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -935,6 +942,30 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionTypeSyntax) -> TypeSyntax {
     return TypeSyntax(FunctionTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
+  /// Visit a `FunctionYieldClauseSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldClauseSyntax) -> FunctionYieldClauseSyntax {
+    return FunctionYieldClauseSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a `FunctionYieldListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldListSyntax) -> FunctionYieldListSyntax {
+    return FunctionYieldListSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a `FunctionYieldSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: FunctionYieldSyntax) -> FunctionYieldSyntax {
+    return FunctionYieldSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
   /// Visit a ``GenericArgumentClauseSyntax``.
@@ -1719,6 +1750,13 @@ open class SyntaxRewriter {
     return SameTypeRequirementSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
+  /// Visit a ``SectionAttributeArgumentSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SectionAttributeArgumentSyntax) -> SectionAttributeArgumentSyntax {
+    return SectionAttributeArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``SequenceExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2061,14 +2099,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: UnsafeExprSyntax) -> ExprSyntax {
     return ExprSyntax(UnsafeExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
-  }
-
-  /// Visit a `UsingDeclSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
-  open func visit(_ node: UsingDeclSyntax) -> DeclSyntax {
-    return DeclSyntax(UsingDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
   /// Visit a ``ValueBindingPatternSyntax``.
@@ -2736,6 +2766,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitFileDefaultDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FileDefaultDeclSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitFloatLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FloatLiteralExprSyntax(unsafeCasting: node)))
   }
@@ -2788,6 +2823,21 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitFunctionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionTypeSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FunctionYieldClauseSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldListSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FunctionYieldListSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FunctionYieldSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -3346,6 +3396,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitSectionAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(SectionAttributeArgumentSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitSequenceExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(SequenceExprSyntax(unsafeCasting: node)))
   }
@@ -3588,11 +3643,6 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitUnsafeExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnsafeExprSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
-  private func visitUsingDeclSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(UsingDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -3899,6 +3949,8 @@ open class SyntaxRewriter {
       return self.visitExtensionDeclSyntaxImpl(_:)
     case .fallThroughStmt:
       return self.visitFallThroughStmtSyntaxImpl(_:)
+    case .fileDefaultDecl:
+      return self.visitFileDefaultDeclSyntaxImpl(_:)
     case .floatLiteralExpr:
       return self.visitFloatLiteralExprSyntaxImpl(_:)
     case .forStmt:
@@ -3921,6 +3973,12 @@ open class SyntaxRewriter {
       return self.visitFunctionSignatureSyntaxImpl(_:)
     case .functionType:
       return self.visitFunctionTypeSyntaxImpl(_:)
+    case .functionYieldClause:
+      return self.visitFunctionYieldClauseSyntaxImpl(_:)
+    case .functionYieldList:
+      return self.visitFunctionYieldListSyntaxImpl(_:)
+    case .functionYield:
+      return self.visitFunctionYieldSyntaxImpl(_:)
     case .genericArgumentClause:
       return self.visitGenericArgumentClauseSyntaxImpl(_:)
     case .genericArgumentList:
@@ -4143,6 +4201,8 @@ open class SyntaxRewriter {
       return self.visitReturnStmtSyntaxImpl(_:)
     case .sameTypeRequirement:
       return self.visitSameTypeRequirementSyntaxImpl(_:)
+    case .sectionAttributeArgument:
+      return self.visitSectionAttributeArgumentSyntaxImpl(_:)
     case .sequenceExpr:
       return self.visitSequenceExprSyntaxImpl(_:)
     case .simpleStringLiteralExpr:
@@ -4241,8 +4301,6 @@ open class SyntaxRewriter {
       return self.visitUnresolvedTernaryExprSyntaxImpl(_:)
     case .unsafeExpr:
       return self.visitUnsafeExprSyntaxImpl(_:)
-    case .usingDecl:
-      return self.visitUsingDeclSyntaxImpl(_:)
     case .valueBindingPattern:
       return self.visitValueBindingPatternSyntaxImpl(_:)
     case .variableDecl:
@@ -4493,6 +4551,8 @@ open class SyntaxRewriter {
       return visitExtensionDeclSyntaxImpl(node)
     case .fallThroughStmt:
       return visitFallThroughStmtSyntaxImpl(node)
+    case .fileDefaultDecl:
+      return visitFileDefaultDeclSyntaxImpl(node)
     case .floatLiteralExpr:
       return visitFloatLiteralExprSyntaxImpl(node)
     case .forStmt:
@@ -4515,6 +4575,12 @@ open class SyntaxRewriter {
       return visitFunctionSignatureSyntaxImpl(node)
     case .functionType:
       return visitFunctionTypeSyntaxImpl(node)
+    case .functionYieldClause:
+      return visitFunctionYieldClauseSyntaxImpl(node)
+    case .functionYieldList:
+      return visitFunctionYieldListSyntaxImpl(node)
+    case .functionYield:
+      return visitFunctionYieldSyntaxImpl(node)
     case .genericArgumentClause:
       return visitGenericArgumentClauseSyntaxImpl(node)
     case .genericArgumentList:
@@ -4737,6 +4803,8 @@ open class SyntaxRewriter {
       return visitReturnStmtSyntaxImpl(node)
     case .sameTypeRequirement:
       return visitSameTypeRequirementSyntaxImpl(node)
+    case .sectionAttributeArgument:
+      return visitSectionAttributeArgumentSyntaxImpl(node)
     case .sequenceExpr:
       return visitSequenceExprSyntaxImpl(node)
     case .simpleStringLiteralExpr:
@@ -4835,8 +4903,6 @@ open class SyntaxRewriter {
       return visitUnresolvedTernaryExprSyntaxImpl(node)
     case .unsafeExpr:
       return visitUnsafeExprSyntaxImpl(node)
-    case .usingDecl:
-      return visitUsingDeclSyntaxImpl(node)
     case .valueBindingPattern:
       return visitValueBindingPatternSyntaxImpl(node)
     case .variableDecl:
@@ -4899,7 +4965,7 @@ open class SyntaxRewriter {
         if newLayout.baseAddress == nil {
           // We have not yet collected any previous rewritten nodes. Initialize
           // the new layout with the previous nodes of the parent.
-          newLayout = .allocate(capacity: node.raw.layoutView!.children.count)
+          newLayout = .allocate(capacity: Int(node.raw.layoutView!.logicalChildCount))
           _ = newLayout.initialize(fromContentsOf: node.raw.layoutView!.children)
         }
 

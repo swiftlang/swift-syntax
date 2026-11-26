@@ -14,6 +14,7 @@
 
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class ModuleSelectorTests: ParserTestCase {
@@ -1794,7 +1795,7 @@ final class ModuleSelectorTests: ParserTestCase {
           CodeBlockItemSyntax(item: .expr(ExprSyntax(IntegerLiteralExprSyntax(integerLiteral: 1))))
         }
       ),
-      experimentalFeatures: [.doExpressions]
+      languageFeatures: [.doExpressions]
     )
     assertParse(
       """
@@ -1808,7 +1809,7 @@ final class ModuleSelectorTests: ParserTestCase {
         let x = Swift::<#identifier#>
         do { 1 }
         """,
-      experimentalFeatures: [.doExpressions]
+      languageFeatures: [.doExpressions]
     )
     assertParse(
       "let x = Swift::if1️⃣ y { 1 } 2️⃣else { 0 }",
@@ -2171,6 +2172,38 @@ final class ModuleSelectorTests: ParserTestCase {
         DiagnosticSpec(message: "unexpected code '#available(macOS 15, *)' in 'if' statement"),
       ],
       fixedSource: "if Swift::<#identifier#> #available(macOS 15, *) {}"
+    )
+  }
+
+  func testModuleSelectorKeywordNameAtStartOfStatement() {
+    // https://github.com/swiftlang/swift-syntax/issues/3387
+    // A module-selected reference to a keyword-named declaration must be
+    // recognized as the start of an expression at statement level, matching
+    // 'parseDeclReferenceBase', which remaps the keyword to an identifier.
+    assertParse(
+      "Module::as(x)",
+      substructure: makeCall(
+        callee: makeDeclRef(moduleSelector: "Module", baseName: "as"),
+        arguments: [nil: ExprSyntax(makeDeclRef(baseName: "x"))]
+      )
+    )
+    assertParse(
+      "Module::is(x)",
+      substructure: makeCall(
+        callee: makeDeclRef(moduleSelector: "Module", baseName: "is"),
+        arguments: [nil: ExprSyntax(makeDeclRef(baseName: "x"))]
+      )
+    )
+    assertParse(
+      """
+      func use(_ x: Int) {
+        Module::as(x)
+      }
+      """,
+      substructure: makeCall(
+        callee: makeDeclRef(moduleSelector: "Module", baseName: "as"),
+        arguments: [nil: ExprSyntax(makeDeclRef(baseName: "x"))]
+      )
     )
   }
 

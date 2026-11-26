@@ -451,7 +451,7 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
-  func testAccessor() {
+  func testAccessor1() {
     let source = """
       struct Point {
         var computed: Int {
@@ -472,6 +472,40 @@ final class BasicFormatTest: XCTestCase {
         }
         """,
       using: BasicFormat(indentationWidth: .spaces(2))
+    )
+  }
+
+  func testAccessor2() {
+    let source: AccessorDeclSyntax = """
+        get {
+          return 1
+        }
+      """
+
+    assertFormatted(
+      tree: source,
+      expected: """
+          get {
+            return 1
+          }
+        """
+    )
+  }
+
+  func testAccessor3() {
+    let source: AccessorDeclSyntax = """
+        get {
+            return 1
+        }
+      """
+
+    assertFormatted(
+      tree: source,
+      expected: """
+          get {
+              return 1
+          }
+        """
     )
   }
 
@@ -694,6 +728,23 @@ final class BasicFormatTest: XCTestCase {
       source: "let x:(Int)->Void",
       expected: "let x: (Int) -> Void"
     )
+  }
+
+  func testFloatLiteralPeriod() {
+    // Version numbers should not get a space before the period
+    assertFormattingRoundTrips(
+      """
+      #if canImport(SomeKit, _underlyingVersion: 8.0.4)
+      import SomeKit
+      #endif
+
+      """
+    )
+  }
+
+  func testFloatLiteralMemberAccess() {
+    // Float literal member access should not get a space either
+    assertFormattingRoundTrips("1.0.description")
   }
 
   func testColonColon() {

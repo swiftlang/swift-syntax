@@ -10,11 +10,37 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class AttributeTests: ParserTestCase {
+  func testMissingArgumentToAttributeFollowedByComment() {
+    // The attribute's name in the message does not include its trailing trivia.
+    assertParse(
+      """
+      @_specialize1️⃣ // comment
+      func foo() {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected '()' in attribute", fixIts: ["insert '()'"]),
+        DiagnosticSpec(
+          message: "expected argument for '@_specialize' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+      ],
+      applyFixIts: ["insert '()'"],
+      fixedSource: """
+        @_specialize() // comment
+        func foo() {
+        }
+        """
+    )
+  }
+
   func testMissingArgumentToAttribute() {
     assertParse(
       """
@@ -75,7 +101,7 @@ final class AttributeTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected ':' and arguments in '@differentiable' argument",
+          message: "expected ':' and arguments in differentiability argument",
           fixIts: ["insert ':' and arguments"]
         ),
         DiagnosticSpec(
@@ -116,6 +142,41 @@ final class AttributeTests: ParserTestCase {
       @specialized(where T : Int)
       func foo(_ t: T) {}
       """
+    )
+    assertParse(
+      """
+      @specialized(exported: true, where T == Int)
+      func foo(_ t: T) {}
+      """,
+      languageFeatures: [.extendedSpecializedAttribute]
+    )
+    // Only the 'exported' label is accepted before the 'where' clause.
+    assertParse(
+      """
+      @specialized(1️⃣kind: full, 2️⃣where T == Int)
+      func foo(_ t: T) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'where' in 'where' clause",
+          fixIts: ["insert 'where'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected left-hand type, '==', and right-hand type in same type requirement",
+          fixIts: ["insert left-hand type, '==', and right-hand type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code 'where T == Int' in attribute"
+        ),
+      ],
+      fixedSource: """
+        @specialized(where kind: full, <#type#> == <#type#>where T == Int)
+        func foo(_ t: T) {}
+        """,
+      languageFeatures: [.extendedSpecializedAttribute]
     )
   }
 
@@ -240,8 +301,38 @@ final class AttributeTests: ParserTestCase {
     assertParse(
       """
       func f(in: @differentiable(reverse) (Int) -> Int) { }
-      func f(in: @differentiable(reverse, wrt: a) (Int) -> Int) { }
       """
+    )
+  }
+
+  func testBareDifferentiableTypeAttribute() {
+    assertParse(
+      """
+      let a: @differentiable (Int) -> Int
+      func f(in: @differentiable (Int) -> Int) { }
+      let b: @differentiable(reverse) (Int) -> Int
+      let h: @differentiable (Float, Float) -> Float
+      """
+    )
+  }
+
+  func testDifferentiableTypeAttributeWithWrt() {
+    // Like the C++ parser, '(reverse, wrt: a)' is not parsed as the arguments of
+    // a '@differentiable' type attribute; it is the parameter list of a function type.
+    assertParse(
+      """
+      func f3️⃣(in: @differentiable(reverse, wrt: a)1️⃣ 2️⃣(Int) -> Int) { }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ')' to end parameter clause",
+          notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(Int) -> Int)' in function"),
+      ],
+      fixedSource: "func f(in: @differentiable(reverse, wrt: a)) (Int) -> Int) { }"
     )
   }
 
@@ -530,10 +621,40 @@ final class AttributeTests: ParserTestCase {
       """
     )
 
+    // The compiler accepts '*' in place of a platform name, with or without a
+    // version, and warns that it has no effect.
+    assertParse(
+      """
+      @backDeployed(before: macOS 12.0, *)
+      struct Foo {}
+      """
+    )
+
+    assertParse(
+      """
+      @backDeployed(before: macOS 12.0, * 9.0)
+      struct Foo {}
+      """
+    )
+
+    assertParse(
+      """
+      @backDeployed(before: *, iOS 15.0)
+      struct Foo {}
+      """
+    )
+
     // Legacy spelling @_backDeploy(before:)
     assertParse(
       """
       @_backDeploy(before: macOS 12.0)
+      struct Foo {}
+      """
+    )
+
+    assertParse(
+      """
+      @_backDeploy(before: macOS 12.0, *)
       struct Foo {}
       """
     )
@@ -873,28 +994,18 @@ final class AttributeTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected identifier in class",
-          fixIts: ["insert identifier"]
+          message: "expected identifier and member block in class",
+          fixIts: ["insert identifier and member block"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected '{' in class",
-          fixIts: ["insert '{'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "unexpected code '))' in class"
-        ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected '}' to end class",
-          fixIts: ["insert '}'"]
+          message: "unexpected code '))' in source file"
         ),
       ],
       fixedSource: """
-        @attached(member, names: named(<#expression#>)) class <#identifier#> {))
+        @attached(member, names: named(<#expression#>)) class <#identifier#> {
+        }))
         macro m()
-        }
         """
     )
   }
@@ -1307,6 +1418,159 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testSectionAttribute() {
+    func sectionAttr(_ section: SectionAttributeArgumentSyntax.Section) -> AttributeListSyntax.Element {
+      return .attribute(
+        AttributeSyntax(
+          attributeName: TypeSyntax("section"),
+          leftParen: .leftParenToken(),
+          arguments: .sectionArguments(
+            SectionAttributeArgumentSyntax(section: section)
+          ),
+          rightParen: .rightParenToken()
+        )
+      )
+    }
+
+    assertParse(
+      """
+      @section(default)
+      let x = 42
+      """,
+      substructure: sectionAttr(.defaultKeyword(.keyword(.default)))
+    )
+
+    assertParse(
+      """
+      @section("__DATA,__mysection")
+      let x = 42
+      """,
+      substructure: sectionAttr(
+        .expression(ExprSyntax(StringLiteralExprSyntax(content: "__DATA,__mysection")))
+      )
+    )
+
+    assertParse(
+      """
+      @section(sectionName)
+      let x = 42
+      """,
+      substructure: sectionAttr(.expression(ExprSyntax(DeclReferenceExprSyntax(baseName: "sectionName"))))
+    )
+
+    // An arbitrary expression is accepted in the syntax tree; whether it is a
+    // valid section is diagnosed in the compiler.
+    assertParse(
+      """
+      @section(1 + 2)
+      let x = 42
+      """
+    )
+
+    assertParse(
+      """
+      @section(default)
+      func f() {}
+      """
+    )
+
+    assertParse(
+      """
+      struct S {
+        @section(default)
+        var x = 42
+      }
+      """
+    )
+
+    assertParse(
+      """
+      func f(@section(default) x: Int) {}
+      """
+    )
+
+    // 'default' is only recognized as the keyword if it is the entire argument.
+    assertParse(
+      """
+      @section(defaultSection)
+      let x = 42
+      """,
+      substructure: sectionAttr(.expression(ExprSyntax(DeclReferenceExprSyntax(baseName: "defaultSection"))))
+    )
+
+    // A module selector makes this a custom attribute, not the builtin one.
+    assertParse(
+      """
+      @MyModule::section("__DATA,__mysection")
+      let x = 42
+      """,
+      substructure: AttributeSyntax(
+        attributeName: TypeSyntax(
+          IdentifierTypeSyntax(
+            moduleSelector: ModuleSelectorSyntax(moduleName: "MyModule"),
+            name: "section"
+          )
+        ),
+        leftParen: .leftParenToken(),
+        arguments: .argumentList([
+          LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "__DATA,__mysection"))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+  }
+
+  func testSectionAttributeRecovery() {
+    assertParse(
+      """
+      @section1️⃣
+      let x = 42
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected '(', '@section' argument, and ')' in attribute",
+          fixIts: ["insert '(', '@section' argument, and ')'"]
+        )
+      ],
+      fixedSource: """
+        @section(<#expression#>)
+        let x = 42
+        """
+    )
+
+    assertParse(
+      """
+      @section(1️⃣)
+      let x = 42
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected argument for '@section' attribute", fixIts: ["insert attribute argument"])
+      ],
+      fixedSource: """
+        @section(<#expression#>)
+        let x = 42
+        """
+    )
+
+    assertParse(
+      """
+      @sectionℹ️(default1️⃣
+      let x = 42
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ')' to end attribute",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        )
+      ],
+      fixedSource: """
+        @section(default)
+        let x = 42
+        """
+    )
+  }
+
   func testSpaceBetweenAtAndAttribute() {
     assertParse(
       "@1️⃣ custom func foo() {}",
@@ -1338,6 +1602,21 @@ final class AttributeTests: ParserTestCase {
         DiagnosticSpec(message: "extraneous whitespace after '@' is not permitted", fixIts: ["remove whitespace"])
       ],
       fixedSource: "@custom func foo() {}"
+    )
+  }
+
+  func testSpaceBetweenAtAndTypeAttribute() {
+    assertParse(
+      "let x: @1️⃣ escaping () -> Void = {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace after '@' is not permitted; this is an error in Swift 6",
+          severity: .warning,
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: "let x: @escaping () -> Void = {}",
+      swiftVersion: .v5
     )
   }
 
@@ -1526,6 +1805,25 @@ final class AttributeTests: ParserTestCase {
       var _ = [@Sendable () -> Void]()
       """,
       swiftVersion: .v5
+    )
+  }
+
+  func testUnknownDifferentiabilityKind() {
+    assertParse(
+      """
+      @differentiable(1️⃣horse)
+      func f(_ x: Float) -> Float { x }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unknown differentiability kind 'horse'; only 'reverse' is supported",
+          fixIts: ["replace 'horse' with 'reverse'"]
+        )
+      ],
+      fixedSource: """
+        @differentiable(reverse)
+        func f(_ x: Float) -> Float { x }
+        """
     )
   }
 }

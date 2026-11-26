@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension Parser {
   /// Token lookahead for the parser.
@@ -36,18 +32,18 @@ extension Parser {
 
     /// The experimental features that have been enabled in the underlying
     /// parser.
-    let experimentalFeatures: ExperimentalFeatures
+    let languageFeatures: LanguageFeatures
 
     private init(
       lexemes: Lexer.LexemeSequence,
       currentToken: Lexer.Lexeme,
       swiftVersion: SwiftVersion,
-      experimentalFeatures: ExperimentalFeatures
+      languageFeatures: LanguageFeatures
     ) {
       self.lexemes = lexemes
       self.currentToken = currentToken
       self.swiftVersion = swiftVersion
-      self.experimentalFeatures = experimentalFeatures
+      self.languageFeatures = languageFeatures
     }
 
     fileprivate init(cloning other: Parser) {
@@ -55,7 +51,7 @@ extension Parser {
         lexemes: other.lexemes,
         currentToken: other.currentToken,
         swiftVersion: other.swiftVersion,
-        experimentalFeatures: other.experimentalFeatures
+        languageFeatures: other.languageFeatures
       )
     }
 
@@ -66,7 +62,7 @@ extension Parser {
         lexemes: self.lexemes,
         currentToken: self.currentToken,
         swiftVersion: self.swiftVersion,
-        experimentalFeatures: self.experimentalFeatures
+        languageFeatures: self.languageFeatures
       )
     }
   }
@@ -341,7 +337,7 @@ extension Parser.Lookahead {
     case poundElse
     case poundElseif
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
       switch lexeme.rawTokenKind {
       case .leftParen: self = .leftParen
       case .leftBrace: self = .leftBrace
@@ -377,7 +373,10 @@ extension Parser.Lookahead {
 
   /// A non-recursive function to skip tokens.
   private mutating func skip(initialState: SkippingState) {
-    var stack: [SkippingState] = [initialState]
+    // NOTE: Don't use `stack += [...]`; it creates a temporary array per push.
+    var stack: [SkippingState] = []
+    stack.reserveCapacity(8)
+    stack.append(initialState)
 
     while let state = stack.popLast() {
       switch state {
@@ -386,19 +385,23 @@ extension Parser.Lookahead {
         switch t {
         case (.leftParen, let handle)?:
           self.eat(handle)
-          stack += [.skipSinglePost(start: .leftParen), .skipUntil(.rightParen, .rightBrace)]
+          stack.append(.skipSinglePost(start: .leftParen))
+          stack.append(.skipUntil(.rightParen, .rightBrace))
         case (.leftBrace, let handle)?:
           self.eat(handle)
-          stack += [.skipSinglePost(start: .leftBrace), .skipUntil(.rightBrace, .rightBrace)]
+          stack.append(.skipSinglePost(start: .leftBrace))
+          stack.append(.skipUntil(.rightBrace, .rightBrace))
         case (.leftSquare, let handle)?:
           self.eat(handle)
-          stack += [.skipSinglePost(start: .leftSquare), .skipUntil(.rightSquare, .rightSquare)]
+          stack.append(.skipSinglePost(start: .leftSquare))
+          stack.append(.skipUntil(.rightSquare, .rightSquare))
         case (.poundIf, let handle)?,
           (.poundElse, let handle)?,
           (.poundElseif, let handle)?:
           self.eat(handle)
           // skipUntil also implicitly stops at tok::pound_endif.
-          stack += [.skipSinglePost(start: t!.0), .skipUntil(.poundElse, .poundElseif)]
+          stack.append(.skipSinglePost(start: t!.0))
+          stack.append(.skipUntil(.poundElse, .poundElseif))
         case nil:
           self.consumeAnyToken()
         }
@@ -412,7 +415,7 @@ extension Parser.Lookahead {
           self.consume(if: .rightSquare)
         case .poundIf, .poundElse, .poundElseif:
           if self.at(.poundElse, .poundElseif) {
-            stack += [.skipSingle]
+            stack.append(.skipSingle)
           } else {
             self.consume(if: .poundElseif)
           }
@@ -420,7 +423,8 @@ extension Parser.Lookahead {
         }
       case .skipUntil(let t1, let t2):
         if !self.at(.endOfFile, t1, t2) && !self.at(.poundEndif, .poundElse, .poundElseif) {
-          stack += [.skipUntil(t1, t2), .skipSingle]
+          stack.append(.skipUntil(t1, t2))
+          stack.append(.skipSingle)
         }
       }
     }

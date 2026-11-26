@@ -12,6 +12,7 @@
 
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class TypeTests: ParserTestCase {
@@ -25,6 +26,73 @@ final class TypeTests: ParserTestCase {
       ],
       fixedSource: """
         var foo: Bar = 1
+        """
+    )
+  }
+
+  func testLegacyProtocolComposition() {
+    // `protocol<A, B>` was removed from the language. It is parsed as a generic
+    // type so the declarations that follow are not lost.
+    assertParse(
+      """
+      let a: 1️⃣protocol<P1, P2>?
+      let b: 2️⃣protocol<>
+      func f(_: 3️⃣protocol<P1>) {}
+      typealias T = 4️⃣protocol< >
+      let c = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'protocol<...>' composition syntax has been removed; join the type constraints using '&'",
+          highlight: "protocol<P1, P2>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'protocol<>' syntax has been removed; use 'Any' instead",
+          highlight: "protocol<>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "'protocol<...>' composition syntax has been removed and is not needed here",
+          highlight: "protocol<P1>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "'protocol<>' syntax has been removed; use 'Any' instead",
+          highlight: "protocol< >",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        ),
+      ],
+      fixedSource: """
+        let a: (P1 & P2)?
+        let b: Any
+        func f(_: P1) {}
+        typealias T = Any
+        let c = 0
+        """
+    )
+  }
+
+  func testLegacyProtocolCompositionInClosureResult() {
+    // The lookahead that recognizes a closure signature has to accept the
+    // removed composition too, or the closure is parsed as a body.
+    assertParse(
+      """
+      let f = { () -> 1️⃣protocol<P> in 1 }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'protocol<...>' composition syntax has been removed and is not needed here",
+          highlight: "protocol<P>",
+          fixIts: ["replace 'protocol<...>' with a composition using '&'"]
+        )
+      ],
+      fixedSource: """
+        let f = { () -> P in 1 }
         """
     )
   }
@@ -438,9 +506,9 @@ final class TypeTests: ParserTestCase {
   }
 
   func testLifetimeSpecifier() {
-    assertParse("func foo() -> dependsOn(x) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(x) X", languageFeatures: [.nonescapableTypes])
 
-    assertParse("func foo() -> dependsOn(x, y) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(x, y) X", languageFeatures: [.nonescapableTypes])
 
     assertParse(
       "func foo() -> dependsOn(1️⃣) X",
@@ -452,7 +520,7 @@ final class TypeTests: ParserTestCase {
         )
       ],
       fixedSource: "func foo() -> dependsOn(<#identifier#>) X",
-      experimentalFeatures: [.nonescapableTypes]
+      languageFeatures: [.nonescapableTypes]
     )
 
     assertParse(
@@ -465,12 +533,12 @@ final class TypeTests: ParserTestCase {
         )
       ],
       fixedSource: "func foo() -> dependsOn(x, <#identifier#>) X",
-      experimentalFeatures: [.nonescapableTypes]
+      languageFeatures: [.nonescapableTypes]
     )
 
-    assertParse("func foo() -> dependsOn(x) dependsOn(scoped y) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(x) dependsOn(scoped y) X", languageFeatures: [.nonescapableTypes])
 
-    assertParse("func foo() -> dependsOn(scoped x) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(scoped x) X", languageFeatures: [.nonescapableTypes])
 
     assertParse(
       "func foo() -> dependsOn1️⃣ X",
@@ -482,7 +550,7 @@ final class TypeTests: ParserTestCase {
         )
       ],
       fixedSource: "func foo() -> dependsOn(<#identifier#>) X",
-      experimentalFeatures: [.nonescapableTypes]
+      languageFeatures: [.nonescapableTypes]
     )
 
     assertParse(
@@ -496,7 +564,7 @@ final class TypeTests: ParserTestCase {
       ],
       fixedSource:
         "func foo() -> dependsOn(<#identifier#>) @Sendable (Int, isolated (any Actor)?) async throws -> Void",
-      experimentalFeatures: [.nonescapableTypes]
+      languageFeatures: [.nonescapableTypes]
     )
 
     assertParse(
@@ -510,12 +578,12 @@ final class TypeTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '*' in lifetime specifier"),
       ],
       fixedSource: "func foo() -> dependsOn(<#identifier#>*) X",
-      experimentalFeatures: [.nonescapableTypes]
+      languageFeatures: [.nonescapableTypes]
     )
 
-    assertParse("func foo() -> dependsOn(0) X", diagnostics: [], experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(0) X", diagnostics: [], languageFeatures: [.nonescapableTypes])
 
-    assertParse("func foo() -> dependsOn(self) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(self) X", languageFeatures: [.nonescapableTypes])
 
     assertParse(
       "func foo() -> dependsOn1️⃣(0)2️⃣ X",
@@ -548,7 +616,7 @@ final class TypeTests: ParserTestCase {
         DiagnosticSpec(message: "unexpected code '-1' in lifetime specifier"),
       ],
       fixedSource: "func foo() -> dependsOn(<#identifier#>-1) X",
-      experimentalFeatures: [.nonescapableTypes]
+      languageFeatures: [.nonescapableTypes]
     )
   }
 
@@ -772,6 +840,30 @@ final class TypeTests: ParserTestCase {
       """
     )
   }
+
+  func testYields() {
+    assertParse(
+      """
+      { () yields(Int) -> Void in }
+      """
+    )
+
+    assertParse(
+      "typealias T = () yields(Int) -> Void"
+    )
+
+    assertParse(
+      """
+      { () yields(inout Int) -> Void in }
+      """
+    )
+
+    assertParse(
+      """
+      { () yields(inout Int) -> Int in }
+      """
+    )
+  }
 }
 
 final class InlineArrayTypeTests: ParserTestCase {
@@ -871,5 +963,196 @@ final class InlineArrayTypeTests: ParserTestCase {
   func testEllipsis() {
     // Make sure this isn't parsed as '<variadic-type> of <missing type>'
     assertParse("[x...of]")
+  }
+
+  func testExpressionCount() {
+    assertParse(
+      "InlineArray<1️⃣(1 + 3), Int>()",
+      { ExprSyntax.parse(from: &$0) },
+      substructure: GenericArgumentSyntax(
+        argument: .expr(
+          ExprSyntax(
+            TupleExprSyntax(
+              elements: .init([
+                .init(
+                  expression: SequenceExprSyntax(
+                    elements: .init([
+                      ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
+                      ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator("+"))),
+                      ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("3"))),
+                    ])
+                  )
+                )
+              ])
+            )
+          )
+        ),
+        trailingComma: .commaToken()
+      ),
+      substructureAfterMarker: "1️⃣",
+      languageFeatures: .literalExpressions
+    )
+  }
+
+  func testSugaredExpressionCount() {
+    // Parenthesized expression as count in a sugared InlineArray syntax
+    assertParse(
+      "[(2 + 3) of Int]",
+      substructure: InlineArrayTypeSyntax(
+        count: .init(
+          argument: .expr(
+            ExprSyntax(
+              TupleExprSyntax(
+                elements: .init([
+                  .init(
+                    expression: SequenceExprSyntax(
+                      elements: .init([
+                        ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))),
+                        ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator("+"))),
+                        ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("3"))),
+                      ])
+                    )
+                  )
+                ])
+              )
+            )
+          )
+        ),
+        separator: .keyword(.of),
+        element: .init(argument: .type(TypeSyntax("Int")))
+      ),
+      languageFeatures: .literalExpressions
+    )
+  }
+
+  func testNestedExpressionCount() {
+    // Nested inline arrays with expression counts
+    assertParse(
+      "[(1 + 1) of [(2 + 1) of Int]]",
+      languageFeatures: .literalExpressions
+    )
+  }
+  func testParenthesizedOpaqueGenericArgument() {
+    // A parenthesized generic argument is parsed as a value expression when
+    // LiteralExpressions is enabled, so `some` must be accepted in an
+    // expression, as `any` is.
+    assertParse(
+      "func f(_ x: G<(some P)>) {}",
+      substructure: TypeExprSyntax(
+        type: SomeOrAnyTypeSyntax(
+          someOrAnySpecifier: .keyword(.some),
+          constraint: TypeSyntax(IdentifierTypeSyntax(name: .identifier("P")))
+        )
+      ),
+      languageFeatures: .literalExpressions
+    )
+
+    assertParse(
+      "func f(_ x: G<(any P)>) {}",
+      substructure: TypeExprSyntax(
+        type: SomeOrAnyTypeSyntax(
+          someOrAnySpecifier: .keyword(.any),
+          constraint: TypeSyntax(IdentifierTypeSyntax(name: .identifier("P")))
+        )
+      ),
+      languageFeatures: .literalExpressions
+    )
+
+    assertParse(
+      "var v: G<(some P)> { G<S>() }",
+      languageFeatures: .literalExpressions
+    )
+
+    // `some` is still an ordinary identifier when it can't start a type.
+    assertParse(
+      """
+      some = 1
+      some.foo()
+      some(1)
+      _ = some + 1
+      """
+    )
+  }
+
+  func testSomeOrAnyInMiddleOfComposition() {
+    assertParse(
+      """
+      let a: P & 1️⃣some Q = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'some' should appear at the beginning of a composition",
+          fixIts: ["move 'some' to the beginning of the composition"]
+        )
+      ],
+      fixedSource: """
+        let a: some P & Q = 1
+        """
+    )
+    assertParse(
+      """
+      let a: any P & 1️⃣any Q
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'any' should appear at the beginning of a composition",
+          fixIts: ["remove 'any'"]
+        )
+      ],
+      fixedSource: """
+        let a: any P & Q
+        """
+    )
+  }
+
+  func testDefaultArgumentInTupleType() {
+    assertParse(
+      """
+      let t: (Int 1️⃣= 3, Int) = (1, 2)
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "default argument not permitted in a tuple type",
+          fixIts: ["remove '=' and integer literal"]
+        )
+      ],
+      fixedSource: """
+        let t: (Int , Int) = (1, 2)
+        """
+    )
+  }
+
+  func testOldStyleArrayType() {
+    assertParse(
+      """
+      var v: Int1️⃣[] = []
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["insert '['"]
+        )
+      ],
+      fixedSource: """
+        var v: [Int] = []
+        """
+    )
+  }
+
+  func testOldStyleArrayTypeWithSize() {
+    assertParse(
+      """
+      var v: Int1️⃣[3] = []
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "array types are now written with the brackets around the element type",
+          fixIts: ["write as an inline array type"]
+        )
+      ],
+      fixedSource: """
+        var v: [3 of Int] = []
+        """
+    )
   }
 }

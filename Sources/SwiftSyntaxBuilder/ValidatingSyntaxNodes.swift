@@ -10,15 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 internal import SwiftDiagnostics
 internal import SwiftParserDiagnostics
 public import SwiftSyntax
-#else
-import SwiftDiagnostics
-import SwiftParserDiagnostics
-import SwiftSyntax
-#endif
 
 extension SyntaxProtocol {
   /// If `node` has contains no syntax errors, return `node`, otherwise

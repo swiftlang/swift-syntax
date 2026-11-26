@@ -77,7 +77,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     _ indexInTree: SyntaxIndexInTree,
     relativeToRoot root: some SyntaxProtocol
   ) -> SyntaxIdentifier? {
-    guard !root.hasParent, Int(truncatingIfNeeded: indexInTree.indexInTree) < root.raw.totalNodes else {
+    guard !root.hasParent, indexInTree.indexInTree < root.raw.totalNodes else {
       return nil
     }
 

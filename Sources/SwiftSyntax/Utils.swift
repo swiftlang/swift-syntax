@@ -79,26 +79,3 @@ extension Range<AbsolutePosition> {
     }
   }
 }
-
-extension RawUnexpectedNodesSyntax {
-  /// Construct a ``RawUnexpectedNodesSyntax``with the given `elements`.
-  ///
-  /// If `isMaximumNestingLevelOverflow` is `true`, the node has the
-  /// `isMaximumNestingLevelOverflow` error bit set, indicating that the parser
-  /// overflowed its maximum nesting level and thus aborted parsing.
-  public init(elements: [RawSyntax], isMaximumNestingLevelOverflow: Bool, arena: __shared RawSyntaxArena) {
-    let raw = RawSyntax.makeLayout(
-      kind: .unexpectedNodes,
-      uninitializedCount: elements.count,
-      isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow,
-      arena: arena
-    ) { layout in
-      guard var ptr = layout.baseAddress else { return }
-      for elem in elements {
-        ptr.initialize(to: elem.raw)
-        ptr += 1
-      }
-    }
-    self.init(raw: raw)
-  }
-}

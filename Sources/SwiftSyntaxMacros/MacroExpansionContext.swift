@@ -10,17 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftDiagnostics
 public import SwiftIfConfig
 public import SwiftSyntax
 import SwiftSyntaxBuilder
-#else
-import SwiftDiagnostics
-import SwiftIfConfig
-import SwiftSyntax
-import SwiftSyntaxBuilder
-#endif
 
 /// Interface to extract information about the context in which a given
 /// macro is expanded.
@@ -99,18 +92,10 @@ extension MacroExpansionContext {
     return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
   }
 
-  #if compiler(>=6.0)
   @available(*, deprecated, message: "`MacroExpansionContext` conformance must implement `lexicalContext`")
   public var lexicalContext: [Syntax] {
     return []
   }
-  #else
-  public var lexicalContext: [Syntax] {
-    fatalError(
-      "`MacroExpansionContext` conformance must implement `lexicalContext`"
-    )
-  }
-  #endif
 }
 
 private enum MacroExpansionContextError: DiagnosticMessage {

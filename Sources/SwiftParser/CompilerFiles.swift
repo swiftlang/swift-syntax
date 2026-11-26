@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-#endif
 
 extension Parser {
   /// Parse an argument for `-define-availability` compiler option.
@@ -50,7 +46,7 @@ extension Parser {
 
     return RawAccessorBlockFileSyntax(
       leftBrace: leftBrace,
-      accessors: accessors ?? RawAccessorDeclListSyntax(elements: [], arena: self.arena),
+      accessors: accessors ?? RawAccessorDeclListSyntax(elements: .init(), arena: self.arena),
       unexpectedBeforeRightBrace,
       rightBrace: rightBrace,
       unexpectedBeforeEndOfFileToken,

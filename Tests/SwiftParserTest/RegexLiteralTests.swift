@@ -10,8 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class RegexLiteralTests: ParserTestCase {
@@ -916,7 +918,6 @@ final class RegexLiteralTests: ParserTestCase {
   }
 
   func testBinOpDisambiguation28() {
-    // FIXME: The diagnostic should be one character back
     assertParse(
       #"""
       \1️⃣ /^ x/

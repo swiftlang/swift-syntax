@@ -10,15 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import Foundation
 private import XCTest
 private import _SwiftSyntaxGenericTestSupport
-#else
-import Foundation
-import XCTest
-import _SwiftSyntaxGenericTestSupport
-#endif
 
 /// Asserts that the two strings are equal, providing Unix `diff`-style output if they are not.
 ///

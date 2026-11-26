@@ -13,7 +13,6 @@
 /// A struct wrapper for a diagnostic group inheritance tree
 /// represented with a dictionary of a group identifier to an array
 /// of its sub-group identifiers.
-@_spi(ExperimentalLanguageFeatures)
 public struct DiagnosticGroupInheritanceTree {
   private let subGroups: [DiagnosticGroupIdentifier: [DiagnosticGroupIdentifier]]
   public init(subGroups: [DiagnosticGroupIdentifier: [DiagnosticGroupIdentifier]]) throws {
@@ -63,7 +62,6 @@ extension DiagnosticGroupInheritanceTree {
 /// Describes the kinds of diagnostics that can occur when processing warning
 /// group control queries. This is an Error-conforming type so we can throw errors when
 /// needed.
-@_spi(ExperimentalLanguageFeatures)
 public enum WarningControlError: Error, CustomStringConvertible {
   case groupInheritanceCycle
 

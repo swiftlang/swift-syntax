@@ -10,16 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension Parser {
   /// Parse a list of availability arguments.
-  mutating func parseAvailabilitySpecList() -> RawAvailabilityArgumentListSyntax {
-    var elements = [RawAvailabilityArgumentSyntax]()
+  ///
+  /// If `allowTrailingComma` is `true`, a comma directly before the closing
+  /// parenthesis ends the list instead of starting another argument.
+  mutating func parseAvailabilitySpecList(allowTrailingComma: Bool = false) -> RawAvailabilityArgumentListSyntax {
+    var elements = RawSyntaxNodeListBuilder<RawAvailabilityArgumentSyntax>()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var availabilityArgumentProgress = LoopProgressCondition()
@@ -45,13 +44,15 @@ extension Parser {
             unexpectedBeforeKeepGoing,
             trailingComma: keepGoing,
             arena: self.arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       } while keepGoing != nil
+        && !(allowTrailingComma && self.at(.rightParen))
         && self.hasProgressed(&availabilityArgumentProgress)
     }
 
-    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   enum AvailabilityArgumentKind: TokenSpecSet {
@@ -65,19 +66,35 @@ extension Parser {
     case star
     case identifier
 
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.message): self = .message
-      case TokenSpec(.renamed): self = .renamed
-      case TokenSpec(.introduced): self = .introduced
-      case TokenSpec(.deprecated): self = .deprecated
-      case TokenSpec(.obsoleted): self = .obsoleted
-      case TokenSpec(.unavailable): self = .unavailable
-      case TokenSpec(.noasync): self = .noasync
-      case TokenSpec(.binaryOperator) where lexeme.tokenText == "*": self = .star
-      case TokenSpec(.identifier): self = .identifier
-      default: return nil
+    init?(lexeme: Lexer.Lexeme, languageFeatures: Parser.LanguageFeatures) {
+      func token() -> Self? {
+        return switch lexeme.rawTokenKind {
+        case .binaryOperator where lexeme.tokenText == "*": .star
+        case .identifier: .identifier
+        default: nil
+        }
       }
+
+      func keyword() -> Self? {
+        guard let keyword = lexeme.keyword else {
+          return nil
+        }
+        return switch keyword {
+        case .message: .message
+        case .renamed: .renamed
+        case .introduced: .introduced
+        case .deprecated: .deprecated
+        case .obsoleted: .obsoleted
+        case .unavailable: .unavailable
+        case .noasync: .noasync
+        default: nil
+        }
+      }
+
+      guard let match = keyword() ?? token() else {
+        return nil
+      }
+      self = match
     }
 
     var spec: TokenSpec {
@@ -96,7 +113,7 @@ extension Parser {
   }
 
   mutating func parseAvailabilityArgumentSpecList() -> RawAvailabilityArgumentListSyntax {
-    var elements = [RawAvailabilityArgumentSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawAvailabilityArgumentSyntax>()
     var keepGoing: RawTokenSyntax? = nil
 
     var loopProgress = LoopProgressCondition()
@@ -171,10 +188,11 @@ extension Parser {
           argument: entry,
           trailingComma: keepGoing,
           arena: self.arena
-        )
+        ),
+        allocator: self.nodeListAllocator
       )
     } while keepGoing != nil && self.hasProgressed(&loopProgress)
-    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements.build(), arena: self.arena)
   }
 
   /// Parse an availability argument.
@@ -191,7 +209,8 @@ extension Parser {
   /// Availability macros are not an official part of the Swift language.
   ///
   /// If `allowStarAsVersionNumber` is `true`, versions like `* 13.0` are accepted.
-  /// This is to match the behavior of `@_originallyDefinedIn` in the old parser that accepted such versions
+  /// This is to match the behavior of `@_originallyDefinedIn` and `@backDeployed` in the old parser that
+  /// accepted such versions
   mutating func parsePlatformVersion(allowStarAsVersionNumber: Bool = false) -> RawPlatformVersionSyntax {
     let unexpectedBeforePlatform: RawUnexpectedNodesSyntax?
     let platform: RawTokenSyntax
@@ -267,7 +286,7 @@ extension Parser {
         as: .integerLiteral
       )
 
-      var components: [RawVersionComponentSyntax] = []
+      var components = RawSyntaxNodeListBuilder<RawVersionComponentSyntax>()
 
       var loopProgress = LoopProgressCondition()
       while self.hasProgressed(&loopProgress) {
@@ -278,7 +297,7 @@ extension Parser {
 
         let versionComponent = RawVersionComponentSyntax(period: period, number: version, arena: self.arena)
 
-        components.append(versionComponent)
+        components.append(versionComponent, allocator: self.nodeListAllocator)
 
         if version.isMissing {
           break
@@ -288,7 +307,7 @@ extension Parser {
       let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
       return RawVersionTupleSyntax(
         major: major,
-        components: RawVersionComponentListSyntax(elements: components, arena: self.arena),
+        components: RawVersionComponentListSyntax(elements: components.build(), arena: self.arena),
         unexpectedAfterComponents,
         arena: self.arena
       )
@@ -297,7 +316,7 @@ extension Parser {
       let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
       return RawVersionTupleSyntax(
         major: major,
-        components: RawVersionComponentListSyntax(elements: [], arena: self.arena),
+        components: RawVersionComponentListSyntax(elements: .init(), arena: self.arena),
         unexpectedAfterComponents,
         arena: self.arena
       )

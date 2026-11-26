@@ -737,9 +737,133 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return false
     }
   }
+
+  /// The name of this case, without using reflection.
+  var debugDescription: String {
+    switch self {
+    case .arrow:
+      return "arrow"
+    case .atSign:
+      return "atSign"
+    case .backslash:
+      return "backslash"
+    case .backtick:
+      return "backtick"
+    case .binaryOperator:
+      return "binaryOperator"
+    case .colon:
+      return "colon"
+    case .colonColon:
+      return "colonColon"
+    case .comma:
+      return "comma"
+    case .dollarIdentifier:
+      return "dollarIdentifier"
+    case .ellipsis:
+      return "ellipsis"
+    case .endOfFile:
+      return "endOfFile"
+    case .equal:
+      return "equal"
+    case .exclamationMark:
+      return "exclamationMark"
+    case .floatLiteral:
+      return "floatLiteral"
+    case .identifier:
+      return "identifier"
+    case .infixQuestionMark:
+      return "infixQuestionMark"
+    case .integerLiteral:
+      return "integerLiteral"
+    case .keyword:
+      return "keyword"
+    case .leftAngle:
+      return "leftAngle"
+    case .leftBrace:
+      return "leftBrace"
+    case .leftParen:
+      return "leftParen"
+    case .leftSquare:
+      return "leftSquare"
+    case .multilineStringQuote:
+      return "multilineStringQuote"
+    case .period:
+      return "period"
+    case .postfixOperator:
+      return "postfixOperator"
+    case .postfixQuestionMark:
+      return "postfixQuestionMark"
+    case .pound:
+      return "pound"
+    case .poundAvailable:
+      return "poundAvailable"
+    case .poundElse:
+      return "poundElse"
+    case .poundElseif:
+      return "poundElseif"
+    case .poundEndif:
+      return "poundEndif"
+    case .poundIf:
+      return "poundIf"
+    case .poundSourceLocation:
+      return "poundSourceLocation"
+    case .poundUnavailable:
+      return "poundUnavailable"
+    case .prefixAmpersand:
+      return "prefixAmpersand"
+    case .prefixOperator:
+      return "prefixOperator"
+    case .rawStringPoundDelimiter:
+      return "rawStringPoundDelimiter"
+    case .regexLiteralPattern:
+      return "regexLiteralPattern"
+    case .regexPoundDelimiter:
+      return "regexPoundDelimiter"
+    case .regexSlash:
+      return "regexSlash"
+    case .rightAngle:
+      return "rightAngle"
+    case .rightBrace:
+      return "rightBrace"
+    case .rightParen:
+      return "rightParen"
+    case .rightSquare:
+      return "rightSquare"
+    case .semicolon:
+      return "semicolon"
+    case .shebang:
+      return "shebang"
+    case .singleQuote:
+      return "singleQuote"
+    case .stringQuote:
+      return "stringQuote"
+    case .stringSegment:
+      return "stringSegment"
+    case .unknown:
+      return "unknown"
+    case .wildcard:
+      return "wildcard"
+    }
+  }
 }
 
 extension TokenKind {
+  /// A description like `String(describing:)` that doesn't use reflection.
+  var debugDescription: String {
+    // There are three kinds of payloads...
+    switch decomposeToRaw() {
+    case (.keyword, let text?):
+      // 1. A `Keyword` payload, e.g., `.keyword(.func)`
+      return "keyword(SwiftSyntax.Keyword.\(text))"
+    case (let rawKind, let text?):
+      // 2. A `String` payload, e.g., `.identifier("x")`
+      return "\(rawKind.debugDescription)(\(text.debugDescription))"
+    case (let rawKind, nil):
+      // 3. No payload, e.g., `.arrow`
+      return rawKind.debugDescription
+    }
+  }
+
   /// If the `rawKind` has a `defaultText`, `text` can be empty.
   @_spi(RawSyntax)
   public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind {

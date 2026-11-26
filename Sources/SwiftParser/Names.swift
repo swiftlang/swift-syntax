@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftSyntax
-#else
-@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
-#endif
 
 extension Parser {
   mutating func parseAnyIdentifier() -> RawTokenSyntax {
@@ -251,7 +247,7 @@ extension Parser {
 
   mutating func parsePresentArgumentLabelList() -> RawDeclNameArgumentsSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    var elements = [RawDeclNameArgumentSyntax]()
+    var elements = RawSyntaxNodeListBuilder<RawDeclNameArgumentSyntax>()
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightParen) && self.hasProgressed(&loopProgress) {
@@ -265,7 +261,8 @@ extension Parser {
             unexpectedBeforeColon,
             colon: colon,
             arena: arena
-          )
+          ),
+          allocator: self.nodeListAllocator
         )
       }
     }
@@ -273,7 +270,7 @@ extension Parser {
     return RawDeclNameArgumentsSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
-      arguments: RawDeclNameArgumentListSyntax(elements: elements, arena: self.arena),
+      arguments: RawDeclNameArgumentListSyntax(elements: elements.build(), arena: self.arena),
       unexpectedBeforeRParen,
       rightParen: rparen,
       arena: arena
@@ -426,7 +423,7 @@ extension Lexer.Lexeme {
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {
     // Currently we can ignore experimental features since a new kind of
     // non-prefix/infix/postfix operator seems unlikely.
-    return Operator(lexeme: self, experimentalFeatures: []) != nil && self.tokenText == name
+    return Operator(lexeme: self, languageFeatures: []) != nil && self.tokenText == name
   }
 
   var isLexerClassifiedKeyword: Bool {

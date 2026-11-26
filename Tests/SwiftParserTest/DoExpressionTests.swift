@@ -12,10 +12,11 @@
 
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class DoExpressionTests: ParserTestCase {
-  override var experimentalFeatures: Parser.ExperimentalFeatures {
+  override var languageFeatures: Parser.LanguageFeatures {
     [.doExpressions, .thenStatements]
   }
 
@@ -285,7 +286,7 @@ final class DoExpressionTests: ParserTestCase {
         return
         do { 5 }
         """,
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 
@@ -301,7 +302,7 @@ final class DoExpressionTests: ParserTestCase {
             IntegerLiteralExprSyntax(5)
           }
         ),
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 
@@ -316,7 +317,7 @@ final class DoExpressionTests: ParserTestCase {
             IntegerLiteralExprSyntax(5)
           }
         ),
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 
@@ -334,7 +335,7 @@ final class DoExpressionTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'as Int' in source file")
       ],
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 
@@ -350,7 +351,7 @@ final class DoExpressionTests: ParserTestCase {
         )
       ],
       fixedSource: "let x = <#expression#>do { 5 }",
-      experimentalFeatures: []
+      languageFeatures: []
     )
   }
 }

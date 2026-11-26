@@ -140,18 +140,25 @@ extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// DeclSyntaxProtocol.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(DeclSyntaxProtocol.self) != nil
   }
-
-  /// Return the non-type erased version of this syntax node if it conforms to
-  /// DeclSyntaxProtocol. Otherwise return nil.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol? {
-    return self.asProtocol(SyntaxProtocol.self) as? DeclSyntaxProtocol
-  }
+/// Return the non-type erased version of this syntax node if it conforms to
+/// DeclSyntaxProtocol. Otherwise return nil.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol? {
+  #if !hasFeature(Embedded)
+  return self.asProtocol(SyntaxProtocol.self) as? DeclSyntaxProtocol
+  #endif
+}
 }
 
 /// ### Subtypes
@@ -165,6 +172,7 @@ extension Syntax {
 /// - ``EnumCaseDeclSyntax``
 /// - ``EnumDeclSyntax``
 /// - ``ExtensionDeclSyntax``
+/// - ``FileDefaultDeclSyntax``
 /// - ``FunctionDeclSyntax``
 /// - ``IfConfigDeclSyntax``
 /// - ``ImportDeclSyntax``
@@ -184,10 +192,19 @@ extension Syntax {
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .fileDefaultDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .variableDecl:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``DeclSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some DeclSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -200,9 +217,12 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared DeclSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
-    self = Syntax(syntax).cast(Self.self)
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
+    self = syntax._syntaxNode.cast(Self.self)
   }
 
   /// Create a ``DeclSyntax`` node from a specialized optional syntax node.
@@ -214,29 +234,31 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .usingDecl, .variableDecl:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `DeclSyntaxProtocol`. This API is just
   /// added for consistency.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
     return true
   }
-
-  /// Return the non-type erased version of this syntax node.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
-    return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
-  }
+/// Return the non-type erased version of this syntax node.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
+  return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
+}
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
@@ -249,6 +271,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(EnumCaseDeclSyntax.self),
       .node(EnumDeclSyntax.self),
       .node(ExtensionDeclSyntax.self),
+      .node(FileDefaultDeclSyntax.self),
       .node(FunctionDeclSyntax.self),
       .node(IfConfigDeclSyntax.self),
       .node(ImportDeclSyntax.self),
@@ -264,7 +287,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(SubscriptDeclSyntax.self),
       .node(TypeAliasDeclSyntax.self),
       .node(UnexpectedCodeDeclSyntax.self),
-      .node(UsingDeclSyntax.self),
       .node(VariableDeclSyntax.self)
     ])
   }
@@ -442,18 +464,25 @@ extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// ExprSyntaxProtocol.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(ExprSyntaxProtocol.self) != nil
   }
-
-  /// Return the non-type erased version of this syntax node if it conforms to
-  /// ExprSyntaxProtocol. Otherwise return nil.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol? {
-    return self.asProtocol(SyntaxProtocol.self) as? ExprSyntaxProtocol
-  }
+/// Return the non-type erased version of this syntax node if it conforms to
+/// ExprSyntaxProtocol. Otherwise return nil.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol? {
+  #if !hasFeature(Embedded)
+  return self.asProtocol(SyntaxProtocol.self) as? ExprSyntaxProtocol
+  #endif
+}
 }
 
 /// ### Subtypes
@@ -512,10 +541,19 @@ extension Syntax {
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr, .unsafeExpr:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``ExprSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some ExprSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -528,9 +566,12 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared ExprSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
-    self = Syntax(syntax).cast(Self.self)
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
+    self = syntax._syntaxNode.cast(Self.self)
   }
 
   /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
@@ -542,29 +583,31 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr, .unsafeExpr:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `ExprSyntaxProtocol`. This API is just
   /// added for consistency.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
     return true
   }
-
-  /// Return the non-type erased version of this syntax node.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
-    return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
-  }
+/// Return the non-type erased version of this syntax node.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
+  return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
+}
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
@@ -798,18 +841,25 @@ extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// PatternSyntaxProtocol.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(PatternSyntaxProtocol.self) != nil
   }
-
-  /// Return the non-type erased version of this syntax node if it conforms to
-  /// PatternSyntaxProtocol. Otherwise return nil.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol? {
-    return self.asProtocol(SyntaxProtocol.self) as? PatternSyntaxProtocol
-  }
+/// Return the non-type erased version of this syntax node if it conforms to
+/// PatternSyntaxProtocol. Otherwise return nil.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol? {
+  #if !hasFeature(Embedded)
+  return self.asProtocol(SyntaxProtocol.self) as? PatternSyntaxProtocol
+  #endif
+}
 }
 
 /// ### Subtypes
@@ -824,10 +874,19 @@ extension Syntax {
 public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``PatternSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some PatternSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -840,9 +899,12 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared PatternSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
-    self = Syntax(syntax).cast(Self.self)
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
+    self = syntax._syntaxNode.cast(Self.self)
   }
 
   /// Create a ``PatternSyntax`` node from a specialized optional syntax node.
@@ -854,29 +916,31 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `PatternSyntaxProtocol`. This API is just
   /// added for consistency.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
     return true
   }
-
-  /// Return the non-type erased version of this syntax node.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol {
-    return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
-  }
+/// Return the non-type erased version of this syntax node.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol {
+  return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
+}
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
@@ -1063,18 +1127,25 @@ extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// StmtSyntaxProtocol.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(StmtSyntaxProtocol.self) != nil
   }
-
-  /// Return the non-type erased version of this syntax node if it conforms to
-  /// StmtSyntaxProtocol. Otherwise return nil.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol? {
-    return self.asProtocol(SyntaxProtocol.self) as? StmtSyntaxProtocol
-  }
+/// Return the non-type erased version of this syntax node if it conforms to
+/// StmtSyntaxProtocol. Otherwise return nil.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol? {
+  #if !hasFeature(Embedded)
+  return self.asProtocol(SyntaxProtocol.self) as? StmtSyntaxProtocol
+  #endif
+}
 }
 
 /// ### Subtypes
@@ -1098,10 +1169,19 @@ extension Syntax {
 public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``StmtSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some StmtSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -1114,9 +1194,12 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared StmtSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
-    self = Syntax(syntax).cast(Self.self)
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
+    self = syntax._syntaxNode.cast(Self.self)
   }
 
   /// Create a ``StmtSyntax`` node from a specialized optional syntax node.
@@ -1128,29 +1211,31 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `StmtSyntaxProtocol`. This API is just
   /// added for consistency.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
     return true
   }
-
-  /// Return the non-type erased version of this syntax node.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
-    return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
-  }
+/// Return the non-type erased version of this syntax node.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
+  return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
+}
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
@@ -1347,18 +1432,25 @@ extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// TypeSyntaxProtocol.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
+  @_unavailableInEmbedded
   public func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(TypeSyntaxProtocol.self) != nil
   }
-
-  /// Return the non-type erased version of this syntax node if it conforms to
-  /// TypeSyntaxProtocol. Otherwise return nil.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol? {
-    return self.asProtocol(SyntaxProtocol.self) as? TypeSyntaxProtocol
-  }
+/// Return the non-type erased version of this syntax node if it conforms to
+/// TypeSyntaxProtocol. Otherwise return nil.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol? {
+  #if !hasFeature(Embedded)
+  return self.asProtocol(SyntaxProtocol.self) as? TypeSyntaxProtocol
+  #endif
+}
 }
 
 /// ### Subtypes
@@ -1385,10 +1477,19 @@ extension Syntax {
 public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  static func isKindOf(_ kind: SyntaxKind) -> Bool {
+    switch kind {
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+      return true
+    default:
+      return false
+    }
+  }
+
   /// Create a ``TypeSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some TypeSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `Syntax.init(_:)` just to double-check and
+    // verify the kind matches.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -1401,9 +1502,12 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared TypeSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
-    // verify the kind matches in debug builds and get maximum performance in release builds.
-    self = Syntax(syntax).cast(Self.self)
+    // We know this cast is going to succeed. Go through `SyntaxProtocol/_syntaxNode`
+    // just to double-check and verify the kind matches.
+    //
+    // Note: We use `syntax._syntaxNode` rather than `Syntax(syntax)` to avoid
+    // opening the existential.
+    self = syntax._syntaxNode.cast(Self.self)
   }
 
   /// Create a ``TypeSyntax`` node from a specialized optional syntax node.
@@ -1415,29 +1519,31 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    switch node.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
-      self._syntaxNode = node._syntaxNode
-    default:
+    guard Self.isKindOf(node.raw.kind) else {
       return nil
     }
+    self._syntaxNode = node._syntaxNode
   }
 
   /// Syntax nodes always conform to `TypeSyntaxProtocol`. This API is just
   /// added for consistency.
   ///
-  ///  - Note:  This will incur an existential conversion.
+  ///  - Note: This will incur an existential conversion. Hence,
+  ///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+  ///    with a specific syntax type instead.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
     return true
   }
-
-  /// Return the non-type erased version of this syntax node.
-  ///
-  ///  - Note:  This will incur an existential conversion.
-  public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
-    return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
-  }
+/// Return the non-type erased version of this syntax node.
+///
+///  - Note: This will incur an existential conversion. Hence,
+///    it's unavailable in Embedded; use `.as(...)` or `.is(...)`
+///    with a specific syntax type instead.
+@_unavailableInEmbedded
+public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
+  return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
+}
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
@@ -1623,6 +1729,7 @@ extension Syntax {
       .node(ExpressionStmtSyntax.self),
       .node(ExtensionDeclSyntax.self),
       .node(FallThroughStmtSyntax.self),
+      .node(FileDefaultDeclSyntax.self),
       .node(FloatLiteralExprSyntax.self),
       .node(ForStmtSyntax.self),
       .node(ForceUnwrapExprSyntax.self),
@@ -1634,6 +1741,9 @@ extension Syntax {
       .node(FunctionParameterSyntax.self),
       .node(FunctionSignatureSyntax.self),
       .node(FunctionTypeSyntax.self),
+      .node(FunctionYieldClauseSyntax.self),
+      .node(FunctionYieldListSyntax.self),
+      .node(FunctionYieldSyntax.self),
       .node(GenericArgumentClauseSyntax.self),
       .node(GenericArgumentListSyntax.self),
       .node(GenericArgumentSyntax.self),
@@ -1745,6 +1855,7 @@ extension Syntax {
       .node(ReturnClauseSyntax.self),
       .node(ReturnStmtSyntax.self),
       .node(SameTypeRequirementSyntax.self),
+      .node(SectionAttributeArgumentSyntax.self),
       .node(SequenceExprSyntax.self),
       .node(SimpleStringLiteralExprSyntax.self),
       .node(SimpleStringLiteralSegmentListSyntax.self),
@@ -1794,7 +1905,6 @@ extension Syntax {
       .node(UnresolvedIsExprSyntax.self),
       .node(UnresolvedTernaryExprSyntax.self),
       .node(UnsafeExprSyntax.self),
-      .node(UsingDeclSyntax.self),
       .node(ValueBindingPatternSyntax.self),
       .node(VariableDeclSyntax.self),
       .node(VersionComponentListSyntax.self),

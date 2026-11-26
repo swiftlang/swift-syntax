@@ -12,6 +12,7 @@
 
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 @_spi(Testing) import SwiftSyntaxMacroExpansion
 import XCTest
 import _SwiftSyntaxTestSupport

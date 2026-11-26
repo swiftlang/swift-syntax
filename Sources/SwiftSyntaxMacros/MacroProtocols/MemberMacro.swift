@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 public import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
 
 /// Describes a macro that can add members to the declaration it's attached to.
 public protocol MemberMacro: AttachedMacro {

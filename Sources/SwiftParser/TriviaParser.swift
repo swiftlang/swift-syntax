@@ -10,11 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
 @_spi(RawSyntax) public import SwiftSyntax
-#else
-@_spi(RawSyntax) import SwiftSyntax
-#endif
 
 @_spi(Testing)
 public struct TriviaParser {
@@ -25,9 +21,7 @@ public struct TriviaParser {
     var pieces: [RawTriviaPiece] = []
     var cursor = Lexer.Cursor(
       input: UnsafeBufferPointer(start: source.baseAddress, count: source.count),
-      previous: 0,
-      // There are currently no experimental features that affect trivia parsing.
-      experimentalFeatures: []
+      isAtStartOfInput: true
     )
 
     while true {
@@ -145,27 +139,27 @@ extension Lexer.Cursor {
   fileprivate mutating func lexCarriageReturn(start: Lexer.Cursor) -> RawTriviaPiece {
     precondition(self.previous == UInt8(ascii: "\r"))
     if self.advance(if: { $0 == "\n" }) {
-      var mark = self
+      var mark = self.position
       while true {
         if self.advance(if: { $0 == "\r" }),
           self.advance(if: { $0 == "\n" })
         {
-          mark = self
+          mark = self.position
           continue
         } else {
-          self = mark
+          self.position = mark
           break
         }
       }
       return .carriageReturnLineFeeds(start.distance(to: self) / 2)
     } else {
-      var mark = self
+      var mark = self.position
       while true {
         if self.advance(if: { $0 == "\r" }), !self.advance(if: { $0 == "\n" }) {
-          mark = self
+          mark = self.position
           continue
         } else {
-          self = mark
+          self.position = mark
           break
         }
       }

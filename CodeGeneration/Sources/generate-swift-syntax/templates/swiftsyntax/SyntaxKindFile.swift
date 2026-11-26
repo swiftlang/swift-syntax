@@ -46,6 +46,31 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
+    try VariableDeclSyntax(
+      """
+      /// Whether a node of this kind lays its children out with an `unexpected`
+      /// slot before the first, between every pair and after the last, so that
+      /// its layout holds `2 * n + 1` slots for `n` children.
+      ///
+      /// False for collections, whose children are all elements, and for the
+      /// few layout nodes that opt out of interleaving.
+      @_spi(RawSyntax)
+      public var interleavesUnexpectedChildren: Bool
+      """
+    ) {
+      try SwitchExprSyntax("switch self") {
+        for node in NON_BASE_SYNTAX_NODES where node.interleavesUnexpectedChildren {
+          SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+            StmtSyntax("return true")
+          }
+        }
+
+        SwitchCaseSyntax("default:") {
+          StmtSyntax("return false")
+        }
+      }
+    }
+
     try VariableDeclSyntax("public var isMissing: Bool") {
       try SwitchExprSyntax("switch self") {
         for name in SyntaxNodeKind.allCases where name.isMissing {
@@ -69,6 +94,44 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         for node in NON_BASE_SYNTAX_NODES {
           SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
             StmtSyntax("return \(node.kind.syntaxType).self")
+          }
+        }
+      }
+    }
+
+    try VariableDeclSyntax(
+      """
+      /// The name of ``syntaxNodeType``, without using reflection.
+      var syntaxNodeTypeName: String
+      """
+    ) {
+      try SwitchExprSyntax("switch self") {
+        SwitchCaseSyntax("case .token:") {
+          StmtSyntax(#"return "TokenSyntax""#)
+        }
+
+        for node in NON_BASE_SYNTAX_NODES {
+          SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+            StmtSyntax("return \(literal: node.kind.syntaxType.description)")
+          }
+        }
+      }
+    }
+
+    try VariableDeclSyntax(
+      """
+      /// The name of this case, without using reflection.
+      var debugDescription: String
+      """
+    ) {
+      try SwitchExprSyntax("switch self") {
+        SwitchCaseSyntax("case .token:") {
+          StmtSyntax(#"return "token""#)
+        }
+
+        for node in NON_BASE_SYNTAX_NODES {
+          SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+            StmtSyntax("return \(literal: node.identifier.text)")
           }
         }
       }

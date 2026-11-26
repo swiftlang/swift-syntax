@@ -10,14 +10,84 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
-internal import SwiftSyntax
-#else
-import SwiftSyntax
-#endif
+public import SwiftSyntax
 
 // This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
+
+extension Parser {
+  @_spi(ExperimentalLanguageFeatures)
+  @available(*, deprecated, renamed: "LanguageFeatures")
+  public typealias ExperimentalFeatures = LanguageFeatures
+
+  @_spi(ExperimentalLanguageFeatures)
+  @available(*, deprecated, renamed: "init(_:maximumNestingLevel:parseTransition:swiftVersion:languageFeatures:)")
+  public init(
+    _ input: String,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    swiftVersion: SwiftVersion? = nil,
+    experimentalFeatures: LanguageFeatures
+  ) {
+    self.init(
+      input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      swiftVersion: swiftVersion,
+      languageFeatures: experimentalFeatures
+    )
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  @available(*, deprecated, renamed: "init(_:maximumNestingLevel:parseTransition:swiftVersion:languageFeatures:)")
+  public init(
+    _ input: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    swiftVersion: SwiftVersion? = nil,
+    experimentalFeatures: LanguageFeatures
+  ) {
+    self.init(
+      input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      swiftVersion: swiftVersion,
+      languageFeatures: experimentalFeatures
+    )
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  @available(*, deprecated, renamed: "parse(source:maximumNestingLevel:swiftVersion:languageFeatures:)")
+  public static func parse(
+    source: String,
+    maximumNestingLevel: Int? = nil,
+    swiftVersion: SwiftVersion? = nil,
+    experimentalFeatures: LanguageFeatures
+  ) -> SourceFileSyntax {
+    return parse(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      swiftVersion: swiftVersion,
+      languageFeatures: experimentalFeatures
+    )
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  @available(*, deprecated, renamed: "parse(source:maximumNestingLevel:swiftVersion:languageFeatures:)")
+  public static func parse(
+    source: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
+    swiftVersion: SwiftVersion? = nil,
+    experimentalFeatures: LanguageFeatures
+  ) -> SourceFileSyntax {
+    return parse(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      swiftVersion: swiftVersion,
+      languageFeatures: experimentalFeatures
+    )
+  }
+}
 
 extension TokenSpec {
   @available(*, deprecated, renamed: "leftSquare")

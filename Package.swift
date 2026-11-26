@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.2
 
 import Foundation
 import PackageDescription
@@ -185,7 +185,7 @@ let package = Package(
 
     .target(
       name: "SwiftWarningControl",
-      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"],
+      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftIfConfig"],
       exclude: ["CMakeLists.txt", "SwiftWarningControl.md"]
     ),
 
@@ -193,6 +193,7 @@ let package = Package(
       name: "SwiftWarningControlTest",
       dependencies: [
         "_SwiftSyntaxTestSupport",
+        "SwiftIfConfig",
         "SwiftWarningControl",
         "SwiftParser",
         "SwiftSyntaxMacrosGenericTestSupport",
@@ -231,10 +232,10 @@ let package = Package(
       name: "SwiftSyntax",
       dependencies: [
         "_SwiftSyntaxCShims", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600", "SwiftSyntax601", "SwiftSyntax602",
-        "SwiftSyntax603", "SwiftSyntax604",
+        "SwiftSyntax603", "SwiftSyntax604", "SwiftSyntax605",
       ],
       exclude: ["CMakeLists.txt"],
-      swiftSettings: swiftSyntaxSwiftSettings
+      swiftSettings: swiftSyntaxSwiftSettings + embeddedRestrictionsSwiftSettings
     ),
 
     .testTarget(
@@ -280,6 +281,11 @@ let package = Package(
       path: "Sources/VersionMarkerModules/SwiftSyntax604"
     ),
 
+    .target(
+      name: "SwiftSyntax605",
+      path: "Sources/VersionMarkerModules/SwiftSyntax605"
+    ),
+
     // MARK: SwiftSyntaxBuilder
 
     .target(
@@ -313,7 +319,14 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacroExpansion",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxBuilder", "SwiftSyntaxMacros", "SwiftDiagnostics", "SwiftOperators"],
+      dependencies: [
+        "SwiftBasicFormat",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftDiagnostics",
+        "SwiftOperators",
+      ],
       exclude: ["CMakeLists.txt"]
     ),
 
@@ -438,7 +451,7 @@ let package = Package(
       exclude: ["Inputs"]
     ),
   ],
-  swiftLanguageVersions: [.v5, .version("6")]
+  swiftLanguageModes: [.v5, .v6]
 )
 
 // This is a fake target that depends on all targets in the package.
@@ -456,6 +469,13 @@ package.targets.append(
     }
   )
 )
+
+// Require every file to import the modules that define the members it uses, so that missing
+// imports can't creep back in.
+// When updating this, also update CMakeLists.txt accordingly.
+for target in package.targets where target.type != .plugin {
+  target.swiftSettings = (target.swiftSettings ?? []) + [.enableUpcomingFeature("MemberImportVisibility")]
+}
 
 // MARK: - Parse build arguments
 
@@ -499,6 +519,17 @@ var swiftSyntaxSwiftSettings: [SwiftSetting] {
     settings.append(.define("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"))
   }
   return settings
+}
+/// Diagnose language features unsupported in Embedded Swift.
+///
+/// Swift 6.3 doesn't support generic methods in non-final classes (e.g. `SyntaxVisitor.walk`) in Embedded mode, so
+/// only enable Embedded diagnostics on newer compilers.
+var embeddedRestrictionsSwiftSettings: [SwiftSetting] {
+  #if compiler(>=6.5)
+  return [.treatWarning("EmbeddedRestrictions", as: .error)]
+  #else
+  return []
+  #endif
 }
 var swiftSyntaxBuilderSwiftSettings: [SwiftSetting] {
   if buildScriptEnvironment {

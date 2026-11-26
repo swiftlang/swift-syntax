@@ -128,6 +128,13 @@ extension ConfiguredRegions: CustomDebugStringConvertible {
   }
 }
 
+extension ConfiguredRegions {
+  /// A `ConfiguredRegions` with no `#if` regions; every node is `.active`.
+  public static var empty: ConfiguredRegions {
+    ConfiguredRegions(regions: [], activeClauses: [:], diagnostics: [])
+  }
+}
+
 extension IfConfigClauseSyntax {
   /// The effective start of the region after which code is subject to its
   /// condition.

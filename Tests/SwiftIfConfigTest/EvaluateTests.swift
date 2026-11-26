@@ -14,6 +14,7 @@ import SwiftDiagnostics
 import SwiftIfConfig
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 @_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
 import _SwiftSyntaxGenericTestSupport
@@ -345,6 +346,33 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("compiler(>=5.8)", .active)
     assertIfConfig("compiler(>=5.9)", .active)
     assertIfConfig("compiler(>=5.10)", .unparsed)
+    assertIfConfig("compiler(>=5.8.0.0.0)", .active)
+    assertIfConfig(
+      "compiler(>=5.8.0.0.0.0)",
+      .active,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "trailing components of version '5.8.0.0.0' are ignored",
+          line: 1,
+          column: 12,
+          severity: .warning,
+          highlights: [".", "0"]
+        )
+      ]
+    )
+    assertIfConfig(
+      "compiler(>=5.10.0.0.0.0)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "trailing components of version '5.10.0.0.0' are ignored",
+          line: 1,
+          column: 12,
+          severity: .warning,
+          highlights: [".", "0"]
+        )
+      ]
+    )
     assertIfConfig(#"_compiler_version("5009.*.1")"#, .active)
     assertIfConfig(#"_compiler_version("5009.*.3.2.3")"#, .unparsed)
     assertIfConfig(#"_compiler_version("5010.*.0")"#, .unparsed)
@@ -440,10 +468,11 @@ public class EvaluateTests: XCTestCase {
       .inactive,
       diagnostics: [
         DiagnosticSpec(
-          message: "trailing components of version '5009.10.5.4' are ignored",
+          message: "trailing components of version '5009.10.5.4.2' are ignored",
           line: 1,
           column: 44,
-          severity: .warning
+          severity: .warning,
+          highlights: [".", "3", ".", "5"]
         )
       ]
     )
@@ -625,6 +654,18 @@ public class EvaluateTests: XCTestCase {
 
 /// Assert the results of evaluating the condition within an `#if` against the
 /// given build configuration.
+extension EvaluateTests {
+  func testIntegerLiteralFixItKeepsTrivia() throws {
+    let condition: ExprSyntax = "0  // comment"
+    let (_, _, diagnostics) = IfConfigRegionState.evaluating(condition, in: TestingBuildConfiguration())
+    let edit = try XCTUnwrap(diagnostics.first?.fixIts.first?.edits.first)
+    // Only the literal is replaced; the trailing comment is left alone.
+    XCTAssertEqual(edit.replacement, "false")
+    XCTAssertEqual(edit.range.lowerBound.utf8Offset, 0)
+    XCTAssertEqual(edit.range.upperBound.utf8Offset, 1)
+  }
+}
+
 private func assertIfConfig(
   _ condition: ExprSyntax,
   _ expectedState: IfConfigRegionState,

@@ -30,6 +30,7 @@ public struct AddProduct: EditRefactoringProvider {
     "dependencies",
     "targets",
     "swiftLanguageVersions",
+    "swiftLanguageModes",
     "cLanguageStandard",
     "cxxLanguageStandard",
   ]

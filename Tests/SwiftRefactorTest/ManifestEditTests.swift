@@ -349,6 +349,59 @@ final class ManifestEditTests: XCTestCase {
     )
   }
 
+  func testAddPackageDependencyBeforeSwiftLanguageModes() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 6.0
+      let package = Package(
+          name: "packages",
+          swiftLanguageModes: [.v6]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 6.0
+        let package = Package(
+            name: "packages",
+            dependencies: [
+                .package(url: "https://github.com/apple/swift-system.git", branch: "main"),
+            ],
+            swiftLanguageModes: [.v6]
+        )
+        """,
+      provider: AddPackageDependency.self,
+      context: .init(dependency: Self.swiftSystemPackageDependency)
+    )
+  }
+
+  func testAddProductBeforeSwiftLanguageModes() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 6.0
+      let package = Package(
+          name: "packages",
+          swiftLanguageModes: [.v6]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 6.0
+        let package = Package(
+            name: "packages",
+            products: [
+                .library(
+                    name: "MyLibrary",
+                    targets: [ "MyLibrary" ]
+                ),
+            ],
+            swiftLanguageModes: [.v6]
+        )
+        """,
+      provider: AddProduct.self,
+      context: .init(
+        product: ProductDescription(name: "MyLibrary", type: .library(.automatic), targets: ["MyLibrary"])
+      )
+    )
+  }
+
   func testAddPackageDependencyErrors() {
     XCTAssertThrowsError(
       try AddPackageDependency.textRefactor(

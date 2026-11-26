@@ -30,6 +30,7 @@ public struct AddPackageDependency: EditRefactoringProvider {
   private static let argumentLabelsAfterDependencies: Set<String> = [
     "targets",
     "swiftLanguageVersions",
+    "swiftLanguageModes",
     "cLanguageStandard",
     "cxxLanguageStandard",
   ]

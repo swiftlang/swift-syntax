@@ -322,7 +322,7 @@ extension Attached where Node: TypeSyntaxProtocol {
       })
 
     // Base cases that don't produce types
-    case .namedOpaqueReturnType, .classRestrictionType:
+    case .classRestrictionType:
       return Result.success(PartiallyResolvedType.composition([]))
     case .suppressedType:
       // Don't diagnose here since suppressed types can be aliased, e.g.:

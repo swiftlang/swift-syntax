@@ -422,29 +422,6 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .namedOpaqueReturnType,
-    base: .type,
-    nameForDiagnostics: "named opaque return type",
-    children: [
-      Child(
-        name: "genericParameterClause",
-        kind: .node(kind: .genericParameterClause),
-        documentation: "The parameter clause that defines the generic parameters."
-      ),
-      Child(
-        name: "type",
-        kind: .node(kind: .type)
-      ),
-    ],
-    childHistory: [
-      [
-        "genericParameterClause": .renamed(from: "genericParameters"),
-        "type": .renamed(from: "baseType"),
-      ]
-    ]
-  ),
-
-  Node(
     kind: .optionalType,
     base: .type,
     nameForDiagnostics: "optional type",

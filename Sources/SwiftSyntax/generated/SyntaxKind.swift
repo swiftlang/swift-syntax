@@ -220,7 +220,6 @@ public enum SyntaxKind: Sendable {
   case moduleSelector
   case multipleTrailingClosureElementList
   case multipleTrailingClosureElement
-  case namedOpaqueReturnType
   case nilLiteralExpr
   case nonisolatedSpecifierArgument
   case nonisolatedTypeSpecifier
@@ -758,8 +757,6 @@ public enum SyntaxKind: Sendable {
     case .moduleSelector:
       return true
     case .multipleTrailingClosureElement:
-      return true
-    case .namedOpaqueReturnType:
       return true
     case .nilLiteralExpr:
       return true
@@ -1343,8 +1340,6 @@ public enum SyntaxKind: Sendable {
       return MultipleTrailingClosureElementListSyntax.self
     case .multipleTrailingClosureElement:
       return MultipleTrailingClosureElementSyntax.self
-    case .namedOpaqueReturnType:
-      return NamedOpaqueReturnTypeSyntax.self
     case .nilLiteralExpr:
       return NilLiteralExprSyntax.self
     case .nonisolatedSpecifierArgument:
@@ -1943,8 +1938,6 @@ public enum SyntaxKind: Sendable {
       return "MultipleTrailingClosureElementListSyntax"
     case .multipleTrailingClosureElement:
       return "MultipleTrailingClosureElementSyntax"
-    case .namedOpaqueReturnType:
-      return "NamedOpaqueReturnTypeSyntax"
     case .nilLiteralExpr:
       return "NilLiteralExprSyntax"
     case .nonisolatedSpecifierArgument:
@@ -2543,8 +2536,6 @@ public enum SyntaxKind: Sendable {
       return "multipleTrailingClosureElementList"
     case .multipleTrailingClosureElement:
       return "multipleTrailingClosureElement"
-    case .namedOpaqueReturnType:
-      return "namedOpaqueReturnType"
     case .nilLiteralExpr:
       return "nilLiteralExpr"
     case .nonisolatedSpecifierArgument:

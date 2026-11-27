@@ -432,7 +432,6 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 ///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/genericParameterClause``
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/genericParameterClause``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/genericParameterClause``
-///  - ``NamedOpaqueReturnTypeSyntax``.``NamedOpaqueReturnTypeSyntax/genericParameterClause``
 ///  - ``StructDeclSyntax``.``StructDeclSyntax/genericParameterClause``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/genericParameterClause``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/genericParameterClause``

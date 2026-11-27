@@ -110,10 +110,6 @@ final class PartialTypeResolutionTests: XCTestCase {
       typeSyntax: "(() -> A, B).Type",
       result: .success(.metatype(base: "(() -> A, B)"))
     )
-    assertPartialResolutionResult(
-      typeSyntax: "<T: Hashable> [T]",
-      result: .success(.composition([]))
-    )
     // I.e. Test `class` in `protocol A: class`.
     assertPartialResolutionResult(
       typeSyntaxPrefix: "protocol A: ",

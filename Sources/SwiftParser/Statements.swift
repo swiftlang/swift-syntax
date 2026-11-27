@@ -473,7 +473,7 @@ extension Parser {
   }
 
   /// Parse a do statement.
-  mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawStmtSyntax {
+  mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawDoStmtSyntax {
     let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(doHandle)
 
     // Parse the optional throws clause.
@@ -494,36 +494,13 @@ extension Parser {
       elements.append(self.parseCatchClause(), allocator: self.nodeListAllocator)
     }
 
-    let catchClauses = RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena)
-
-    // `do { } while condition` is a `repeat`-`while` loop written with the
-    // wrong keyword, as long as the `while` is on the same line.
-    if catchClauses.isEmpty, throwsClause == nil, unexpectedBeforeDoKeyword == nil,
-      self.at(.keyword(.while)), !self.currentToken.isAtStartOfLine
-    {
-      let whileKeyword = self.consumeAnyToken()
-      let condition = self.parseExpression(flavor: .basic, pattern: .none)
-      return RawStmtSyntax(
-        RawRepeatStmtSyntax(
-          RawUnexpectedNodesSyntax([doKeyword], arena: self.arena),
-          repeatKeyword: self.missingToken(.repeat),
-          body: body,
-          whileKeyword: whileKeyword,
-          condition: condition,
-          arena: self.arena
-        )
-      )
-    }
-
-    return RawStmtSyntax(
-      RawDoStmtSyntax(
-        unexpectedBeforeDoKeyword,
-        doKeyword: doKeyword,
-        throwsClause: throwsClause,
-        body: body,
-        catchClauses: catchClauses,
-        arena: self.arena
-      )
+    return RawDoStmtSyntax(
+      unexpectedBeforeDoKeyword,
+      doKeyword: doKeyword,
+      throwsClause: throwsClause,
+      body: body,
+      catchClauses: RawCatchClauseListSyntax(elements: elements.build(), arena: self.arena),
+      arena: self.arena
     )
   }
 

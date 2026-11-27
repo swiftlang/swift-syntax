@@ -1611,14 +1611,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  override open func visit(_ node: NamedOpaqueReturnTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: NamedOpaqueReturnTypeSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
   override open func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

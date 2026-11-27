@@ -220,7 +220,6 @@ public enum SyntaxEnum: Sendable {
   case moduleSelector(ModuleSelectorSyntax)
   case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
-  case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   case nilLiteralExpr(NilLiteralExprSyntax)
   case nonisolatedSpecifierArgument(NonisolatedSpecifierArgumentSyntax)
   case nonisolatedTypeSpecifier(NonisolatedTypeSpecifierSyntax)
@@ -716,8 +715,6 @@ extension Syntax {
       return .multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax(self)!)
     case .multipleTrailingClosureElement:
       return .multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax(self)!)
-    case .namedOpaqueReturnType:
-      return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .nilLiteralExpr:
       return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
     case .nonisolatedSpecifierArgument:
@@ -1314,7 +1311,6 @@ public enum TypeSyntaxEnum {
   case memberType(MemberTypeSyntax)
   case metatypeType(MetatypeTypeSyntax)
   case missingType(MissingTypeSyntax)
-  case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   case optionalType(OptionalTypeSyntax)
   case packElementType(PackElementTypeSyntax)
   case packExpansionType(PackExpansionTypeSyntax)
@@ -1351,8 +1347,6 @@ extension TypeSyntax {
       return .metatypeType(MetatypeTypeSyntax(self)!)
     case .missingType:
       return .missingType(MissingTypeSyntax(self)!)
-    case .namedOpaqueReturnType:
-      return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .optionalType:
       return .optionalType(OptionalTypeSyntax(self)!)
     case .packElementType:

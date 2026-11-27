@@ -2353,18 +2353,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: MultipleTrailingClosureElementSyntax) {
   }
 
-  /// Visiting ``NamedOpaqueReturnTypeSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: NamedOpaqueReturnTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``NamedOpaqueReturnTypeSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: NamedOpaqueReturnTypeSyntax) {
-  }
-
   /// Visiting ``NilLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5163,14 +5151,6 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitNamedOpaqueReturnTypeSyntaxImpl(_ node: Syntax) {
-    if visit(NamedOpaqueReturnTypeSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(NamedOpaqueReturnTypeSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
   private func visitNilLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(NilLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6412,8 +6392,6 @@ open class SyntaxVisitor {
       return self.visitMultipleTrailingClosureElementListSyntaxImpl(_:)
     case .multipleTrailingClosureElement:
       return self.visitMultipleTrailingClosureElementSyntaxImpl(_:)
-    case .namedOpaqueReturnType:
-      return self.visitNamedOpaqueReturnTypeSyntaxImpl(_:)
     case .nilLiteralExpr:
       return self.visitNilLiteralExprSyntaxImpl(_:)
     case .nonisolatedSpecifierArgument:
@@ -7014,8 +6992,6 @@ open class SyntaxVisitor {
       self.visitMultipleTrailingClosureElementListSyntaxImpl(node)
     case .multipleTrailingClosureElement:
       self.visitMultipleTrailingClosureElementSyntaxImpl(node)
-    case .namedOpaqueReturnType:
-      self.visitNamedOpaqueReturnTypeSyntaxImpl(node)
     case .nilLiteralExpr:
       self.visitNilLiteralExprSyntaxImpl(node)
     case .nonisolatedSpecifierArgument:

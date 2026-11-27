@@ -1467,7 +1467,6 @@ public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol? {
 /// - ``MemberTypeSyntax``
 /// - ``MetatypeTypeSyntax``
 /// - ``MissingTypeSyntax``
-/// - ``NamedOpaqueReturnTypeSyntax``
 /// - ``OptionalTypeSyntax``
 /// - ``PackElementTypeSyntax``
 /// - ``PackExpansionTypeSyntax``
@@ -1479,7 +1478,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   static func isKindOf(_ kind: SyntaxKind) -> Bool {
     switch kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
       return true
     default:
       return false
@@ -1559,7 +1558,6 @@ public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
       .node(MemberTypeSyntax.self),
       .node(MetatypeTypeSyntax.self),
       .node(MissingTypeSyntax.self),
-      .node(NamedOpaqueReturnTypeSyntax.self),
       .node(OptionalTypeSyntax.self),
       .node(PackElementTypeSyntax.self),
       .node(PackExpansionTypeSyntax.self),
@@ -1812,7 +1810,6 @@ extension Syntax {
       .node(ModuleSelectorSyntax.self),
       .node(MultipleTrailingClosureElementListSyntax.self),
       .node(MultipleTrailingClosureElementSyntax.self),
-      .node(NamedOpaqueReturnTypeSyntax.self),
       .node(NilLiteralExprSyntax.self),
       .node(NonisolatedSpecifierArgumentSyntax.self),
       .node(NonisolatedTypeSpecifierSyntax.self),

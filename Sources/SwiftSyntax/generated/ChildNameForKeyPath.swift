@@ -2442,16 +2442,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "closure"
   case \MultipleTrailingClosureElementSyntax.unexpectedAfterClosure:
     return "unexpectedAfterClosure"
-  case \NamedOpaqueReturnTypeSyntax.unexpectedBeforeGenericParameterClause:
-    return "unexpectedBeforeGenericParameterClause"
-  case \NamedOpaqueReturnTypeSyntax.genericParameterClause:
-    return "genericParameterClause"
-  case \NamedOpaqueReturnTypeSyntax.unexpectedBetweenGenericParameterClauseAndType:
-    return "unexpectedBetweenGenericParameterClauseAndType"
-  case \NamedOpaqueReturnTypeSyntax.type:
-    return "type"
-  case \NamedOpaqueReturnTypeSyntax.unexpectedAfterType:
-    return "unexpectedAfterType"
   case \NilLiteralExprSyntax.unexpectedBeforeNilKeyword:
     return "unexpectedBeforeNilKeyword"
   case \NilLiteralExprSyntax.nilKeyword:

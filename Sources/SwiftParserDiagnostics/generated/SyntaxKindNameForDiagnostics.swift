@@ -298,8 +298,6 @@ extension SyntaxKind {
       return "module selector"
     case .multipleTrailingClosureElement:
       return "trailing closure"
-    case .namedOpaqueReturnType:
-      return "named opaque return type"
     case .nonisolatedTypeSpecifier:
       return "'nonisolated' specifier"
     case .objCSelectorPieceList:

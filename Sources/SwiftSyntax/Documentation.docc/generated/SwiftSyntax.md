@@ -188,7 +188,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/InlineArrayTypeSyntax>
 - <doc:SwiftSyntax/MemberTypeSyntax>
 - <doc:SwiftSyntax/MetatypeTypeSyntax>
-- <doc:SwiftSyntax/NamedOpaqueReturnTypeSyntax>
 - <doc:SwiftSyntax/OptionalTypeSyntax>
 - <doc:SwiftSyntax/PackElementTypeSyntax>
 - <doc:SwiftSyntax/PackExpansionTypeSyntax>

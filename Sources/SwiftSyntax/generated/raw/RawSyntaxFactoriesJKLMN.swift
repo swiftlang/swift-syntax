@@ -975,32 +975,6 @@ extension RawSyntax {
   }
 
   @_spi(RawSyntax)
-  public static func makeNamedOpaqueReturnType(
-    _ unexpectedBeforeGenericParameterClause: RawSyntax?,
-    genericParameterClause: RawSyntax,
-    _ unexpectedBetweenGenericParameterClauseAndType: RawSyntax?,
-    type: RawSyntax,
-    _ unexpectedAfterType: RawSyntax?,
-    arena: __shared RawSyntaxArena
-  ) -> RawSyntax {
-    let hasUnexpected = unexpectedBeforeGenericParameterClause != nil || unexpectedBetweenGenericParameterClauseAndType != nil || unexpectedAfterType != nil
-    return RawSyntax.makeLayout(
-      kind: .namedOpaqueReturnType,
-      childCount: 2,
-      storage: hasUnexpected ? .layoutWithUnexpected : .layout,
-      arena: arena
-    ) { layout in
-      layout.initializeElement(at: 0, to: genericParameterClause)
-      layout.initializeElement(at: 1, to: type)
-      if hasUnexpected {
-        layout.initializeElement(at: 2, to: unexpectedBeforeGenericParameterClause)
-        layout.initializeElement(at: 3, to: unexpectedBetweenGenericParameterClauseAndType)
-        layout.initializeElement(at: 4, to: unexpectedAfterType)
-      }
-    }
-  }
-
-  @_spi(RawSyntax)
   public static func makeNilLiteralExpr(
     _ unexpectedBeforeNilKeyword: RawSyntax?,
     nilKeyword: RawSyntax,

@@ -2168,14 +2168,6 @@ func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind) {
     assertNoError(kind, 5, verify(layout[5], as: ClosureExprSyntax.self, isKindOf: ClosureExprSyntax.isKindOf))
     assertNoError(kind, 6, verify(layout[6], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
   }
-  func validateNamedOpaqueReturnTypeSyntax(kind: SyntaxKind, layout: RawLayoutChildren) {
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
-    assertNoError(kind, 1, verify(layout[1], as: GenericParameterClauseSyntax.self, isKindOf: GenericParameterClauseSyntax.isKindOf))
-    assertNoError(kind, 2, verify(layout[2], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
-    assertNoError(kind, 3, verify(layout[3], as: TypeSyntax.self, isKindOf: TypeSyntax.isKindOf))
-    assertNoError(kind, 4, verify(layout[4], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
-  }
   func validateNilLiteralExprSyntax(kind: SyntaxKind, layout: RawLayoutChildren) {
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: UnexpectedNodesSyntax?.self, isKindOf: UnexpectedNodesSyntax.isKindOf))
@@ -3545,8 +3537,6 @@ func validateLayout(layout: RawLayoutChildren, as kind: SyntaxKind) {
     validateMultipleTrailingClosureElementListSyntax(kind: kind, layout: layout)
   case .multipleTrailingClosureElement:
     validateMultipleTrailingClosureElementSyntax(kind: kind, layout: layout)
-  case .namedOpaqueReturnType:
-    validateNamedOpaqueReturnTypeSyntax(kind: kind, layout: layout)
   case .nilLiteralExpr:
     validateNilLiteralExprSyntax(kind: kind, layout: layout)
   case .nonisolatedSpecifierArgument:

@@ -186,6 +186,8 @@ extension Parser {
   ///   - argumentMode: Indicates whether the attribute must, may, or may not have an argument.
   ///   - parseArguments: Called to parse the argument list. If there is an opening parenthesis, it will have already been consumed.
   ///   - parseMissingArguments: If provided, called instead of `parseArgument` when an argument list was required but no opening parenthesis was present.
+  ///   - diagnoseInvalidAttributeName: If `true`, diagnose attribute names that cannot be applied in this
+  ///     position, like type attributes and `@unknown` on a declaration.
   mutating func parseAttribute(
     argumentMode: AttributeArgumentMode,
     parseArguments: (inout Parser) -> (
@@ -193,7 +195,8 @@ extension Parser {
     ),
     parseMissingArguments: (
       (inout Parser) -> (unexpectedBefore: RawUnexpectedNodesSyntax?, arguments: RawAttributeSyntax.Arguments)
-    )? = nil
+    )? = nil,
+    diagnoseInvalidAttributeName: Bool = false
   ) -> RawAttributeSyntax {
     var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     if atSign.trailingTriviaByteLength > 0 || self.currentToken.leadingTriviaByteLength > 0 {
@@ -203,7 +206,10 @@ extension Parser {
       )
       atSign = atSign.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
-    let attributeName = self.parseAttributeName()
+    var attributeName = self.parseAttributeName()
+    if diagnoseInvalidAttributeName {
+      attributeName = self.attributeNameDiagnosingInvalidName(attributeName)
+    }
     let attributeNameHasTrailingSpace = attributeName.raw.trailingTriviaByteLength > 0
 
     let shouldParseArgument: Bool
@@ -266,6 +272,42 @@ extension Parser {
         arena: self.arena
       )
     }
+  }
+
+  /// If `attributeName` is a type attribute or `@unknown`, which cannot be applied to a declaration, return the
+  /// name with the corresponding diagnostic attached to its token, matching the C++ parser's `parseDeclAttribute`.
+  /// Otherwise, return the name unchanged.
+  func attributeNameDiagnosingInvalidName(_ attributeName: RawTypeSyntax) -> RawTypeSyntax {
+    guard let identifier = attributeName.as(RawIdentifierTypeSyntax.self),
+      identifier.moduleSelector == nil
+    else {
+      return attributeName
+    }
+    let diagnosticKind: TokenDiagnostic.Kind
+    switch identifier.name.tokenText {
+    case "autoclosure", "convention", "escaping", "noescape", "retroactive", "unchecked", "_opaqueReturnTypeOf":
+      diagnosticKind = .typeAttributeAppliedToDeclaration
+    case "unknown":
+      diagnosticKind = .unknownAttribute
+    default:
+      return attributeName
+    }
+    let diagnosedName = identifier.name.tokenView.withTokenDiagnostic(
+      tokenDiagnostic: TokenDiagnostic(diagnosticKind, byteOffset: 0),
+      arena: self.arena
+    )
+    return RawTypeSyntax(
+      RawIdentifierTypeSyntax(
+        identifier.unexpectedBeforeModuleSelector,
+        moduleSelector: identifier.moduleSelector,
+        identifier.unexpectedBetweenModuleSelectorAndName,
+        name: diagnosedName,
+        identifier.unexpectedBetweenNameAndGenericArgumentClause,
+        genericArgumentClause: identifier.genericArgumentClause,
+        identifier.unexpectedAfterGenericArgumentClause,
+        arena: self.arena
+      )
+    )
   }
 
   mutating func parseAttribute() -> RawAttributeSyntax {
@@ -372,13 +414,17 @@ extension Parser {
         preconditionFailure("yield_once has no argument")
       }
     case nil:
-      return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(
-          pattern: .none,
-          allowTrailingComma: true
-        )
-        return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
-      }
+      return parseAttribute(
+        argumentMode: .customAttribute,
+        parseArguments: { parser in
+          let arguments = parser.parseArgumentListElements(
+            pattern: .none,
+            allowTrailingComma: true
+          )
+          return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
+        },
+        diagnoseInvalidAttributeName: true
+      )
     }
   }
 }

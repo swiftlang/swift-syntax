@@ -534,7 +534,7 @@ final class StatementTests: ParserTestCase {
         @s 1️⃣return
       }
       func test2() {
-        @unknown 2️⃣return
+        @3️⃣unknown 2️⃣return
       }
       """,
       diagnostics: [
@@ -542,6 +542,10 @@ final class StatementTests: ParserTestCase {
           locationMarker: "1️⃣",
           message: "expected declaration and ';' after attribute",
           fixIts: ["insert declaration and ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "unknown attribute 'unknown'"
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",

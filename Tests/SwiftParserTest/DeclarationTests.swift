@@ -3658,13 +3658,17 @@ final class DeclarationTests: ParserTestCase {
 
   func testMissingCommaInParametersAndAttributes() {
     assertParse(
-      "func a(foo: Bar1️⃣ @escaping foo1: () -> Void) {}",
+      "func a(foo: Bar1️⃣ @2️⃣escaping foo1: () -> Void) {}",
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
           message: "expected ',' in parameter",
           fixIts: ["insert ','"]
-        )
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "attribute can only be applied to types, not declarations"
+        ),
       ],
       fixedSource: "func a(foo: Bar, @escaping foo1: () -> Void) {}"
     )

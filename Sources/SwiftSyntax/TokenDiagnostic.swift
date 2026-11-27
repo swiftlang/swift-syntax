@@ -59,8 +59,10 @@ public struct TokenDiagnostic: Hashable, Sendable {
     case spaceAtStartOfRegexLiteral
     /// The lexer discovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
     case tokenDiagnosticOffsetOverflow
+    case typeAttributeAppliedToDeclaration
     case unexpectedBlockCommentEnd
     case unicodeCurlyQuote
+    case unknownAttribute
     case unprintableAsciiCharacter
     case unterminatedBlockComment
 
@@ -102,8 +104,10 @@ public struct TokenDiagnostic: Hashable, Sendable {
       case .spaceAtEndOfRegexLiteral: return .error
       case .spaceAtStartOfRegexLiteral: return .error
       case .tokenDiagnosticOffsetOverflow: return .error
+      case .typeAttributeAppliedToDeclaration: return .error
       case .unexpectedBlockCommentEnd: return .error
       case .unicodeCurlyQuote: return .error
+      case .unknownAttribute: return .error
       case .unprintableAsciiCharacter: return .error
       case .unterminatedBlockComment: return .error
       }

@@ -1826,4 +1826,163 @@ final class AttributeTests: ParserTestCase {
         """
     )
   }
+
+  func testUnknownAttributeOnDeclaration() {
+    // `@unknown` is only valid on `case` labels in a `switch` statement.
+    assertParse(
+      """
+      @1️⃣unknown func f() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unknown attribute 'unknown'")
+      ]
+    )
+
+    assertParse(
+      """
+      func g(@1️⃣unknown x: Int) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unknown attribute 'unknown'")
+      ]
+    )
+  }
+
+  func testTypeAttributeOnDeclaration() {
+    assertParse(
+      """
+      func g(@1️⃣noescape x: () -> ()) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "attribute can only be applied to types, not declarations")
+      ]
+    )
+
+    assertParse(
+      """
+      @1️⃣escaping func f() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "attribute can only be applied to types, not declarations")
+      ]
+    )
+
+    assertParse(
+      """
+      func g(@1️⃣autoclosure x: () -> ()) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "attribute can only be applied to types, not declarations")
+      ]
+    )
+
+    assertParse(
+      """
+      @1️⃣convention(c) func f() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "attribute can only be applied to types, not declarations")
+      ]
+    )
+
+    assertParse(
+      """
+      @1️⃣retroactive func f() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "attribute can only be applied to types, not declarations")
+      ]
+    )
+
+    assertParse(
+      """
+      @1️⃣unchecked func f() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "attribute can only be applied to types, not declarations")
+      ]
+    )
+
+    assertParse(
+      """
+      @1️⃣_opaqueReturnTypeOf(String) func f() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "attribute can only be applied to types, not declarations")
+      ]
+    )
+  }
+
+  func testTypeAttributeOnDeclarationAcceptedInTypePosition() {
+    // The same attributes are valid in type position.
+    assertParse(
+      """
+      func g(_ x: @noescape () -> ()) {}
+      """
+    )
+
+    assertParse(
+      """
+      let f: @Sendable () -> Void
+      """
+    )
+
+    // `@unknown` is accepted in type position; the C++ parser does not reject it there.
+    assertParse(
+      """
+      let f: @unknown Int
+      """
+    )
+  }
+
+  func testAttributeOnDeclarationAccepted() {
+    // Declaration attributes, including custom attributes, are unaffected.
+    assertParse(
+      """
+      @Sendable func f() {}
+      """
+    )
+
+    assertParse(
+      """
+      @MainActor func f() {}
+      """
+    )
+
+    assertParse(
+      """
+      @MyWrapper func f() {}
+      """
+    )
+
+    // An attribute qualified by a module selector is always a custom attribute.
+    assertParse(
+      """
+      @Foo.noescape func f() {}
+      """
+    )
+
+    // Type attributes that are also valid declaration attributes are unaffected.
+    assertParse(
+      """
+      @noDerivative func f() {}
+      """
+    )
+
+    assertParse(
+      """
+      @preconcurrency func f() {}
+      """
+    )
+
+    // `@unknown` is valid on a `default` case label.
+    assertParse(
+      """
+      switch x {
+      @unknown default:
+        break
+      }
+      """
+    )
+  }
 }

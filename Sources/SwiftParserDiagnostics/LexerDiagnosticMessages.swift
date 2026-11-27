@@ -75,9 +75,11 @@ public enum StaticTokenError: String, DiagnosticMessage {
   case rawIdentifierCannotBeOperator = "a raw identifier cannot contain only operator characters"
   case tokenDiagnosticOffsetOverflow =
     "the lexer discovered an error in this token but was not able to represent its offset due to overflow; please split the token"
+  case typeAttributeAppliedToDeclaration = "attribute can only be applied to types, not declarations"
   case sourceConflictMarker = "source control conflict marker in source file"
   case unexpectedBlockCommentEnd = "unexpected end of block comment"
   case unicodeCurlyQuote = #"unicode curly quote found; use '"' instead"#
+  case unknownAttribute = "unknown attribute 'unknown'"
   case spaceAtStartOfRegexLiteral = "bare slash regex literal may not start with space"
   case spaceAtEndOfRegexLiteral = "bare slash regex literal may not end with space"
   case multilineRegexClosingNotOnNewline = "multi-line regex closing delimiter must appear on new line"
@@ -233,8 +235,10 @@ extension SwiftSyntax.TokenDiagnostic {
     case .spaceAtEndOfRegexLiteral: return StaticTokenError.spaceAtEndOfRegexLiteral
     case .spaceAtStartOfRegexLiteral: return StaticTokenError.spaceAtStartOfRegexLiteral
     case .tokenDiagnosticOffsetOverflow: return StaticTokenError.tokenDiagnosticOffsetOverflow
+    case .typeAttributeAppliedToDeclaration: return StaticTokenError.typeAttributeAppliedToDeclaration
     case .unexpectedBlockCommentEnd: return StaticTokenError.unexpectedBlockCommentEnd
     case .unicodeCurlyQuote: return StaticTokenError.unicodeCurlyQuote
+    case .unknownAttribute: return StaticTokenError.unknownAttribute
     case .unprintableAsciiCharacter: return StaticTokenError.unprintableAsciiCharacter
     case .unterminatedBlockComment: return StaticTokenError.unterminatedBlockComment
     #if RESILIENT_LIBRARIES

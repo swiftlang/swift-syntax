@@ -1070,8 +1070,11 @@ final class SwitchTests: ParserTestCase {
   func testSwitch65() {
     assertParse(
       """
-      @unknown let _ = 1
-      """
+      @1️⃣unknown let _ = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unknown attribute 'unknown'")
+      ]
     )
   }
 
@@ -1080,9 +1083,12 @@ final class SwitchTests: ParserTestCase {
       """
       switch x {
       case _:
-        @unknown let _ = 1
+        @1️⃣unknown let _ = 1
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unknown attribute 'unknown'")
+      ]
     )
   }
 

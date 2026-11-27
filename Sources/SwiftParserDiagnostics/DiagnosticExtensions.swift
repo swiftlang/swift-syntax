@@ -71,11 +71,7 @@ extension FixIt.MultiNodeChange {
     guard let node = node else {
       return FixIt.MultiNodeChange(primitiveChanges: [])
     }
-    var changes = [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().rewrite(node, detach: true))]
-    if transferTrivia {
-      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: [node]).primitiveChanges
-    }
-    return FixIt.MultiNodeChange(primitiveChanges: changes)
+    return .makeMissing([Syntax(node)], transferTrivia: transferTrivia)
   }
 
   /// Transfers the leading and trailing trivia of `nodes` to the previous token
@@ -103,7 +99,12 @@ extension FixIt.MultiNodeChange {
   /// If `transferTrivia` is `true`, the leading trivia of the first node and
   /// the trailing trivia of the last node will be transferred to their adjecent
   /// tokens.
-  static func makeMissing(_ nodes: [Syntax], transferTrivia: Bool = true) -> Self {
+  ///
+  /// If `removeTrailingSpaces` is `true`, the spaces after the last node are
+  /// removed along with the nodes when there is also whitespace before the
+  /// first node, so that removing `x` from `a x b` leaves `a b` but removing
+  /// `...` from `T... }` leaves `T }`.
+  static func makeMissing(_ nodes: [Syntax], transferTrivia: Bool = true, removeTrailingSpaces: Bool = false) -> Self {
     precondition(!nodes.isEmpty)
     var changes = nodes.map {
       FixIt.Change.replace(
@@ -112,9 +113,41 @@ extension FixIt.MultiNodeChange {
       )
     }
     if transferTrivia {
-      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: nodes).primitiveChanges
+      if removeTrailingSpaces, let first = nodes.first, let last = nodes.last,
+        last.trailingTrivia.allSatisfy({ $0.isSpaceOrTab }),
+        nodes.allSatisfy({ $0.is(TokenSyntax.self) }),
+        Self.isPrecededByWhitespace(first)
+      {
+        // The spaces after the removed tokens go with them; whatever precedes
+        // them (indentation, a newline, a space) stays where it is.
+        changes = nodes.enumerated().map { (index, node) in
+          let token = node.cast(TokenSyntax.self)
+          let emptyToken = TokenSyntax(
+            .identifier(""),
+            leadingTrivia: index == 0 ? first.leadingTrivia : token.leadingTrivia,
+            trailingTrivia: node.id == last.id ? [] : token.trailingTrivia,
+            presence: .present
+          )
+          return FixIt.Change.replace(oldNode: node, newNode: Syntax(emptyToken))
+        }
+      } else {
+        changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: nodes).primitiveChanges
+      }
     }
     return FixIt.MultiNodeChange(primitiveChanges: changes)
+  }
+
+  /// Whether the character just before `node` is whitespace: the end of its
+  /// leading trivia or, if it has none, of the previous token's trailing
+  /// trivia. The start of the file doesn't count.
+  private static func isPrecededByWhitespace(_ node: Syntax) -> Bool {
+    if let piece = node.leadingTrivia.pieces.last {
+      return piece.isWhitespace
+    }
+    guard let previous = node.previousToken(viewMode: .sourceAccurate) else {
+      return false
+    }
+    return previous.trailingTrivia.pieces.last?.isWhitespace ?? false
   }
 }
 

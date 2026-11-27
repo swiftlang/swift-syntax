@@ -2408,6 +2408,29 @@ final class ExpressionTests: ParserTestCase {
     }
   }
 
+  func testExtraneousWhitespaceAfterPeriodFixItOnlyRemovesWhitespace() throws {
+    // The edit removes the whitespace after the period and leaves the period
+    // itself alone, rather than removing the period and inserting it again.
+    let source = "_ = a.   utf8"
+    let tree = Parser.parse(source: source)
+    let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
+    XCTAssertEqual(diagnostics.count, 1)
+    let diagnostic = try XCTUnwrap(diagnostics.first)
+    XCTAssertEqual(diagnostic.message, "extraneous whitespace after '.' is not permitted")
+
+    let fixIt = try XCTUnwrap(diagnostic.fixIts.first)
+    XCTAssertEqual(fixIt.message.message, "remove whitespace")
+    XCTAssertEqual(fixIt.edits.count, 1)
+    let edit = try XCTUnwrap(fixIt.edits.first)
+    let utf8 = Array(source.utf8)
+    let replaced = String(
+      decoding: utf8[edit.range.lowerBound.utf8Offset..<edit.range.upperBound.utf8Offset],
+      as: UTF8.self
+    )
+    XCTAssertEqual(replaced, "   ")
+    XCTAssertEqual(edit.replacement, "")
+  }
+
   func testTabsIndentationInMultilineStringLiteral() {
     assertParse(
       #"""

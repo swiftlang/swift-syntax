@@ -2019,6 +2019,27 @@ final class RecoveryTests: ParserTestCase {
         }
         """
     )
+
+    assertParse(
+      """
+      func exprPostfix3() {
+        _ =
+          1️⃣.42
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'.42' is not a valid floating point literal; it must be written '0.42'",
+          fixIts: ["insert '0'"]
+        )
+      ],
+      fixedSource: """
+        func exprPostfix3() {
+          _ =
+            0.42
+        }
+        """
+    )
   }
 
   func testRecovery111() {

@@ -109,6 +109,24 @@ extension Parser {
     case (.then, let handle)?:
       return label(self.parseThenStatement(handle: handle), with: optLabel)
     case nil:
+      if optLabel != nil, self.at(.leftBrace) {
+        // A labeled block without `do`; diagnosed as a missing `do`.
+        let doKeyword = self.missingToken(.do)
+        let body = self.parseCodeBlock(introducer: doKeyword)
+        return label(
+          RawDoStmtSyntax(
+            doKeyword: doKeyword,
+            throwsClause: nil,
+            body: body,
+            catchClauses: RawCatchClauseListSyntax(
+              elements: RawSyntaxNodeListBuilder<RawCatchClauseSyntax>().build(),
+              arena: self.arena
+            ),
+            arena: self.arena
+          ),
+          with: optLabel
+        )
+      }
       return label(RawMissingStmtSyntax(arena: self.arena), with: optLabel)
     }
   }
@@ -1099,7 +1117,7 @@ extension Parser.Lookahead {
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
   mutating func atStartOfStatement(preferExpr: Bool) -> Bool {
-    _ = self.consume(if: .identifier, followedBy: .colon)
+    let hasLabel = self.consume(if: .identifier, followedBy: .colon) != nil
     switch self.at(anyIn: CanBeStatementStart.self)?.0 {
     case .return?,
       .throw?,
@@ -1133,6 +1151,10 @@ extension Parser.Lookahead {
       )
 
     case nil:
+      // A labeled block, which is missing its `do`.
+      if hasLabel, self.at(.leftBrace) {
+        return true
+      }
       // Special recovery 'try return' etc..
       if !preferExpr,
         consume(if: .keyword(.try)) != nil,

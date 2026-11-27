@@ -189,6 +189,7 @@ extension Parser {
       // misspelled comma: leave the `&&` to the condition list.
       if flavor == .stmtCondition, self.atContextualPunctuator("&&"),
         self.peek(isAt: .keyword(.let), .keyword(.var), .keyword(.case))
+          || self.peek(isAt: .poundAvailable, .poundUnavailable)
       {
         break
       }
@@ -654,6 +655,27 @@ extension Parser {
       return RawExprSyntax(self.parseSwitchExpression(switchHandle: .noRecovery(handle)))
     default:
       break
+    }
+
+    // An operator that is separated from its operand is a prefix operator
+    // with a space after it.
+    if self.at(.binaryOperator), !self.currentToken.isAtStartOfLine, !self.currentToken.tokenText.hasPrefix("/"),
+      self.currentToken.tokenText != "&", !self.peek().tokenText.hasPrefix("/"),
+      !self.peek(isAt: .rightParen, .comma, .rightSquare),
+      !self.peek(isAt: .rightBrace, .colon, .endOfFile),
+      !self.peek(isAt: .semicolon, .equal, .arrow),
+      !self.peek().isAtStartOfLine
+    {
+      let op = self.consumeAnyToken()
+      let postfix = self.parseUnaryExpression(flavor: flavor, pattern: pattern)
+      return RawExprSyntax(
+        RawPrefixOperatorExprSyntax(
+          RawUnexpectedNodesSyntax([op], arena: self.arena),
+          operator: self.missingToken(.prefixOperator, text: op.tokenText),
+          expression: postfix,
+          arena: self.arena
+        )
+      )
     }
 
     switch self.at(anyIn: ExpressionPrefixOperator.self) {

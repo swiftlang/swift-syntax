@@ -360,6 +360,23 @@ final class TypeParameterPackTests: ParserTestCase {
         """
     )
   }
+  func testParameterPacks4EarlySyntaxSameLine() {
+    // The space after '...' stays: nothing separates '...' from 'T'.
+    assertParse(
+      """
+      protocol P { associatedtype T1️⃣... }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "associated types cannot be variadic",
+          fixIts: ["remove '...'"]
+        )
+      ],
+      fixedSource: """
+        protocol P { associatedtype T }
+        """
+    )
+  }
   func testParameterPacks5() {
     assertParse(
       """

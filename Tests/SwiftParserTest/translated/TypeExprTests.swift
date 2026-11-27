@@ -700,11 +700,14 @@ final class TypeExprTests: ParserTestCase {
   func testTypeExpr28() {
     assertParse(
       """
-      func takesVoid(f: 1️⃣Void2️⃣ -> ()) {}
+      func takesVoid(f: 1️⃣Void -> ()) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "single argument function types require parentheses",
+          fixIts: ["insert '(' and ')'"]
+        )
       ],
       fixedSource: """
         func takesVoid(f: (Void) -> ()) {}
@@ -741,11 +744,14 @@ final class TypeExprTests: ParserTestCase {
   func testTypeExpr31() {
     assertParse(
       """
-      let _: 1️⃣Float2️⃣       -> Int
+      let _: 1️⃣Float       -> Int
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "single argument function types require parentheses",
+          fixIts: ["insert '(' and ')'"]
+        )
       ],
       fixedSource: """
         let _: (Float) -> Int

@@ -1359,8 +1359,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
               // Only insert the `0`; the `.` and the digits stay where they are.
               .replace(
                 oldNode: Syntax(node.literal),
-                newNode: Syntax(TokenSyntax(.integerLiteral("0"), presence: .present))
-              )
+                newNode: Syntax(
+                  TokenSyntax(.integerLiteral("0"), leadingTrivia: period.leadingTrivia, presence: .present)
+                )
+              ),
+              .replace(
+                oldNode: Syntax(period),
+                newNode: Syntax(period.with(\.leadingTrivia, []))
+              ),
             ]
           )
         ],

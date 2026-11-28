@@ -599,6 +599,14 @@ public struct SpecifierOnParameterName: ParserError {
   }
 }
 
+public struct SpecifierAfterTypeAttribute: ParserError {
+  public let misplacedSpecifiers: [TokenSyntax]
+
+  public var message: String {
+    return "\(nodesDescription(misplacedSpecifiers, format: false)) must appear before the type attributes"
+  }
+}
+
 public struct TokensNotAllowedInOperatorName: ParserError {
   public let tokens: [TokenSyntax]
 

@@ -803,6 +803,22 @@ final class TypeTests: ParserTestCase {
     )
   }
 
+  func testSpecifierAfterTypeAttribute() {
+    assertParse(
+      "func foo(test: @Sendable 1️⃣nonisolated(nonsending) () async -> Void) {}",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'nonisolated(nonsending)' must appear before the type attributes",
+          fixIts: ["move 'nonisolated(nonsending)' in front of type"]
+        )
+      ],
+      fixedSource: """
+        func foo(test: nonisolated(nonsending) @Sendable () async -> Void) {}
+        """
+    )
+  }
+
   func testTrailingCommas() {
     assertParse(
       """

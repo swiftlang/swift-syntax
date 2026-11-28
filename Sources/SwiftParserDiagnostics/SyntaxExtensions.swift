@@ -209,6 +209,19 @@ extension TokenSyntax {
 }
 
 extension TypeSpecifierListSyntax {
+  var nonisolatedSpecifiers: [NonisolatedTypeSpecifierSyntax] {
+    return self.compactMap { specifier in
+      switch specifier {
+      case .nonisolatedTypeSpecifier(let specifier): return specifier
+      case .simpleTypeSpecifier, .lifetimeTypeSpecifier: return nil
+      #if RESILIENT_LIBRARIES
+      @unknown default:
+        return nil
+      #endif
+      }
+    }
+  }
+
   var simpleSpecifiers: [TokenSyntax] {
     return self.compactMap { specifier in
       switch specifier {

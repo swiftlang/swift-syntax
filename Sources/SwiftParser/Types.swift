@@ -14,10 +14,20 @@
 
 extension Parser {
   /// Parse a type.
-  mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+  ///
+  /// - Parameter isInInheritanceClause: Whether the type is an element of an
+  ///   inheritance clause, where a `nonisolated` specifier may follow the type
+  ///   attributes.
+  mutating func parseType(
+    misplacedSpecifiers: [RawTokenSyntax] = [],
+    isInInheritanceClause: Bool = false
+  ) -> RawTypeSyntax {
     // Parse pack expansion 'repeat T'.
     if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
-      let repetitionPattern = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+      let repetitionPattern = self.parseTypeScalar(
+        misplacedSpecifiers: misplacedSpecifiers,
+        isInInheritanceClause: isInInheritanceClause
+      )
       return RawTypeSyntax(
         RawPackExpansionTypeSyntax(
           repeatKeyword: repeatKeyword,
@@ -27,11 +37,20 @@ extension Parser {
       )
     }
 
-    return self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+    return self.parseTypeScalar(
+      misplacedSpecifiers: misplacedSpecifiers,
+      isInInheritanceClause: isInInheritanceClause
+    )
   }
 
-  mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
-    let specifiersAndAttributes = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
+  mutating func parseTypeScalar(
+    misplacedSpecifiers: [RawTokenSyntax] = [],
+    isInInheritanceClause: Bool = false
+  ) -> RawTypeSyntax {
+    let specifiersAndAttributes = self.parseTypeAttributeList(
+      misplacedSpecifiers: misplacedSpecifiers,
+      isInInheritanceClause: isInInheritanceClause
+    )
     var base = self.parseSimpleOrCompositionType()
     if self.withLookahead({ $0.canParseFunctionTypeArrow() }) {
       var (effectSpecifiers, yields) = self.parseTypeEffectSpecifiers()
@@ -97,6 +116,7 @@ extension Parser {
         RawAttributedTypeSyntax(
           specifiers: specifiersAndAttributes.specifiers,
           attributes: specifiersAndAttributes.attributes,
+          specifiersAndAttributes.unexpectedBeforeLateSpecifiers,
           lateSpecifiers: specifiersAndAttributes.lateSpecifiers,
           baseType: base,
           arena: self.arena
@@ -1523,10 +1543,12 @@ extension Parser {
   }
 
   mutating func parseTypeAttributeList(
-    misplacedSpecifiers: [RawTokenSyntax] = []
+    misplacedSpecifiers: [RawTokenSyntax] = [],
+    isInInheritanceClause: Bool = false
   ) -> (
     specifiers: RawTypeSpecifierListSyntax,
     attributes: RawAttributeListSyntax,
+    unexpectedBeforeLateSpecifiers: RawUnexpectedNodesSyntax?,
     lateSpecifiers: RawTypeSpecifierListSyntax
   )? {
     var specifiers = RawSyntaxNodeListBuilder<RawTypeSpecifierListSyntax.Element>()
@@ -1569,12 +1591,35 @@ extension Parser {
       attributes = nil
     }
 
-    // Only handle `nonisolated` as a late specifier.
+    // Only handle `nonisolated` as a late specifier. It is only valid after the
+    // attributes of an inherited type, i.e. `struct S: @unchecked nonisolated
+    // Sendable {}`. Outside of an inheritance clause, a `nonisolated(nonsending)`
+    // specifier has to precede the type attributes.
+    var misplacedSpecifier: RawNonisolatedTypeSpecifierSyntax? = nil
     var lateSpecifier: RawTypeSpecifierListSyntax.Element? = nil
-    if self.at(.keyword(.nonisolated)) && !(self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine)
-      && canHaveParameterSpecifier
+    if canHaveParameterSpecifier, self.at(.keyword(.nonisolated)),
+      !(self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine)
     {
-      lateSpecifier = parseNonisolatedTypeSpecifier()
+      if isInInheritanceClause {
+        lateSpecifier = parseNonisolatedTypeSpecifier()
+      } else {
+        let nonisolatedHasTrailingSpace = self.currentToken.trailingTriviaByteLength > 0
+        let isNonisolatedWithArgument = self.withLookahead({
+          $0.consumeAnyToken()
+          return $0.atAttributeOrSpecifierArgument(lastTokenHadSpace: nonisolatedHasTrailingSpace)
+        })
+        if isNonisolatedWithArgument {
+          // Preserve the misplaced specifier in the tree so that a diagnostic
+          // can offer to move it in front of the type attributes.
+          if case .nonisolatedTypeSpecifier(let specifier) = self.parseNonisolatedTypeSpecifier() {
+            misplacedSpecifier = specifier
+          }
+          specifiers.append(
+            .nonisolatedTypeSpecifier(missingNonisolatedTypeSpecifier()),
+            allocator: self.nodeListAllocator
+          )
+        }
+      }
     }
 
     guard !specifiers.isEmpty || attributes != nil || lateSpecifier != nil else {
@@ -1598,10 +1643,34 @@ extension Parser {
       lateSpecifierList = self.emptyCollection(RawTypeSpecifierListSyntax.self)
     }
 
+    let unexpectedBeforeLateSpecifiers: RawUnexpectedNodesSyntax?
+    if let misplacedSpecifier {
+      unexpectedBeforeLateSpecifiers = RawUnexpectedNodesSyntax([misplacedSpecifier], arena: self.arena)
+    } else {
+      unexpectedBeforeLateSpecifiers = nil
+    }
+
     return (
       specifierList,
       attributes ?? self.emptyCollection(RawAttributeListSyntax.self),
+      unexpectedBeforeLateSpecifiers,
       lateSpecifierList
+    )
+  }
+
+  /// A missing `nonisolated(nonsending)` specifier, used as the target of a
+  /// Fix-It that moves a misplaced `nonisolated(nonsending)` in front of the
+  /// type attributes.
+  private mutating func missingNonisolatedTypeSpecifier() -> RawNonisolatedTypeSpecifierSyntax {
+    return RawNonisolatedTypeSpecifierSyntax(
+      nonisolatedKeyword: missingToken(.keyword(.nonisolated)),
+      argument: RawNonisolatedSpecifierArgumentSyntax(
+        leftParen: missingToken(.leftParen),
+        nonsendingKeyword: missingToken(.keyword(.nonsending)),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      ),
+      arena: self.arena
     )
   }
 

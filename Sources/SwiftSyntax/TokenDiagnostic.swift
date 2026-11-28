@@ -30,6 +30,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
     case expectedDigitInFloatLiteral
     case expectedHexCodeInUnicodeEscape
     case expectedHexDigitInHexLiteral
+    case extendedEscapingStringLiteral
     case extraneousLeadingWhitespaceError
     case extraneousLeadingWhitespaceWarning
     case extraneousTrailingWhitespaceError
@@ -74,6 +75,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
       case .expectedDigitInFloatLiteral: return .error
       case .expectedHexCodeInUnicodeEscape: return .error
       case .expectedHexDigitInHexLiteral: return .error
+      case .extendedEscapingStringLiteral: return .error
       case .extraneousLeadingWhitespaceError: return .error
       case .extraneousLeadingWhitespaceWarning: return .warning
       case .extraneousTrailingWhitespaceError: return .error

@@ -63,6 +63,7 @@ public enum StaticTokenError: String, DiagnosticMessage {
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
   case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
   case expectedHexDigitInHexLiteral = "expected hexadecimal digit (0-9, A-F) in integer literal"
+  case extendedEscapingStringLiteral = "argument cannot be an extended escaping string literal"
   case invalidBackslashInRawIdentifier = "a raw identifier cannot contain a backslash"
   case invalidCharacter = "invalid character in source file"
   case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
@@ -197,6 +198,7 @@ extension SwiftSyntax.TokenDiagnostic {
     case .expectedDigitInFloatLiteral: return StaticTokenError.expectedDigitInFloatLiteral
     case .expectedHexCodeInUnicodeEscape: return StaticTokenError.expectedHexCodeInUnicodeEscape
     case .expectedHexDigitInHexLiteral: return StaticTokenError.expectedHexDigitInHexLiteral
+    case .extendedEscapingStringLiteral: return StaticTokenError.extendedEscapingStringLiteral
     case .extraneousLeadingWhitespaceError: return ExtraneousLeadingWhitespaceError(tokenText: token.rawText)
     case .extraneousLeadingWhitespaceWarning:
       return ErrorToWarningDowngrade(error: ExtraneousLeadingWhitespaceError(tokenText: token.rawText))

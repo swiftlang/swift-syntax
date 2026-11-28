@@ -236,12 +236,13 @@ extension Parser {
       }
 
       let unexpectedBeforeArguments: RawUnexpectedNodesSyntax?
-      let argument: RawAttributeSyntax.Arguments
+      var argument: RawAttributeSyntax.Arguments
       if let parseMissingArguments, leftParen.presence == .missing {
         (unexpectedBeforeArguments, argument) = parseMissingArguments(&self)
       } else {
         (unexpectedBeforeArguments, argument) = parseArguments(&self)
       }
+      argument = self.diagnoseExtendedEscapingStringLiterals(in: argument, forAttributeNamed: attributeName)
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return RawAttributeSyntax(
         unexpectedBeforeAtSign,
@@ -266,6 +267,100 @@ extension Parser {
         arena: self.arena
       )
     }
+  }
+
+  /// Attributes that require a plain string literal argument, mapped to the label of the argument
+  /// that must be a plain string literal, or `nil` if the argument is unlabeled. The C++ parser
+  /// rejects a raw string literal in these arguments with
+  /// "cannot be an extended escaping string literal".
+  private static let attributesRequiringPlainStringLiteral: [String: String?] = [
+    "_cdecl": nil,
+    "_private": "sourceFile",
+    "_semantics": nil,
+    "_silgen_name": nil,
+    "_unavailableFromAsync": "message",
+    "convention": "cType",
+  ]
+
+  /// If `expression` is a raw string literal, return a copy with an
+  /// `extendedEscapingStringLiteral` diagnostic attached to its opening `#` delimiter.
+  /// Otherwise, return `nil`.
+  func diagnosedRawStringLiteral(_ expression: RawExprSyntax) -> RawExprSyntax? {
+    guard let stringLiteral = expression.as(RawStringLiteralExprSyntax.self),
+      let openingPounds = stringLiteral.openingPounds
+    else {
+      return nil
+    }
+    let diagnosedPounds = openingPounds.tokenView.withTokenDiagnostic(
+      tokenDiagnostic: TokenDiagnostic(.extendedEscapingStringLiteral, byteOffset: 0),
+      arena: self.arena
+    )
+    return RawExprSyntax(
+      RawStringLiteralExprSyntax(
+        stringLiteral.unexpectedBeforeOpeningPounds,
+        openingPounds: diagnosedPounds,
+        stringLiteral.unexpectedBetweenOpeningPoundsAndOpeningQuote,
+        openingQuote: stringLiteral.openingQuote,
+        stringLiteral.unexpectedBetweenOpeningQuoteAndSegments,
+        segments: stringLiteral.segments,
+        stringLiteral.unexpectedBetweenSegmentsAndClosingQuote,
+        closingQuote: stringLiteral.closingQuote,
+        stringLiteral.unexpectedBetweenClosingQuoteAndClosingPounds,
+        closingPounds: stringLiteral.closingPounds,
+        stringLiteral.unexpectedAfterClosingPounds,
+        arena: self.arena
+      )
+    )
+  }
+
+  /// If `arguments` is the argument list of an attribute that requires a plain string literal
+  /// argument and one of those arguments is a raw string literal, return the argument list with
+  /// a diagnostic attached to the raw string's opening `#` delimiter. Otherwise, return the
+  /// arguments unchanged.
+  func diagnoseExtendedEscapingStringLiterals(
+    in arguments: RawAttributeSyntax.Arguments,
+    forAttributeNamed attributeName: RawTypeSyntax
+  ) -> RawAttributeSyntax.Arguments {
+    guard let identifier = attributeName.as(RawIdentifierTypeSyntax.self),
+      identifier.moduleSelector == nil,
+      let expectedLabel = Self.attributesRequiringPlainStringLiteral[
+        String(syntaxText: identifier.name.tokenText)
+      ],
+      case .argumentList(let argumentList) = arguments
+    else {
+      return arguments
+    }
+    var builder = RawSyntaxNodeListBuilder<RawLabeledExprSyntax>()
+    var didDiagnose = false
+    for element in argumentList.elements {
+      let labelText: String? = element.label.map { String(syntaxText: $0.tokenText) }
+      guard labelText == expectedLabel,
+        let diagnosedExpression = self.diagnosedRawStringLiteral(element.expression)
+      else {
+        builder.append(element, allocator: self.nodeListAllocator)
+        continue
+      }
+      didDiagnose = true
+      builder.append(
+        RawLabeledExprSyntax(
+          element.unexpectedBeforeLabel,
+          label: element.label,
+          element.unexpectedBetweenLabelAndColon,
+          colon: element.colon,
+          element.unexpectedBetweenColonAndExpression,
+          expression: diagnosedExpression,
+          element.unexpectedBetweenExpressionAndTrailingComma,
+          trailingComma: element.trailingComma,
+          element.unexpectedAfterTrailingComma,
+          arena: self.arena
+        ),
+        allocator: self.nodeListAllocator
+      )
+    }
+    guard didDiagnose else {
+      return arguments
+    }
+    return .argumentList(RawLabeledExprListSyntax(elements: builder.build(), arena: self.arena))
   }
 
   mutating func parseAttribute() -> RawAttributeSyntax {
@@ -826,7 +921,8 @@ extension Parser {
     if let defaultKeyword = self.consume(if: .keyword(.default)) {
       section = .defaultKeyword(defaultKeyword)
     } else {
-      section = .expression(self.parseExpression(flavor: .attributeArguments, pattern: .none))
+      let expression = self.parseExpression(flavor: .attributeArguments, pattern: .none)
+      section = .expression(self.diagnosedRawStringLiteral(expression) ?? expression)
     }
     return RawSectionAttributeArgumentSyntax(section: section, arena: self.arena)
   }

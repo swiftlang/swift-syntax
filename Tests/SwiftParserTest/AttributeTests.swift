@@ -1826,4 +1826,121 @@ final class AttributeTests: ParserTestCase {
         """
     )
   }
+
+  func testRawStringLiteralInSemanticsAttribute() {
+    assertParse(
+      ##"""
+      @_semantics(1️⃣#"a"#) func a() {}
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+
+    assertParse(
+      ##"""
+      @_semantics(1️⃣##"a"##) func a() {}
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+
+    assertParse(
+      ##"""
+      @_semantics(1️⃣#"""
+        a
+        """#) func a() {}
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+  }
+
+  func testRawStringLiteralInSilgenNameAndCdeclAttributes() {
+    assertParse(
+      ##"""
+      @_silgen_name(1️⃣#"a"#) func b()
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+
+    assertParse(
+      ##"""
+      @_cdecl(1️⃣#"a"#) func c() {}
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+  }
+
+  func testRawStringLiteralInPrivateAndUnavailableFromAsyncAttributes() {
+    assertParse(
+      ##"""
+      @_private(sourceFile: 1️⃣#"a.swift"#) import Foundation
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+
+    assertParse(
+      ##"""
+      @_unavailableFromAsync(message: 1️⃣#"a"#) func d() {}
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+  }
+
+  func testRawStringLiteralInConventionCType() {
+    assertParse(
+      ##"""
+      let f: @convention(c, cType: 1️⃣#"void (*)(void)"#) () -> Void
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+  }
+
+  func testRawStringLiteralInSectionAttribute() {
+    assertParse(
+      ##"""
+      @section(1️⃣#"a"#) func s() {}
+      """##,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an extended escaping string literal")
+      ]
+    )
+  }
+
+  func testPlainStringLiteralInStringAttributeArguments() {
+    assertParse(
+      """
+      @_semantics("a") func a() {}
+      @_silgen_name("a") func b()
+      @_cdecl("a") func c() {}
+      @_private(sourceFile: "a.swift") import Foundation
+      @_unavailableFromAsync(message: "a") func d() {}
+      let f: @convention(c, cType: "void (*)(void)") () -> Void
+      @section("a") func s() {}
+      """
+    )
+  }
+
+  func testRawStringLiteralInCustomAttributeAccepted() {
+    assertParse(
+      ##"""
+      @MyAttr(#"a"#) func a() {}
+      @MyAttr(label: #"a"#) func b() {}
+      @_semantics(foo) func c() {}
+      """##
+    )
+  }
 }

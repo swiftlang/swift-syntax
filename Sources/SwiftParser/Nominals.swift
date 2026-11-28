@@ -300,7 +300,7 @@ extension Parser {
             )
           )
         } else {
-          type = self.parseType()
+          type = self.parseType(isInInheritanceClause: true)
         }
 
         keepGoing = self.consume(if: .comma)

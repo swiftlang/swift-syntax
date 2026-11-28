@@ -663,6 +663,40 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    // A `nonisolated(nonsending)` specifier after the type attributes belongs in
+    // front of them.
+    guard let unexpected = node.unexpectedBetweenAttributesAndLateSpecifiers else {
+      return .visitChildren
+    }
+    let misplacedSpecifiers = unexpected.compactMap { $0.as(NonisolatedTypeSpecifierSyntax.self) }
+      .filter { $0.argument != nil }
+    guard !misplacedSpecifiers.isEmpty else {
+      return .visitChildren
+    }
+    let misplacedTokens = misplacedSpecifiers.flatMap { Array($0.tokens(viewMode: .sourceAccurate)) }
+    var changes: [FixIt.MultiNodeChange] = [
+      .makeMissing(misplacedSpecifiers.map(Syntax.init), transferTrivia: false)
+    ]
+    var handledNodes: [SyntaxIdentifier] = [unexpected.id]
+    if let missingSpecifier = node.specifiers.nonisolatedSpecifiers.first(where: { $0.isMissingAllTokens }) {
+      changes.append(.makePresent(missingSpecifier))
+      handledNodes.append(missingSpecifier.id)
+    }
+    addDiagnostic(
+      unexpected,
+      SpecifierAfterTypeAttribute(misplacedSpecifiers: misplacedTokens),
+      fixIts: [
+        FixIt(message: MoveTokensInFrontOfTypeFixIt(movedTokens: misplacedTokens), changes: changes)
+      ],
+      handledNodes: handledNodes
+    )
+    return .visitChildren
+  }
+
   public override func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
